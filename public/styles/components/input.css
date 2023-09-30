@@ -1,3 +1,6 @@
+/* adicione a classe no-icon no input-wrapper para remover o ícone no começo */
+/* adicone a classe password no input-wrapper para adicionar o ícone de visualizar a senha */
+
 .input {
    background-color: transparent;
    border: transparent;
@@ -31,6 +34,21 @@
                0px 5px 2px 0px rgba(32, 32, 64, 0.01) inset, 
                0px 7px 2px 0px rgba(32, 32, 64, 0.00) inset;
 }
+.input-wrapper i {
+   color: #bdbdbd;
+   font-size: 1.2rem;
+}
+
+.ph-eye {
+   display: none;
+}
+
+.input-wrapper.password .ph-eye {
+   display: block;
+}
+
+.input-wrapper.no-icon .ph-magnifying-glass {
+   display: none;
 
 .input-wrapper:focus-within {
    border: 1px solid var(--color-roxoEscuro);
