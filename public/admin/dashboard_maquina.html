@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../styles/global.css">
+   <link rel="stylesheet" href="../styles/dashboard.css">
+   
+   <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
+   <script src="../scripts/components/button.js"></script>
+   <script src="../scripts/components/navbar.js "></script>
+   <title>Dashboard</title>
+</head>
+<body>
+   <SideNav></SideNav>
+   <div class="dash-content">
+      <h1>Desempenho da máquina 01</h1>
+      <div class="chart-grid">
+         <div class="chart-container top-chart">
+            <div class="specs-container">
+               <img src="../assets/img/elements/windows.svg" alt="">
+               <div class="spec">
+                  <span class="spec-name">Sistema Operacional</span>
+                  <span class="spec-value">Windows</span>
+               </div>
+               <div class="spec">
+                  <span class="spec-name">Núcleos</span>
+                  <span class="spec-value">10</span>
+               </div>
+               <div class="spec">
+                  <span class="spec-name">RAM</span>
+                  <span class="spec-value">8gb</span>
+               </div>
+               <div class="spec">
+                  <span class="spec-name">Disco (SSD)</span>
+                  <span class="spec-value">512gb</span>
+               </div>
+               <div class="spec">
+                  <span class="spec-name">Em uso</span>
+                  <span class="spec-value spec-ativo">ON</span>
+               </div>
+            </div>
+            <button class="btn primario">Ver hardware</button>
+         </div>
+         <div class="chart-container">
+            <h3>Uso de CPU</h3>
+            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+         </div>
+         <div class="chart-container">
+            <h3>Uso de RAM</h3>
+            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+         </div>
+         <div class="chart-container">
+            <h3>Uso de Disco</h3>
+            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+         </div>
+         <div class="chart-container">
+            <h3>Quantidade de janelas abertas</h3>
+            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+         </div>
+      </div>
+   </div>
+</body>
+</html>
+
+<script>
+     usuario.innerHTML = sessionStorage.NOME_USUARIO
+</script>

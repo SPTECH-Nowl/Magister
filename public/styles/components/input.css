@@ -1,0 +1,42 @@
+.input {
+   background-color: transparent;
+   border: transparent;
+   font-size: 1.2rem;
+   text-overflow: ellipsis;
+}
+
+.input:focus {
+   border: none;
+   outline: none;
+}
+
+.input::placeholder {
+   color: #bdbdbd;
+}
+
+.input-wrapper {
+   display: flex;
+   gap: 8px;
+   align-items: center;
+   width: fit-content;
+   border-radius: 30px;
+   padding: 0.3rem 1rem;
+   border: 1px solid #E6E6E6;
+   background-color: #FBFBFD;
+   transition: .3s ease-in-out;
+   box-shadow: 0px 0px 0px 0px rgba(32, 32, 64, 0.10) inset, 
+               0px 0px 1px 0px rgba(32, 32, 64, 0.10) inset, 
+               0px 1px 1px 0px rgba(32, 32, 64, 0.09) inset, 
+               0px 3px 2px 0px rgba(32, 32, 64, 0.05) inset, 
+               0px 5px 2px 0px rgba(32, 32, 64, 0.01) inset, 
+               0px 7px 2px 0px rgba(32, 32, 64, 0.00) inset;
+}
+
+.input-wrapper:focus-within {
+   border: 1px solid var(--color-roxoEscuro);
+}
+
+.ph-magnifying-glass {
+   color: #bdbdbd;
+   font-size: 1.2rem;
+}

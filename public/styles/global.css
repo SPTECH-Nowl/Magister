@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap');
+
+:root {
+   --color-gray-100: #F5F5F5;
+   --color-gray-950: #0D0D0D;
+   --color-gray-800: #252525;
+   --color-purple-300: #BF80FF;
+   --color-purple-500: #9747FF;
+   --color-purple-700: #6D499D;
+   --color-purple-800: #4E2F78;
+   --color-blue-500: #439CDD;
+
+   --font-title: "Kanit";
+   --font-text: "Raleway";
+
+   --wave-shadow: 50px -2px 4px rgba(0, 0, 0, 0.25);
+}
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+html, body {
+   overflow-x: hidden;
+   font-family: var(--font-text);
+}
+
+/* componentes */
+SideNav {
+   width: 15%;
+}
+
+.display-none {
+   display: none;
+}
+
+.display-block {
+   display: block;
+}
+
+h1 {
+   font-family: var(--font-title);
+}
+
+/* dialog */
+sl-dialog::part(overlay) {
+   background: #0d0d0d9a;
+}
+
+sl-dialog::part(panel) {
+   border-radius: 20px;
+}
+
+sl-dialog::part(title) {
+   font-family: var(--font-title);
+   font-style: 900;
+   font-size: 2rem;
+}
+
+sl-dialog::part(body) {
+   font-family: var(--font-text);
+}
+
+sl-dialog::part(close-button__base) {
+   color: #0D0D0D;
+}

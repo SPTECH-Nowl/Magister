@@ -1,0 +1,47 @@
+#select_ordem {
+   width: fit-content;
+   border-radius: 30px;
+   background-color: #8e8d8d;
+}
+
+sl-select::part(form-control) {
+   width: 12rem;
+}
+
+sl-select::part(combobox) {
+   outline: none;
+   box-shadow: none;
+   background-color: transparent;
+}
+
+sl-select::part(display-input) {
+   width: fit-content;
+   color: white;
+   font-family: var(--font-title);
+   text-overflow: ellipsis !important;
+}
+
+sl-select::part(display-input)::placeholder {
+   color: var(--color-branco);
+   font-family: var(--font-title);
+}
+
+sl-select::part(listbox) {
+   border-radius: 12px;
+   background-color: var(--color-branco);
+}
+
+sl-option::part(base) {
+   background-color: var(--color-branco);
+   color: #0D0D0D;
+}
+
+sl-option::part(base):hover {
+   background-color: var(--color-violeta);
+   color: var(--color-branco);
+}
+
+sl-select::part(clear-button),
+sl-select::part(expand-icon) {
+   color: var(--color-branco);
+}

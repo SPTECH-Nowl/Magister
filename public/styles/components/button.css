@@ -1,0 +1,32 @@
+.btn {
+   padding: 0.4rem 2rem;
+   border-radius: 30px;
+   border: none;
+   font-family: var(--font-title);
+   font-weight: 700;
+   font-size: 1.2rem;
+   cursor: pointer;
+   transition: .3s ease-in-out;
+}
+
+.btn:hover {
+   filter: brightness(1.2);
+}
+
+.btn.primario {
+   background-color: var(--color-violeta);
+   color: var(--color-branco);
+   border: 2px solid var(--color-violeta);
+}
+
+.btn.secundario {
+   background-color: var(--color-roxo);
+   color: var(--color-branco);
+   border: 2px solid var(--color-roxo);
+}
+
+.btn.terciario {
+   background-color: transparent;
+   color: var(--color-violeta);
+   border: 2px solid var(--color-violeta);
+}
