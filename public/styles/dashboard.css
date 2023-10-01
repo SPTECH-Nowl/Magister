@@ -3,10 +3,11 @@ body {
    font-family: var(--font-text);
 }
 
+/* dashboard */
 .dash-content {
    width: 100%;
    height: 100%;
-   padding: 1.5rem;
+   padding: 1.5rem 3.5rem;
    background-color: #f0edf5;
 }
 
@@ -69,4 +70,22 @@ body {
 .chart {
    width: 100%;
    height: 90%;
+}
+
+/* máquinas da organização */
+.container-maquinas {
+   margin-top: 1.5rem;
+}
+
+.top-maquinas {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+}
+
+.container-selects {
+   display: flex;
+   box-sizing: border-box;
+   flex-wrap: wrap;
+   gap: 1.2rem;
 }

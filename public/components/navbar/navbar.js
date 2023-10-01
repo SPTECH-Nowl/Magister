@@ -1,5 +1,4 @@
 const loadNavbar = (nome_usuario) => {
-   $("head").append("<link rel='stylesheet' href='../styles/components/navbar.css'>");
 
    var navbar = document.querySelector("SideNav");
    navbar.innerHTML = `
@@ -39,5 +38,5 @@ const loadNavbar = (nome_usuario) => {
 }
 
 window.onload = () => {
-   loadNavbar("Usuário");
+   loadNavbar();
 }

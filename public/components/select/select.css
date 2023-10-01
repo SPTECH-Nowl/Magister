@@ -1,4 +1,4 @@
-#select_ordem {
+sl-select {
    width: fit-content;
    border-radius: 30px;
    background-color: #8e8d8d;
@@ -22,26 +22,26 @@ sl-select::part(display-input) {
 }
 
 sl-select::part(display-input)::placeholder {
-   color: var(--color-branco);
+   color: var(--color-gray-100);
    font-family: var(--font-title);
 }
 
 sl-select::part(listbox) {
    border-radius: 12px;
-   background-color: var(--color-branco);
+   background-color: var(--color-gray-100);
 }
 
 sl-option::part(base) {
-   background-color: var(--color-branco);
+   background-color: var(--color-gray-100);
    color: #0D0D0D;
 }
 
 sl-option::part(base):hover {
-   background-color: var(--color-violeta);
-   color: var(--color-branco);
+   background-color: var(--color-purple-500);
+   color: var(--color-gray-100);
 }
 
 sl-select::part(clear-button),
 sl-select::part(expand-icon) {
-   color: var(--color-branco);
+   color: var(--color-gray-100);
 }

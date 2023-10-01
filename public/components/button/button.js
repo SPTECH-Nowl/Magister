@@ -1,5 +1,5 @@
-const loadButton = (id_button) => {
-   var btn = document.getElementById(id_button);
+const loadButton = () => {
+   var btn = document.getElementById();
    var size = btn.getAttribute("fontSize");
    var width = btn.getAttribute("width");
 
@@ -8,5 +8,5 @@ const loadButton = (id_button) => {
 } 
 
 window.onload = () => {
-   $("head").append("<link rel='stylesheet' href='../styles/components/button.css'>");
+   loadButton();
 }
