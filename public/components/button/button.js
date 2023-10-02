@@ -1,10 +1,14 @@
-const loadButton = () => {
-   var btn = document.getElementById();
-   var size = btn.getAttribute("fontSize");
-   var width = btn.getAttribute("width");
+const buttons = document.querySelectorAll(".btn");
 
-   btn.style.width = `${width}`;
-   btn.style.fontSize = `${size}`;
+const loadButton = () => {
+   for (let i = 0; i < buttons.length; i++) {
+      var btn = buttons[i];
+      var size = btn.getAttribute("fontSize");
+      var width = btn.getAttribute("width");
+   
+      btn.style.width = `${width}`;
+      btn.style.fontSize = `${size}`;
+   }
 } 
 
 window.onload = () => {
