@@ -1,3 +1,434 @@
-/* passar os estilos de login e cadastro para este arquivo, eles estão separados no repositório do site em login.css
-e cadastro.css, não sei se juntar os dois vai dar algun conflito, se der, pode deixar o mesmo jeito aqui tbm, em dois
-arquivos */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@300;400;500;700&display=swap');
+
+
+:root {
+    --color-coral: #F05D5E;
+    --color-cobalto: #314CB6;
+    --color-white: #F5F5F5;
+    --color-preto: #0D0D0D;
+    --color-preto-default: #252525;
+    --color-violeta: #9747FF;
+    --color-roxo: #6D499D;
+    --color-roxoEscuro: #4E2F78;
+    --color-errado: #F24D28;
+    --color-certo: #439CDD;
+
+    --font-title: "Kanit";
+    --font-text: "Raleway";
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* overflow: hidden; */
+}
+
+body {
+    overflow: hidden;
+    background: var(--color-white);
+}
+
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Raleway";
+    height: 85vh;
+    gap: 1rem;
+}
+
+.form a{
+    color: white;
+    text-decoration: none;
+}
+
+.roxo {
+    border-radius: 0 0 40% 40% / 0 0 15% 15%;
+    box-shadow: 0px 8px 5px 0 rgb(184, 184, 184);
+    color: var(--color-white);
+    background: var(--color-violeta);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 6vh;
+}
+
+.login-header img {
+    width: 8rem;
+}
+
+
+.main h1 {
+    font-family: "Kanit";
+    font-size: 4rem;
+    /* margin: 5.5% 0; */
+    line-height: 4rem;
+    font-size: 4rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    font-family: var(--font-title);
+}
+.roxo button{
+    margin-top: 1rem;
+}
+
+#closeLogin{
+    color: var(--color-coral);
+    margin-left: 0.5rem;
+    text-decoration: underline;
+}
+
+.roxo .campo {
+    width: 30%;
+}
+
+.form label {
+    margin-left: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--font-title);
+    color: #252525;
+}
+
+.form input {
+    width: 100%;
+    border: none;
+    font-family: var(--font-text);
+    padding: 1rem 2rem 1rem 1.5rem;
+    height: 50px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    transition: all .25s ease-in-out;
+    background: var(--color-roxo);
+    color: var(--color-white);
+}       
+
+.form.roxo input {
+    background: var(--color-roxo);
+    color: var(--color-white);
+}
+
+.form input::placeholder {
+    color: var(--color-roxoEscuro);
+    font-family: var(--font-text);
+    font-weight: 500;
+    color: #b99ccb;
+    font-family: "Arial";
+}
+
+.form.roxo input::placeholder {
+    color: #b99ccb;
+}
+
+.form input:focus {
+    outline: none;
+    box-shadow: 8px 8px 4px 0px rgba(0, 0, 0, 0.25) inset, -6px 6px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.campos-linha {
+    display: flex;
+    gap: 6rem;
+    width: 70%;
+}
+
+.form.white .campos-linha:nth-child(4){
+    gap: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon{
+    top: 50%;
+    margin-left: 90%;
+    margin-top: -48px;
+    transform: translate(-50%);
+    background: url(../assets/img/Icone/olho\ ativado.png);
+    background-size: cover;
+    color:#fff;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.icon_hide{
+    top: 50%;
+    background: url(../assets/img/Icone/olho\ desativado.png);
+    margin-left: 90%;
+    margin-top: -40px;
+    transform: translate(-50%);
+    color: #F5F5F5;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.icon_senha{
+    right: 5px;
+    top: 10px;
+    position: absolute;
+    transform: translate(-50%);
+    background: url(../assets/img/Icone/olho\ ativado.png);
+    background-size: cover;
+    margin-top: -8px;
+    margin-left: 18px;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.icon_senha_desativado{
+
+    position: absolute;
+    background: url(../assets/img/Icone/olho\ desativado.png);
+    right: 5px;
+    top: 10px;
+    transform: translate(-50%);
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+
+.icon_confirmar{
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    margin-top: -8px;
+    margin-left: 18px;
+    transform: translate(-50%);
+    background: url(../assets/img/Icone/olho\ ativado.png);
+    background-size: cover;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+}
+
+
+
+.icon_confirmar_desativado{
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    transform: translate(-50%);
+    background: url(../assets/img/Icone/olho\ desativado.png);
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+
+
+
+.form button {
+    font-size: 20px;
+    padding: 0.6rem 1.3rem;
+    font-weight: 600;
+    font-family: var(--font-title);
+    text-transform: capitalize;
+    border-radius: 25px;
+    background: var(--color-white);
+    color: var(--color-roxo);
+    border: none;
+    
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25), -6px 6px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    cursor: pointer;
+    transition: all .25s ease-in-out;
+}
+
+.form button:hover {
+    background: var(--color-violeta);
+    color: var(--color-white);
+}
+
+h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+    color: var(--color-preto);
+    font-family: var(--font-title);
+    font-weight: 500;
+}
+
+span {
+    transition: all .25s ease-in-out;
+    color: var(--color-preto);
+    cursor: pointer;
+}
+
+.span-login {
+    position: absolute;
+    bottom: -10%;
+}
+
+span.not-valid {
+    color: rgb(255, 0, 0);
+    font-size: 0.8rem;
+    font-family: var(--font-text);
+    font-weight: 600;
+    max-width: 380px;
+    align-self: center;
+    opacity: 1 !important;
+    margin-left: 20px;
+}
+
+#span_validar_email,
+#span_validar_nome,
+#span_validar_email_cadastro,
+#span_senha_cadastro,
+#span_validar_conf_senha,
+#span_validar_codigo {
+    opacity: 0;
+    width: 150px;
+
+}
+
+span.valid {
+    color: var(--color-certo);
+    font-size: 12px;
+    margin-top: 5px;
+    font-family: var(--font-text);
+    font-weight: 600;
+    max-width: 380px;
+    align-self: center;
+}
+
+.input-div {
+    width: 100%;
+    position: relative;
+}
+
+.input-div input {
+    width: 100%;
+}
+
+.flex {
+    display: flex !important;
+}
+
+.icon-input {
+    width: 30px;
+    position: absolute;
+    top: 15%;
+    left: -10%;
+    z-index: 2;
+}
+
+.btn-cadastrar {
+    font-size: 20px;
+    padding: 0.6rem 1.3rem;
+    font-weight: 600;
+    font-family: var(--font-title);
+    text-transform: capitalize;
+    border-radius: 25px;
+    background: var(--color-violeta) !important;
+    color: var(--color-white) !important;
+    border: none;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25), -6px 6px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    cursor: pointer;
+    transition: all .25s ease-in-out;
+}
+
+.shake {
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(10px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+
+main {
+    position: relative;
+}
+
+
+.closeLogin {
+    position: absolute;
+    right: 0;
+    left: 0;
+    animation-name: subir;
+    animation-duration: 1s;
+    top: -96%;
+    z-index: 2;
+}
+
+
+@keyframes subir {
+    0% {
+        top: -5%;
+    }
+
+    100% {
+        top: -96%;
+    }
+}
+
+#activeLogin{
+    text-decoration: underline;
+    color: var(--color-coral);
+    margin-left: 5px;
+}
+
+.activeLogin{
+    position: absolute;
+    right: 0;
+    left: 0;
+    animation-name: example;
+    animation-duration: 1s;
+}
+
+@keyframes example {
+    0%   {top:  -400px;}
+
+
+    100% {top: 0px}
+}
+
+
+.active {
+    display: block;
+}
+
+.close {
+display: none;
+}

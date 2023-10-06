@@ -1,4 +1,4 @@
-const loadButton = () => {
+const loadButton = async () => {
    var btn = document.getElementById();
    var size = btn.getAttribute("fontSize");
    var width = btn.getAttribute("width");
