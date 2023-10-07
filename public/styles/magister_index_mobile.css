@@ -1,0 +1,281 @@
+@media (max-width: 600px) {
+
+    /*Responsividade da header*/
+    #nav {
+        display: none;
+    }
+    
+    
+    #wrapper{
+        background-color: var(--color-violeta);
+    }
+    
+    #header{
+        padding: 20px 65px 155px 65px;
+        text-align: center;
+        position: relative;
+    }
+    
+    .head-textos{
+        color: var(--color-branco);
+    }
+    
+    .head-textos .titulo{
+        font-size: 2.3rem;
+    }
+    
+    .head-textos .subtitulo{
+        font-size: 1.1rem;
+        font-weight: lighter;
+    }
+    
+    .barco{
+        left: 1rem;
+        bottom: 0;
+        top: 10rem;
+    
+        position: absolute;
+    }
+    
+    
+    /*Responsividade do sobre nos*/
+    
+    #sobre {
+        background: var(--color-branco);
+    }
+    
+    .sobre-textos{
+        color: var(--color-preto);
+        text-align: center;
+        max-width: 30rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .sobre-conteudo{
+        flex-direction: column;
+        padding: 45px;
+    }
+    
+    .sobre-textos .titulo{
+        font-size: 2.3rem;
+    }
+    
+    .sobre-textos .subtitulo{
+        font-weight: normal;
+        font-size: 1rem;
+        width: 90%;
+    }
+    
+    .onda1{
+        display: none;
+    }
+    
+    .onda1Branca{
+        display: block;
+        bottom: -5px;
+    }
+    
+    .sobre-img-responsivo{
+        display: block; 
+        width: 13rem;
+    }
+    
+    .sobre-img{
+        display: none;
+    }
+    
+    
+    .onda-branca{
+        display: none;
+    }
+    
+    .onda-roxa{
+    display: block;
+    }
+    
+    /* Responsividade missoes*/
+    
+    #missoes{
+    background: #8144D0;
+    padding: 25px;
+    }
+    
+    #missoes .titulo{
+        color: white;
+        font-size: 2rem;
+    }
+    
+    .cards-missoes{
+        flex-direction: column;
+        gap: 5rem;
+    }
+    
+    .card{
+        max-width: 260px;
+        height: 350px;
+        background-color: #ffffff;
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+    }
+    
+    .card-img-div{
+        height: 100px;
+        transform: translateY(-15px);
+        width: unset;
+    }
+    
+    .card-img{
+        width: 8rem;
+        height: 8rem;
+    }
+    
+    .card-textos{
+        color: white;
+    } 
+    
+    .card-textos .subtitulo{
+        font-weight: normal;
+    }
+    
+    .onda-card{
+        width: 16.3rem;
+    }
+    
+    /*Responsividade fale conosco*/
+    
+    .fale-aqui-img{
+        display: none;
+    }
+    
+    .fale-aqui-img-responsividade{
+        display: block;
+        width: 10rem;
+    }
+    
+    #fale-aqui{
+        flex-direction: column;
+        padding: 25px 50px;
+    }
+    
+    .fale-aqui-lado{
+        width: unset; 
+    }
+    
+    .fale-aqui-textos{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .fale-aqui-textos .titulo{
+        font-size: 2rem;
+    }
+    
+    .fale-aqui-textos .mini-titulo{
+        font-size: 1.5rem;
+        font-weight: 100;
+    }
+    
+    .fale-aqui-rodape{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    
+    /* responsividade do footer*/
+    
+    
+    #footer{
+        flex-direction: column;
+        background: var(--color-cinzaEscuro);
+        padding: 5px 75px;
+        gap: 2rem;
+    }
+    
+    .logo-footer{
+        background: unset;
+    }
+    
+    .logo-footer-img{
+        display: none;
+    }
+    
+    
+    .logo-footer-img-responsividade{
+        display: block;
+    }
+    
+    .row-footer{
+        flex-direction: column-reverse;
+        color: var(--color-violeta);
+        border-left: 3px var(--color-violeta) solid;
+        padding-inline: 2rem;
+    }
+    
+    .info-footer{
+        align-items: start;
+        gap: 1.5rem;
+        padding: 0;
+        
+    }
+    
+    .footer-item{
+        color: white;
+        font-size: 1.1rem;
+    }
+    
+    .col-footer{
+        width: unset;
+    }
+    
+    .nowl-footer-img{
+        display: none;
+    }
+    
+    .bottom-footer{
+        color: white;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    
+    }
+    
+    .bottom-footer p{
+        font-size: .9rem;
+    }
+    
+    .mar-footer{
+        display: none;
+    }
+    
+    @keyframes ondas {
+        0% {
+            transform: translateY(0) rotate(0deg);
+    
+        } 50% {
+            transform: translateY(-10px);
+    
+        } 100% {
+            transform: translateY(0) rotate(0deg);
+    
+        }
+    }
+    
+    @keyframes barco {
+        0% {
+            transform: translateY(0) rotate(-15deg);
+    
+        } 50% {
+            transform: translateY(-10px) rotate(-15deg);
+    
+        } 100% {
+            transform: translateY(0) rotate(-15deg);
+    
+        }
+    }
+    
+    }

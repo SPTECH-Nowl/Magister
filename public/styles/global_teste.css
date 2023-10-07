@@ -1,0 +1,80 @@
+/* NÃO ESTÁ SENDO USADO NA INDEX NOWL */
+/* Aparente está quebrando a index */
+
+/* Importar Fontes */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@300;400;500;700&display=swap');
+
+/* Variáveis CSS */
+:root {
+    --color-coral: #F05D5E;
+    --color-cobalto: #314CB6;
+    --color-branco: #F5F5F5;
+    --color-preto: #0D0D0D;
+    --color-violeta: #9747FF;
+    --color-roxo: #6D499D;
+    --color-roxoEscuro: #4E2F78;
+    --color-cinzaEscuro: #252525;
+    --color-cinza: #E3E3E3;
+
+    --font-title: "Kanit";
+    --font-text: "Raleway";
+}
+
+/* Zerando estilo geral */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* overflow: hidden; */
+}
+
+.titulo {
+    font-family: 'Kanit';
+    font-size: 65px;
+    font-weight: bold;
+}
+
+.subtitulo {
+    font-family: 'Kanit';
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.mini-titulo {
+    font-family: 'Kanit';
+    font-size: 25px;
+    font-weight: medium;
+}
+
+.texto-k {
+    font-family: 'Kanit';
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.texto-r {
+    font-family: 'Raleway';
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.btn-roxo {
+    color: var(--color-branco);
+    background-color: var(--color-violeta);
+    /* font-weight: bold; */
+    padding: 10px 40px;
+    border-radius: 15px;
+    text-decoration: none;
+    border: none;
+    transition: all .25s ease-in-out;
+    box-shadow: inset -4px 4px 2px rgba(0, 0, 0, .25);
+}
+
+.btn-roxo:hover {
+    color: var(--color-violeta);
+    background-color: var(--color-branco);
+    box-shadow: inset 4px -4px 10px rgba(0, 0, 0, 0.50);
+    cursor: pointer;
+}
