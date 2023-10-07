@@ -39,6 +39,50 @@ html, body {
    font-family: var(--font-text);
 }
 
+h1, h2, h3, h4, h5, h6 {
+   font-family: var(--font-title);
+}
+
+highlight {
+   color: var(--color-purple-500);
+}
+
+body::-webkit-scrollbar {
+   width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+   background-color: var(--color-branco);
+}
+
+body::-webkit-scrollbar-thumb {
+   background-color: var(--color-violeta);
+   ;
+   border-radius: 5px;
+}
+
+.flex-row {
+   display: flex;
+   flex-direction: row;
+}
+
+.item-center {
+   align-items: center;
+}
+
+.content-center {
+   justify-content: center;
+}
+
+.all-center {
+   align-items: center;
+   justify-content: center;
+}
+
+.gap-1 {
+   gap: 1.5rem;
+}
+
 /* componentes */
 SideNav {
    width: 15%;

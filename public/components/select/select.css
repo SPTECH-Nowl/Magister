@@ -1,7 +1,7 @@
 sl-select {
    width: fit-content;
    border-radius: 30px;
-   background-color: #8e8d8d;
+   background-color: #bfbfbf;
 }
 
 sl-select::part(form-control) {
