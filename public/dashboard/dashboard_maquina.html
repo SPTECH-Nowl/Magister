@@ -7,8 +7,14 @@
    <link rel="stylesheet" href="../styles/dashboard.css">   
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
 
+   <!-- Shoelace -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/themes/light.css" />
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/shoelace-autoloader.js"></script>
+
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
+
+   <script src="../components/dialog/dialog.js" defer></script>   
 
    <!-- Google Charts -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -77,6 +83,11 @@
                   <span class="spec-value spec-ativo">ON</span>
                </div>
             </div>
+            <sl-dialog label="Dialog" class="dialog-overview">
+               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+               <sl-button slot="footer" variant="primary">Close</sl-button>
+            </sl-dialog>
+
             <button class="btn primario">Ver hardware</button>
          </div>
          <div class="chart-container">
