@@ -10,12 +10,46 @@
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
 
-   <script src="../components/navbar/navbar.js"></script>
-   <link rel="stylesheet" href="../components/navbar/navbar.css">
+   <!-- Google Charts -->
+   <script src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="../scripts/dashboard_maquina.js" defer></script>
+
    <title>Dashboard</title>
 </head>
 <body>
-   <SideNav></SideNav>
+   <div class="side-menu">
+      <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
+      <div class="user-profile">
+         <div id="pfp"></div>
+         <div class="texto-user">
+            <span>Bem-vindo,</span>
+            <span id="usuario">Usuário</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+         <li>
+            <img src="../assets/img/elements/dash.svg" alt="">
+            Dashboard
+         </li>
+         <li>
+            <img src="../assets/img/elements/pc.svg" alt="">
+            Máquinas
+         </li>
+         <li>
+            <img src="../assets/img/elements/programa.svg" alt="">
+            Programas
+         </li>
+      </ul>
+
+      <ul>
+         <li>
+            <img src="../assets/img/elements/settings.svg" alt="">
+            Ajustes
+         </li>
+      </ul>
+   </div>
+
    <div class="dash-content">
       <h1>Desempenho da máquina 01</h1>
       <div class="chart-grid">
@@ -47,25 +81,21 @@
          </div>
          <div class="chart-container">
             <h3>Uso de CPU</h3>
-            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+            <div id="cpu_chart" class="chart"></div>
          </div>
          <div class="chart-container">
             <h3>Uso de RAM</h3>
-            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+            <div id="ram_chart" class="chart"></div>
          </div>
          <div class="chart-container">
             <h3>Uso de Disco</h3>
-            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+            <div id="disc_chart" class="chart"></div>
          </div>
          <div class="chart-container">
             <h3>Quantidade de janelas abertas</h3>
-            <img src="../assets/img/elements/chart-print.png" alt="" class="chart">
+            <div id="window_chart" class="chart"></div>
          </div>
       </div>
    </div>
 </body>
 </html>
-
-<script>
-     usuario.innerHTML = sessionStorage.NOME_USUARIO
-</script>
