@@ -22,6 +22,11 @@ app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 
 
+app.use('*',(_,res)=>{
+    res.sendfile('./public/404.html');
+})
+
+
 app.listen(PORTA, function () {
     console.log(`Servidor do seu site já está rodando! Acesse o caminho a seguir para visualizar: http://localhost:${PORTA} \n
     Você está rodando sua aplicação em Ambiente de ${process.env.AMBIENTE_PROCESSO} \n

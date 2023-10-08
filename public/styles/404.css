@@ -1,0 +1,86 @@
+
+body{
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.principal{
+    margin-left: 2%;
+    font-family: 'Kanit';
+    font-weight: 600;
+}
+
+.principal .titulo{
+    font-size: 200px;
+    color: var(--color-roxoEscuro);
+    text-shadow: 10px 10px var(--color-cinza);
+}
+
+.principal .subtitulo{
+    font-family: var(--font-text);
+    font-size: 35px;
+    width: 700px;
+}
+
+.texto-k{
+    font-weight: 600;
+
+}
+
+.gaivota01{
+
+    position: absolute;
+    right:10%;
+    top: 10%;
+
+}
+
+.gaivota02{
+
+    position: absolute;
+    right:40%;
+    top: 30%;
+}
+
+.gaivota03{
+
+    position: absolute;
+    right:20%;
+    top: 45%;
+
+}
+
+
+.Onda1{
+    z-index: 4;
+
+    width: 101%;
+    height: 36%;
+    position: absolute;
+    left: -1%;
+    bottom: 0;
+}
+
+.OndaRoxa{
+    z-index: 1;
+
+    width: 100%;
+    height:30%;
+    position: absolute;
+    left:10%;
+    bottom: 0;
+}
+.afogamento{
+    z-index: 2;
+    width: 10%;
+    position: absolute;
+    right: 240px;
+    bottom: 110px;
+}
+.naufragio{
+    z-index: 3;
+    width: 23%;
+    position: absolute;
+    left: 200px;
+    bottom: 0px;
+}
