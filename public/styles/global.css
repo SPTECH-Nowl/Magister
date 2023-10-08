@@ -84,9 +84,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 /* componentes */
-SideNav {
-   width: 15%;
-}
 
 .display-none {
    display: none;
@@ -121,4 +118,87 @@ sl-dialog::part(body) {
 
 sl-dialog::part(close-button__base) {
    color: #0D0D0D;
+}
+
+.texto-user span {
+   display: flex;
+   align-self: center;
+   justify-content: center;
+   font-size: 20px;
+   color: var(--color-gray-100);
+}
+
+#b_usuario {
+   align-self: center;
+   font-size: 20px;
+   color: var(--color-gray-100);
+}
+
+ul {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   gap: 2.3rem;
+}
+
+ul li {
+   width: 10vw;
+   display: flex;
+   align-items: center;
+   gap: 1.2rem;
+   font-weight: 700;
+   color: white;
+   font-size: 1.2rem;
+   cursor: pointer;
+}
+
+ul li img {
+   width: 1.4rem;
+}
+
+.side-menu {
+   position: relative;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-direction: column;
+   width: 15%;
+   height: 100vh;
+   padding: 2rem 0;
+   background: linear-gradient(358deg, #6D499D 18.16%, #9747FF 38.1%);   
+   z-index: -2;
+}
+
+.wave-menu {
+   width: 100%;
+   position: absolute;
+   top: -10%;
+   z-index: -1;
+}
+
+.nav-list {
+   position: absolute;
+   top: 40%;
+}
+
+.user-profile {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   gap: 1rem;
+}
+
+#pfp {
+   width: 8rem;
+   height: 8rem;
+   background-color: #d4d4d4;
+   border-radius: 50%;
+}
+
+#nome_user {
+   font-weight: 700;
+   font-size: 1.5rem;
+   color: white;
 }
