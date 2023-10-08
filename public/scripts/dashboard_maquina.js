@@ -1,6 +1,7 @@
+//Google Chart functions
 google.charts.load('current', {packages: ['corechart']});
 
-function drawCPU() {
+const drawCPU = () => {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -31,7 +32,7 @@ function drawCPU() {
    chart.draw(data, options);
 }
 
-function drawRAM() {
+const drawRAM = () => {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -62,7 +63,7 @@ function drawRAM() {
    chart.draw(data, options);
 }
 
-function drawDisc() {
+const drawDisc = () => {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -93,7 +94,7 @@ function drawDisc() {
    chart.draw(data, options);
 }
 
-function drawWindow() {
+const drawWindow = () => {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
