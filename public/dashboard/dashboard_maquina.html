@@ -6,7 +6,7 @@
    <link rel="stylesheet" href="../styles/global.css">
    <link rel="stylesheet" href="../styles/dashboard.css">   
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
-
+   <link rel="shortcut icon" href="../scripts/funcoes.js">
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
 
@@ -22,8 +22,8 @@
       <div class="user-profile">
          <div id="pfp"></div>
          <div class="texto-user">
-            <span>Bem-vindo,</span>
-            <span id="usuario">Usuário</span>
+            <span>Bem-vindo</span>
+            <span id="b_usuario"></span>
         </div>
       </div>
 
@@ -99,3 +99,6 @@
    </div>
 </body>
 </html>
+<script>
+   b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+</script>

@@ -1,3 +1,4 @@
+b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
 // essa função é só para visualização de como a tela fica quando está sendo preenchida, ela vai ser substituída pela 
 // função que irá trazer os dados vindos do banco
 

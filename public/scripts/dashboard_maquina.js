@@ -1,3 +1,5 @@
+b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
 //Google Chart functions
 google.charts.load('current', {packages: ['corechart']});
 

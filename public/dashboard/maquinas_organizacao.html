@@ -43,8 +43,8 @@
       <div class="user-profile">
          <div id="pfp"></div>
          <div class="texto-user">
-            <span>Bem-vindo,</span>
-            <span id="usuario">Usuário</span>
+            <span>Bem-vindo</span>
+            <span id="b_usuario"></span>
         </div>
       </div>
 
@@ -122,3 +122,6 @@
    </div>
 </body>
 </html>
+<script>
+   b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+</script>

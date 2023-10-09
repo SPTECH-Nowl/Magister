@@ -51,12 +51,13 @@ function entrar() {
         fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
              {cache: "no-cache"}).then( resposta =>{
                 if(resposta.ok){
+                    swal("sucess","Redirecionando para dashboard","sucess");
                         resposta.json().then(json => {
                             sessionStorage.emailUsuario = json.email;
                             sessionStorage.nomeUsuario = json.nome;
                             sessionStorage.idUsuario = json.idUsuario;
                         })
-                        swal("Parábens","Redirecionando para dashboard","Sucess");
+                        swal("Parábens","Redirecionando para dashboard","sucess");
                         window.location = "./dashboard/dashboard_maquina.html"
                 } else {
                     swal('Email e/ou senha invalido!')
