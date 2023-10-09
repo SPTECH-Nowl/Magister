@@ -4,160 +4,313 @@
 // * verificar nomes = deletar == delete -> aviso/deletar
 // * verificar nomes = mostrar_dados == select -> aviso/mostrar_dados
 
+
+b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
+function limparFormulario() {
+    document.getElementById("form_postagem").reset();
+}
+
 function publicar() {
-    var nomeVar = nome_input_cadastro.value;
-    var emailVar = email_input_cadastro.value;
-    var senhaVar = senha_input_cadastro.value;
-    var codigoVar = codigo_input.value;
-    var fkInstituicaoVar = fkInstituicao_input.value;
 
-    if (nomeVar ==""||emailVar == "" || senhaVar == ""|| codigoVar =="" || fkInstituicaoVar == "") {
-      
-        swal("error","Preencha todos os campos ou nivel de permição invalido","error");
-        return false;
-} 
+    var corpo = {
+        nome: form_postagem.nome_input.value,
+        email: form_postagem.email_input.value,
+        senha: form_postagem.senha_input.value,
+        nivPermissão: form_postagem.nivPermissao_input.value
+    }
 
-    fetch("/aviso/publicar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeServer: nomeVar,
-            emailServer: emailVar,
-            senhaServer: senhaVar,
-            codigoServer: codigoVar,
-            fkInstituicaoServer:fkInstituicaoVar
+    if (tipo_de_usuario == "usuario") {
+        Swal.fire({
+            background: '#151515',
+            color: '#FFF',
+            icon: 'error',
+            title: 'Erro',
+            html: `Prezado usuário,
+
+Voce não tem permissão para adicionar Usuario`,
         })
-    }).then(function (resposta) {
-        if (resposta.ok) {
-            toggleLogin()
-            swal("Parábens","Cadastro concluido com êxito!","sucess")
-        } else {
-            console.log("erro no cadastro")
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+        return false;
+    } 
+    else {
+        fetch(`/avisos/publicar/${idUsuario}`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(corpo)
+        }).then(function (resposta) {
 
-    });
+            console.log("resposta: ", resposta);
 
-    return false;
+            if (resposta.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    background: '#151515',
+                    color: '#FFF',
+                    showCancelButton: false,
+                    title: 'Bom trabalho!',
+                    text: 'Usuário Cadastrado com sucesso',
 
+                })
+                document.getElementById('okButton').addEventListener('click', function () {
+                    Swal.close()
+                    window.location.reload()
+                });
+                limparFormulario();
 
+            } else if (resposta.status == 404) {
+                window.alert("Deu 404!");
+                window.location = "usuarios.html"
+                alert("ERRO")
+            } else {
+                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+
+        });
+
+        return false;
+
+    }
 
 }
 
-function editar() {
-    var nomeVar = nome_input_cadastro.value;
-    var emailVar = email_input_cadastro.value;
-    var senhaVar = senha_input_cadastro.value;
-    var idUsuarioVar = idUsuario.value;
-    var fkInstituicaoVar = fkInstituicao_input.value;
+function mostrar_dados(idAviso) {
 
-    if (nomeVar ==""||emailVar == "" || senhaVar == ""|| idUsuarioVar =="" || fkInstituicaoVar == "") {
-      
-        swal("error","Preencha todos os campos ou nivel de permição invalido","error");
-        return false;
-} 
+    //aguardar();
+    fetch(`/avisos/mostrar_dados/${idAviso}`).then(function (resposta_dados_usuario) {
 
-    fetch("/aviso/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeServer: nomeVar,
-            emailServer: emailVar,
-            senhaServer: senhaVar,
-            idUsuarioServer: idUsuarioVar,
-            fkInstituicao:fkInstituicaoVar
-        })
-    }).then(function (resposta) {
-        if (resposta.ok) {
-            toggleLogin()
-            swal("Parábens","Update concluido com êxito!","sucess")
+        if (resposta_dados_usuario.ok) {
+            if (resposta_dados_usuario.status == 204) {
+                alert("ERRO")
+            }
+
+            resposta_dados_usuario.json().then(function (resposta_dados_usuario) {
+                console.log("Dados recebidos dos usuarios é : ", JSON.stringify(resposta_dados_usuario));
+
+
+                for (let i = 0; i < resposta_dados_usuario.length; i++) {
+                    var dados = resposta_dados_usuario[i];
+                    console.log(dados)
+                    Swal.fire({
+                        background: '#151515',
+                        color: '#FFF',
+                        confirmButtonColor: 'cornflowerblue',
+                        title: 'Dados do Funcionário',
+                        html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <span><b>Nome</b>: ${dados.nome}</span>
+                        <span><b>Email</b>: ${dados.email}</span>
+                        <span><b>Senha:</b> ${dados.senha}</span>
+                        <span><b>nivPermissao:</b> ${dados.nivPermissao}</span>
+                        </div>`,
+                    })
+                }
+            });
         } else {
-            console.log("erro no Update")
+            console.error('Houve um erro na API!', resposta_dados_usuario.status);
+
         }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+    }).catch(function (erro) {
+        console.error(erro);
 
     });
+}
 
-    return false;
-
-
+function editar(idAviso) {
+    sessionStorage.ID_POSTAGEM_EDITANDO = idAviso;
+    console.log("cliquei em editar - " + idAviso);
+    window.alert("Você será redirecionado à página de edição do aviso de id número: " + idAviso);
+    window.location = "/dashboard/usuarios.html"
 
 }
 
-function deletar() {
-    var idUsuarioVar = idUsuario.value;
+function deletar(idAviso) {
+    console.log("Criar função de apagar post escolhido - ID" + idAviso);
 
 
-    if ( idUsuarioVar == "") {
-      
-        swal("error","Preencha todos os campos ou nivel de permição invalido","error");
-        return false;
-} 
 
-    fetch("/aviso/deletar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            idUsuario: idUsuarioVar,
+    if (tipo_de_usuario == "usuario") {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            background: '#151515',
+            color: '#FFF',
+            html: `Prezado usuário,
+
+Voce nao possui permissão para deletar`,
         })
-    }).then(function (resposta) {
-        if (resposta.ok) {
-            toggleLogin()
-            swal("Parábens","Update concluido com êxito!","sucess")
-        } else {
-            console.log("erro no Update")
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+        return false;
+    }
+    else {
+        Swal.fire({
+            title: 'Você tem certeza que deseja deletar?',
+            background: '#151515',
+            color: '#FFF',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Deletar',
+            denyButtonText: `Não Deletar`,
+            confirmButtonColor: '#FF5555',
+            denyButtonColor: '#424242',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/avisos/deletar/${idAviso}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).then(function (resposta) {
+                    if (resposta.ok) {
+                        Swal.fire('Saved!', '', 'success')
+                        Swal.fire({
+                            icon: 'success',
+                            background: '#151515',
+                            color: '#FFF',
+                            title: 'Bom trabalho!',
+                            text: 'Usuário deletado com sucesso',
 
-    });
+                        })
+                        document.getElementById('okButton').addEventListener('click', function () {
+                            Swal.close();
+                            location.reload();
+                        });
+                        window.location = "cadastrar-usuario.html";
+                    } else {
+                        Swal.fire('Falha ao deletar o usuário', '', 'error')
+                    }
+                }).catch(function (resposta) {
+                    console.log(resposta);
+                });
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'warning',
+                    background: '#151515',
+                    color: '#FFF',
+                    title: 'Bom trabalho!',
+                    text: 'Usuário não deletado',
+                    confirmButtonColor: '#4CAF50'
+                })
 
-    return false;
-
-
-
+            }
+        });
+    }
 }
 
-function mostrar_dados() {
-    var idUsuarioVar = idUsuario.value;
-
-
-    if ( idUsuarioVar == "") {
-      
-        swal("error","Preencha todos os campos ou nivel de permição invalido","error");
-        return false;
-} 
-
-    fetch("/aviso/mostrar_dados", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            idUsuario: idUsuarioVar,
-        })
-    }).then(function (resposta) {
+function atualizarFeed() {
+    var idUsuario = sessionStorage.ID_USUARIO;
+    //aguardar();
+    fetch(`/avisos/listar/${idUsuario}`).then(function (resposta) {
         if (resposta.ok) {
-            toggleLogin()
-            swal("Parábens","Update concluido com êxito!","sucess")
+
+            if (resposta.status == 204) {
+                var feed = document.getElementById("feed_container");
+                var mensagem = document.createElement("span");
+                mensagem.innerHTML = "Nenhum resultado encontrado."
+                feed.appendChild(mensagem);
+                throw "Nenhum resultado encontrado!!";
+            }
+
+            resposta.json().then(function (resposta) {
+                console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                var feed = document.getElementById("feed_container");
+                feed.innerHTML = "";
+                for (let i = 0; i < resposta.length; i++) {
+                    var publicacao = resposta[i];
+
+                    
+                    var linha = document.createElement("tr");
+                    var tdId = document.createElement("td");
+                    var tdNome = document.createElement("td");
+                    var tdButtons = document.createElement("td");
+                   
+                    tdId.innerHTML = publicacao.idusuario;
+                    var id_usuario = publicacao.idusuario
+                    console.log("O id é " + id_usuario)
+                    tdNome.innerHTML = publicacao.nome;
+                    tdButtons.innerHTML = `
+                        <button class="btn-crud red" id="btn_delete${i}" onclick="deletar(${publicacao.idusuario})">Deletar</button>
+                        <button class="btn-crud green" id="btn_update${i}" onclick="alterar(${publicacao.idusuario})">Alterar</button>
+                        <button class="btn-crud blue" id="btn_get${i}" onclick="mostrar_dados(${publicacao.idusuario})">Informações</button>
+                    `
+                    
+
+
+                    tdNome.className = "publicacao-nome";
+                   
+
+                    linha.appendChild(tdId);
+                    linha.appendChild(tdNome);
+                    linha.appendChild(tdButtons);
+                    feed.appendChild(linha);
+                }
+
+
+            });
         } else {
-            console.log("erro no Update")
+            throw ('Houve um erro na API!');
         }
     }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+        console.error(resposta);
 
     });
+}
+
+
+function testar() {
+    aguardar();
+
+    var formulario = new URLSearchParams(new FormData(document.getElementById("form_postagem")));
+
+    var divResultado = document.getElementById("div_feed");
+
+    divResultado.appendChild(document.createTextNode(formulario.get("descricao")));
+    divResultado.innerHTML = formulario.get("descricao");
+
+
 
     return false;
-
-
-
 }
+
+
+
+function alterar(idAviso) {
+
+    Swal.fire({
+        background: '#151515',
+        color: '#FFF',
+        title: '<span class="titulo">Editar Usuário</span>',
+        html: `
+      <div class="div_crud_alterar">
+        
+        <input type="text" id="input_nome" onkeyup="validar_nome()" placeholder="Nome de no minimo 3 caracteres" />
+      </div>
+      <div class="div_crud_alterar">
+        <input type="email" id="emailInput" onkeyup="validar_email()" placeholder="Insira um email válido" />
+      </div>
+      <div class="div_crud_alterar">
+        <input type="text" id="senhaInput" onkeyup="validar_senha()" placeholder="Senha de no mínimo 8 caracteres" />
+      </div>
+      <div class="div_crud_alterar">
+      <input type="text" id="nivPermissaoInput" onkeyup="validar_nivPermissao()" placeholder="insira números" />
+    </div>
+    `,
+        showCancelButton: true,
+        confirmButtonText: 'Alterar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#74C365',
+        cancelButtonColor: '#FF5555',
+        preConfirm: () => {
+            var nome = document.getElementById('input_nome').value;
+            var email = document.getElementById('emailInput').value;
+            var senha = document.getElementById('senhaInput').value;
+            var nivPermissao = document.getElementById('nivPermissaoInput').value;
+
+            alterarUsuario(idAviso);
+        }
+    });
+}
+
