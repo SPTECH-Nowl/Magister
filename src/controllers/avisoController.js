@@ -63,18 +63,24 @@ function publicar(req, res) {
     var nome = req.body.nome;
     var email = req.body.email;
     var senha = req.body.senha
-    var idUsuario = req.params.idUsuario;
+    var nivPermissao= req.body.nivPermissao;
+    var fkInstituicao= req.body.fkInstituicao;
+
     if (nome == undefined) {
         res.status(400).send("O nome está indefinido!");
     } else if (email == undefined) {
         res.status(400).send("O Email está indefinido!");
     } else if (senha == undefined) {
         res.status(403).send("O id do usuário está indefinido!");
+    } else if (nivPermissao == undefined) {
+        res.status(403).send("O id do usuário está indefinido!");
+    } else if (fkInstituicao== undefined) {
+        res.status(403).send("O id do usuário está indefinido!");
     } else {
-        avisoModel.publicar(nome, email, senha , idUsuario)
+        avisoModel.publicar(nome, email, senha , nivPermissao,fkInstituicao)
             .then(
                 function (resultado) {
-                    res.json(resultado);
+             47       res.json(resultado);
                 }
             )
             .catch(
@@ -92,8 +98,10 @@ function editar(req, res) {
     var nome = req.body.nomeServer
     var email = req.body.emailServer
     var senha = req.body.senhaServer
-    var idAviso = req.body.idSever
-    avisoModel.editar(nome,email , senha , idAviso)
+    var nivPermissao= req.body.nivPermissao;
+    var fkInstituicao= req.body.fkInstituicao;
+
+    avisoModel.editar(nome,email , senha ,nivPermissao,fkInstituicao)
         .then(
             function (resultado) {
                 res.json(resultado);
