@@ -1,7 +1,8 @@
 var avisoModel = require("../models/avisoModel");
 
 function listar(req, res) {
-    avisoModel.listar().then(function (resultado) {
+    var idAviso = req.params.idAviso;
+    avisoModel.listar(idAviso).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -39,40 +40,38 @@ function listarPorUsuario(req, res) {
         );
 }
 
-function pesquisarDescricao(req, res) {
-    var descricao = req.params.descricao;
 
-    avisoModel.pesquisarDescricao(descricao)
+function mostrar_dados(req, res) {
+    var idAviso = req.params.idAviso;
+    avisoModel.mostrar_dados(idAviso)
         .then(
             function (resultado) {
-                if (resultado.length > 0) {
-                    res.status(200).json(resultado);
-                } else {
-                    res.status(204).send("Nenhum resultado encontrado!");
-                }
+                res.json(resultado);
             }
-        ).catch(
+        )
+        .catch(
             function (erro) {
                 console.log(erro);
-                console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
                 res.status(500).json(erro.sqlMessage);
             }
         );
 }
 
-function publicar(req, res) {
-    var titulo = req.body.titulo;
-    var descricao = req.body.descricao;
-    var idUsuario = req.params.idUsuario;
 
-    if (titulo == undefined) {
-        res.status(400).send("O título está indefinido!");
-    } else if (descricao == undefined) {
-        res.status(400).send("A descrição está indefinido!");
-    } else if (idUsuario == undefined) {
+function publicar(req, res) {
+    var nome = req.body.nome;
+    var email = req.body.email;
+    var senha = req.body.senha
+    var idUsuario = req.params.idUsuario;
+    if (nome == undefined) {
+        res.status(400).send("O nome está indefinido!");
+    } else if (email == undefined) {
+        res.status(400).send("O Email está indefinido!");
+    } else if (senha == undefined) {
         res.status(403).send("O id do usuário está indefinido!");
     } else {
-        avisoModel.publicar(titulo, descricao, idUsuario)
+        avisoModel.publicar(nome, email, senha , idUsuario)
             .then(
                 function (resultado) {
                     res.json(resultado);
@@ -88,11 +87,13 @@ function publicar(req, res) {
     }
 }
 
-function editar(req, res) {
-    var novaDescricao = req.body.descricao;
-    var idAviso = req.params.idAviso;
 
-    avisoModel.editar(novaDescricao, idAviso)
+function editar(req, res) {
+    var nome = req.body.nomeServer
+    var email = req.body.emailServer
+    var senha = req.body.senhaServer
+    var idAviso = req.body.idSever
+    avisoModel.editar(nome,email , senha , idAviso)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -105,12 +106,11 @@ function editar(req, res) {
                 res.status(500).json(erro.sqlMessage);
             }
         );
-
 }
+
 
 function deletar(req, res) {
     var idAviso = req.params.idAviso;
-
     avisoModel.deletar(idAviso)
         .then(
             function (resultado) {
@@ -125,11 +125,10 @@ function deletar(req, res) {
             }
         );
 }
-
 module.exports = {
     listar,
     listarPorUsuario,
-    pesquisarDescricao,
+    mostrar_dados,
     publicar,
     editar,
     deletar
