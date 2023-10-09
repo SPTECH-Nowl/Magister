@@ -80,7 +80,7 @@ function publicar(req, res) {
         avisoModel.publicar(nome, email, senha , nivPermissao,fkInstituicao)
             .then(
                 function (resultado) {
-             47       res.json(resultado);
+              res.json(resultado);
                 }
             )
             .catch(
