@@ -27,6 +27,25 @@ body{
 
 }
 
+
+
+
+.gaivota01{
+    display: none;
+}
+
+.gaivota2 {
+    z-index: 3;
+    animation: 2.25s ease-in-out 1s infinite ondas;
+}
+
+.gaivota3 {
+    z-index: 2;
+    animation: 2.5s ease-in-out 1s infinite ondas;
+}
+
+
+
 .gaivota01{
 
     position: absolute;
@@ -84,3 +103,4 @@ body{
     left: 200px;
     bottom: 0px;
 }
+

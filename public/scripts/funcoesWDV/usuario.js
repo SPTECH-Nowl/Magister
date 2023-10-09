@@ -6,7 +6,7 @@ function cadastrar() {
 
     if (nomeVar ==""||emailVar == "" || senhaVar == ""|| codigoVar =="") {
       
-
+        swal("error","Preencha todos os campos","error");
         return false;
 } 
 
@@ -24,7 +24,7 @@ function cadastrar() {
     }).then(function (resposta) {
         if (resposta.ok) {
             toggleLogin()
-            swal("sucess","Cadastro concluido com êxito!","sucess")
+            swal("Parábens","Cadastro concluido com êxito!","sucess")
         } else {
             console.log("erro no cadastro")
         }
@@ -44,7 +44,7 @@ function entrar() {
     var senhaVar = senha_input.value;
 
     if (emailVar == "" || senhaVar == "") {
-        return false;
+        swal("error","Preencha todos os campos","error");
     }
     else {
      
@@ -56,7 +56,7 @@ function entrar() {
                             sessionStorage.nomeUsuario = json.nome;
                             sessionStorage.idUsuario = json.idUsuario;
                         })
-
+                        swal("Parábens","Redirecionando para dashboard","Sucess");
                         window.location = "./dashboard/dashboard_maquina.html"
                 } else {
                     swal('Email e/ou senha invalido!')

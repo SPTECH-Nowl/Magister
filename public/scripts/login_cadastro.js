@@ -123,8 +123,6 @@ function validar_codigo() {
 //
 
 
-
-
 var status = 1;
 
 function senha(){
