@@ -1,19 +1,10 @@
-// sessão
-function validarSessao() {
-    // aguardar();
+const validarAcesso = () => {
+   var acesso = localStorage.getItem("nivelUsuario");
 
-    var email = sessionStorage.EMAIL_USUARIO;
-    var nome = sessionStorage.NOME_USUARIO;
-
-    var b_usuario = document.getElementById("b_usuario");
-
-    if (email != null && nome != null) {
-        // window.alert(`Seja bem-vindo, ${nome}!`);
-        b_usuario.innerHTML = nome;
-
-        // finalizarAguardar();
-    } else {
-        window.location = "../login.html";
-    }
+   if(acesso >= 2 && acesso != undefined && acesso != null) {
+      b_usuario.innerHTML = nome;
+      alert("Bem vindo!");
+   } else {
+      window.location.href = "http://127.0.0.1:5500/public/index.html";
+   }
 }
-

@@ -53,9 +53,10 @@ function entrar() {
                 if(resposta.ok){
                     swal("sucess","Redirecionando para dashboard","sucess");
                         resposta.json().then(json => {
-                            sessionStorage.emailUsuario = json.email;
-                            sessionStorage.nomeUsuario = json.nome;
-                            sessionStorage.idUsuario = json.idUsuario;
+                            localStorage.setItem("emailUsuario", json.email);
+                            localStorage.setItem("nomeUsuario", json.nome);
+                            localStorage.setItem("idUsuario", json.idUsuario);
+                            localStorage.setItem("nivelUsuario", json.nivel);
                         })
                         swal("Parábens","Redirecionando para dashboard","sucess");
                         window.location = "./dashboard/dashboard_maquina.html"
