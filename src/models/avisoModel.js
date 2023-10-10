@@ -86,7 +86,7 @@ function deletar(idAviso) {
 function mostrar_dados(idAviso) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function deletar():", idAviso);
     var instrucao = `
-    SELECT usuario.nome AS nome, usuario.email, instituicao.nome AS instituicao_nome
+    SELECT usuario.nome AS nome, usuario.email,usuario.senha,usuario.nivPermissao, instituicao.nome AS instituicao_nome
 FROM usuario
 JOIN instituicao ON usuario.FkInstituicao = instituicao.codigoHex
 WHERE usuario.idUsuario = ${idUsuario};
