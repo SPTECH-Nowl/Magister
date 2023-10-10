@@ -313,4 +313,133 @@ function alterar(idAviso) {
         }
     });
 }
+function validar_nome() {
+    var input = document.getElementById('input_nome');
+    var nome = input.value;
+    if (nome == "") {
+
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Campo vazio';
+    }
+    else if (nome.length < 3) {
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Nome muito curto';
+    }
+    else {
+        input.classList.add('correto');
+        input.placeholder = 'Nome';
+
+    }
+}
+
+
+function validar_email() {
+    var input = document.getElementById('emailInput');
+    var email = input.value;
+
+    if (email == '') {
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Campo vazio';
+    }
+    else if (email.indexOf("@") == -1 || email.indexOf(".com") == -1 || email.length < 7) {
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Email incorreto';
+    }
+    else {
+        input.classList.add('correto');
+        input.placeholder = 'Email';
+    }
+}
+
+
+function validar_senha() {
+    var input = document.getElementById('senhaInput');
+    var senha = input.value;
+
+
+    if (senha == "") {
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Campo vazio';
+    }
+    else if (senha.length < 8) {
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Senha menor que 8 caracteres';
+    }
+    else {
+        input.classList.add('correto');
+        input.placeholder = 'Senha';
+    }
+}
+
+function alterarUsuario(idAviso) {
+
+    var input_nome = document.getElementById('input_nome')
+    var input_email = document.getElementById('emailInput')
+    var input_senha = document.getElementById('senhaInput');
+    var input_nivPermissao = document.getElementById('nivPermissaoInput');
+
+    var nome = input_nome.value;
+    var email = input_email.value
+    var senha = input_senha.value
+    var nivPermissao = input_nivPermissao.value
+
+
+    if (nome == "" || email == "" || senha == ""||nivPermissao) {
+
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Campo vazio';
+    }
+    else if (nome.length < 3 || email.indexOf("@") == -1 || email.indexOf(".com") == -1 || email.length < 7
+        || senha.length < 8) {
+        input.classList.remove('correto');
+        input.classList.add('erro');
+        input.placeholder = 'Nome muito curto';
+    }
+    else {
+        fetch(`/avisos/editar/${sessionStorage.getItem("ID_POSTAGEM_EDITANDO")}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nomeServer: nome,
+                emailServer: email,
+                senhaServer: senha,
+                nivPermissaoServer: nivPermissao,
+                idSever: idAviso
+            })
+        }).then(function (resposta) {
+
+            if (resposta.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    background: '#151515',
+                    color: '#FFF',
+                    title: 'Bom trabalho!',
+                    text: 'Usuario Atualizado com sucesso',
+                    showConfirmButton: false,
+                })
+                document.getElementById('okButton').addEventListener('click', function () {
+                    Swal.close();
+                });
+                window.location = "cadastrar-usuario.html"
+            } else if (resposta.status == 404) {
+                window.alert("Deu 404!");
+            } else {
+                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+}
+
+
 

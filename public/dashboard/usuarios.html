@@ -4,7 +4,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
    <link rel="stylesheet" href="../styles/dashboard.css">
-
+   <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -14,6 +14,37 @@
 </head>
 <body>
    <body onload="atualizarFeed() , listarInfosDeUm()"></body>
-   <SideNav></SideNav>
+   <div class="side-menu">
+      <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
+      <div class="user-profile">
+         <div id="pfp"></div>
+         <div class="texto-user">
+            <span>Bem-vindo</span>
+            <span id="b_usuario"></span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+         <li>
+            <img src="../assets/img/elements/dash.svg" alt="">
+            Dashboard
+         </li>
+         <li>
+            <img src="../assets/img/elements/pc.svg" alt="">
+            Máquinas
+         </li>
+         <li>
+            <img src="../assets/img/elements/programa.svg" alt="">
+            Programas
+         </li>
+      </ul>
+
+      <ul>
+         <li>
+            <img src="../assets/img/elements/settings.svg" alt="">
+            Ajustes
+         </li>
+      </ul>
+   </div>
 </body>
 </html>
