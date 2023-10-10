@@ -24,7 +24,8 @@ function cadastrar() {
     }).then(function (resposta) {
         if (resposta.ok) {
             toggleLogin()
-            swal("Parábens","Cadastro concluido com êxito!","sucess")
+            swal("Parábens","Redirecionando para dashboard","sucess");
+            window.location = "login_cadastro.html"
         } else {
             console.log("erro no cadastro")
         }
@@ -59,7 +60,7 @@ function entrar() {
                             localStorage.setItem("nivelUsuario", json.nivel);
                         })
                         swal("Parábens","Redirecionando para dashboard","sucess");
-                        window.location = "./dashboard/dashboard_maquina.html"
+                        window.location = "../dashboard/dashboard_maquina.html"
                 } else {
                     swal('Email e/ou senha invalido!')
                 }
