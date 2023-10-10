@@ -6,9 +6,10 @@
    <link rel="stylesheet" href="../styles/global.css">
    <link rel="stylesheet" href="../styles/dashboard.css">   
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
-   <link rel="shortcut icon" href="../scripts/funcoes.js">
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
+   <script src="../scripts/funcoes.js"></script>
+
 
    <!-- Google Charts -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -16,7 +17,7 @@
 
    <title>Dashboard</title>
 </head>
-<body>
+<body onload="validarAcesso()">
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
       <div class="user-profile">
