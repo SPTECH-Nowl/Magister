@@ -1,7 +1,7 @@
 const validarAcesso = () => {
    var acesso = localStorage.getItem("nivelUsuario");
 
-   if(acesso >= 2 || acesso != undefined || acesso != null) {
+   if(acesso >= 2 && acesso != undefined && acesso != null) {
       b_usuario.innerHTML = nome;
       alert("Bem vindo!");
    } else {
