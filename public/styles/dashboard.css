@@ -3,6 +3,8 @@ body {
    font-family: var(--font-text);
 }
 
+
+
 /* dashboard */
 .dash-content {
    width: 100%;
@@ -104,6 +106,25 @@ body {
    overflow-y: scroll;
 }
 
+#maquinas {
+   overflow-x: hidden;
+}
+
+#maquinas::-webkit-scrollbar {
+   width: 5px;
+}
+
+#maquinas::-webkit-scrollbar-track {
+   background-color: var(--color-branco);
+}
+
+#maquinas::-webkit-scrollbar-thumb {
+   background-color: var(--color-violeta);
+   ;
+   border-radius: 5px;
+}
+
+
 .maquina-item {
    display: flex;
    align-items: center;
@@ -149,3 +170,4 @@ body {
    gap: 0.5rem;
    margin-top: 1rem;
 }
+
