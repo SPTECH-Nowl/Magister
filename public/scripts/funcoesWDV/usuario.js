@@ -52,15 +52,12 @@ function entrar() {
         fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
              {cache: "no-cache"}).then( resposta =>{
                 if(resposta.ok){
-                    swal("sucess","Redirecionando para dashboard","sucess");
                         resposta.json().then(json => {
                             localStorage.setItem("emailUsuario", json.email);
                             localStorage.setItem("nomeUsuario", json.nome);
                             localStorage.setItem("idUsuario", json.idUsuario);
-                            localStorage.setItem("nivelUsuario", json.nivel);
+                            localStorage.setItem("nivelUsuario", json.nivPermissao );
                         })
-                        swal("Parábens","Redirecionando para dashboard","sucess");
-                        window.location = "../dashboard/dashboard_maquina.html"
                 } else {
                     swal('Email e/ou senha invalido!')
                 }
