@@ -2,6 +2,139 @@ var usuarioModel = require("../models/usuarioModel");
 
 var sessoes = [];
 
+function listar(req, res) {
+    var idAviso = req.params.idAviso;
+    
+    avisoModel.listar(idAviso).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function listarPorUsuario(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    avisoModel.listarPorUsuario(idUsuario)
+        .then(
+            function (resultado) {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!");
+                }
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "Houve um erro ao buscar os avisos: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+
+function mostrar_dados(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    usuarioModel.mostrar_dados(idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+
+function cadastrarInDash(req, res) {
+    var nome = req.body.nome;
+    var email = req.body.email;
+    var senha = req.body.senha;
+    var nivPermissao = req.body.nivPermissão;
+    var fkInstituicao= req.body.fkInstituicao;
+
+    if (nome == undefined) {
+        res.status(400).send("O nome está indefinido!");
+    } else if (email == undefined) {
+        res.status(400).send("O Email está indefinido!");
+    } else if (senha == undefined) {
+        res.status(403).send("A senha do usuário está indefinido!");
+    } else if (nivPermissao == undefined) {
+        res.status(403).send("O nivel de permissão do usuário está indefinido!");
+    } else {
+        avisoModel.publicar(nome, email, senha , nivPermissao, fkInstituicao)
+            .then(
+                function (resultado) {
+              res.json(resultado);
+                }
+            )
+            .catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function editar(req, res) {
+    var nome = req.body.novoNomeUsuario
+    var email = req.body.novoEmailUsuario
+    var senha = req.body.novaSenhaUsuario
+    var nivPermissao= req.body.novoNivPerm
+    var idUsuario = req.body.idUsuarioPM
+
+    usuarioModel.editar(nome, email , senha ,nivPermissao, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function deletar(req, res) {
+    var idUsuario = req.body.idUsuarioPE;
+
+    usuarioModel.deletar(idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function testar(req, res) {
     console.log("ENTRAMOS NA usuarioController");
     res.json("ESTAMOS FUNCIONANDO!");
@@ -82,5 +215,11 @@ function cadastrar(req, res) {
 
 module.exports = {
     entrar,
-    cadastrar
+    cadastrar,
+    listar,
+    listarPorUsuario,
+    cadastrarInDash,
+    editar,
+    deletar,
+    mostrar_dados
 }

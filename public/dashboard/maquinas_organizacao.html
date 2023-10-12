@@ -43,24 +43,37 @@
       <div class="user-profile">
          <div id="pfp"></div>
          <div class="texto-user">
-            <span>Bem-vindo</span>
+            <span>Bem-vindo,</span>
             <span id="b_usuario"></span>
         </div>
       </div>
 
       <ul class="nav-list">
-         <li>
-            <img src="../assets/img/elements/dash.svg" alt="">
-            Dashboard
-         </li>
-         <li>
-            <img src="../assets/img/elements/pc.svg" alt="">
-            Máquinas
-         </li>
-         <li>
-            <img src="../assets/img/elements/programa.svg" alt="">
-            Programas
-         </li>
+         <a href="">
+            <li>
+               <img src="../assets/img/elements/dash.svg" alt="">
+               Dashboard
+            </li>
+         </a>
+
+            <a href=""></a>
+            <li>
+               <img src="../assets/img/elements/pc.svg" alt="">
+               Máquinas
+            </li>
+         </a>
+         <a href="">
+            <li>
+               <img src="../assets/img/elements/programa.svg" alt="">
+               Programas
+            </li>
+         </a>
+         <a href="usuarios.html">
+            <li>
+               <img src="../assets/img/elements/usuario.svg" alt="">
+               Usuários
+            </li>
+         </a>
       </ul>
 
       <ul>
@@ -70,6 +83,7 @@
          </li>
       </ul>
    </div>
+   
    <div class="dash-content">
       <h1>Máquinas da sua organização</h1>
       <div class="container-maquinas">
@@ -122,6 +136,3 @@
    </div>
 </body>
 </html>
-<script>
-   b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
-</script>
