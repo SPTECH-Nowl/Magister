@@ -1,20 +1,22 @@
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <link rel="stylesheet" href="../styles/global.css">
-   <link rel="stylesheet" href="../styles/dashboard.css">   
+   <link rel="stylesheet" href="../styles/dashboard.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
 
    <!-- Shoelace -->
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/themes/light.css" />
-   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/shoelace-autoloader.js"></script>
+   <script type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/shoelace-autoloader.js"></script>
 
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
 
-   <script src="../components/dialog/dialog.js" defer></script>   
+   <script src="../components/dialog/dialog.js" defer></script>
 
    <!-- Google Charts -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -22,6 +24,7 @@
 
    <title>Dashboard</title>
 </head>
+
 <body>
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
@@ -30,7 +33,7 @@
          <div class="texto-user">
             <span>Bem-vindo,</span>
             <span id="usuario">Usuário</span>
-        </div>
+         </div>
       </div>
 
       <ul class="nav-list">
@@ -46,6 +49,10 @@
             <img src="../assets/img/elements/programa.svg" alt="">
             Programas
          </li>
+         <li>
+            <img src="../assets/img/elements/user-circle-gear.svg" alt="">
+            Usuários
+         </li>
       </ul>
 
       <ul>
@@ -55,7 +62,6 @@
          </li>
       </ul>
    </div>
-
    <div class="dash-content">
       <h1>Desempenho da máquina 01</h1>
       <div class="chart-grid">
@@ -84,7 +90,12 @@
                </div>
             </div>
             <sl-dialog label="Dialog" class="dialog-overview">
-               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+               <div class="specs-container">
+                  <div class="spec">
+                     <span class="spec-name">Nome do dispositivo:</span>
+                     <span class="spec-value">DESKTOP-G520F</span>
+                  </div>
+               </div>
                <sl-button slot="footer" variant="primary">Close</sl-button>
             </sl-dialog>
 
@@ -109,4 +120,5 @@
       </div>
    </div>
 </body>
+
 </html>
