@@ -10,14 +10,21 @@
    <link rel="stylesheet" href="../components/button/button.css">
    <script src="../scripts/funcoes.js"></script>
 
+   <!-- Shoelace -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/alert/alert.js"></script>
 
    <!-- Google Charts -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+   <!-- Funções -->
    <script src="../scripts/dashboard_maquina.js" defer></script>
 
    <title>Dashboard</title>
 </head>
 <body onload="validarAcesso()">
+   <div class="alert-toast-wrapper"></div>
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
       <div class="user-profile">
@@ -100,6 +107,3 @@
    </div>
 </body>
 </html>
-<script>
-   b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
-</script>

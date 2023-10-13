@@ -133,3 +133,55 @@ google.charts.setOnLoadCallback(() => {
    drawDisc();
    drawWindow();
 });
+
+b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
+//criando o toast
+const container = document.querySelector('.alert-toast-wrapper');
+
+// Always escape HTML for text arguments!
+function escapeHtml(html) {
+  const div = document.createElement('div');
+  div.textContent = html;
+  return div.innerHTML;
+}
+
+// Custom function to emit toast notifications
+function notify(message, variant, icon, duration = 3000) {
+  const alert = Object.assign(document.createElement('sl-alert'), {
+    variant,
+    closable: true,
+    duration: duration,
+    innerHTML: `
+      <sl-icon name="${icon}" slot="icon"></sl-icon>
+      ${escapeHtml(message)}
+    `
+  });
+
+  document.body.append(alert);
+  return alert.toast();
+}
+
+const verifConsumo = (dadosMonitorados, limiteConsumo) => {
+   var qtdAcima = 0;
+   dadosMonitorados.forEach(dado => {
+      if(dado[1] >= limiteConsumo) {
+         qtdAcima++;
+      }
+   });
+
+   if(qtdAcima == 1) {
+      notify(`Texto do mensagem mensagem mensagem`, 'warning', 'exclamation-triangle');
+   } else if(qtdAcima >= 2) {
+      notify(`Texto do mensagem mensagem mensagem`, 'danger', 'exclamation-octagon');
+   }
+}
+
+// Dados para teste - cola no console e puxa a função com essas variáveis pra testar
+// dadosMonitorados = [
+//    [1, 10],
+//    [2, 15],
+//    [3, 40],
+//    [4, 50],
+//  ];
+//  limiteConsumo = 30;
