@@ -5,13 +5,6 @@
 // * verificar nomes = mostrar_dados == select -> aviso/mostrar_dados
 
 
-b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
-
-
-
-
-
-
 
 
 

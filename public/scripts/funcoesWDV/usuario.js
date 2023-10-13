@@ -40,6 +40,37 @@ function cadastrar() {
 
 }
 
+function cadastrarNaDash() {
+    var nome = nomeInput.value
+    var email = emailInput.value
+    var senha= senhaInput.value
+    var nivPerm = tipoInput.value
+
+    fetch(`/usuarios/cadastrarNaDash`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nomeUsuario: nome,
+            emailUsuario: email,
+            senhaUsuario: senha,
+            nivPermissao: nivPerm,
+            instituicao: sessionStorage.instituicao
+        })
+    }).then(resposta =>{
+        if (resposta.ok){
+            console.log("deu certo")
+        } else{
+            console.log("deu errado")
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+
+    });
+}
+
+
 function entrar() {
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
@@ -79,29 +110,87 @@ function entrar() {
     }
 }
 
+function atualizarFeed() {
+    var codInstituicao = sessionStorage.instituicao
+    fetch(`/usuarios/listar/${codInstituicao}`).then(function (listaUsuarios) {
+        if (listaUsuarios.ok) {
+            if (listaUsuarios.status == 204) {
+                var feed = document.getElementById("feed_container");
+                var mensagem = document.createElement("span");
+                mensagem.innerHTML = "Nenhum resultado encontrado."
+                feed.appendChild(mensagem);
+                throw "Nenhum resultado encontrado!!";
+            } else {
+                listaUsuarios.json().then(listaUsuarios =>{
+                    console.log(listaUsuarios)
+                    console.log(listaUsuarios[0])
+                    /*for(i = 0; i < listaUsuarios.length; i++){
+                        console.log(listaUsuarios[i])
+                    }*/
+                })
+            }
+
+
+
+
+                /*
+                var feed = document.getElementById("feed_container");
+                feed.innerHTML = "";
+                for (let i = 0; i < resposta.length; i++) {
+                    var publicacao = resposta[i];
+
+                    
+                    var linha = document.createElement("tr");
+                    var tdId = document.createElement("td");
+                    var tdNome = document.createElement("td");
+                    var tdButtons = document.createElement("td");
+                  
+
+                    tdId.innerHTML = publicacao.idusuario;
+                    var id_usuario = publicacao.idusuario
+                    console.log("O id é " + id_usuario)
+                    tdNome.innerHTML = publicacao.nome;
+                    tdButtons.innerHTML = `
+                        <button class="btn-crud red" id="btn_delete${i}" onclick="deletar(${publicacao.idusuario})">Deletar</button>
+                        <button class="btn-crud green" id="btn_update${i}" onclick="alterar(${publicacao.idusuario})">Alterar</button>
+                        <button class="btn-crud blue" id="btn_get${i}" onclick="mostrar_dados(${publicacao.idusuario})">Informações</button>
+                    `
+                  
+
+
+                    tdNome.className = "publicacao-nome";
+        
+
+                    linha.appendChild(tdId);
+                    linha.appendChild(tdNome);
+                    linha.appendChild(tdButtons);
+                    feed.appendChild(linha);
+                } */
+
+
+        } else {
+            throw ('Houve um erro na API!');
+        }
+    }).catch(function (resposta) {
+        console.error(resposta);
+
+    });
+}
+
 function limparFormulario() {
     document.getElementById("form_postagem").reset();
 }
 
+
 function cadastrarInDash() {
 
-    var corpo = {
-        nome: form_postagem.nome_input.value,
-        email: form_postagem.email_input.value,
-        senha: form_postagem.senha_input.value,
-        nivPermissão: form_postagem.codigo_input.value,
-        instituicao: sessionStorage.instituicao
-    }
+    var nome = nomeInput.value
+    var email = emailInput.value
+    var senha= senhaInput.value
+    var nivPerm = tipoInput.value
 
     if (sessionStorage.nivPerm == "1") {
-        Swal.fire({
-            background: '#151515',
-            color: '#FFF',
-            icon: 'error',
-            title: 'Erro',
-            html: `Prezado usuário,
-Voce não tem permissão para adicionar Usuario`,
-        })
+        alert("Nivel de permissão invalida.")
         return false;
     } 
     else {
@@ -110,32 +199,18 @@ Voce não tem permissão para adicionar Usuario`,
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(corpo)
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                senha: senha,
+                nivPermissao: nivPerm,
+                instituicao: sessionStorage.instituicao
+            })
         }).then(function (resposta) {
-            console.log("resposta: ", resposta);
-
             if (resposta.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    background: '#151515',
-                    color: '#FFF',
-                    showCancelButton: false,
-                    title: 'Bom trabalho!',
-                    text: 'Usuário Cadastrado com sucesso',
-
-                })
-                document.getElementById('okButton').addEventListener('click', function () {
-                    Swal.close()
-                    window.location.reload()
-                });
-                limparFormulario();
-
-            } else if (resposta.status == 404) {
-                window.alert("Deu 404!");
-                window.location = "usuarios.html"
-                alert("ERRO")
+                alert("Cadastro feito com sucesso")
             } else {
-                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+                alert("Houve um erro ao cadastrar")
             }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`);
@@ -262,9 +337,9 @@ function deletar(idUsuario) {
                         })
                         document.getElementById('okButton').addEventListener('click', function () {
                             Swal.close();
-                            location.reload();
+                            
                         });
-                        window.location = "usuario.html";
+
                     } else {
                         Swal.fire('Falha ao deletar o usuário', '', 'error')
                     }
@@ -284,69 +359,6 @@ function deletar(idUsuario) {
             }
         });
     }
-}
-
-
-   
-function atualizarFeed() {
-    var idUsuario = sessionStorage.ID_USUARIO;
-    
-    fetch(`/avisos/listar/${idUsuario}`).then(function (resposta) {
-        if (resposta.ok) {
-
-            if (resposta.status == 204) {
-                var feed = document.getElementById("feed_container");
-                var mensagem = document.createElement("span");
-                mensagem.innerHTML = "Nenhum resultado encontrado."
-                feed.appendChild(mensagem);
-                throw "Nenhum resultado encontrado!!";
-            }
-
-            resposta.json().then(function (resposta) {
-                console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                var feed = document.getElementById("feed_container");
-                feed.innerHTML = "";
-                for (let i = 0; i < resposta.length; i++) {
-                    var publicacao = resposta[i];
-
-                    
-                    var linha = document.createElement("tr");
-                    var tdId = document.createElement("td");
-                    var tdNome = document.createElement("td");
-                    var tdButtons = document.createElement("td");
-                  
-
-                    tdId.innerHTML = publicacao.idusuario;
-                    var id_usuario = publicacao.idusuario
-                    console.log("O id é " + id_usuario)
-                    tdNome.innerHTML = publicacao.nome;
-                    tdButtons.innerHTML = `
-                        <button class="btn-crud red" id="btn_delete${i}" onclick="deletar(${publicacao.idusuario})">Deletar</button>
-                        <button class="btn-crud green" id="btn_update${i}" onclick="alterar(${publicacao.idusuario})">Alterar</button>
-                        <button class="btn-crud blue" id="btn_get${i}" onclick="mostrar_dados(${publicacao.idusuario})">Informações</button>
-                    `
-                  
-
-
-                    tdNome.className = "publicacao-nome";
-        
-
-                    linha.appendChild(tdId);
-                    linha.appendChild(tdNome);
-                    linha.appendChild(tdButtons);
-                    feed.appendChild(linha);
-                }
-
-
-            });
-        } else {
-            throw ('Houve um erro na API!');
-        }
-    }).catch(function (resposta) {
-        console.error(resposta);
-
-    });
 }
 
 
@@ -425,7 +437,6 @@ function validar_nome() {
     }
 }
 
-
 function validar_email() {
     var input = document.getElementById('emailInput');
     var email = input.value;
@@ -445,7 +456,6 @@ function validar_email() {
         input.placeholder = 'Email';
     }
 }
-
 
 function validar_senha() {
     var input = document.getElementById('senhaInput');
@@ -539,7 +549,7 @@ function alterarUsuario(idAviso) {
                 document.getElementById('okButton').addEventListener('click', function () {
                     Swal.close();
                 });
-                window.location = "usuarios.html"
+                
             } else if (resposta.status == 404) {
                 window.alert("Deu 404!");
             } else {

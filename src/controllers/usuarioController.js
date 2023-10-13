@@ -3,9 +3,9 @@ var usuarioModel = require("../models/usuarioModel");
 var sessoes = [];
 
 function listar(req, res) {
-    var idAviso = req.params.idAviso;
+    var codInstituicao = req.params.codInstituicao;
     
-    avisoModel.listar(idAviso).then(function (resultado) {
+    usuarioModel.listar(codInstituicao).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -43,7 +43,6 @@ function listarPorUsuario(req, res) {
         );
 }
 
-
 function mostrar_dados(req, res) {
     var idUsuario = req.params.idUsuario;
 
@@ -67,8 +66,8 @@ function cadastrarInDash(req, res) {
     var nome = req.body.nome;
     var email = req.body.email;
     var senha = req.body.senha;
-    var nivPermissao = req.body.nivPermissão;
-    var fkInstituicao= req.body.fkInstituicao;
+    var nivPermissao = req.body.nivPerm;
+    var fkInstituicao= req.body.instituicao;
 
     if (nome == undefined) {
         res.status(400).send("O nome está indefinido!");
@@ -94,6 +93,46 @@ function cadastrarInDash(req, res) {
             );
     }
 }
+
+function cadastrarNaDash(req, res) {
+    var nomeVar = req.body.nomeUsuario;
+    var emailVar = req.body.emailUsuario;
+    var senhaVar = req.body.senhaUsuario;
+    var nivPerm = req.body.nivPermissao;
+    var instituicaoVar = req.body.instituicao;
+
+    console.log(nomeVar, emailVar, senhaVar, nivPerm, instituicaoVar)
+    
+
+    if (nomeVar == undefined) {
+        res.status(400).send("Seu nome está indefinido");
+    } else if (emailVar == undefined) {
+        res.status(400).send("Seu email está indefinido");
+    } else if (senhaVar == undefined) {
+        res.status(400).send("Sua senha está indefinido");
+    } else if (instituicaoVar == undefined) {
+        res.status(400).send("Seu codigo hexadecimal está indefinido");
+    } else {
+
+        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        usuarioModel.cadastrarNaDash(nomeVar, emailVar, senhaVar, nivPerm, instituicaoVar)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 
 function editar(req, res) {
     var nome = req.body.novoNomeUsuario
@@ -219,6 +258,7 @@ module.exports = {
     listar,
     listarPorUsuario,
     cadastrarInDash,
+    cadastrarNaDash,
     editar,
     deletar,
     mostrar_dados

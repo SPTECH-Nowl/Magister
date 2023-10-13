@@ -13,7 +13,7 @@ router.get("/entrar/:emailVar/:senhaVar", function (req, res) {
 })
 
 
-router.get("/listar/:idUsuario", function (req, res) {
+router.get("/listar/:codInstituicao", function (req, res) {
     usuarioController.listar(req, res);
 });
 
@@ -22,8 +22,13 @@ router.get("/mostrar_dados/:idUsuario", function (req, res) {
     usuarioController.mostrar_dados(req, res);
 });
 
+
 router.post("/cadastrarInDash", function (req, res) {
     usuarioController.cadastrarInDash(req, res);
+})
+
+router.post("/cadastrarNaDash", function (req, res) {
+    usuarioController.cadastrarNaDash(req, res);
 })
 
 router.get("/pesquisar/:descricao", function (req, res) {

@@ -11,10 +11,13 @@
    <script src="../scripts/components/navbar.js "></script>
    <script src="../scripts/funcoesWDV/pagina_usuario.js"></script>
    <script src="../scripts/funcoes.js"></script>
+   <script src="../scripts/funcoesWDV/usuario.js"></script>
+
    <title>Magister | Usuários</title>
+
 </head>
 <body>
-   <body onload="validarAcesso(), atualizarFeed() , listarInfosDeUm()"></body>
+   <body onload="validarAcesso(), atualizarFeed()"></body>
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
       <div class="user-profile">
@@ -61,5 +64,41 @@
       </ul>
    </div>
    
+   <div>
+      <form action="" id="formMudanca">
+         
+         <input type="text" id="nomeInput" placeholder="Nome">
+         <input type="text" id="emailInput" placeholder="Email">
+         
+         <select name="Tipo de usuario" id="tipoInput">
+            <option value="3" selected>Instrutor</option>
+         </select>
+         <input type="password" id="senhaInput" placeholder="Senha">
+         <input type="password" id="confirmSenhaInput" placeholder="Confirmar senha">
+
+         <button onclick="cadastrarNaDash()">Cadastrar usuario</button>
+      </form>
+
+      <!-- 
+      <section class="div_container">
+         <div class="table-container" id="table_container">
+             <table>
+                 <thead>
+                     <tr>
+                         <td>Nome</td>
+                         <td>Email</td>
+                         <td>Tipo</td>
+                         <td>Modificar</td>
+                     </tr>
+                 </thead>
+                 <tbody id="feed_container">  
+                 </tbody>
+             </table>
+         </div>
+     </section>
+      -->
+   </div>
 </body>
 </html>
+
+

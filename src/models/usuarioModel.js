@@ -8,15 +8,14 @@ function entrar(email, senha) {
 }
 
 /*Corrigir: a gente lista por hexadecimal*/
-function listar(id) {
-    console.log("ACESSEI O AVISO  MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
+function listar(codInstituicao) {
     var instrucao = `
-    SELECT u1.idUsuario, u1.nome, u1.email, u1.senha
-    FROM usuario u1
-    JOIN usuario u2 ON u1.idUsuario = u2.fkInstituicao
-    WHERE u1.idUsuario = ${id}
-    LIMIT 0, 1000;
-    `;
+
+	SELECT usuario.idUsuario, usuario.nome as nomeUsuario, usuario.email, usuario.nivPermissao, usuario.fkInstituicao, instituicao.nome as nomeInstituicao, instituicao.sigla  FROM usuario
+    JOIN instituicao ON usuario.fkInstituicao = instituicao.codigoHex
+    WHERE fkInstituicao = '${codInstituicao}';
+
+ `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
@@ -61,7 +60,26 @@ VALUES ('${nome}', '${email}', ${senha} , '${nivPermissao}','${fkInstituicao}');
     return database.executar(instrucao);
 }
 
+function cadastrar(nome, email, senha, instituicao) {
+
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 3, '${instituicao}');
+    `;
+    return database.executar(instrucao);
+}
+
+function cadastrarNaDash(nome, email, senha, nivPerm,instituicao) {
+
+    console.log(nome, email, senha, nivPerm, instituicao)
+    
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', ${nivPerm}, '${instituicao}');
+    `;
+    return database.executar(instrucao);
+}
+
 function editar(nome, email , senha , nivPermissao, idUsuario) {
+    
     var instrucao = `
     UPDATE usuario
 SET nome = '${nome}', email = '${email}', senha = '${senha}', nivPermissao ='${nivPermissao}
@@ -82,7 +100,7 @@ function deletar(idUsuario) {
 function cadastrar(nome, email, senha, codigo) {
 
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 3, '${codigo}');
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 2, '${codigo}');
     `;
     return database.executar(instrucao);
 }
@@ -106,6 +124,7 @@ module.exports = {
     listar,
     listarPorUsuario,
     cadastrarInDash,
+    cadastrarNaDash,
     editar,
     deletar,
     mostrar_dados
