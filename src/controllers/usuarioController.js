@@ -2,6 +2,178 @@ var usuarioModel = require("../models/usuarioModel");
 
 var sessoes = [];
 
+function listar(req, res) {
+    var codInstituicao = req.params.codInstituicao;
+    
+    usuarioModel.listar(codInstituicao).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function listarPorUsuario(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    avisoModel.listarPorUsuario(idUsuario)
+        .then(
+            function (resultado) {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!");
+                }
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "Houve um erro ao buscar os avisos: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function mostrar_dados(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    usuarioModel.mostrar_dados(idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+
+function cadastrarInDash(req, res) {
+    var nome = req.body.nome;
+    var email = req.body.email;
+    var senha = req.body.senha;
+    var nivPermissao = req.body.nivPerm;
+    var fkInstituicao= req.body.instituicao;
+
+    if (nome == undefined) {
+        res.status(400).send("O nome está indefinido!");
+    } else if (email == undefined) {
+        res.status(400).send("O Email está indefinido!");
+    } else if (senha == undefined) {
+        res.status(403).send("A senha do usuário está indefinido!");
+    } else if (nivPermissao == undefined) {
+        res.status(403).send("O nivel de permissão do usuário está indefinido!");
+    } else {
+        avisoModel.publicar(nome, email, senha , nivPermissao, fkInstituicao)
+            .then(
+                function (resultado) {
+              res.json(resultado);
+                }
+            )
+            .catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function cadastrarNaDash(req, res) {
+    var nomeVar = req.body.nomeUsuario;
+    var emailVar = req.body.emailUsuario;
+    var senhaVar = req.body.senhaUsuario;
+    var nivPerm = req.body.nivPermissao;
+    var instituicaoVar = req.body.instituicao;
+
+    console.log(nomeVar, emailVar, senhaVar, nivPerm, instituicaoVar)
+    
+
+    if (nomeVar == undefined) {
+        res.status(400).send("Seu nome está indefinido");
+    } else if (emailVar == undefined) {
+        res.status(400).send("Seu email está indefinido");
+    } else if (senhaVar == undefined) {
+        res.status(400).send("Sua senha está indefinido");
+    } else if (instituicaoVar == undefined) {
+        res.status(400).send("Seu codigo hexadecimal está indefinido");
+    } else {
+
+        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        usuarioModel.cadastrarNaDash(nomeVar, emailVar, senhaVar, nivPerm, instituicaoVar)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+
+function editar(req, res) {
+    var nome = req.body.novoNomeUsuario
+    var email = req.body.novoEmailUsuario
+    var senha = req.body.novaSenhaUsuario
+    var nivPermissao= req.body.novoNivPerm
+    var idUsuario = req.body.idUsuarioPM
+
+    usuarioModel.editar(nome, email , senha ,nivPermissao, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function deletar(req, res) {
+    var idUsuario = req.body.idUsuarioPE;
+
+    usuarioModel.deletar(idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function testar(req, res) {
     console.log("ENTRAMOS NA usuarioController");
     res.json("ESTAMOS FUNCIONANDO!");
@@ -82,5 +254,12 @@ function cadastrar(req, res) {
 
 module.exports = {
     entrar,
-    cadastrar
+    cadastrar,
+    listar,
+    listarPorUsuario,
+    cadastrarInDash,
+    cadastrarNaDash,
+    editar,
+    deletar,
+    mostrar_dados
 }

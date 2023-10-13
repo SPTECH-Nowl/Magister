@@ -7,22 +7,103 @@ function entrar(email, senha) {
     return database.executar(instrucao);
 }
 
+/*Corrigir: a gente lista por hexadecimal*/
+function listar(codInstituicao) {
+    var instrucao = `
 
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucao
-function cadastrar(nome, email, senha, codigo) {
+	SELECT usuario.idUsuario, usuario.nome as nomeUsuario, usuario.email, usuario.nivPermissao, usuario.fkInstituicao, instituicao.nome as nomeInstituicao, instituicao.sigla  FROM usuario
+    JOIN instituicao ON usuario.fkInstituicao = instituicao.codigoHex
+    WHERE fkInstituicao = '${codInstituicao}';
+
+ `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+
+/*Filtrar por nome do usuario e fkInstituicao*/
+function listarPorUsuario(idUsuario) {
+    console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorUsuario()");
+    var instrucao = `
+    SELECT
+    u.idUsuario AS idUsuario,
+    u.nome,
+    u.email,
+    u.senha,
+    u.nivPermissao,
+    u.FkInstituicao AS fkInstituicao
+FROM usuario u
+WHERE u.idUsuario = ${idUsuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function mostrar_dados(idUsuario) {
+    var instrucao = `
+    SELECT usuario.nome AS nome, usuario.email,usuario.senha,usuario.nivPermissao, instituicao.nome AS instituicao_nome
+FROM usuario
+JOIN instituicao ON usuario.FkInstituicao = instituicao.codigoHex
+WHERE usuario.idUsuario = ${idUsuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+
+function cadastrarInDash(nome, email, senha , nivPermissao, fkInstituicao) {
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao)
+VALUES ('${nome}', '${email}', ${senha} , '${nivPermissao}','${fkInstituicao}');
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function cadastrar(nome, email, senha, instituicao) {
 
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 3, '${codigo}');
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 3, '${instituicao}');
     `;
     return database.executar(instrucao);
 }
 
-function deletar(id) {
+function cadastrarNaDash(nome, email, senha, nivPerm,instituicao) {
 
-    var instrucao = `DELETE FROM usuario WHERE idUsuario = ${id};`;
+    console.log(nome, email, senha, nivPerm, instituicao)
+    
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', ${nivPerm}, '${instituicao}');
+    `;
     return database.executar(instrucao);
 }
 
+function editar(nome, email , senha , nivPermissao, idUsuario) {
+    
+    var instrucao = `
+    UPDATE usuario
+SET nome = '${nome}', email = '${email}', senha = '${senha}', nivPermissao ='${nivPermissao}
+WHERE idUsuario = "${idUsuario}";
+    `;
+    return database.executar(instrucao);
+}
+
+
+function deletar(idUsuario) {
+    var instrucao = `
+    DELETE FROM usuario WHERE idUsuario = ${idUsuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function cadastrar(nome, email, senha, codigo) {
+
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 2, '${codigo}');
+    `;
+    return database.executar(instrucao);
+}
 
 function update(novoNome,novoEmail,id) {
 
@@ -38,6 +119,13 @@ function update(novoNome,novoEmail,id) {
 module.exports = {
     entrar,
     cadastrar,
-     deletar,
-     update
+    deletar,
+    update,
+    listar,
+    listarPorUsuario,
+    cadastrarInDash,
+    cadastrarNaDash,
+    editar,
+    deletar,
+    mostrar_dados
 };

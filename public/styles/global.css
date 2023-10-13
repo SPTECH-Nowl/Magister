@@ -202,3 +202,8 @@ ul li img {
    font-size: 1.5rem;
    color: white;
 }
+
+a {
+   text-decoration: none;
+   cursor: pointer;
+}
