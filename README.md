@@ -33,26 +33,5 @@ Site construido para a o segundo semestre de 2023 da faculdade SPTECH.
 
 #
 
-- 📌 Andamento.
+- 📌 Em Andamento.
 - 🔗 Sem link no momento
-
-
-## 📝 Normas de convivência!
-
-
-As regras de convivências determinadas para a realização deste trabalho foram:
-
-❗ [x] Determinar dias e horários das reuniões(diárias) de reuniões de Sprint Review/Retrospective, sempre no mesmo horário.
-
-❗ [x] Se o integrante não participar da reunião, será registrado em ata e computado nos indicadores de participação do projeto.
-
-❗ [x] Os integrantes que participarem da reunião poderão tomar decisões em relação ao projeto.
-
-❗ [x] Fedbacks do grupo referentes aos entregáveis de cada membro.
-
-❗ [x] Justificação para falta, verificaremos se abonaremos a falta no dia da reunião.
-
-❗ [x] Haverá uma rotatividade semanal na apresentação da Review para o Professor.
-
-❗ [x] A sprint dos grupos terá 7 dias de duração e as reuniões de final de Sprint serão sempre nas aulas de PI.
-
