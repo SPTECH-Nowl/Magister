@@ -61,6 +61,7 @@ body {
     max-height: 100%;
     overflow-y: auto;
     position: relative;
+    overflow: scroll;
  }
 
  .tableWrapper::-webkit-scrollbar{
@@ -124,3 +125,56 @@ td:nth-child(1), th:nth-child(1){
  tr {
     overflow: hidden;
  }
+
+ 
+.btn-crud {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   width: 100%;
+   height: 3vh;
+   color: #FFF;
+   background: transparent;
+   border: 1px solid #FFF;
+   border-radius: 5px;
+   padding: 5px;
+   margin-bottom: 2px;
+   transition: 0.5s ease-in;
+   outline: none;
+   cursor: pointer;
+}
+
+.red {
+   color: #FF5555;
+   border-color: #FF5555;
+}
+
+.green {
+   color: #74C365;
+   border-color: #489e37;
+}
+
+.blue {
+   color: cornflowerblue;
+   border-color: rgb(75, 135, 245);
+}
+
+.btn-crud.red:hover {
+   color: #FFF;
+   background: #FF5555;
+   transition: 0.5s ease-in;
+}
+
+.btn-crud.green:hover {
+   color: #FFF;
+   background: #74C365;
+   transition: 0.5s ease-in;
+}
+
+.btn-crud.blue:hover {
+   color: #FFF;
+   background: cornflowerblue;
+   transition: 0.5s ease-in;
+}
+

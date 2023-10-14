@@ -73,7 +73,8 @@ function editar(nome, email , senha , nivPermissao, idUsuario) {
     
     var instrucao = `
     UPDATE usuario
-SET nome = '${nome}', email = '${email}', senha = '${senha}', nivPermissao ='${nivPermissao}
+SET nome = '${nome}', email = '${email}', senha = '${senha}', nivPermissao ='$
+{nivPermissao}'
 WHERE idUsuario = "${idUsuario}";
     `;
     return database.executar(instrucao);

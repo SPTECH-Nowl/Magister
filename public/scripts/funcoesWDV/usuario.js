@@ -1,3 +1,44 @@
+// CADASTRO DE LOGIN
+function entrar() {
+    var emailVar = email_input.value;
+    var senhaVar = senha_input.value;
+
+    if (emailVar == "" || senhaVar == "") {
+        swal("error","Preencha todos os campos","error");
+    }
+    else {
+     
+        fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
+             {cache: "no-cache"}).then((informacoesUsuario) =>{
+                if(informacoesUsuario.ok){
+                    informacoesUsuario.json().then(infosUser =>{
+                        console.log(infosUser)
+
+                        sessionStorage.emailUsuario = infosUser.email
+                        sessionStorage.nomeUsuario = infosUser.nome
+                        sessionStorage.idUsuario = infosUser.idUsuario
+                        sessionStorage.nivPerm = infosUser.nivPermissao
+                        sessionStorage.instituicao = infosUser.FkInstituicao
+
+                        window.location = "dashboard/dashboard_maquina.html"
+                    })
+
+                } else {
+                    swal('Email e/ou senha invalido!')
+
+                    informacoesUsuario.text().then(texto => {
+                        console.error(texto)
+                    })
+
+                }
+             }).catch(function (erro) {
+                console.log(erro);
+            })
+        return false
+    }
+}
+
+// CADASTRO FUNCAO
 function cadastrar() {
     var nomeVar = nome_input_cadastro.value;
     var emailVar = email_input_cadastro.value;
@@ -40,162 +81,113 @@ function cadastrar() {
 
 }
 
-function cadastrarNaDash() {
-    var nome = nomeInput.value
-    var email = emailInput.value
-    var senha= senhaInput.value
-    var nivPerm = tipoInput.value
 
-    fetch(`/usuarios/cadastrarNaDash`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeUsuario: nome,
-            emailUsuario: email,
-            senhaUsuario: senha,
-            nivPermissao: nivPerm,
-            instituicao: sessionStorage.instituicao
-        })
-    }).then(resposta =>{
-        if (resposta.ok){
-            console.log("deu certo")
-        } else{
-            console.log("deu errado")
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
 
-    });
-}
+ 
+document.addEventListener('DOMContentLoaded', function() {
+    const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
+    adicionarUsuarioButton.addEventListener('click', function() {
+        Swal.fire({
+            title: 'Adicionar Usuário',
+            html:
+                '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input">' +
+                '<input type="email" id="emailInput" placeholder="Email" class="swal2-input">' +
+                '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input">'+
+                '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input">',
+            showCancelButton: true,
+            confirmButtonText: 'Cadastrar',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                const nome = Swal.getPopup().querySelector('#nomeInput').value;
+                const email = Swal.getPopup().querySelector('#emailInput').value;
+                const senha = Swal.getPopup().querySelector('#senhaInput').value;
+                const tipoInput = Swal.getPopup().querySelector('#tipoInput').value;
 
-function entrar() {
-    var emailVar = email_input.value;
-    var senhaVar = senha_input.value;
-
-    if (emailVar == "" || senhaVar == "") {
-        swal("error","Preencha todos os campos","error");
-    }
-    else {
-     
-        fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
-             {cache: "no-cache"}).then((informacoesUsuario) =>{
-                if(informacoesUsuario.ok){
-                    informacoesUsuario.json().then(infosUser =>{
-                        console.log(infosUser)
-
-                        sessionStorage.emailUsuario = infosUser.email
-                        sessionStorage.nomeUsuario = infosUser.nome
-                        sessionStorage.idUsuario = infosUser.idUsuario
-                        sessionStorage.nivPerm = infosUser.nivPermissao
-                        sessionStorage.instituicao = infosUser.FkInstituicao
-
-                        window.location = "dashboard/dashboard_maquina.html"
+                // Envie os dados para o servidor
+                return fetch(`/usuarios/cadastrarNaDash`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeUsuario: nome,
+                        emailUsuario: email,
+                        senhaUsuario: senha,
+                        nivPermissao: tipoInput,
+                        instituicao: sessionStorage.instituicao
                     })
-
-                } else {
-                    swal('Email e/ou senha invalido!')
-
-                    informacoesUsuario.text().then(texto => {
-                        console.error(texto)
-                    })
-
-                }
-             }).catch(function (erro) {
-                console.log(erro);
-            })
-        return false
-    }
-}
-
-function atualizarFeed() {
-    var codInstituicao = sessionStorage.instituicao
-    fetch(`/usuarios/listar/${codInstituicao}`).then(function (listaUsuarios) {
-        if (listaUsuarios.ok) {
-            if (listaUsuarios.status == 204) {
-                var feed = document.getElementById("feed_container");
-                var mensagem = document.createElement("span");
-                mensagem.innerHTML = "Nenhum resultado encontrado."
-                feed.appendChild(mensagem);
-                throw "Nenhum resultado encontrado!!";
-            } else {
-                listaUsuarios.json().then(listaUsuarios =>{
-                
-                    var tableUsuarios = document.getElementById("listaDeUsuarios")
-                    tableUsuarios.innerHTML = "";
-
-                
-                    for(i = 0; i < listaUsuarios.length; i++){
-                        
-                        var linhaTable = document.createElement("tr")
-
-                        var celulaNome = document.createElement("td")
-                        var celulaEmail = document.createElement("td")
-                        var celulaTipo = document.createElement("td")
-                        var celulaBotoes = document.createElement("td")
-                        
-
-                        celulaNome.innerHTML = listaUsuarios[i].nomeUsuario
-                        celulaEmail.innerHTML = listaUsuarios[i].email
-                        celulaTipo.innerHTML = listaUsuarios[i].nivPermissao
-                        celulaBotoes.innerHTML = "Em processo"
-
-                        linhaTable.appendChild(celulaNome)
-                        linhaTable.appendChild(celulaEmail)
-                        linhaTable.appendChild(celulaTipo)
-                        linhaTable.appendChild(celulaBotoes)
-
-                        tableUsuarios.appendChild(linhaTable)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro no servidor');
                     }
                 })
+                .catch(error => {
+                    Swal.showValidationMessage(`Erro: ${error}`);
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Sucesso!', 'O usuário foi cadastrado com sucesso.', 'success');
             }
-
-
-
-
-                /*
-                var feed = document.getElementById("feed_container");
-                feed.innerHTML = "";
-                for (let i = 0; i < resposta.length; i++) {
-                    var publicacao = resposta[i];
-
-                    
-                    var linha = document.createElement("tr");
-                    var tdId = document.createElement("td");
-                    var tdNome = document.createElement("td");
-                    var tdButtons = document.createElement("td");
-                  
-
-                    tdId.innerHTML = publicacao.idusuario;
-                    var id_usuario = publicacao.idusuario
-                    console.log("O id é " + id_usuario)
-                    tdNome.innerHTML = publicacao.nome;
-                    tdButtons.innerHTML = `
-                        <button class="btn-crud red" id="btn_delete${i}" onclick="deletar(${publicacao.idusuario})">Deletar</button>
-                        <button class="btn-crud green" id="btn_update${i}" onclick="alterar(${publicacao.idusuario})">Alterar</button>
-                        <button class="btn-crud blue" id="btn_get${i}" onclick="mostrar_dados(${publicacao.idusuario})">Informações</button>
-                    `
-                  
-
-
-                    tdNome.className = "publicacao-nome";
-        
-
-                    linha.appendChild(tdId);
-                    linha.appendChild(tdNome);
-                    linha.appendChild(tdButtons);
-                    feed.appendChild(linha);
-                } */
-
-
-        } else {
-            throw ('Houve um erro na API!');
-        }
-    }).catch(function (resposta) {
-        console.error(resposta);
-
+        });
     });
+});
+
+
+function atualizarFeed() {
+    var codInstituicao = sessionStorage.instituicao;
+    fetch(`/usuarios/listar/${codInstituicao}`)
+        .then(function (listaUsuarios) {
+            if (listaUsuarios.ok) {
+                if (listaUsuarios.status == 204) {
+                    var tableUsuarios = document.getElementById("listaDeUsuarios");
+                    tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                } else {
+                    listaUsuarios.json().then(function (listaUsuarios) {
+                        var tableUsuarios = document.getElementById("listaDeUsuarios");
+                        tableUsuarios.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+
+                        for (var i = 0; i < listaUsuarios.length; i++) {
+                            var usuario = listaUsuarios[i];
+                            var linhaTable = document.createElement("tr");
+                            var celulaNome = document.createElement("td");
+                            var celulaEmail = document.createElement("td");
+                            var celulaTipo = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNome.textContent = usuario.nomeUsuario;
+                            celulaEmail.textContent = usuario.email;
+                            celulaTipo.textContent = usuario.nivPermissao;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
+                            <button class="btn-crud red" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${usuario.nivPermissao})">Deletar</button>
+                                <button class="btn-crud green" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">Alterar</button>
+                                <button class="btn-crud blue" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">Informações</button>
+                            `;
+
+                            linhaTable.appendChild(celulaNome);
+                            linhaTable.appendChild(celulaEmail);
+                            linhaTable.appendChild(celulaTipo);
+                            linhaTable.appendChild(celulaBotoes);
+
+                            tableUsuarios.appendChild(linhaTable);
+                        }
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        })
+        .catch(function (resposta) {
+            console.error(resposta);
+        });
 }
 
 function limparFormulario() {
@@ -203,40 +195,38 @@ function limparFormulario() {
 }
 
 function mostrar_dados(idUsuario) {
-    fetch(`/usuarios/mostrar_dados/${idUsuario}`).then(function (listaDeDadosUsuario) {
-
-        if (listaDeDadosUsuario.ok) {
-            if (listaDeDadosUsuario.status == 204) {
-                alert("ERRO")  
+    fetch(`/usuarios/mostrar_dados/${idUsuario}`)
+        .then(function (response) {
+            if (!response.ok) {
+                console.error('Erro na resposta da API:', response.status);
+                return;
             }
-
-            listaDeDadosUsuario.json().then(function (listaDeDadosUsuario) {
-                console.log("Dados recebidos dos usuarios: ", JSON.stringify(listaDeDadosUsuario));
-
+            return response.json();
+        })
+        .then(function (dadosUsuario) {
+            if (dadosUsuario) {
+                console.log("Dados recebidos dos usuários: ", JSON.stringify(dadosUsuario));
                 Swal.fire({
                     background: '#151515',
                     color: '#FFF',
                     confirmButtonColor: 'cornflowerblue',
                     title: 'Dados do Funcionário',
                     html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <span><b>Nome</b>: ${listaDeDadosUsuario.nome}</span>
-                    <span><b>Email</b>: ${listaDeDadosUsuario.email}</span> 
-                    <span><b>Senha:</b> ${listaDeDadosUsuario.senha}</span>
-                    <span><b>nivPermissao:</b> ${listaDeDadosUsuario.nivPermissao}</span>
+                        <span><b>Nome</b>: ${dadosUsuario.nomeUsuario}</span>
+                        <span><b>Email</b>: ${dadosUsuario.emailUsuario}</span>
+                        <span><b>Senha:</b> ${dadosUsuario.senhaUsuario}</span>
+                        <span><b>nivPermissao:</b> ${dadosUsuario.nivPermissao}</span>
                     </div>`,
-                })
-
-  
-            });
-        } else {
-            console.error('Houve um erro na API!', listaDeDadosUsuario.status);
-
-        }
-    }).catch(function (erro) {
-        console.error(erro);
-
-    });
+                });
+            } else {
+                console.error('Dados do usuário não encontrados na resposta da API.');
+            }
+        })
+        .catch(function (erro) {
+            console.error('Erro na requisição:', erro);
+        });
 }
+
 
 function editar(idUsuario) {
     var nome = form_postagem.nome_input.value
@@ -269,9 +259,8 @@ function editar(idUsuario) {
 
 }
 
-function deletar(idUsuario) {
-
-    if (tipo_de_usuario == "1") {
+function deletar(idUsuario, tipoPermissao) {
+    if (tipoPermissao == "1") {
 
         Swal.fire({
             icon: 'error',
@@ -360,24 +349,12 @@ function testar() {
 function alterar(idAviso) {
 
     Swal.fire({
-        background: '#151515',
-        color: '#FFF',
-        title: '<span class="titulo">Editar Usuário</span>',
-        html: `
-      <div class="div_crud_alterar">
-        
-        <input type="text" id="input_nome" onkeyup="validar_nome()" placeholder="Nome de no minimo 3 caracteres" />
-      </div>
-      <div class="div_crud_alterar">
-        <input type="email" id="emailInput" onkeyup="validar_email()" placeholder="Insira um email válido" />
-      </div>
-      <div class="div_crud_alterar">
-        <input type="text" id="senhaInput" onkeyup="validar_senha()" placeholder="Senha de no mínimo 8 caracteres" />
-      </div>
-      <div class="div_crud_alterar">
-        <input type="text" id="nivPermissaoInput" onkeyup="validar_nivPermissao()" />
-      </div>
-    `,
+        title: 'Alterar Usuário',
+        html:
+            '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input">' +
+            '<input type="email" id="emailInput" placeholder="Email" class="swal2-input">' +
+            '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input">'+
+            '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input">',
         showCancelButton: true,
         confirmButtonText: 'Alterar',
         cancelButtonText: 'Cancelar',
