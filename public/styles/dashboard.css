@@ -171,11 +171,16 @@ body {
 
 /* dashboard geral */
 .grid {
+   height: 88vh;
    display: grid;
-   grid-template-columns: repeat(3, 1fr);
+   grid-template-columns: 1fr 1fr 1.5fr;
+   grid-template-rows: 1fr 1fr 2fr;
    gap: 35px;
 }
 
-.item {
-   border: 1px solid red;
+.list-chart {
+   grid-column-start: 3;
+   grid-column-end: 4;
+   grid-row-start: 2;
+   grid-row-end: 4;
 }
