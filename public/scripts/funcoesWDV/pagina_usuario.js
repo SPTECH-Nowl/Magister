@@ -101,7 +101,7 @@ function alterar(idAviso) {
         <input type="text" id="senhaInput" onkeyup="validar_senha()" placeholder="Senha de no mínimo 8 caracteres" />
       </div>
       <div class="div_crud_alterar">
-      <input type="text" id="nivPermissaoInput" onkeyup="validar_nivPermissao()" placeholder="insira números" />
+      <input type="text" id="tipoInput" onkeyup="validar_nivPermissao()" placeholder="insira números" />
     </div>
     `,
         showCancelButton: true,
@@ -113,7 +113,7 @@ function alterar(idAviso) {
             var nome = document.getElementById('input_nome').value;
             var email = document.getElementById('emailInput').value;
             var senha = document.getElementById('senhaInput').value;
-            var nivPermissao = document.getElementById('nivPermissaoInput').value;
+            var nivPermissao = document.getElementById('tipoInput').value;
 
             alterarUsuario(idAviso);
         }
@@ -183,15 +183,15 @@ function validar_senha() {
     }
 }
 function alterarUsuario(idAviso) {
-    var input_nome = document.getElementById('input_nome');
-    var input_email = document.getElementById('emailInput');
-    var input_senha = document.getElementById('senhaInput');
-    var input_nivPermissao = document.getElementById('nivPermissaoInput');
+    var nome = document.getElementById('nomeInput');
+    var email = document.getElementById('emailInput');
+    var senha = document.getElementById('senhaInput');
+    var nivPermissao = document.getElementById('tipoInput');
 
-    var nome = input_nome.value;
-    var email = input_email.value;
-    var senha = input_senha.value;
-    var nivPermissao = input_nivPermissao.value;
+    var nome = nomeInput.value;
+    var email = emailInput.value;
+    var senha = senhaInput.value;
+    var nivPermissao = tipoInput.value;
 
     if (nome === "" || email === "" || senha === "" || nivPermissao === "") {
         Swal.fire({

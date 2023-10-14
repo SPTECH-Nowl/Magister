@@ -361,10 +361,10 @@ function alterar(idAviso) {
         confirmButtonColor: '#74C365',
         cancelButtonColor: '#FF5555',
         preConfirm: () => {
-            var nome = document.getElementById('input_nome').value;
+            var nome = document.getElementById('nomeInput').value;
             var email = document.getElementById('emailInput').value;
             var senha = document.getElementById('senhaInput').value;
-            var nivPermissao = document.getElementById('nivPermissaoInput').value;
+            var nivPermissao = document.getElementById('tipoInput').value;
 
 
             alterarUsuario(idAviso);
@@ -373,7 +373,7 @@ function alterar(idAviso) {
 }
 
 function validar_nome() {
-    var input = document.getElementById('input_nome');
+    var input = document.getElementById('nomeInput');
     var nome = input.value;
     if (nome == "") {
 
@@ -435,7 +435,7 @@ function validar_senha() {
 }
 
 function validar_nivPermissao() {
-    var input = document.getElementById('nivPermissaoInput');
+    var input = document.getElementById('tipoInput');
     var nivPermissao = input.value;
 
 
@@ -457,10 +457,10 @@ function validar_nivPermissao() {
 
 function alterarUsuario(idAviso) {
 
-    var input_nome = document.getElementById('input_nome')
-    var input_email = document.getElementById('emailInput')
-    var input_senha = document.getElementById('senhaInput');
-    var input_nivPermissao = document.getElementById('nivPermissaoInput');
+    var nome = document.getElementById('nomeInput')
+    var email = document.getElementById('emailInput')
+    var senha = document.getElementById('senhaInput');
+    var nivPermissao = document.getElementById('tipoInput');
 
     var nome = input_nome.value;
     var email = input_email.value
