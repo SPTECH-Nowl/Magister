@@ -204,18 +204,19 @@ function mostrar_dados(idUsuario) {
             return response.json();
         })
         .then(function (dadosUsuario) {
-            if (dadosUsuario) {
-                console.log("Dados recebidos dos usuários: ", JSON.stringify(dadosUsuario));
+            if (dadosUsuario && dadosUsuario.length > 0) {
+                const usuario = dadosUsuario[0]; // Os dados são um array, pegamos o primeiro item
+                console.log("Dados recebidos dos usuários: ", JSON.stringify(usuario));
                 Swal.fire({
                     background: '#151515',
                     color: '#FFF',
                     confirmButtonColor: 'cornflowerblue',
                     title: 'Dados do Funcionário',
                     html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                        <span><b>Nome</b>: ${dadosUsuario.nomeUsuario}</span>
-                        <span><b>Email</b>: ${dadosUsuario.emailUsuario}</span>
-                        <span><b>Senha:</b> ${dadosUsuario.senhaUsuario}</span>
-                        <span><b>nivPermissao:</b> ${dadosUsuario.nivPermissao}</span>
+                        <span><b>Nome</b>: ${usuario.nome}</span>
+                        <span><b>Email</b>: ${usuario.email}</span>
+                        <span><b>Senha:</b> ${usuario.senha}</span>
+                        <span><b>nivPermissao:</b> ${usuario.nivPermissao}</span>
                     </div>`,
                 });
             } else {
@@ -226,7 +227,6 @@ function mostrar_dados(idUsuario) {
             console.error('Erro na requisição:', erro);
         });
 }
-
 
 function editar(idUsuario) {
     var nome = form_postagem.nome_input.value
@@ -260,15 +260,14 @@ function editar(idUsuario) {
 }
 
 function deletar(idUsuario, tipoPermissao) {
-    if (tipoPermissao == "1") {
+    if (tipoPermissao == "2") {
 
         Swal.fire({
             icon: 'error',
             title: 'Erro',
             background: '#151515',
             color: '#FFF',
-            html: `Prezado ${nome},
-                    Voce nao possui permissão para deletar`,
+            html: ` Voce nao possui permissão para deletar`,
         })
         return false;
     }
@@ -367,11 +366,11 @@ function alterar(idAviso) {
             var nivPermissao = document.getElementById('tipoInput').value;
 
 
+       
             alterarUsuario(idAviso);
         }
     });
 }
-
 function validar_nome() {
     var input = document.getElementById('nomeInput');
     var nome = input.value;
@@ -393,6 +392,7 @@ function validar_nome() {
     }
 }
 
+
 function validar_email() {
     var input = document.getElementById('emailInput');
     var email = input.value;
@@ -412,6 +412,7 @@ function validar_email() {
         input.placeholder = 'Email';
     }
 }
+
 
 function validar_senha() {
     var input = document.getElementById('senhaInput');
@@ -433,87 +434,80 @@ function validar_senha() {
         input.placeholder = 'Senha';
     }
 }
-
-function validar_nivPermissao() {
-    var input = document.getElementById('tipoInput');
-    var nivPermissao = input.value;
-
-
-    if (nivPermissao == "") {
-        input.classList.remove('correto');
-        input.classList.add('erro');
-        input.placeholder = 'Campo vazio';
-    }
-    else if (nivPermissao != 1 || nivPermissao != 2 || nivPermissao != 3) {
-        input.classList.remove('correto');
-        input.classList.add('erro');
-        input.placeholder = 'num inválido';
-    }
-    else {
-        input.classList.add('correto');
-        input.placeholder = 'Senha';
-    }
-
-
 function alterarUsuario(idAviso) {
-
-    var nome = document.getElementById('nomeInput')
-    var email = document.getElementById('emailInput')
+    var nome = document.getElementById('nomeInput');
+    var email = document.getElementById('emailInput');
     var senha = document.getElementById('senhaInput');
     var nivPermissao = document.getElementById('tipoInput');
 
-    var nome = input_nome.value;
-    var email = input_email.value
-    var senha = input_senha.value
-    var nivPermissao= input_nivPermissao.value
+    var nome = nomeInput.value;
+    var email = emailInput.value;
+    var senha = senhaInput.value;
+    var nivPermissao = tipoInput.value;
 
-    if (nome == "" || email == "" || senha == ""||nivPermissao=="") {
-
-        input.classList.remove('correto');
-        input.classList.add('erro');
-        input.placeholder = 'Campo vazio';
-    }
-    else if (nome.length < 3 || email.indexOf("@") == -1 || email.indexOf(".com") == -1 || email.length < 7
-        || senha.length < 8 || nivPermissao.length == 1 || nivPermissao.lenght == 2 || nivPermissao.lenght ==3 ) {
-        input.classList.remove('correto');
-        input.classList.add('erro');
-        input.placeholder = 'Nome muito curto';
-    }
-    else {
-        fetch(`/avisos/editar/${sessionStorage.getItem("ID_POSTAGEM_EDITANDO")}`, {
+    if (nome === "" || email === "" || senha === "" || nivPermissao === "") {
+        Swal.fire({
+            icon: 'error',
+            background: '#151515',
+            color: '#FFF',
+            title: 'Erro',
+            text: 'Preencha todos os campos corretamente.'
+        });
+    } else if (nome.length < 3 || email.indexOf("@") === -1 || email.indexOf(".com") === -1 || email.length < 7 || senha.length < 8) {
+        Swal.fire({
+            icon: 'error',
+            background: '#151515',
+            color: '#FFF',
+            title: 'Erro',
+            text: 'Verifique os formatos dos campos.'
+        });
+    } else {
+        fetch(`/usuarios/editar/${idAviso}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                nomeServer: nome,
-                emailServer: email,
-                senhaServer: senha,
-                nivPermissaoServer: nivPermissao
+                novoNomeUsuario: nome,
+                novoEmailUsuario: email,
+                novaSenhaUsuario: senha,
+                novoNivPerm: nivPermissao,
+                idUsuarioPM: idAviso
             })
-        }).then(function (resposta) {
-
+        })
+        .then(function (resposta) {
             if (resposta.ok) {
                 Swal.fire({
                     icon: 'success',
                     background: '#151515',
                     color: '#FFF',
-                    title: 'Bom trabalho!',
-                    text: 'Usuario Atualizado com sucesso',
-                    showConfirmButton: false,
-                })
-                document.getElementById('okButton').addEventListener('click', function () {
-                    Swal.close();
+                    title: 'Sucesso',
+                    text: 'Usuário Atualizado com sucesso.'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "usuarios.html";
+                    }
                 });
-                
-            } else if (resposta.status == 404) {
-                window.alert("Deu 404!");
+            } else if (resposta.status === 404) {
+                Swal.fire({
+                    icon: 'error',
+                    background: '#151515',
+                    color: '#FFF',
+                    title: 'Erro',
+                    text: 'Usuário não encontrado.'
+                });
             } else {
-                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+                Swal.fire({
+                    icon: 'error',
+                    background: '#151515',
+                    color: '#FFF',
+                    title: 'Erro',
+                    text: 'Houve um erro ao tentar realizar a atualização.'
+                });
             }
-        }).catch(function (resposta) {
+        })
+        .catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`);
         });
     }
-  }
 }
