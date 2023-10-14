@@ -22,11 +22,6 @@ router.get("/mostrar_dados/:idUsuario", function (req, res) {
     usuarioController.mostrar_dados(req, res);
 });
 
-
-router.post("/cadastrarInDash", function (req, res) {
-    usuarioController.cadastrarInDash(req, res);
-})
-
 router.post("/cadastrarNaDash", function (req, res) {
     usuarioController.cadastrarNaDash(req, res);
 })

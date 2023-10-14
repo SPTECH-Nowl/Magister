@@ -61,39 +61,6 @@ function mostrar_dados(req, res) {
         );
 }
 
-
-function cadastrarInDash(req, res) {
-    var nome = req.body.nome;
-    var email = req.body.email;
-    var senha = req.body.senha;
-    var nivPermissao = req.body.nivPerm;
-    var fkInstituicao= req.body.instituicao;
-
-    if (nome == undefined) {
-        res.status(400).send("O nome está indefinido!");
-    } else if (email == undefined) {
-        res.status(400).send("O Email está indefinido!");
-    } else if (senha == undefined) {
-        res.status(403).send("A senha do usuário está indefinido!");
-    } else if (nivPermissao == undefined) {
-        res.status(403).send("O nivel de permissão do usuário está indefinido!");
-    } else {
-        avisoModel.publicar(nome, email, senha , nivPermissao, fkInstituicao)
-            .then(
-                function (resultado) {
-              res.json(resultado);
-                }
-            )
-            .catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
-                    res.status(500).json(erro.sqlMessage);
-                }
-            );
-    }
-}
-
 function cadastrarNaDash(req, res) {
     var nomeVar = req.body.nomeUsuario;
     var emailVar = req.body.emailUsuario;
@@ -132,7 +99,6 @@ function cadastrarNaDash(req, res) {
             );
     }
 }
-
 
 function editar(req, res) {
     var nome = req.body.novoNomeUsuario
@@ -252,12 +218,11 @@ function cadastrar(req, res) {
     }
 }
 
-module.exports = {
+module.exports = {  
     entrar,
     cadastrar,
     listar,
     listarPorUsuario,
-    cadastrarInDash,
     cadastrarNaDash,
     editar,
     deletar,

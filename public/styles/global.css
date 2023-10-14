@@ -207,3 +207,14 @@ a {
    text-decoration: none;
    cursor: pointer;
 }
+
+.btn {
+   padding: 0.5rem 1rem;
+   background-color: unset;
+   border-radius: 2rem;
+   border: 1px black solid;
+   font-family: var(--font-title);
+   font-weight: 500;
+   font-size: 1.2rem;
+   cursor: pointer;
+}

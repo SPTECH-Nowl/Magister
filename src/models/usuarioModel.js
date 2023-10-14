@@ -51,15 +51,6 @@ WHERE usuario.idUsuario = ${idUsuario};
 }
 
 
-function cadastrarInDash(nome, email, senha , nivPermissao, fkInstituicao) {
-    var instrucao = `
-        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao)
-VALUES ('${nome}', '${email}', ${senha} , '${nivPermissao}','${fkInstituicao}');
-    `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
-    return database.executar(instrucao);
-}
-
 function cadastrar(nome, email, senha, instituicao) {
 
     var instrucao = `
@@ -114,8 +105,6 @@ function update(novoNome,novoEmail,id) {
 }
 
 
-
-
 module.exports = {
     entrar,
     cadastrar,
@@ -123,7 +112,6 @@ module.exports = {
     update,
     listar,
     listarPorUsuario,
-    cadastrarInDash,
     cadastrarNaDash,
     editar,
     deletar,

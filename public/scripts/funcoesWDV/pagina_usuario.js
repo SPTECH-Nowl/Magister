@@ -5,9 +5,6 @@
 // * verificar nomes = mostrar_dados == select -> aviso/mostrar_dados
 
 
-
-
-
 function atualizarFeed() {
     var idUsuario = sessionStorage.ID_USUARIO;
     //aguardar();

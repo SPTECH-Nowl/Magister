@@ -70,7 +70,6 @@ function cadastrarNaDash() {
     });
 }
 
-
 function entrar() {
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
@@ -122,11 +121,33 @@ function atualizarFeed() {
                 throw "Nenhum resultado encontrado!!";
             } else {
                 listaUsuarios.json().then(listaUsuarios =>{
-                    console.log(listaUsuarios)
-                    console.log(listaUsuarios[0])
-                    /*for(i = 0; i < listaUsuarios.length; i++){
-                        console.log(listaUsuarios[i])
-                    }*/
+                
+                    var tableUsuarios = document.getElementById("listaDeUsuarios")
+                    tableUsuarios.innerHTML = "";
+
+                
+                    for(i = 0; i < listaUsuarios.length; i++){
+                        
+                        var linhaTable = document.createElement("tr")
+
+                        var celulaNome = document.createElement("td")
+                        var celulaEmail = document.createElement("td")
+                        var celulaTipo = document.createElement("td")
+                        var celulaBotoes = document.createElement("td")
+                        
+
+                        celulaNome.innerHTML = listaUsuarios[i].nomeUsuario
+                        celulaEmail.innerHTML = listaUsuarios[i].email
+                        celulaTipo.innerHTML = listaUsuarios[i].nivPermissao
+                        celulaBotoes.innerHTML = "Em processo"
+
+                        linhaTable.appendChild(celulaNome)
+                        linhaTable.appendChild(celulaEmail)
+                        linhaTable.appendChild(celulaTipo)
+                        linhaTable.appendChild(celulaBotoes)
+
+                        tableUsuarios.appendChild(linhaTable)
+                    }
                 })
             }
 
@@ -179,48 +200,6 @@ function atualizarFeed() {
 
 function limparFormulario() {
     document.getElementById("form_postagem").reset();
-}
-
-
-function cadastrarInDash() {
-
-    var nome = nomeInput.value
-    var email = emailInput.value
-    var senha= senhaInput.value
-    var nivPerm = tipoInput.value
-
-    if (sessionStorage.nivPerm == "1") {
-        alert("Nivel de permissão invalida.")
-        return false;
-    } 
-    else {
-        fetch(`/usuarios/cadastrarInDash/`, {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nome: nome,
-                email: email,
-                senha: senha,
-                nivPermissao: nivPerm,
-                instituicao: sessionStorage.instituicao
-            })
-        }).then(function (resposta) {
-            if (resposta.ok) {
-                alert("Cadastro feito com sucesso")
-            } else {
-                alert("Houve um erro ao cadastrar")
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-
-        });
-
-        return false;
-
-    }
-
 }
 
 function mostrar_dados(idUsuario) {
