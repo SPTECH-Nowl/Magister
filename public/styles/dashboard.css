@@ -169,3 +169,13 @@ body {
    margin-top: 1rem;
 }
 
+/* dashboard geral */
+.grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 35px;
+}
+
+.item {
+   border: 1px solid red;
+}

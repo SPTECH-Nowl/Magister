@@ -39,6 +39,10 @@ html, body {
    font-family: var(--font-text);
 }
 
+body {
+   background-color: #f0edf5;
+}
+
 h1, h2, h3, h4, h5, h6 {
    font-family: var(--font-title);
 }
@@ -143,7 +147,6 @@ ul {
 }
 
 ul li {
-   width: 10vw;
    display: flex;
    align-items: center;
    gap: 1.2rem;
@@ -163,44 +166,27 @@ ul li img {
    align-items: center;
    justify-content: space-between;
    flex-direction: column;
-   width: 15%;
+   width: 4vw;
    height: 100vh;
-   padding: 2rem 0;
    background: linear-gradient(358deg, #6D499D 18.16%, #9747FF 38.1%);   
    z-index: -2;
+   padding-block: 1.5rem;
+   border-radius: 0 25px 25px 0;
+}
+
+.logo-nav {
+   width: 40px;
 }
 
 .wave-menu {
    width: 100%;
    position: absolute;
-   top: -10%;
    z-index: -1;
 }
 
 .nav-list {
    position: absolute;
    top: 40%;
-}
-
-.user-profile {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   flex-direction: column;
-   gap: 1rem;
-}
-
-#pfp {
-   width: 8rem;
-   height: 8rem;
-   background-color: #d4d4d4;
-   border-radius: 50%;
-}
-
-#nome_user {
-   font-weight: 700;
-   font-size: 1.5rem;
-   color: white;
 }
 
 a {
