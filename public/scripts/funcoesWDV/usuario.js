@@ -89,13 +89,15 @@ document.addEventListener('DOMContentLoaded', function() {
     adicionarUsuarioButton.addEventListener('click', function() {
         Swal.fire({
             title: 'Adicionar Usuário',
+            width:"900px",
+            height:"200px",
             html:
                 '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input">' +
                 '<input type="email" id="emailInput" placeholder="Email" class="swal2-input">' +
                 '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input">'+
                 '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input">',
             showCancelButton: true,
-            confirmButtonText: 'Cadastrar',
+            confirmButtonText: 'Adicionar usuário',
             cancelButtonText: 'Cancelar',
             showLoaderOnConfirm: true,
             preConfirm: () => {
@@ -138,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 
 
 function atualizarFeed() {
@@ -208,10 +211,10 @@ function mostrar_dados(idUsuario) {
                 const usuario = dadosUsuario[0]; // Os dados são um array, pegamos o primeiro item
                 console.log("Dados recebidos dos usuários: ", JSON.stringify(usuario));
                 Swal.fire({
-                    background: '#151515',
-                    color: '#FFF',
+                    title: 'Dados do cliente',
+                    width:"500px",
+                    height:"550px",
                     confirmButtonColor: 'cornflowerblue',
-                    title: 'Dados do Funcionário',
                     html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                         <span><b>Nome</b>: ${usuario.nome}</span>
                         <span><b>Email</b>: ${usuario.email}</span>
@@ -260,13 +263,13 @@ function editar(idUsuario) {
 }
 
 function deletar(idUsuario, tipoPermissao) {
-    if (tipoPermissao == "2") {
+    if (tipoPermissao == "0") {
 
         Swal.fire({
             icon: 'error',
             title: 'Erro',
-            background: '#151515',
-            color: '#FFF',
+            width:"900px",
+            height:"200px",
             html: ` Voce nao possui permissão para deletar`,
         })
         return false;
@@ -274,8 +277,9 @@ function deletar(idUsuario, tipoPermissao) {
     else {
         Swal.fire({
             title: 'Você tem certeza que deseja deletar?',
-            background: '#151515',
             color: '#FFF',
+            width:"600px",
+            height:"800px",
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: 'Deletar',
@@ -297,7 +301,6 @@ function deletar(idUsuario, tipoPermissao) {
                         Swal.fire('Saved!', '', 'success')
                         Swal.fire({
                             icon: 'success',
-                            background: '#151515',
                             color: '#FFF',
                             text: 'Usuário deletado com sucesso',
 
@@ -316,7 +319,6 @@ function deletar(idUsuario, tipoPermissao) {
             } else if (result.isDenied) {
                 Swal.fire({
                     icon: 'warning',
-                    background: '#151515',
                     color: '#FFF',
                     title: 'Bom trabalho!',
                     text: 'Usuário não deletado',
@@ -479,7 +481,8 @@ function alterarUsuario(idAviso) {
             if (resposta.ok) {
                 Swal.fire({
                     icon: 'success',
-                    background: '#151515',
+                    width:"500px",
+                    height:"5s00px",
                     color: '#FFF',
                     title: 'Sucesso',
                     text: 'Usuário Atualizado com sucesso.'
