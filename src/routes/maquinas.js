@@ -1,9 +1,14 @@
 var express = require("express");
 var router = express.Router();
     
-var usuarioController = require("../controllers/maquinaController");
+var maquinaController = require("../controllers/maquinaController");
 
 
+
+router.post("/autenticar", function (req, res) {
+    maquinaController.capturaIndividual(req, res);
+   
+});
 
 
 

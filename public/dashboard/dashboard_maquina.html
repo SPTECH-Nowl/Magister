@@ -19,11 +19,13 @@
    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
    <!-- Funções -->
-   <script src="../scripts/dashboard_maquina.js" defer></script>
+   <!-- <script src="../scripts/dashboard_maquina.js" defer></script> -->
+   <script src="../scripts/maquina_individual.js" ></script>
 
    <title>Dashboard</title>
 </head>
-<body onload="validarAcesso()">
+<body>
+   <!-- <body onload="validarAcesso()"> -->
    <div class="alert-toast-wrapper"></div>
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
@@ -61,30 +63,30 @@
       </ul>
    </div>
    <div class="dash-content">
-      <h1>Desempenho da máquina 01</h1>
+      <h1>Desempenho da <span id="nome_maquina"></span></h1>
       <div class="chart-grid">
          <div class="chart-container top-chart">
             <div class="specs-container">
                <img src="../assets/img/elements/windows.svg" alt="">
                <div class="spec">
-                  <span class="spec-name">Sistema Operacional</span>
-                  <span class="spec-value">Windows</span>
+                  <span class="spec-name">Sistema Operacional</span><br>
+                  <span class="spec-value"><span id="so"></span></span>
                </div>
                <div class="spec">
-                  <span class="spec-name">Núcleos</span>
-                  <span class="spec-value">10</span>
+                  <span class="spec-name">Núcleos</span><br>
+                  <span class="spec-value"><span id="nucleo"></span></span>
                </div>
                <div class="spec">
-                  <span class="spec-name">RAM</span>
-                  <span class="spec-value">8gb</span>
+                  <span class="spec-name">RAM</span><br>
+                  <span class="spec-value"><span id="ram"></span>gb</span>
                </div>
                <div class="spec">
-                  <span class="spec-name">Disco (SSD)</span>
-                  <span class="spec-value">512gb</span>
+                  <span class="spec-name">Disco (<span id="nomeDisco">)</span></span><br>
+                  <span class="spec-value"><span id="disco"></span>gb</span>
                </div>
                <div class="spec">
-                  <span class="spec-name">Em uso</span>
-                  <span class="spec-value spec-ativo">ON</span>
+                  <span class="spec-name">Em uso</span><br>
+                  <span class="spec-value spec-ativo"><span id="statusUso"></span></span>
                </div>
             </div>
             <button class="btn primario">Ver hardware</button>
