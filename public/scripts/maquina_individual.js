@@ -4,7 +4,7 @@ console.log("OI");
 function entrar() {
 
 
-    var idVar =1;
+    var idVar =2;
 
     fetch("/maquinas/autenticar", {
         method: "POST",
@@ -24,8 +24,10 @@ function entrar() {
                 console.log(json);
                 console.log(JSON.stringify(json));
 
-                nome_maquina.innerHTML = json.nome;
-                so.innerHTML = json.SO;
+                nome_maquina.innerHTML = json.nomeMaquina;
+                so.innerHTML = json.sistema;
+                ram.innerHTML = json.consumoRam;
+                disco.innerHTML = json.consumoDisco;
 
                 if(json.emUso=1){
                     statusUso.innerHTML = "ON";
