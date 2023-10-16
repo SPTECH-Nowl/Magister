@@ -16,8 +16,8 @@ function listar(codInstituicao) {
     WHERE fkInstituicao = '${codInstituicao}';
 
  `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
-    return database.executar(instrucao);
+    console.log("Executando a instrução SQL: \n" + instrucao); 
+        return database.executar(instrucao);
 }
 
 
@@ -54,27 +54,28 @@ WHERE usuario.idUsuario = ${idUsuario};
 function cadastrar(nome, email, senha, instituicao) {
 
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 3, '${instituicao}');
+        INSERT INTO usuario (nome, email, senha, fkTipoUsuario, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 1, '${instituicao}');
     `;
     return database.executar(instrucao);
 }
+
 
 function cadastrarNaDash(nome, email, senha, nivPerm,instituicao) {
 
     console.log(nome, email, senha, nivPerm, instituicao)
     
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', ${nivPerm}, '${instituicao}');
+        INSERT INTO usuario (nome, email, senha, fkTipoUsuario , fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', ${nivPerm}, '${instituicao}');
     `;
     return database.executar(instrucao);
 }
 
-function editar(nome, email , senha , nivPermissao, idUsuario) {
+function editar(nome, email , senha , nivPerm, idUsuario) {
     
     var instrucao = `
     UPDATE usuario
-SET nome = '${nome}', email = '${email}', senha = '${senha}', nivPermissao ='${nivPermissao}'
-WHERE idUsuario = "${idUsuario}";
+SET nome = '${nome}', email = '${email}', senha = '${senha}', fkTipoUsuario = ${nivPerm}
+WHERE idUsuario = ${idUsuario};
     `;
     return database.executar(instrucao);
 }
@@ -91,7 +92,7 @@ function deletar(idUsuario) {
 function cadastrar(nome, email, senha, codigo) {
 
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 2, '${codigo}');
+        INSERT INTO usuario (nome, email, senha, fkTipoUsuario, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 1, '${codigo}');
     `;
     return database.executar(instrucao);
 }

@@ -43,39 +43,53 @@ function cadastrar() {
     var nomeVar = nome_input_cadastro.value;
     var emailVar = email_input_cadastro.value;
     var senhaVar = senha_input_cadastro.value;
-    var codigoVar = codigo_input.value;
+    var c = codigo_input.value;
 
-    if (nomeVar ==""||emailVar == "" || senhaVar == ""|| codigoVar =="") {
+    if (nomeVar ==""||emailVar == "" || senhaVar == ""|| c =="") {
       
         swal("error","Preencha todos os campos","error");
         return false;
 } 
 
-    fetch("/usuarios/cadastrar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeServer: nomeVar,
-            emailServer: emailVar,
-            senhaServer: senhaVar,
-            codigoServer: codigoVar
-        })
-    }).then(function (resposta) {
-        if (resposta.ok) {
-            toggleLogin()
-            swal("Parábens","Redirecionando para dashboard","sucess");
-            window.location = "login_cadastro.html"
+    fetch(`/instituicoes/buscarIdInst/${c}`, {
+        cache: "no-cache"
+    }).then(idInst => {
+        if(idInst.ok){
+            idInst.json().then(idInst => {
+
+                fetch("/usuarios/cadastrar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeServer: nomeVar,
+                        emailServer: emailVar,
+                        senhaServer: senhaVar,
+                        codigoServer: idInst[0].idInstituicao
+                    })
+                }).then(function (resposta) {
+                    if (resposta.ok) {
+                        toggleLogin()
+                        swal("Parábens","Redirecionando para dashboard","sucess");
+                        window.location = "login_cadastro.html"
+                    } else {
+                        console.log("erro no cadastro")
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+
+                });
+
+                return false;
+            })
         } else {
-            console.log("erro no cadastro")
+            swal("Error", "Código de instituição inválido!")
+            return false;
+
         }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+    })
 
-    });
-
-    return false;
 
 
 
