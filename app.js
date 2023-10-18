@@ -11,6 +11,7 @@ var app = express();
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var maquinaRouter = require("./src/routes/maquinas");
+var instituicaoRouter = require("./src/routes/instituicoes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -21,6 +22,7 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/maquinas", maquinaRouter);
+app.use("/instituicoes", instituicaoRouter);
 
 
 app.use('*',(_,res)=>{

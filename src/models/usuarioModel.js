@@ -22,8 +22,18 @@ function listar(codInstituicao) {
     WHERE u.fkInstituicao = '${codInstituicao}';
     `;
 
+<<<<<<< HEAD
     console.log("Executando a instrução SQL: \n" + instrução);
     return database.executar(instrução);
+=======
+	SELECT usuario.idUsuario, usuario.nome as nomeUsuario, usuario.email, usuario.nivPermissao, usuario.fkInstituicao, instituicao.nome as nomeInstituicao, instituicao.sigla  FROM usuario
+    JOIN instituicao ON usuario.fkInstituicao = instituicao.codigoHex
+    WHERE fkInstituicao = '${codInstituicao}';
+
+ `;
+    console.log("Executando a instrução SQL: \n" + instrucao); 
+        return database.executar(instrucao);
+>>>>>>> 889838037b9fecc011c731389b73ff1600886777
 }
 
 function listarPorUsuario(idUsuario) {
@@ -56,12 +66,19 @@ WHERE usuario.idUsuario = ${idUsuario};
 }
 
 function cadastrar(nome, email, senha, instituicao) {
+<<<<<<< HEAD
     var instrução = `
         INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 3, '${instituicao}');
+=======
+
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, fkTipoUsuario, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 1, '${instituicao}');
+>>>>>>> 889838037b9fecc011c731389b73ff1600886777
     `;
     return database.executar(instrução);
 }
 
+<<<<<<< HEAD
 function cadastrarNaDash(nome, email, senha, nivPerm, instituicao) {
     console.log(nome, email, senha, nivPerm, instituicao);
 
@@ -85,9 +102,25 @@ function cadastrarNaDash(nome, email, senha, nivPerm, instituicao) {
 
 function editar(nome, email, senha, nivPermissao, idUsuario) {
     var instrução = `
+=======
+
+function cadastrarNaDash(nome, email, senha, nivPerm,instituicao) {
+
+    console.log(nome, email, senha, nivPerm, instituicao)
+    
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, fkTipoUsuario , fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', ${nivPerm}, '${instituicao}');
+    `;
+    return database.executar(instrucao);
+}
+
+function editar(nome, email , senha , nivPerm, idUsuario) {
+    
+    var instrucao = `
+>>>>>>> 889838037b9fecc011c731389b73ff1600886777
     UPDATE usuario
-SET nome = '${nome}', email = '${email}', senha = '${senha}', nivPermissao ='${nivPermissao}'
-WHERE idUsuario = "${idUsuario}";
+SET nome = '${nome}', email = '${email}', senha = '${senha}', fkTipoUsuario = ${nivPerm}
+WHERE idUsuario = ${idUsuario};
     `;
     return database.executar(instrução);
 }
@@ -103,8 +136,14 @@ function deletar(idUsuario) {
 
 
 function cadastrar(nome, email, senha, codigo) {
+<<<<<<< HEAD
     var instrução = `
         INSERT INTO usuario (nome, email, senha, nivPermissao, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 1, '${codigo}');
+=======
+
+    var instrucao = `
+        INSERT INTO usuario (nome, email, senha, fkTipoUsuario, fkInstituicao) VALUES ('${nome}', '${email}', '${senha}', 1, '${codigo}');
+>>>>>>> 889838037b9fecc011c731389b73ff1600886777
     `;
     return database.executar(instrução);
 }

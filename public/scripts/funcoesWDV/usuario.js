@@ -44,9 +44,9 @@ function cadastrar() {
     var nomeVar = nome_input_cadastro.value;
     var emailVar = email_input_cadastro.value;
     var senhaVar = senha_input_cadastro.value;
-    var codigoVar = codigo_input.value;
+    var c = codigo_input.value;
 
-    if (nomeVar ==""||emailVar == "" || senhaVar == ""|| codigoVar =="") {
+    if (nomeVar ==""||emailVar == "" || senhaVar == ""|| c =="") {
       
         swal("error","Preencha todos os campos","error");
         return false;
@@ -71,14 +71,12 @@ function cadastrar() {
             swal("Parábens","Redirecionando para dashboard","sucess");
             window.location = "login_cadastro.html"
         } else {
-            console.log("erro no cadastro")
+            swal("Error", "Código de instituição inválido!")
+            return false;
+
         }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+    })
 
-    });
-
-    return false;
 
 
 
