@@ -1,4 +1,4 @@
-b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
 
 //Google Chart functions
 google.charts.load('current', {packages: ['corechart']});
@@ -176,12 +176,10 @@ const verifConsumo = (dadosMonitorados, limiteConsumo) => {
       notify(`Texto do mensagem mensagem mensagem`, 'danger', 'exclamation-octagon');
    }
 }
-
-// Dados para teste - cola no console e puxa a função com essas variáveis pra testar
-// dadosMonitorados = [
-//    [1, 10],
-//    [2, 15],
-//    [3, 40],
-//    [4, 50],
-//  ];
-//  limiteConsumo = 30;
+   dadosMonitorados = [
+      [1, 10],
+      [2, 15],
+      [3, 40],
+      [4, 50],
+   ];
+   limiteConsumo = 30;

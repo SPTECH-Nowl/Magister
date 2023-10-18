@@ -11,20 +11,21 @@ function entrar() {
         fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
              {cache: "no-cache"}).then((informacoesUsuario) =>{
                 if(informacoesUsuario.ok){
+                    setInterval(4000);
+                    swal('sucess','Redirecionando para dashboard','sucess')
                     informacoesUsuario.json().then(infosUser =>{
                         console.log(infosUser)
-
                         sessionStorage.emailUsuario = infosUser.email
                         sessionStorage.nomeUsuario = infosUser.nome
                         sessionStorage.idUsuario = infosUser.idUsuario
                         sessionStorage.nivPerm = infosUser.nivPermissao
                         sessionStorage.instituicao = infosUser.FkInstituicao
-
+                        swal('sucess','Redirecionando para dashboard','sucess')
                         window.location = "dashboard/dashboard_maquina.html"
                     })
 
                 } else {
-                    swal('Email e/ou senha invalido!')
+                    swal('warning','Email e/ou senha invalido!','error')
 
                     informacoesUsuario.text().then(texto => {
                         console.error(texto)
@@ -64,7 +65,9 @@ function cadastrar() {
         })
     }).then(function (resposta) {
         if (resposta.ok) {
-            toggleLogin()
+            setInterval(5000);
+            swal("sucess","Redirecionando para dashboard","sucess");
+            to/ggleLogin()
             swal("Parábens","Redirecionando para dashboard","sucess");
             window.location = "login_cadastro.html"
         } else {

@@ -19,7 +19,7 @@ JOIN maquina m ON h.fkMaquina = m.idMaquina and h.fkComponente =1
 left join historico h2 on h.fkMaquina = h2.fkMaquina and h2.fkComponente =2
 left join historico h3 on h2.fkMaquina = h3.fkMaquina and h3.fkComponente =3
 left join historico h4 on h3.fkMaquina = h4.fkMaquina and h4.fkComponente =4
-where m.idMaquina =${idMaquina}
+where m.idMaquina =1
 LIMIT 0, 1;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);

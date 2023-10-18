@@ -4,12 +4,12 @@ var sessoes = [];
 
 function listar(req, res) {
     var codInstituicao = req.params.codInstituicao;
-    
+
     usuarioModel.listar(codInstituicao).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
-            res.status(204).send("Nenhum resultado encontrado!")
+            res.status(204).send("Nenhum resultado encontrado!");
         }
     }).catch(function (erro) {
         console.log(erro);
@@ -69,16 +69,15 @@ function cadastrarNaDash(req, res) {
     var instituicaoVar = req.body.instituicao;
 
     console.log(nomeVar, emailVar, senhaVar, nivPerm, instituicaoVar)
-    
 
     if (nomeVar == undefined) {
         res.status(400).send("Seu nome está indefinido");
     } else if (emailVar == undefined) {
         res.status(400).send("Seu email está indefinido");
     } else if (senhaVar == undefined) {
-        res.status(400).send("Sua senha está indefinido");
+        res.status(400).send("Sua senha está indefinida");
     } else if (instituicaoVar == undefined) {
-        res.status(400).send("Seu codigo hexadecimal está indefinido");
+        res.status(400).send("Seu código hexadecimal está indefinido");
     } else {
 
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
@@ -101,13 +100,13 @@ function cadastrarNaDash(req, res) {
 }
 
 function editar(req, res) {
-    var nome = req.body.novoNomeUsuario
-    var email = req.body.novoEmailUsuario
-    var senha = req.body.novaSenhaUsuario
-    var nivPermissao= req.body.novoNivPerm
-    var idUsuario = req.body.idUsuarioPM
+    var nome = req.body.novoNomeUsuario;
+    var email = req.body.novoEmailUsuario;
+    var senha = req.body.novaSenhaUsuario;
+    var nivPermissao = req.body.novoNivPerm;
+    var idUsuario = req.body.idUsuarioPM;
 
-    usuarioModel.editar(nome, email , senha ,nivPermissao, idUsuario)
+    usuarioModel.editar(nome, email, senha, nivPermissao, idUsuario)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -150,10 +149,10 @@ function entrar(req, res) {
     var senhaVar = req.params.senhaVar;
 
     if (emailVar == undefined) {
-        res.status(400).send("Seu email está indefinida");
+        res.status(400).send("Seu email está indefinido");
     } else if (senhaVar == undefined) {
         res.status(400).send("Sua senha está indefinida");
-    } else {        
+    } else {
         usuarioModel.entrar(emailVar, senhaVar)
             .then(
                 function (resultado) {
@@ -177,9 +176,7 @@ function entrar(req, res) {
                 }
             );
     }
-
 }
-
 
 function cadastrar(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
@@ -194,9 +191,9 @@ function cadastrar(req, res) {
     } else if (emailVar == undefined) {
         res.status(400).send("Seu email está indefinido");
     } else if (senhaVar == undefined) {
-        res.status(400).send("Sua senha está indefinido");
+        res.status(400).send("Sua senha está indefinida");
     } else if (codigoVar == undefined) {
-        res.status(400).send("Seu codigo hexadecimal está indefinido");
+        res.status(400).send("Seu código hexadecimal está indefinido");
     } else {
 
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
@@ -218,7 +215,7 @@ function cadastrar(req, res) {
     }
 }
 
-module.exports = {  
+module.exports = {
     entrar,
     cadastrar,
     listar,

@@ -4,7 +4,7 @@ console.log("OI");
 function entrar() {
 
 
-    var idVar =2;
+    var idVar =1;
 
     fetch("/maquinas/autenticar", {
         method: "POST",
