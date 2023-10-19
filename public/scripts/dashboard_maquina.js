@@ -34,24 +34,11 @@ function drawCPU() {
    chart.draw(data, options);
 }
 
-function drawRAM() {
+function drawRAM(dados) {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
-   data.addRows([
-      ['12:30', 80],
-      ['12:31', 81],
-      ['12:32', 85],
-      ['12:33', 85],
-      ['12:34', 80],
-      ['12:35', 78],
-      ['12:36', 59],
-      ['12:37', 80],
-      ['12:38', 91],
-      ['12:39', 99],
-      ['12:40', 70],
-      ['12:41', 80],
-   ]);
+   data.addRows(dados);
 
    var options = {
       title: null,
@@ -127,14 +114,34 @@ function drawWindow() {
    chart.draw(data, options);
 }
 
+function capturarDadosRAM(idInstituicao, idMaquina) {
+   let dadosRAM = [];
+
+   fetch(`/maquinas/capturarConsumoRAM/${idInstituicao}/${idMaquina}`)
+      .then((response) => {
+         if(response.ok) {
+            response.json().then((response) => {
+               response.forEach(dado => {
+                  let dados = [dado.dataHora, (dado.consumo * 100)]
+                  dadosRAM.push(dados);
+               });
+
+               drawRAM(dadosRAM)
+            })
+         }
+      })
+      .catch((error) => {
+         console.log("Não foram encontrados dados vindos do banco de dados.")
+         dadosRAM = [];
+      })
+}
+
 google.charts.setOnLoadCallback(() => {
-   drawCPU();
-   drawRAM();
+   capturarDadosRAM(1, 2)
+   drawCPU();  
    drawDisc();
    drawWindow();
 });
-
-b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
 
 //criando o toast
 const container = document.querySelector('.alert-toast-wrapper');
@@ -177,6 +184,8 @@ function verifConsumo (dadosMonitorados, limiteConsumo) {
    }
 }
 
+
+
 /*
 dadosMonitorados = [
    [1, 10],
@@ -186,3 +195,4 @@ dadosMonitorados = [
 ];
 limiteConsumo = 30;
 */
+

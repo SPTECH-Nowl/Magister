@@ -2,8 +2,6 @@ var maquinaModel = require("../models/maquinaModel");
 
 var sessoes = [];
 
-
-
 function capturaIndividual(req, res) {
     var id = req.body.idServer;
     
@@ -37,8 +35,27 @@ function capturaIndividual(req, res) {
 
 }
 
+function capturarConsumoRAM(req, res) {
+    let idInstituicao = req.params.idInstituicaoServer;
+    let idMaquina = req.params.idMaquinaServer;
 
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarConsumoRAM(idMaquina, idInstituicao)
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
 
 module.exports = {
-    capturaIndividual
+    capturaIndividual,
+    capturarConsumoRAM
 }
