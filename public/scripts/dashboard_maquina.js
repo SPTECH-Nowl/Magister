@@ -39,7 +39,7 @@ function drawRAM(dados) {
    chart.draw(data, options);
 }
 
-function drawDisco(dados) {
+function drawDisco (dados) {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -88,7 +88,7 @@ function drawWindow() {
    chart.draw(data, options);
 }
 
-function capturarDadosRAM(idInstituicao, idMaquina) {
+function capturarDadosRAM(idInstituicao, idMaquina, callback) {
    let dadosRAM = [];
 
    fetch(`/maquinas/capturarConsumoRAM/${idInstituicao}/${idMaquina}`)
@@ -100,7 +100,7 @@ function capturarDadosRAM(idInstituicao, idMaquina) {
                   dadosRAM.push(dados);
                });
 
-               drawRAM(dadosRAM)
+               callback(dadosRAM);
             })
          }
       })
@@ -110,8 +110,8 @@ function capturarDadosRAM(idInstituicao, idMaquina) {
       })
 }
 
-function capturarDadosCPU(idInstituicao, idMaquina) {
-   let dadosRAM = [];
+function capturarDadosCPU(idInstituicao, idMaquina, callback) {
+   let dadosCPU = [];
 
    fetch(`/maquinas/capturarConsumoCPU/${idInstituicao}/${idMaquina}`)
       .then((response) => {
@@ -119,21 +119,21 @@ function capturarDadosCPU(idInstituicao, idMaquina) {
             response.json().then((response) => {
                response.forEach(dado => {
                   let dados = [dado.dataHora, (dado.consumo * 100)]
-                  dadosRAM.push(dados);
+                  dadosCPU.push(dados);
                });
 
-               drawCPU(dadosRAM)
+               callback(dadosCPU);
             })
          }
       })
       .catch((error) => {
          console.log("Não foram encontrados dados vindos do banco de dados.")
-         dadosRAM = [];
+         dadosCPU = [];
       })
 }
 
-function capturarDadosDisco(idInstituicao, idMaquina) {
-   let dadosRAM = [];
+function capturarDadosDisco(idInstituicao, idMaquina, callback) {
+   let dadosDisco = [];
 
    fetch(`/maquinas/capturarConsumoDisco/${idInstituicao}/${idMaquina}`)
       .then((response) => {
@@ -141,23 +141,22 @@ function capturarDadosDisco(idInstituicao, idMaquina) {
             response.json().then((response) => {
                response.forEach(dado => {
                   let dados = [dado.dataHora, (dado.consumo * 100)]
-                  dadosRAM.push(dados);
+                  dadosDisco.push(dados);
                });
 
-               drawDisco(dadosRAM)
-            })
+               callback(dadosDisco);
+            });
          }
       })
       .catch((error) => {
-         console.log("Não foram encontrados dados vindos do banco de dados.")
-         dadosRAM = [];
+         console.log("Não foram encontrados dados vindos do banco de dados.");
       })
 }
 
 google.charts.setOnLoadCallback(() => {
-   capturarDadosRAM(1, 2);
-   capturarDadosCPU(1, 2); 
-   capturarDadosDisco(1, 2);
+   capturarDadosRAM(1, 2, drawRAM); //futuramente é pra ser passado parâmetros da máquina (vindo de sessionStorage) e instituição (vindo de localStorage)
+   capturarDadosCPU(1, 2, drawCPU); 
+   capturarDadosDisco(1, 2, drawDisco);
    drawWindow();
 });
 
