@@ -121,8 +121,6 @@ CREATE TABLE permissaoProcesso (
 
 -- dados mocados para teste java
 
-drop database magister;
-
 select * from hardware;
 
 -- INSERTS TIPOUSUARIO
@@ -203,15 +201,15 @@ INSERT INTO permissao (nome, fkUsuario) VALUES
 
 -- INSERTS HISTORICO
 INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
-	('2023-08-23 12:17:30', .5, 1, 1, 2),
-	('2023-08-23 12:17:35', .6, 1, 1, 2),
-	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
-	('2023-08-23 12:17:30', .5, 1, 2, 2),
-	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
-	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
-	('2023-08-23 12:17:30', 200, 1, 3, 2),
-	('2023-08-23 12:17:35', 200, 1, 3, 2),
-	('2023-08-23 12:17:40', 245, 1, 3, 2);
+	('2023-08-23 12:17:30', 0.5, 1, 1, 2),
+	('2023-08-23 12:17:35', 0.6, 1, 1, 2),
+	('2023-08-23 12:17:40', 0.7, 1, 1, 2),
+	('2023-08-23 12:17:30', 0.7, 1, 2, 2),
+	('2023-08-23 12:17:35', 0.9, 1, 2, 2),
+	('2023-08-23 12:17:40', 1.0, 1, 2, 2),
+	('2023-08-23 12:17:30', 0.9, 1, 3, 2),
+	('2023-08-23 12:17:35', 0.8, 1, 3, 2),
+	('2023-08-23 12:17:40', 0.7, 1, 3, 2);
 
 -- INSERTS HISTORICOPROCESSO
 INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
@@ -231,3 +229,14 @@ INSERT INTO permissaoProcesso (dataAlocacao, fkPermissao, fkProcesso) VALUES
 	('2012-12-12 00:00:25', 1, 2),
 	('2021-07-15 00:00:25', 2, 2),
 	('2023-03-27 00:00:25', 3, 1);
+
+-- SELECT DE DADOS DE CONSUMO DE RAM POR MÁQUINA E INSTITUIÇÃO
+SELECT 
+	h.idHistorico, h.dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+FROM 
+	historico h
+JOIN componente c ON h.fkComponente = c.idComponente
+JOIN hardware hw ON c.fkHardware = hw.idHardware
+JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+WHERE
+	th.tipo = 'RAM' AND h.fkMaquina = 2;

@@ -55,7 +55,49 @@ function capturarConsumoRAM(req, res) {
         })
 }
 
+function capturarConsumoCPU(req, res) {
+    let idInstituicao = req.params.idInstituicaoServer;
+    let idMaquina = req.params.idMaquinaServer;
+
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarConsumoCPU(idMaquina, idInstituicao)
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function capturarConsumoDisco(req, res) {
+    let idInstituicao = req.params.idInstituicaoServer;
+    let idMaquina = req.params.idMaquinaServer;
+
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarConsumoDisco(idMaquina, idInstituicao)
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
 module.exports = {
     capturaIndividual,
-    capturarConsumoRAM
+    capturarConsumoRAM,
+    capturarConsumoCPU,
+    capturarConsumoDisco
 }

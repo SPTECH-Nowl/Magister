@@ -41,7 +41,39 @@ function capturarConsumoRAM(idMaquina, idInstituicao) {
     return database.executar(instrucao);
 }
 
+function capturarConsumoCPU(idMaquina, idInstituicao) {
+    var instrucao = `
+    SELECT 
+	    h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+    FROM 
+	    historico h
+    JOIN componente c ON h.fkComponente = c.idComponente
+    JOIN hardware hw ON c.fkHardware = hw.idHardware
+    JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+    WHERE
+	    th.tipo = 'Processador' AND h.fkMaquina = 2;
+    `
+    return database.executar(instrucao);
+}
+
+function capturarConsumoDisco(idMaquina, idInstituicao) {
+    var instrucao = `
+    SELECT 
+	    h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+    FROM 
+	    historico h
+    JOIN componente c ON h.fkComponente = c.idComponente
+    JOIN hardware hw ON c.fkHardware = hw.idHardware
+    JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+    WHERE
+	    th.tipo = 'Disco' AND h.fkMaquina = 2;
+    `
+    return database.executar(instrucao);
+}
+
 module.exports = {
     capturaIndividual,
-    capturarConsumoRAM
+    capturarConsumoRAM,
+    capturarConsumoCPU,
+    capturarConsumoDisco
 };

@@ -3,24 +3,11 @@
 //Google Chart functions
 google.charts.load('current', {packages: ['corechart']});
 
-function drawCPU() {
+function drawCPU(dados) {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
-   data.addRows([
-      ['12:30', 70],
-      ['12:31', 71],
-      ['12:32', 75],
-      ['12:33', 75],
-      ['12:34', 80],
-      ['12:35', 88],
-      ['12:36', 89],
-      ['12:37', 90],
-      ['12:38', 91],
-      ['12:39', 88],
-      ['12:40', 96],
-      ['12:41', 80],
-   ]);
+   data.addRows(dados);
 
    var options = {
       title: null,
@@ -52,24 +39,11 @@ function drawRAM(dados) {
    chart.draw(data, options);
 }
 
-function drawDisc() {
+function drawDisco(dados) {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
-   data.addRows([
-      ['12:30', 80],
-      ['12:31', 81],
-      ['12:32', 85],
-      ['12:33', 85],
-      ['12:34', 80],
-      ['12:35', 78],
-      ['12:36', 59],
-      ['12:37', 80],
-      ['12:38', 91],
-      ['12:39', 99],
-      ['12:40', 70],
-      ['12:41', 80],
-   ]);
+   data.addRows(dados);
 
    var options = {
       title: null,
@@ -136,10 +110,54 @@ function capturarDadosRAM(idInstituicao, idMaquina) {
       })
 }
 
+function capturarDadosCPU(idInstituicao, idMaquina) {
+   let dadosRAM = [];
+
+   fetch(`/maquinas/capturarConsumoCPU/${idInstituicao}/${idMaquina}`)
+      .then((response) => {
+         if(response.ok) {
+            response.json().then((response) => {
+               response.forEach(dado => {
+                  let dados = [dado.dataHora, (dado.consumo * 100)]
+                  dadosRAM.push(dados);
+               });
+
+               drawCPU(dadosRAM)
+            })
+         }
+      })
+      .catch((error) => {
+         console.log("Não foram encontrados dados vindos do banco de dados.")
+         dadosRAM = [];
+      })
+}
+
+function capturarDadosDisco(idInstituicao, idMaquina) {
+   let dadosRAM = [];
+
+   fetch(`/maquinas/capturarConsumoDisco/${idInstituicao}/${idMaquina}`)
+      .then((response) => {
+         if(response.ok) {
+            response.json().then((response) => {
+               response.forEach(dado => {
+                  let dados = [dado.dataHora, (dado.consumo * 100)]
+                  dadosRAM.push(dados);
+               });
+
+               drawDisco(dadosRAM)
+            })
+         }
+      })
+      .catch((error) => {
+         console.log("Não foram encontrados dados vindos do banco de dados.")
+         dadosRAM = [];
+      })
+}
+
 google.charts.setOnLoadCallback(() => {
-   capturarDadosRAM(1, 2)
-   drawCPU();  
-   drawDisc();
+   capturarDadosRAM(1, 2);
+   capturarDadosCPU(1, 2); 
+   capturarDadosDisco(1, 2);
    drawWindow();
 });
 
