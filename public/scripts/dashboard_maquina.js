@@ -3,7 +3,7 @@
 //Google Chart functions
 google.charts.load('current', {packages: ['corechart']});
 
-const drawCPU = () => {
+function drawCPU() {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -34,7 +34,7 @@ const drawCPU = () => {
    chart.draw(data, options);
 }
 
-const drawRAM = () => {
+function drawRAM() {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -65,7 +65,7 @@ const drawRAM = () => {
    chart.draw(data, options);
 }
 
-const drawDisc = () => {
+function drawDisc() {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -96,7 +96,7 @@ const drawDisc = () => {
    chart.draw(data, options);
 }
 
-const drawWindow = () => {
+function drawWindow() {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -147,7 +147,7 @@ function escapeHtml(html) {
 }
 
 // Custom function to emit toast notifications
-function notify(message, variant, icon, duration = 3000) {
+function notify(message, variant, icon, duration = 10000) {
   const alert = Object.assign(document.createElement('sl-alert'), {
     variant,
     closable: true,
@@ -162,7 +162,7 @@ function notify(message, variant, icon, duration = 3000) {
   return alert.toast();
 }
 
-const verifConsumo = (dadosMonitorados, limiteConsumo) => {
+function verifConsumo (dadosMonitorados, limiteConsumo) {
    var qtdAcima = 0;
    dadosMonitorados.forEach(dado => {
       if(dado[1] >= limiteConsumo) {
@@ -176,10 +176,13 @@ const verifConsumo = (dadosMonitorados, limiteConsumo) => {
       notify(`Texto do mensagem mensagem mensagem`, 'danger', 'exclamation-octagon');
    }
 }
-   dadosMonitorados = [
-      [1, 10],
-      [2, 15],
-      [3, 40],
-      [4, 50],
-   ];
-   limiteConsumo = 30;
+
+/*
+dadosMonitorados = [
+   [1, 10],
+   [2, 15],
+   [3, 40],
+   [4, 50],
+];
+limiteConsumo = 30;
+*/
