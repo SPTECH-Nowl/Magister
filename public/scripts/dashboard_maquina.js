@@ -154,9 +154,19 @@ function capturarDadosDisco(idInstituicao, idMaquina, callback) {
 }
 
 google.charts.setOnLoadCallback(() => {
-   capturarDadosRAM(1, 2, drawRAM); //futuramente é pra ser passado parâmetros da máquina (vindo de sessionStorage) e instituição (vindo de localStorage)
-   capturarDadosCPU(1, 2, drawCPU); 
-   capturarDadosDisco(1, 2, drawDisco);
+   capturarDadosRAM(1, 2, (dados) => {
+      drawRAM(dados);
+      verifConsumo(dados);
+   }); //futuramente é pra ser passado parâmetros da máquina (vindo de sessionStorage) e instituição (vindo de localStorage)
+   capturarDadosCPU(1, 2, (dados) => {
+      drawCPU(dados);
+      verifConsumo(dados);
+   }); 
+
+   capturarDadosDisco(1, 2, (dados) => {
+      drawDisco(dados)
+      verifConsumo(dados)
+   });
    drawWindow();
 });
 
@@ -186,7 +196,7 @@ function notify(message, variant, icon, duration = 10000) {
   return alert.toast();
 }
 
-function verifConsumo (dadosMonitorados, limiteConsumo) {
+function verifConsumo (dadosMonitorados, limiteConsumo = 85) {
    var qtdAcima = 0;
    dadosMonitorados.forEach(dado => {
       if(dado[1] >= limiteConsumo) {
@@ -195,9 +205,9 @@ function verifConsumo (dadosMonitorados, limiteConsumo) {
    });
 
    if(qtdAcima == 1) {
-      notify(`Texto do mensagem mensagem mensagem`, 'warning', 'exclamation-triangle');
+      notify(`mensagem mensagem mensagem`, 'warning', 'exclamation-triangle');
    } else if(qtdAcima >= 2) {
-      notify(`Texto do mensagem mensagem mensagem`, 'danger', 'exclamation-octagon');
+      notify(`mensagem mensagem mensagem`, 'danger', 'exclamation-octagon');
    }
 }
 
