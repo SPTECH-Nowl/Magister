@@ -1,4 +1,41 @@
+//funções relacionadas a gerar alertas
+const container = document.querySelector('.alert-toast-wrapper');
 
+function escapeHtml(html) {
+  const div = document.createElement('div');
+  div.textContent = html;
+  return div.innerHTML;
+}
+
+function notify(message, variant, icon, duration = 10000) {
+  const alert = Object.assign(document.createElement('sl-alert'), {
+    variant,
+    closable: true,
+    duration: duration,
+    innerHTML: `
+      <sl-icon name="${icon}" slot="icon"></sl-icon>
+      ${escapeHtml(message)}
+    `
+  });
+
+  document.body.append(alert);
+  return alert.toast();
+}
+
+function verifConsumo (dadosMonitorados, limiteConsumo = 85, mensagem) {
+   var qtdAcima = 0;
+   dadosMonitorados.forEach(dado => {
+      if(dado[1] >= limiteConsumo) {
+         qtdAcima++;
+      }
+   });
+
+   if(qtdAcima == 1) {
+      notify(mensagem, 'warning', 'exclamation-triangle');
+   } else if(qtdAcima >= 2) {
+      notify(mensagem, 'danger', 'exclamation-octagon');
+   }
+}
 
 //Google Chart functions
 google.charts.load('current', {packages: ['corechart']});
@@ -96,7 +133,7 @@ function capturarDadosRAM(idInstituicao, idMaquina, callback) {
          if(response.ok) {
             response.json().then((response) => {
                response.forEach(dado => {
-                  let dados = [dado.dataHora, (dado.consumo * 100)]
+                  let dados = [dado.dataHora, dado.consumo]
                   dadosRAM.push(dados);
                });
 
@@ -118,7 +155,7 @@ function capturarDadosCPU(idInstituicao, idMaquina, callback) {
          if(response.ok) {
             response.json().then((response) => {
                response.forEach(dado => {
-                  let dados = [dado.dataHora, (dado.consumo * 100)]
+                  let dados = [dado.dataHora, dado.consumo]
                   dadosCPU.push(dados);
                });
 
@@ -140,7 +177,7 @@ function capturarDadosDisco(idInstituicao, idMaquina, callback) {
          if(response.ok) {
             response.json().then((response) => {
                response.forEach(dado => {
-                  let dados = [dado.dataHora, (dado.consumo * 100)]
+                  let dados = [dado.dataHora, dado.consumo]
                   dadosDisco.push(dados);
                });
 
@@ -156,62 +193,20 @@ function capturarDadosDisco(idInstituicao, idMaquina, callback) {
 google.charts.setOnLoadCallback(() => {
    capturarDadosRAM(1, 2, (dados) => {
       drawRAM(dados);
-      verifConsumo(dados);
+      verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
    }); //futuramente é pra ser passado parâmetros da máquina (vindo de sessionStorage) e instituição (vindo de localStorage)
    capturarDadosCPU(1, 2, (dados) => {
       drawCPU(dados);
-      verifConsumo(dados);
+      verifConsumo(dados, null, "A máquina X registrou um alto consumo de CPU.");
    }); 
 
    capturarDadosDisco(1, 2, (dados) => {
       drawDisco(dados)
-      verifConsumo(dados)
-   });
+      verifConsumo(dados, null, "A máquina X registrou um alto consumo de Disco.")
+   });   
+
    drawWindow();
 });
-
-//criando o toast
-const container = document.querySelector('.alert-toast-wrapper');
-
-// Always escape HTML for text arguments!
-function escapeHtml(html) {
-  const div = document.createElement('div');
-  div.textContent = html;
-  return div.innerHTML;
-}
-
-// Custom function to emit toast notifications
-function notify(message, variant, icon, duration = 10000) {
-  const alert = Object.assign(document.createElement('sl-alert'), {
-    variant,
-    closable: true,
-    duration: duration,
-    innerHTML: `
-      <sl-icon name="${icon}" slot="icon"></sl-icon>
-      ${escapeHtml(message)}
-    `
-  });
-
-  document.body.append(alert);
-  return alert.toast();
-}
-
-function verifConsumo (dadosMonitorados, limiteConsumo = 85) {
-   var qtdAcima = 0;
-   dadosMonitorados.forEach(dado => {
-      if(dado[1] >= limiteConsumo) {
-         qtdAcima++;
-      }
-   });
-
-   if(qtdAcima == 1) {
-      notify(`mensagem mensagem mensagem`, 'warning', 'exclamation-triangle');
-   } else if(qtdAcima >= 2) {
-      notify(`mensagem mensagem mensagem`, 'danger', 'exclamation-octagon');
-   }
-}
-
-
 
 /*
 dadosMonitorados = [
