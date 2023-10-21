@@ -2,43 +2,43 @@
 const container = document.querySelector('.alert-toast-wrapper');
 
 function escapeHtml(html) {
-  const div = document.createElement('div');
-  div.textContent = html;
-  return div.innerHTML;
+   const div = document.createElement('div');
+   div.textContent = html;
+   return div.innerHTML;
 }
 
 function notify(message, variant, icon, duration = 10000) {
-  const alert = Object.assign(document.createElement('sl-alert'), {
-    variant,
-    closable: true,
-    duration: duration,
-    innerHTML: `
+   const alert = Object.assign(document.createElement('sl-alert'), {
+      variant,
+      closable: true,
+      duration: duration,
+      innerHTML: `
       <sl-icon name="${icon}" slot="icon"></sl-icon>
       ${escapeHtml(message)}
     `
-  });
+   });
 
-  document.body.append(alert);
-  return alert.toast();
+   document.body.append(alert);
+   return alert.toast();
 }
 
-function verifConsumo (dadosMonitorados, limiteConsumo = 85, mensagem) {
+function verifConsumo(dadosMonitorados, limiteConsumo = 85, mensagem) {
    var qtdAcima = 0;
    dadosMonitorados.forEach(dado => {
-      if(dado[1] >= limiteConsumo) {
+      if (dado[1] >= limiteConsumo) {
          qtdAcima++;
       }
    });
 
-   if(qtdAcima == 1) {
+   if (qtdAcima == 1) {
       notify(mensagem, 'warning', 'exclamation-triangle');
-   } else if(qtdAcima >= 2) {
+   } else if (qtdAcima >= 2) {
       notify(mensagem, 'danger', 'exclamation-octagon');
    }
 }
 
 //Google Chart functions
-google.charts.load('current', {packages: ['corechart']});
+google.charts.load('current', { packages: ['corechart'] });
 
 function drawCPU(dados) {
    var data = new google.visualization.DataTable();
@@ -49,7 +49,7 @@ function drawCPU(dados) {
    var options = {
       title: null,
       legend: 'none',
-      chartArea: {'width': '100%'},
+      chartArea: { 'width': '90%' },
       backgroundColor: '#f5f5f5',
       colors: ['#9747FF']
    };
@@ -67,7 +67,7 @@ function drawRAM(dados) {
    var options = {
       title: null,
       legend: 'none',
-      chartArea: {'width': '100%'},
+      chartArea: { 'width': '90%' },
       backgroundColor: '#f5f5f5',
       colors: ['#9747FF']
    };
@@ -76,7 +76,7 @@ function drawRAM(dados) {
    chart.draw(data, options);
 }
 
-function drawDisco (dados) {
+function drawDisco(dados) {
    var data = new google.visualization.DataTable();
    data.addColumn("string", "Data/Hora");
    data.addColumn("number", "% de uso");
@@ -85,7 +85,7 @@ function drawDisco (dados) {
    var options = {
       title: null,
       legend: 'none',
-      chartArea: {'width': '100%'},
+      chartArea: { 'width': '90%' },
       backgroundColor: '#f5f5f5',
       colors: ['#9747FF']
    };
@@ -116,7 +116,7 @@ function drawWindow() {
    var options = {
       title: null,
       legend: 'none',
-      chartArea: {'width': '100%'},
+      chartArea: { 'width': '100%' },
       backgroundColor: '#f5f5f5',
       colors: ['#9747FF']
    };
@@ -125,96 +125,228 @@ function drawWindow() {
    chart.draw(data, options);
 }
 
-function capturarDadosRAM(idInstituicao, idMaquina, callback) {
-   let dadosRAM = [];
-
-   fetch(`/maquinas/capturarConsumoRAM/${idInstituicao}/${idMaquina}`)
-      .then((response) => {
-         if(response.ok) {
-            response.json().then((response) => {
-               response.forEach(dado => {
-                  let dados = [dado.dataHora, dado.consumo]
-                  dadosRAM.push(dados);
-               });
-
-               callback(dadosRAM);
-            })
-         }
-      })
-      .catch((error) => {
-         console.log("Não foram encontrados dados vindos do banco de dados.")
-         dadosRAM = [];
-      })
+// capturando dados do banco
+function capturarDadosMaquina(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      fetch(`/maquinas/capturarDadosMaquina/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if(response.ok) {
+               response.json().then((response) => {
+                  let registro = response[0];
+                  console.log(registro)
+                  resolve(registro);
+               })
+            }
+         })
+         .catch((error) => {
+            console.log("Erro na requisição", error);
+            reject(error);
+         })
+   })
 }
 
-function capturarDadosCPU(idInstituicao, idMaquina, callback) {
-   let dadosCPU = [];
+function capturarDadosRAM(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      let dadosRAM = [];
 
-   fetch(`/maquinas/capturarConsumoCPU/${idInstituicao}/${idMaquina}`)
-      .then((response) => {
-         if(response.ok) {
-            response.json().then((response) => {
-               response.forEach(dado => {
-                  let dados = [dado.dataHora, dado.consumo]
-                  dadosCPU.push(dados);
+      fetch(`/maquinas/capturarConsumoRAM/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if (response.ok) {
+               response.json().then((response) => {
+                  response.forEach(dado => {
+                     let dados = [dado.dataHora, dado.consumo]
+                     dadosRAM.push(dados);
+                  });
+
+                  resolve(dadosRAM);
                });
-
-               callback(dadosCPU);
-            })
-         }
-      })
-      .catch((error) => {
-         console.log("Não foram encontrados dados vindos do banco de dados.")
-         dadosCPU = [];
-      })
+            } else {
+               reject("Erro na requisição.");
+            }
+         })
+         .catch((error) => {
+            console.log("Não foram encontrados dados vindos do banco de dados.");
+            reject(error);
+         });
+   });
 }
 
-function capturarDadosDisco(idInstituicao, idMaquina, callback) {
-   let dadosDisco = [];
+function capturarDadosCPU(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      let dadosRAM = [];
 
-   fetch(`/maquinas/capturarConsumoDisco/${idInstituicao}/${idMaquina}`)
-      .then((response) => {
-         if(response.ok) {
-            response.json().then((response) => {
-               response.forEach(dado => {
-                  let dados = [dado.dataHora, dado.consumo]
-                  dadosDisco.push(dados);
+      fetch(`/maquinas/capturarConsumoCPU/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if (response.ok) {
+               response.json().then((response) => {
+                  response.forEach(dado => {
+                     let dados = [dado.dataHora, dado.consumo]
+                     dadosRAM.push(dados);
+                  });
+
+                  resolve(dadosRAM);
                });
+            } else {
+               reject("Erro na requisição.");
+            }
+         })
+         .catch((error) => {
+            console.log("Não foram encontrados dados vindos do banco de dados.");
+            reject(error);
+         });
+   });
+}
 
-               callback(dadosDisco);
-            });
-         }
-      })
-      .catch((error) => {
-         console.log("Não foram encontrados dados vindos do banco de dados.");
-      })
+function capturarDadosDisco(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      let dadosRAM = [];
+
+      fetch(`/maquinas/capturarConsumoDisco/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if (response.ok) {
+               response.json().then((response) => {
+                  response.forEach(dado => {
+                     let dados = [dado.dataHora, dado.consumo]
+                     dadosRAM.push(dados);
+                  });
+
+                  resolve(dadosRAM);
+               });
+            } else {
+               reject("Erro na requisição.");
+            }
+         })
+         .catch((error) => {
+            console.log("Não foram encontrados dados vindos do banco de dados.");
+            reject(error);
+         });
+   });
+}
+
+function capturarNovoDadoRAM(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      fetch(`/maquinas/capturarNovoDadoRAM/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if (response.ok) {
+               response.json().then((data) => {
+                  let [obj] = data;
+                  let novoRegistro = [obj.dataHora, obj.consumo];
+                  resolve(novoRegistro);
+               });
+            } else {
+               reject("Erro de requisição");
+            }
+         })
+         .catch((error) => {
+            console.log("Erro de requisição:", error);
+            reject(error);
+         });
+   });
+}
+
+function capturarNovoDadoCPU(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      fetch(`/maquinas/capturarNovoDadoCPU/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if (response.ok) {
+               response.json().then((data) => {
+                  let [obj] = data;
+                  let novoRegistro = [obj.dataHora, obj.consumo];
+                  resolve(novoRegistro);
+               });
+            } else {
+               reject("Erro de requisição");
+            }
+         })
+         .catch((error) => {
+            console.log("Erro de requisição:", error);
+            reject(error);
+         });
+   });
+}
+
+function capturarNovoDadoDisco(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      fetch(`/maquinas/capturarNovoDadoDisco/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if (response.ok) {
+               response.json().then((data) => {
+                  let [obj] = data;
+                  let novoRegistro = [obj.dataHora, obj.consumo];
+                  resolve(novoRegistro);
+               });
+            } else {
+               reject("Erro de requisição");
+            }
+         })
+         .catch((error) => {
+            console.log("Erro de requisição:", error);
+            reject(error);
+         });
+   });
 }
 
 google.charts.setOnLoadCallback(() => {
-   capturarDadosRAM(1, 2, (dados) => {
+   capturarDadosCPU(1, 2).then((dados) => {
+      drawCPU(dados);
+      verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
+   });
+
+   capturarDadosRAM(1, 2).then((dados) => {
       drawRAM(dados);
       verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
-   }); //futuramente é pra ser passado parâmetros da máquina (vindo de sessionStorage) e instituição (vindo de localStorage)
-   capturarDadosCPU(1, 2, (dados) => {
-      drawCPU(dados);
-      verifConsumo(dados, null, "A máquina X registrou um alto consumo de CPU.");
-   }); 
+   });
 
-   capturarDadosDisco(1, 2, (dados) => {
+   capturarDadosDisco(1, 2).then((dados) => {
       drawDisco(dados)
       verifConsumo(dados, null, "A máquina X registrou um alto consumo de Disco.")
-   });   
+   });
+
+   capturarDadosMaquina(1, 2).then((dados) => {
+      const nomeMaquina = document.getElementById("nome_maquina");
+      const soMaquina = document.getElementById("so");
+      const ramMaquina = document.getElementById("ram");
+      const discoMaquina = document.getElementById("disco");
+      const uso = document.getElementById("statusUso")
+      const nucleos = document.getElementById("nucleos");
+
+      nomeMaquina.innerHTML = dados.nome;
+      soMaquina.innerHTML = dados.so;
+      uso.innerHTML = dados.emUso = 0 ? `OFF` : `ON`;
+      ramMaquina.innerHTML = dados.capacidadeRAM;
+      discoMaquina.innerHTML = dados.capacidadeDisco >= 1000 ? `${(dados.capacidadeDisco / 1024)}tb` : `${dados.capacidadeDisco}GB`;
+      nucleos.innerHTML = dados.capacidadeCPU;
+   })
 
    drawWindow();
 });
 
-/*
-dadosMonitorados = [
-   [1, 10],
-   [2, 15],
-   [3, 40],
-   [4, 50],
-];
-limiteConsumo = 30;
-*/
+// const atualizarGraficos = setInterval(() => {
+//    capturarDadosRAM(1, 2). then((dados) => {
+//       let matriz = dados;
+//       capturarNovoDadoRAM(1, 2).then((novoRegistro) => {
+//          matriz.pop();
+//          matriz.unshift(novoRegistro);
+//          drawRAM(matriz);
+//       })
+//    });
+
+//    capturarDadosCPU(1, 2).then((dados) => {
+//       let matriz = dados;
+//       capturarNovoDadoCPU(1, 2).then((novoRegistro) => {
+//          matriz.shift();
+//          matriz.push(novoRegistro);
+//          drawCPU(matriz);
+//       })
+//    });
+
+//    capturarDadosDisco(1, 2).then((dados) => {
+//       let matriz = dados;
+//       capturarNovoDadoDisco(1, 2).then((novoRegistro) => {
+//          matriz.shift();
+//          matriz.push(novoRegistro);
+//          drawDisco(matriz);
+//       })
+//    });
+// }, 3000);
 

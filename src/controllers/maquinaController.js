@@ -2,42 +2,49 @@ var maquinaModel = require("../models/maquinaModel");
 
 var sessoes = [];
 
-function capturaIndividual(req, res) {
-    var id = req.body.idServer;
-    
-    if (id == undefined) {
-        res.status(400).send("Seu id está undefined!");
-    }  else {
-        
-        maquinaModel.capturaIndividual(id)
-            .then(
-                function (resultado) {
-                    console.log(`\nResultados encontrados: ${resultado.length}`);
-                    console.log(`Resultados: ${JSON.stringify(resultado)}`); // transforma JSON em String
+function capturarDadosMaquina(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
 
-                    if (resultado.length == 1) {
-                        console.log(resultado);
-                        res.json(resultado[0]);
-                    } else if (resultado.length == 0) {
-                        res.status(403).send("id e/ou senha inválido(s)");
-                    } else {
-                        res.status(403).send("Mais de um usuário com o mesmo login e senha!");
-                    }
-                }
-            ).catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log("\nHouve um erro ao realizar o login! Erro: ", erro.sqlMessage);
-                    res.status(500).json(erro.sqlMessage);
-                }
-            );
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
     }
 
+    maquinaModel.capturarDadosMaquina(idMaquina, idInstituicao)
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((erro) => {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function capturarTodosDadosMaquina(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
+
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarTodosDadosMaquina(idMaquina, idMaquina)
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json(error.sqlMessage)
+        })
 }
 
 function capturarConsumoRAM(req, res) {
-    let idInstituicao = req.params.idInstituicaoServer;
-    let idMaquina = req.params.idMaquinaServer;
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
 
     if(idInstituicao == undefined) {
         console.log("idInstituicao está undefined");
@@ -46,8 +53,8 @@ function capturarConsumoRAM(req, res) {
     }
 
     maquinaModel.capturarConsumoRAM(idMaquina, idInstituicao)
-        .then(function (resultado) {
-            res.json(resultado);
+        .then(function (response) {
+            res.json(response);
         })
         .catch(function (erro) {
             console.log(erro);
@@ -56,8 +63,8 @@ function capturarConsumoRAM(req, res) {
 }
 
 function capturarConsumoCPU(req, res) {
-    let idInstituicao = req.params.idInstituicaoServer;
-    let idMaquina = req.params.idMaquinaServer;
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
 
     if(idInstituicao == undefined) {
         console.log("idInstituicao está undefined");
@@ -66,8 +73,8 @@ function capturarConsumoCPU(req, res) {
     }
 
     maquinaModel.capturarConsumoCPU(idMaquina, idInstituicao)
-        .then(function (resultado) {
-            res.json(resultado);
+        .then(function (response) {
+            res.json(response);
         })
         .catch(function (erro) {
             console.log(erro);
@@ -76,8 +83,8 @@ function capturarConsumoCPU(req, res) {
 }
 
 function capturarConsumoDisco(req, res) {
-    let idInstituicao = req.params.idInstituicaoServer;
-    let idMaquina = req.params.idMaquinaServer;
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
 
     if(idInstituicao == undefined) {
         console.log("idInstituicao está undefined");
@@ -86,8 +93,68 @@ function capturarConsumoDisco(req, res) {
     }
 
     maquinaModel.capturarConsumoDisco(idMaquina, idInstituicao)
-        .then(function (resultado) {
-            res.json(resultado);
+        .then(function (response) {
+            res.json(response);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function capturarNovoDadoRAM(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
+
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarNovoDadoRAM(idMaquina, idInstituicao)
+        .then(function (response) {
+            res.json(response);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function capturarNovoDadoCPU(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
+
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarNovoDadoCPU(idMaquina, idInstituicao)
+        .then(function (response) {
+            res.json(response);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function capturarNovoDadoDisco(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+    let idMaquina = req.params.idMaquina;
+
+    if(idInstituicao == undefined) {
+        console.log("idInstituicao está undefined");
+    } else if(idMaquina == undefined) {
+        console.log("idMaquina está undefined");
+    }
+
+    maquinaModel.capturarNovoDadoDisco(idMaquina, idInstituicao)
+        .then(function (response) {
+            res.json(response);
         })
         .catch(function (erro) {
             console.log(erro);
@@ -96,8 +163,12 @@ function capturarConsumoDisco(req, res) {
 }
 
 module.exports = {
-    capturaIndividual,
+    capturarDadosMaquina,
+    capturarTodosDadosMaquina,
     capturarConsumoRAM,
     capturarConsumoCPU,
-    capturarConsumoDisco
+    capturarConsumoDisco, 
+    capturarNovoDadoRAM,
+    capturarNovoDadoDisco,
+    capturarNovoDadoCPU
 }
