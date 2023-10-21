@@ -36,7 +36,9 @@ function capturarConsumoRAM(idMaquina, idInstituicao) {
     JOIN hardware hw ON c.fkHardware = hw.idHardware
     JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
     WHERE
-	    th.tipo = 'RAM' AND h.fkMaquina = 2;
+	    th.tipo = 'RAM' AND h.fkMaquina = 2
+    ORDER BY dataHora DESC
+    LIMIT 10;
     `
     return database.executar(instrucao);
 }
@@ -51,7 +53,9 @@ function capturarConsumoCPU(idMaquina, idInstituicao) {
     JOIN hardware hw ON c.fkHardware = hw.idHardware
     JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
     WHERE
-	    th.tipo = 'Processador' AND h.fkMaquina = 2;
+	    th.tipo = 'Processador' AND h.fkMaquina = 2
+    ORDER BY dataHora DESC
+    LIMIT 10;
     `
     return database.executar(instrucao);
 }
@@ -59,14 +63,16 @@ function capturarConsumoCPU(idMaquina, idInstituicao) {
 function capturarConsumoDisco(idMaquina, idInstituicao) {
     var instrucao = `
     SELECT 
-	    h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+	    h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo
     FROM 
 	    historico h
     JOIN componente c ON h.fkComponente = c.idComponente
     JOIN hardware hw ON c.fkHardware = hw.idHardware
     JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
     WHERE
-	    th.tipo = 'Disco' AND h.fkMaquina = 2;
+	    th.tipo = 'Disco' AND h.fkMaquina = 2
+    ORDER BY dataHora DESC
+    LIMIT 10;
     `
     return database.executar(instrucao);
 }

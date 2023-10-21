@@ -1,6 +1,5 @@
 var database = require("../database/config");
 
-
 function pesquisarDescricao(texto) {
     var instrucao = `
         SELECT 
@@ -17,16 +16,8 @@ function pesquisarDescricao(texto) {
                 ON a.fk_usuario = u.id
         WHERE a.descricao LIKE '${texto}';
     `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
-
-
-
-
-
-
-
 
 module.exports = {
     pesquisarDescricao
