@@ -1,3 +1,56 @@
+// funções e variáveis relacionadas aos modais
+const dialog = document.querySelector('.dialog-overview');
+const openButton = dialog.nextElementSibling;
+const closeButton = dialog.querySelector('button');
+
+openButton.addEventListener('click', () => dialog.show());
+closeButton.addEventListener('click', () => dialog.hide());
+dialog.addEventListener('sl-show', () => {
+   capturarTodosDadosMaquina(1, 2).then((dados) => {
+      const nome = document.getElementById("modal_nome"),
+            so = document.getElementById("modal_so"),
+            cpu = document.getElementById("modal_cpu"),
+            procss = document.getElementById("modal_procss"),
+            ram = document.getElementById("modal_ram"),
+            capcddRAM = document.getElementById("modal_capcdd_ram"),
+            disco = document.getElementById("modal_disco"),
+            capcddDisco = document.getElementById("modal_capcdd_disco"),
+            containerStrikes = document.getElementById("modal_strikes"),
+            statusUso = document.getElementById("modal_uso");
+
+      nome.innerHTML = dados.nome;
+      so.innerHTML = dados.so;
+      cpu.innerHTML = dados.componenteCPU;
+      procss.innerHTML = `${dados.capacidadeCPU} GHz`;
+      ram.innerHTML = dados.componenteRAM;
+      capcddRAM.innerHTML = `${dados.capacidadeRAM} gb`;
+      disco.innerHTML = dados.componenteDisco;
+      capcddDisco.innerHTML = `${dados.capacidadeDisco} gb`;
+      statusUso.innerHTML = dados.emUso == 0 ? `OFF` : `ON`;
+      
+      if(dados.emUso == 1) statusUso.style.color = "#BF80FF"
+
+      let strikes = containerStrikes.children;
+      switch(dados.qtdStrikes) {
+         case 1:
+            strikes[0].style.color = `red`;
+            break;
+         case 2:
+            for (let i = 0; i <= 1; i++) {
+               const strike = strikes[i];
+               strike.style.color = `red`;
+            }
+            break;
+         default:
+            for (let i = 0; i <= 2; i++) {
+               const strike = strikes[i];
+               strike.style.color = `red`;
+            }
+            break;
+      }
+   })
+})
+
 //funções relacionadas a gerar alertas
 const container = document.querySelector('.alert-toast-wrapper');
 
@@ -133,7 +186,24 @@ function capturarDadosMaquina(idInstituicao, idMaquina) {
             if(response.ok) {
                response.json().then((response) => {
                   let registro = response[0];
-                  console.log(registro)
+                  resolve(registro);
+               })
+            }
+         })
+         .catch((error) => {
+            console.log("Erro na requisição", error);
+            reject(error);
+         })
+   })
+}
+
+function capturarTodosDadosMaquina(idInstituicao, idMaquina) {
+   return new Promise((resolve, reject) => {
+      fetch(`/maquinas/capturarTodosDadosMaquina/${idInstituicao}/${idMaquina}`)
+         .then((response) => {
+            if(response.ok) {
+               response.json().then((response) => {
+                  let registro = response[0];
                   resolve(registro);
                })
             }

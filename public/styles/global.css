@@ -108,12 +108,14 @@ sl-dialog::part(overlay) {
 
 sl-dialog::part(panel) {
    border-radius: 20px;
+   width: 40vw;
 }
 
 sl-dialog::part(title) {
    font-family: var(--font-title);
    font-style: 900;
-   font-size: 2rem;
+   font-size: 1.5rem;
+   font-weight: bold;
 }
 
 sl-dialog::part(body) {
@@ -203,6 +205,10 @@ a {
    font-weight: 500;
    font-size: 1.2rem;
    cursor: pointer;
+}
+
+.btn-full {
+   width: 100% !important;
 }
 
 /* alert */

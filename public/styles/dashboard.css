@@ -5,7 +5,6 @@ body {
 }
 
 /* dashboard */
-
 .dash-content {
    width: 100%;
    padding: 1.5rem 3.5rem;
@@ -168,6 +167,52 @@ body {
    display: flex;
    gap: 0.5rem;
    margin-top: 1rem;
+}
+
+.modal-table {
+   display: flex;
+   flex-direction: column;
+   border-spacing: 0.6rem;
+   font-size: 1.2rem;
+}
+
+.modal-table th, td {
+   width: 50%;
+}
+
+.modal-table td {
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-table th {
+   text-align: left;
+   font-family: var(--font-title);
+   font-weight: 500;
+}
+
+.container-bottom {
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   gap: 0.6rem;
+}
+
+.modal-col {
+   display: flex;
+   flex-direction: column;
+   gap: 0.4rem;
+   width: 100%;
+   font-weight: bold;
+}
+
+#modal_strikes i {
+   font-size: 2.5rem;
+   color: #787878;
+}
+
+#modal_uso {
+   font-size: 2rem;
+   color: #787878;
 }
 
 /* dashboard geral */

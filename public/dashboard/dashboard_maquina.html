@@ -19,6 +19,9 @@
    <!-- ChartJS -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
+   <!-- Phosphor Icons -->
+   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
    <!-- Funções -->
    <script src="../scripts/dashboard_maquina.js" defer></script>
 
@@ -88,6 +91,62 @@
                   <span class="spec-value spec-ativo"><span id="statusUso"></span></span>
                </div>
             </div>
+            <sl-dialog label="Informações sobre a máquina" class="dialog-overview">
+               <table class="modal-table">
+                  <tr>
+                     <th>Nome de máquina: </th>
+                     <td id="modal_nome"></td>
+                  </tr>
+                  <tr>
+                     <th>Sistema Operacional: </th>
+                     <td id="modal_so"></td>
+                  </tr>
+                  <tr>
+                     <th>Modelo da CPU: </th>
+                     <td id="modal_cpu"></td>
+                  </tr>
+                  <tr>
+                     <th>Processamento: </th>
+                     <td id="modal_procss"></td>
+                  </tr>
+                  <tr>
+                     <th>Modelo da RAM: </th>
+                     <td id="modal_ram"></td>
+                  </tr>
+                  <tr>
+                     <th>Capacidade da RAM: </th>
+                     <td id="modal_capcdd_ram"></td>
+                  </tr>
+                  <tr>
+                     <th>Modelo do disco: </th>
+                     <td id="modal_disco"></td>
+                  </tr>
+                  <tr>
+                     <th>Capacidade do disco: </th>
+                     <td id="modal_capcdd_disco"></td>
+                  </tr>
+                  <tr></tr>
+                  <tr></tr>
+                  <tr>
+                     <th>Quantidade de strikes: </th>
+                     <th>Em uso: </th>
+                  </tr>
+                  <tr>
+                     <th id="modal_strikes">
+                        <i class="ph ph-warning" id="strikes1"></i>
+                        <i class="ph ph-warning" id="strikes2"></i>
+                        <i class="ph ph-warning" id="strikes3"></i>
+                     </th>
+                     <th>
+                        <span id="modal_uso"></span>
+                     </th>
+                  </tr>
+                  <tr></tr>
+               </table>
+
+               <button class="btn primario btn-full">Solicitar suporte para esta máquina</button>
+             </sl-dialog>
+
             <button class="btn primario">Ver hardware</button>
          </div>
          <div class="chart-container">

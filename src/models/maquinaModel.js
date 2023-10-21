@@ -29,7 +29,7 @@ function capturarDadosMaquina(idMaquina, idInstituicao) {
 }
 
 function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
-    var intrucao = `
+    var instrucao = `
     SELECT 
         m.idMaquina as id,
         m.nome as nome,
@@ -41,7 +41,7 @@ function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
         as capacidadeRAM,
         (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
         as componenteCPU,
-        (SELECT especificidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
+        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
         as capacidadeCPU,
         (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
         as componenteDisco,
@@ -170,6 +170,7 @@ function capturarNovoDadoDisco(idMaquina, idInstituicao) {
 
 module.exports = {
     capturarDadosMaquina,
+    capturarTodosDadosMaquina,
     capturarConsumoRAM,
     capturarConsumoCPU,
     capturarConsumoDisco,
