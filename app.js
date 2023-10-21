@@ -25,9 +25,10 @@ app.use("/maquinas", maquinaRouter);
 app.use("/instituicoes", instituicaoRouter);
 
 
-app.use('*',(_,res)=>{
-    res.sendfile('./public/404.html');
+app.use((req, res)=>{
+    res.redirect('/404.html');
 })
+
 
 
 app.listen(PORTA, function () {
