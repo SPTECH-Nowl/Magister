@@ -18,8 +18,63 @@ function listar(codInstituicao) {
         i.nome as nomeInstituicao,
         i.sigla
     FROM usuario u
-    JOIN instituicao i ON u.fkInstituicao = i.codigoHex  /* Alterado para usar a coluna 'codigoHex' */
-    WHERE u.fkInstituicao = '${codInstituicao}';
+    JOIN instituicao i ON u.fkInstituicao = i.idInstituicao
+    WHERE u.fkInstituicao = ${codInstituicao};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
+function pesquisarUsuario(nomeUsuario, instituicao) {
+    var instrucao = `
+    SELECT
+        u.idUsuario,
+        u.nome as nomeUsuario,
+        u.email,
+        u.fkTipoUsuario as nivPermissao,
+        u.fkInstituicao,
+        i.nome as nomeInstituicao,
+        i.sigla
+    FROM usuario u
+    JOIN instituicao i ON u.fkInstituicao = i.idInstituicao
+    WHERE u.nome like '%${nomeUsuario}%' AND fkInstituicao = ${instituicao};
+    `
+    return database.executar(instrucao);
+}
+
+function listarAdm(codInstituicao) {
+    var instrução = `
+    SELECT
+        u.idUsuario,
+        u.nome as nomeUsuario,
+        u.email,
+        u.fkTipoUsuario as nivPermissao,
+        u.fkInstituicao,
+        i.nome as nomeInstituicao,
+        i.sigla
+    FROM usuario u
+    JOIN instituicao i ON u.fkInstituicao = i.idInstituicao
+    WHERE u.fkInstituicao = ${codInstituicao} AND fkTipoUsuario = 2;
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
+function listarInstrutor(codInstituicao) {
+    var instrução = `
+    SELECT
+        u.idUsuario,
+        u.nome as nomeUsuario,
+        u.email,
+        u.fkTipoUsuario as nivPermissao,
+        u.fkInstituicao,
+        i.nome as nomeInstituicao,
+        i.sigla
+    FROM usuario u
+    JOIN instituicao i ON u.fkInstituicao = i.idInstituicao
+    WHERE u.fkInstituicao = ${codInstituicao} AND fkTipoUsuario = 3;
     `;
 
     console.log("Executando a instrução SQL: \n" + instrução);
@@ -30,7 +85,7 @@ function listarPorUsuario(idUsuario) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorUsuario()");
     var instrução = `
     SELECT
-        u.idUsuario AS idUsuario,
+        u.idUsuario,
         u.nome,
         u.email,
         u.senha,
@@ -93,8 +148,8 @@ function cadastrarNaDash(nome, email, senha, nivPerm, instituicao) {
 function editar(nome, email, senha, nivPermissao, idUsuario) {
     var instrução = `
     UPDATE usuario
-SET nome = '${nome}', email = '${email}', senha = '${senha}', fkTipoUsuario = ${ nivPerm }
-WHERE idUsuario = ${ idUsuario };
+    SET nome = '${nome}', email = '${email}', senha = '${senha}', fkTipoUsuario = ${nivPermissao}
+    WHERE idUsuario = ${ idUsuario };
     `;
     return database.executar(instrução);
 }
@@ -116,17 +171,55 @@ function cadastrar(nome, email, senha, codigo) {
     return database.executar(instrução);
 }
 
+function qtdTotal(instituicao){
+    
+    var instrucao = `
+    
+    select count(idUsuario) as qtdTotal FROM usuario
+    WHERE fkInstituicao = ${instituicao};`
 
+    return database.executar(instrucao)
+}
+
+function qtdAdministrador(instituicao){
+    
+    var instrucao = `
+    
+    select count(idUsuario) as qtdTotal FROM usuario
+    WHERE fkInstituicao = ${instituicao} AND fkTipoUsuario = 2;`
+
+    return database.executar(instrucao)
+}
+
+function qtdInstrutor(instituicao){
+    
+    var instrucao = `
+    
+    select count(idUsuario) as qtdTotal FROM usuario
+    WHERE fkInstituicao = ${instituicao} AND fkTipoUsuario = 3`
+
+    return database.executar(instrucao)
+}
 
 
 module.exports = {
     entrar,
     cadastrar,
     deletar,
+
     listar,
+    listarAdm,
+    listarInstrutor,
+
     listarPorUsuario,
     cadastrarNaDash,
     editar,
     deletar,
-    mostrar_dados
+    mostrar_dados,
+
+    qtdTotal,
+    qtdAdministrador,
+    qtdInstrutor,
+
+    pesquisarUsuario,
 };

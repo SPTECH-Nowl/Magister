@@ -7,58 +7,66 @@
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
   
 
+   
+   <!-- Phosphor Icons -->
+   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+   <!-- JQuery -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- Shoelace -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/select/select.js"></script>
+   <!-- Componentes -->
+   <script src="../components/input/input.js" defer></script>
+   <link rel="stylesheet" href="../components/input/input.css">
 
+   <script src="../components/select/select.js" defer></script>
+   <link rel="stylesheet" href="../components/select/select.css">
+
+   <script src="../components/button/button.js" defer></script>
+   <link rel="stylesheet" href="../components/button/button.css">
+
+   <script src="../components/navbar/navbar.js" defer></script>
+   <link rel="stylesheet" href="../components/navbar/navbar.css">
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script src="../scripts/components/navbar.js "></script>
-   <script src="../scripts/funcoesWDV/pagina_usuario.js"></script>
    <script src="../scripts/funcoes.js"></script>
-   <script src="../scripts/funcoesWDV/usuario.js"></script>
 
    <title>Magister | Usuários</title>
 
 </head>
 <body>
-   <body onload="validarAcesso(), atualizarFeed()"></body>
+   <body onload="validarAcesso(), carregarFeed()"></body>
+   
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
-      <div class="user-profile">
-         <div id="pfp"></div>
-         <div class="texto-user">
-            <span>Bem-vindo,</span>
-            <span id="b_usuario"></span>
-        </div>
-      </div>
+      
+      <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
 
       <ul class="nav-list">
          <a href="">
             <li>
                <img src="../assets/img/elements/dash.svg" alt="">
-               Dashboard
             </li>
          </a>
 
          <a href="maquinas_organizacao.html">
             <li>
                <img src="../assets/img/elements/pc.svg" alt="">
-               Máquinas
             </li>
          </a>
          <a href="">
             <li>
                <img src="../assets/img/elements/programa.svg" alt="">
-               Programas
             </li>
          </a>
          <a href="usuarios.html">
             <li>
                <img src="../assets/img/elements/usuario.svg" alt="">
-               Usuários
             </li>
          </a>
       </ul>
@@ -66,7 +74,6 @@
       <ul>
          <li>
             <img src="../assets/img/elements/settings.svg" alt="">
-            Ajustes
          </li>
       </ul>
    </div>
@@ -74,7 +81,12 @@
    <div class="charts-container">
       <h1>Usuários</h1>
       <div class="top-users">
+
+         <div class="flex-row gap-1" id="orderOptions"></div>
+
          <div class="container-selects">
+
+            <!--
             <div class="flex-row gap-1">
                <sl-select id="ordem_az" placeholder="Ordem alfabética" pill filled clearable>
                   <sl-option value="ord_a_a">A à Z</sl-option>
@@ -86,16 +98,19 @@
                   <sl-option value="administrador">Administrador</sl-option>
                </sl-select>
             </div>
-            <div class="flex-row gap-1">
+            -->
+            <div class="flex-row gap-1 pesquisarEAdd">
                <div class="input-wrapper icon wdt-100">
                   <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input" id="input_teste" placeholder="Pesquisar por um usuário"
+                  <input type="text" class="input" id="input_busca" placeholder="Pesquisar por um usuário" onkeyup="buscarUsuario()"
                      fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
                </div>
                <button class="btn primario" id="adicionarUsuario">Adicionar usuário</button>
             </div>
          </div>
+
+
       </div>
       <div class="charts-content">
          <div class="chart-grid cols-1">
@@ -113,19 +128,534 @@
                      </thead>
                
                   <tbody class="user-list-tbody" id="listaDeUsuarios">
-                        <tr>
-                           <td>socorroJesus</td>
-                           <td>socorroJesus@gmail.com</td>
-                           <td>2</td>
-                           <td></td>
-                        </tr>
+
                   </tbody>
                </table>
             </div>
          </div>
       </div>
    </div>
+
+   
 </body>
 </html>
 
 
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    carregarFeed(),
+    filtrosTipo()
+   });
+
+
+function buscarUsuario() {
+   var nomeDigitado = input_busca.value
+   var instituicao = sessionStorage.instituicao
+
+      if (nomeDigitado.length < 3){
+         carregarFeed()
+      } else {
+         fetch(`/usuarios/pesquisarUsuario/${nomeDigitado}/${instituicao}`)
+            .then((usuarioBuscado =>{
+               if(usuarioBuscado.status == 204){
+                  var tableUsuarios = document.getElementById("listaDeUsuarios");
+                  tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+               }else {
+                    usuarioBuscado.json().then(function (usuarioBuscado) {
+                        var tableUsuarios = document.getElementById("listaDeUsuarios");
+                        tableUsuarios.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+
+                        console.log(usuarioBuscado)
+                        
+                        for (var i = 0; i < usuarioBuscado.length; i++) {
+                            var usuario = usuarioBuscado[i];
+                            
+                            var linhaTable = document.createElement("tr");
+                            var celulaNome = document.createElement("td");
+                            var celulaEmail = document.createElement("td");
+                            var celulaTipo = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNome.textContent = usuario.nomeUsuario;
+                            celulaEmail.textContent = usuario.email;
+                            celulaTipo.textContent = usuario.nivPermissao;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            `;
+
+                            linhaTable.appendChild(celulaNome);
+                            linhaTable.appendChild(celulaEmail);
+                            linhaTable.appendChild(celulaTipo);
+                            linhaTable.appendChild(celulaBotoes);
+
+                            tableUsuarios.appendChild(linhaTable);
+                        }
+                    });
+                }
+
+   }))
+      }
+
+}
+
+ 
+document.addEventListener('DOMContentLoaded', function() {
+    const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
+    adicionarUsuarioButton.addEventListener('click', function() {
+        Swal.fire({
+            title: 'Adicionar Usuário',
+            width:"900px",
+            height:"200px",
+            html:
+                '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input">' +
+                '<input type="email" id="emailInput" placeholder="Email" class="swal2-input">' +
+                '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input">'+
+                '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input">',
+            showCancelButton: true,
+            confirmButtonText: 'Adicionar usuário',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                const nome = Swal.getPopup().querySelector('#nomeInput').value;
+                const email = Swal.getPopup().querySelector('#emailInput').value;
+                const senha = Swal.getPopup().querySelector('#senhaInput').value;
+                const tipoInput = Swal.getPopup().querySelector('#tipoInput').value;
+
+                return fetch(`/usuarios/cadastrarNaDash`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeUsuario: nome,
+                        emailUsuario: email,
+                        senhaUsuario: senha,
+                        nivPermissao: tipoInput,
+                        instituicao: sessionStorage.instituicao
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro no servidor');
+                    }
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(`Erro: ${error}`);
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Sucesso!', 'O usuário foi cadastrado com sucesso.', 'success');
+                location.reload();
+            }
+        });
+    });
+});
+
+
+
+function filtrosTipo(){
+   fetch(`/usuarios/qtdTotal/${sessionStorage.instituicao}`)
+   .then((qtdTotal) => {
+      if (qtdTotal.ok){
+         fetch(`/usuarios/qtdAdministrador/${sessionStorage.instituicao}`)
+         .then((qtdTotalAdm) => {
+            fetch(`/usuarios/qtdInstrutor/${sessionStorage.instituicao}`)
+               .then((qtdTotalInstrutor) => {
+                  if (qtdTotalInstrutor.ok){
+                     qtdTotal.json().then((qtdTotal) => {
+                        qtdTotalAdm.json().then((qtdTotalAdm) =>{
+                           qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
+                              var orderOptions = document.getElementById("orderOptions")
+
+                                 var spanTotal = document.createElement("span")
+                                 var spanTotalAdministrador = document.createElement("span")
+                                 var spanTotalInstrutor = document.createElement("span")
+
+                                 spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
+                                 spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
+                                 spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
+
+                                 spanTotal.onclick = carregarFeed
+                                 spanTotalAdministrador.onclick = carregarFeedAdm
+                                 spanTotalInstrutor.onclick = carregarFeedInstrutor
+
+                                 orderOptions.appendChild(spanTotal)
+                                 orderOptions.appendChild(spanTotalAdministrador)
+                                 orderOptions.appendChild(spanTotalInstrutor)
+
+
+                           })
+                        })                        
+                     })
+
+                  }
+               })
+         })
+      }
+   })
+}
+
+
+function carregarFeed() {
+    var codInstituicao = sessionStorage.instituicao;
+    fetch(`/usuarios/listar/${codInstituicao}`)
+        .then(function (listaUsuarios) {
+            if (listaUsuarios.ok) {
+                if (listaUsuarios.status == 204) {
+                    var tableUsuarios = document.getElementById("listaDeUsuarios");
+                    tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                } else {
+                    listaUsuarios.json().then(function (listaUsuarios) {
+                        var tableUsuarios = document.getElementById("listaDeUsuarios");
+                        tableUsuarios.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+
+                        console.log(listaUsuarios)
+                        
+                        for (var i = 0; i < listaUsuarios.length; i++) {
+                            var usuario = listaUsuarios[i];
+                            
+                            var linhaTable = document.createElement("tr");
+                            var celulaNome = document.createElement("td");
+                            var celulaEmail = document.createElement("td");
+                            var celulaTipo = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNome.textContent = usuario.nomeUsuario;
+                            celulaEmail.textContent = usuario.email;
+                            celulaTipo.textContent = usuario.nivPermissao;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            `;
+
+                            linhaTable.appendChild(celulaNome);
+                            linhaTable.appendChild(celulaEmail);
+                            linhaTable.appendChild(celulaTipo);
+                            linhaTable.appendChild(celulaBotoes);
+
+                            tableUsuarios.appendChild(linhaTable);
+                        }
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        })
+        .catch(function (resposta) {
+            console.error(resposta);
+        });
+}
+
+function carregarFeedAdm() {
+    var codInstituicao = sessionStorage.instituicao;
+
+    fetch(`/usuarios/listarAdm/${codInstituicao}`)
+        .then(function (listaUsuarios) {
+            if (listaUsuarios.ok) {
+                if (listaUsuarios.status == 204) {
+                    var tableUsuarios = document.getElementById("listaDeUsuarios");
+                    tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                } else {
+                    listaUsuarios.json().then(function (listaUsuarios) {
+                        var tableUsuarios = document.getElementById("listaDeUsuarios");
+                        tableUsuarios.innerHTML = ""; 
+
+                        console.log(listaUsuarios)
+                        
+                        for (var i = 0; i < listaUsuarios.length; i++) {
+                            var usuario = listaUsuarios[i];
+                            
+                            var linhaTable = document.createElement("tr");
+                            var celulaNome = document.createElement("td");
+                            var celulaEmail = document.createElement("td");
+                            var celulaTipo = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNome.textContent = usuario.nomeUsuario;
+                            celulaEmail.textContent = usuario.email;
+                            celulaTipo.textContent = usuario.nivPermissao;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            `;
+
+                            linhaTable.appendChild(celulaNome);
+                            linhaTable.appendChild(celulaEmail);
+                            linhaTable.appendChild(celulaTipo);
+                            linhaTable.appendChild(celulaBotoes);
+
+                            tableUsuarios.appendChild(linhaTable);
+                        }
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        })
+        .catch(function (resposta) {
+            console.error(resposta);
+        });
+}
+
+function carregarFeedInstrutor() {
+    var codInstituicao = sessionStorage.instituicao;
+
+    fetch(`/usuarios/listarInstrutor/${codInstituicao}`)
+        .then(function (listaUsuarios) {
+            if (listaUsuarios.ok) {
+                if (listaUsuarios.status == 204) {
+                    var tableUsuarios = document.getElementById("listaDeUsuarios");
+                    tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                } else {
+                    listaUsuarios.json().then(function (listaUsuarios) {
+                        var tableUsuarios = document.getElementById("listaDeUsuarios");
+                        tableUsuarios.innerHTML = ""; 
+
+                        console.log(listaUsuarios)
+                        
+                        for (var i = 0; i < listaUsuarios.length; i++) {
+                            var usuario = listaUsuarios[i];
+                            
+                            var linhaTable = document.createElement("tr");
+                            var celulaNome = document.createElement("td");
+                            var celulaEmail = document.createElement("td");
+                            var celulaTipo = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNome.textContent = usuario.nomeUsuario;
+                            celulaEmail.textContent = usuario.email;
+                            celulaTipo.textContent = usuario.nivPermissao;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            `;
+
+                            linhaTable.appendChild(celulaNome);
+                            linhaTable.appendChild(celulaEmail);
+                            linhaTable.appendChild(celulaTipo);
+                            linhaTable.appendChild(celulaBotoes);
+
+                            tableUsuarios.appendChild(linhaTable);
+                        }
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        })
+        .catch(function (resposta) {
+            console.error(resposta);
+        });
+}
+
+function limparFormulario() {
+    document.getElementById("form_postagem").reset();
+}
+
+function mostrar_dados(idUsuario) {
+    fetch(`/usuarios/mostrar_dados/${idUsuario}`)
+        .then(function (response) {
+            if (!response.ok) {
+                console.error('Erro na resposta da API:', response.status);
+                return;
+            }
+            return response.json();
+        })
+        .then(function (dadosUsuario) {
+            if (dadosUsuario && dadosUsuario.length > 0) {
+                const usuario = dadosUsuario[0]; // Os dados são um array, pegamos o primeiro item
+                console.log("Dados recebidos dos usuários: ", JSON.stringify(usuario));
+                Swal.fire({
+                    title: 'Dados do cliente',
+                    width:"500px",
+                    height:"550px",
+                    confirmButtonColor: 'cornflowerblue',
+                    html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <span><b>Nome</b>: ${usuario.nome}</span>
+                        <span><b>Email</b>: ${usuario.email}</span>
+                        <span><b>Senha:</b> ${usuario.senha}</span>
+                        <span><b>nivPermissao:</b> ${usuario.nivPermissao}</span>
+                    </div>`,
+                });
+            } else {
+                console.error('Dados do usuário não encontrados na resposta da API.');
+            }
+        })
+        .catch(function (erro) {
+            console.error('Erro na requisição:', erro);
+        });
+}
+
+function deletar(idUsuario, tipoPermissao) {
+    if (tipoPermissao == "0") {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            width:"900px",
+            height:"200px",
+            html: ` Voce nao possui permissão para deletar`,
+        })
+        return false;
+    }
+    else {
+        Swal.fire({
+            title: 'Você tem certeza que deseja deletar?',
+            color: '#FFF',
+            width:"600px",
+            height:"800px",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Deletar',
+            denyButtonText: `Não Deletar`,
+            confirmButtonColor: '#FF5555',
+            denyButtonColor: '#424242',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/usuarios/deletar/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idUsuarioPE: idUsuario
+                    })
+                }).then(function (resposta) {
+                    if (resposta.ok) {
+                     location.reload()
+
+                     /*
+                        Swal.fire('Saved!', '', 'success')
+                     
+                        Swal.fire({
+                            icon: 'success',
+                            color: '#FFF',
+                            text: 'Usuário deletado com sucesso',
+                        })
+
+                        document.getElementById('okButton').addEventListener('click', function () {
+                            Swal.close();
+                        });
+                     */
+
+                    } else {
+                        Swal.fire('Falha ao deletar o usuário', '', 'error')
+                    }
+                }).catch(function (resposta) {
+                    console.log(resposta);
+                });
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'warning',
+                    color: '#FFF',
+                    title: 'Bom trabalho!',
+                    text: 'Usuário não deletado',
+                    confirmButtonColor: '#4CAF50'
+                })
+
+            }
+        });
+    }
+}
+
+function testar() {
+    aguardar();
+
+    var formulario = new URLSearchParams(new FormData(document.getElementById("form_postagem")));
+
+    var divResultado = document.getElementById("div_feed");
+
+    divResultado.appendChild(document.createTextNode(formulario.get("descricao")));
+    divResultado.innerHTML = formulario.get("descricao");
+
+
+
+    return false;
+}
+
+function alterar(idUsuario) {
+   fetch(`/usuarios/listarPorUsuario/${idUsuario}`)
+   .then((dadosUsuario)=>{
+
+      if(dadosUsuario.ok){
+
+         dadosUsuario.json().then((dadosUsuario)=>{
+            Swal.fire({
+        title: 'Alterar Usuário',
+        html:
+            `<input type="text" id="nomeInput" placeholder="Nome" value="${dadosUsuario[0].nome}" class="swal2-input">` +
+            `<input type="email" id="emailInput" placeholder="Email" value="${dadosUsuario[0].email}" class="swal2-input">` +
+            `<input type="password" id="senhaInput" placeholder="Senha" value="${dadosUsuario[0].senha}" class="swal2-input">`+
+            `<input type="text" id="tipoInput" placeholder="Tipo" value="${dadosUsuario[0].nivPermissao}" class="swal2-input">`,
+        showCancelButton: true,
+        confirmButtonText: 'Alterar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#74C365',
+        cancelButtonColor: '#FF5555',
+        preConfirm: () => {
+            var nome = document.getElementById('nomeInput').value;
+            var email = document.getElementById('emailInput').value;
+            var senha = document.getElementById('senhaInput').value;
+            var nivPermissao = document.getElementById('tipoInput').value;
+
+                return fetch(`/usuarios/editar`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeUsuario: nome,
+                        emailUsuario: email,
+                        senhaUsuario: senha,
+                        nivPermissao: nivPermissao,
+                        idUsuario: idUsuario
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro no servidor');
+                    }
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(`Erro: ${error}`);
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Sucesso!', 'Usuario atualizado com sucesso!', 'success');
+                location.reload();
+            }
+        });
+         })
+      } else {
+         alert("Falha ao editar usuario")
+      }
+   })
+    
+
+        }
+
+
+</script>

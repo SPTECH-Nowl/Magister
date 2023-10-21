@@ -18,10 +18,59 @@ function listar(req, res) {
     });
 }
 
+function listarAdm(req, res) {
+    var codInstituicao = req.params.codInstituicao;
+
+    usuarioModel.listarAdm(codInstituicao).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function pesquisarUsuario(req, res) {
+    var instituicao = req.params.instituicao;
+    var nomeUsuario = req.params.nomeUsuario
+
+    usuarioModel.pesquisarUsuario(nomeUsuario, instituicao).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function listarInstrutor(req, res) {
+    var codInstituicao = req.params.codInstituicao;
+
+    usuarioModel.listarInstrutor(codInstituicao).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function listarPorUsuario(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    avisoModel.listarPorUsuario(idUsuario)
+    usuarioModel.listarPorUsuario(idUsuario)
         .then(
             function (resultado) {
                 if (resultado.length > 0) {
@@ -42,6 +91,8 @@ function listarPorUsuario(req, res) {
             }
         );
 }
+
+
 
 function mostrar_dados(req, res) {
     var idUsuario = req.params.idUsuario;
@@ -100,11 +151,11 @@ function cadastrarNaDash(req, res) {
 }
 
 function editar(req, res) {
-    var nome = req.body.novoNomeUsuario;
-    var email = req.body.novoEmailUsuario;
-    var senha = req.body.novaSenhaUsuario;
-    var nivPermissao = req.body.novoNivPerm;
-    var idUsuario = req.body.idUsuarioPM;
+    var nome = req.body.nomeUsuario;
+    var email = req.body.emailUsuario;
+    var senha = req.body.senhaUsuario;
+    var nivPermissao = req.body.nivPermissao;
+    var idUsuario = req.body.idUsuario;
 
     usuarioModel.editar(nome, email, senha, nivPermissao, idUsuario)
         .then(
@@ -215,13 +266,97 @@ function cadastrar(req, res) {
     }
 }
 
+function qtdTotal(req, res){
+    var instituicao = req.params.instituicao
+    
+    if (instituicao == undefined) {
+        res.status(400).send("A instituicao não foi capturada!")
+    } else {
+        usuarioModel.qtdTotal(instituicao)            
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+    }
+
+}
+
+function qtdAdministrador(req, res){
+    var instituicao = req.params.instituicao
+    
+    if (instituicao == undefined) {
+        res.status(400).send("A instituicao não foi capturada!")
+    } else {
+        usuarioModel.qtdAdministrador(instituicao)            
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+    }
+
+}
+
+function qtdInstrutor(req, res){
+    var instituicao = req.params.instituicao
+    
+    if (instituicao == undefined) {
+        res.status(400).send("A instituicao não foi capturada!")
+    } else {
+        usuarioModel.qtdInstrutor(instituicao)            
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+    }
+
+}
+
 module.exports = {
     entrar,
     cadastrar,
     listar,
+    listarAdm,
+    listarInstrutor,
+
     listarPorUsuario,
     cadastrarNaDash,
     editar,
     deletar,
-    mostrar_dados
+    mostrar_dados,
+
+    qtdTotal,
+    qtdAdministrador,
+    qtdInstrutor,
+
+    pesquisarUsuario,
 }
