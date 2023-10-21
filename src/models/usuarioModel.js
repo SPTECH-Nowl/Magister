@@ -111,7 +111,7 @@ function deletar(idUsuario) {
 
 function cadastrar(nome, email, senha, codigo) {
     var instrução = `
-        INSERT INTO usuario(nome, email, senha, nivPermissao, fkInstituicao) VALUES('${nome}', '${email}', '${senha}', 1, '${codigo}');
+        INSERT INTO usuario(nome, email, senha, fkTipoUsuario, fkInstituicao) VALUES('${nome}', '${email}', '${senha}', 1, '${codigo}');
     `;
     return database.executar(instrução);
 }

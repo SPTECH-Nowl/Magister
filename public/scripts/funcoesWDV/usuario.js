@@ -52,34 +52,47 @@ function cadastrar() {
         return false;
 } 
 
-    fetch("/usuarios/cadastrar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeServer: nomeVar,
-            emailServer: emailVar,
-            senhaServer: senhaVar,
-            codigoServer: codigoVar
-        })
-    }).then(function (resposta) {
-        if (resposta.ok) {
-            setInterval(5000);
-            toggleLogin()
-            swal("Parábens","Redirecionando para dashboard","sucess");
-            window.location = "dashboard/dashboard_geral.html"
-        } else {
-            swal("Error", "Código de instituição inválido!")
+fetch(`/instituicoes/buscarIdInst/${codigoVar}`, {
+    cache: "no-cache"
+}).then(idInst => {
+    if(idInst.ok){
+        idInst.json().then(idInst => {
+
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    emailServer: emailVar,
+                    senhaServer: senhaVar,
+                    codigoServer: idInst[0].idInstituicao
+                })
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    toggleLogin()
+                    swal("Parábens","Redirecionando para dashboard","sucess");
+                    window.location = "login_cadastro.html"
+                } else {
+                    console.log("erro no cadastro")
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+
+            });
+
             return false;
+        }) 
+    } else {
+        swal("Error", "Código de instituição inválido!")
+        return false;
 
-        }
-    })
-
-
-
+    }
+})
 
 }
+
 
 
 
