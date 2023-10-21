@@ -105,12 +105,12 @@ function mostrar_dados(idUsuario) {
         usuario.nome AS nome, 
         usuario.email,
         usuario.senha,
-        usuario.nivPermissao, 
+        usuario.fkTipoUsuario, 
         instituicao.nome AS instituicao_nome
     FROM 
         usuario
     JOIN instituicao 
-        ON usuario.FkInstituicao = instituicao.codigoHex
+        ON usuario.FkInstituicao = instituicao.idInstituicao
     WHERE usuario.idUsuario = ${idUsuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrução);
