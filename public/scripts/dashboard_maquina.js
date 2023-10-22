@@ -348,19 +348,19 @@ google.charts.setOnLoadCallback(() => {
    capturarDadosCPU(1, 2).then((dados) => {
       dados = dados.reverse();
       drawCPU(dados);
-      verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
+      verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de RAM.`);
    });
 
    capturarDadosRAM(1, 2).then((dados) => {
       dados = dados.reverse();
       drawRAM(dados);
-      verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
+      verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de RAM.`);
    });
 
    capturarDadosDisco(1, 2).then((dados) => {
       dados = dados.reverse();
       drawDisco(dados)
-      verifConsumo(dados, null, "A máquina X registrou um alto consumo de Disco.")
+      verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de Disco.`)
    });
 
    capturarDadosMaquina(1, 2).then((dados) => {
