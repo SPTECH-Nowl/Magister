@@ -5,6 +5,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <link rel="stylesheet" href="../styles/global.css">
+   <link rel="stylesheet" href="../styles/alerta.css">
    <link rel="stylesheet" href="../styles/dashboard.css">   
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
    <script src="../components/button/button.js"></script>
@@ -24,6 +25,12 @@
 
    <!-- Funções -->
    <script src="../scripts/dashboard_maquina.js" defer></script>
+
+   <!-- Biblioteca do SHOELACE -->
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/shoelace-autoloader.js"></script>
+
+   <!-- scriot do botão de suporte -->
+   <script src="../scripts/suporte.js"></script>
 
    <title>Dashboard de máquina</title>
 </head>
@@ -149,9 +156,11 @@
                   <tr></tr>
                </table>
 
-               <button class="btn primario btn-full">Solicitar suporte para esta máquina</button>
+               <sl-alert id="suporteAlert" type="custom-modal" hidden>
+                  O suporte já foi contatado.
+              </sl-alert>
+               <button class="btn primario btn-full" id="solicitarSuporteBtn">Solicitar suporte para esta máquina</button>
              </sl-dialog>
-
             <button class="btn primario">Ver hardware</button>
          </div>
          <div class="chart-container">

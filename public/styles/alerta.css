@@ -1,0 +1,30 @@
+/* Estilos CSS personalizados para o modal */
+/* Seu arquivo CSS */
+/* Seu arquivo CSS */
+/* Estilos para o conteúdo do modal com fundo #6D499D */
+.custom-modal-content {
+    background-color: #6D499D;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    color: #FFFFFF; /* Cor do texto desejada */
+    border: 1px solid #6D499D; /* Cor da borda desejada */
+    max-width: 600px;
+    width: 90%;
+}
+
+
+
+.sl-alert[type="success"] .sl-alert-icon {
+    color: #FFFFFF; /* Cor desejada para o ícone do modal de sucesso */
+}
+
+/* Estilizando o botão do sl-alert */
+.sl-alert[type="success"] .sl-alert-button {
+    background-color: #6D499D; /* Cor desejada para o botão do modal de sucesso */
+    color: #FFFFFF; /* Cor do texto do botão */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
