@@ -42,6 +42,21 @@ function capturarTodosDadosMaquina(req, res) {
         })
 }
 
+function capturarTodasMaquinas(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+
+    if(idInstituicao == undefined) console.log("idInstituição está undefined");
+
+    maquinaModel.capturarTodasMaquinas(idInstituicao)
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json(error.sqlMessage);
+        })
+}
+
 function capturarConsumoRAM(req, res) {
     let idInstituicao = req.params.idInstituicao;
     let idMaquina = req.params.idMaquina;
@@ -165,6 +180,7 @@ function capturarNovoDadoDisco(req, res) {
 module.exports = {
     capturarDadosMaquina,
     capturarTodosDadosMaquina,
+    capturarTodasMaquinas,
     capturarConsumoRAM,
     capturarConsumoCPU,
     capturarConsumoDisco, 

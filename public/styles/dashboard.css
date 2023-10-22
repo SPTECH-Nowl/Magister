@@ -149,6 +149,10 @@ body {
    gap: 0.5rem;
 }
 
+.stat-texts highlight{
+   color: #787878;
+}
+
 .maquina-stat {
    font-weight: bold;
    font-size: 1.2rem;
@@ -156,11 +160,11 @@ body {
 
 .stat .stat-texts .maquina-stat:nth-child(3) highlight {
    font-weight: bolder;
-   color: red;
 }
 
-.stat-alerts img {
-   width: 2.3rem;
+.stat-alerts i {
+   font-size: 2.5rem;
+   color: #787878;
 }
 
 .stat-alerts {
@@ -215,6 +219,9 @@ body {
    color: #787878;
 }
 
+#stats_alerts i {
+   color: #787878;
+}
 /* dashboard geral */
 .grid {
    height: 88vh;

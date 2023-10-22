@@ -47,10 +47,6 @@ h1, h2, h3, h4, h5, h6 {
    font-family: var(--font-title);
 }
 
-highlight {
-   color: var(--color-purple-500);
-}
-
 body::-webkit-scrollbar {
    width: 5px;
 }

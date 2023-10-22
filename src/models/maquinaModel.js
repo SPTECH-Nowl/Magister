@@ -61,6 +61,27 @@ function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
     return database.executar(instrucao);
 }
 
+function capturarTodasMaquinas(idInstituicao) {
+    var instrucao = `
+    SELECT
+        m.nome AS nome,
+        m.emUso AS emUso,
+        (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,
+        CASE
+            WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
+            WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
+            ELSE 'Normal'
+        END AS status
+    FROM maquina m
+    LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+    JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+    WHERE idInstituicao = 1
+    GROUP BY m.idMaquina;
+    `
+
+    return database.executar(instrucao);
+}
+
 function capturarConsumoRAM(idMaquina, idInstituicao) {
     var instrucao = `
     SELECT 
@@ -171,6 +192,7 @@ function capturarNovoDadoDisco(idMaquina, idInstituicao) {
 module.exports = {
     capturarDadosMaquina,
     capturarTodosDadosMaquina,
+    capturarTodasMaquinas,
     capturarConsumoRAM,
     capturarConsumoCPU,
     capturarConsumoDisco,

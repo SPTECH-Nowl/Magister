@@ -9,6 +9,10 @@ router.get("/capturarDadosMaquina/:idInstituicao/:idMaquina", (req, res) => {
 
 router.get("/capturarTodosDadosMaquina/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarTodosDadosMaquina(req, res);
+});
+
+router.get("/capturarTodasMaquinas/:idInstituicao", (req, res) => {
+    maquinaController.capturarTodasMaquinas(req, res);
 })
 
 router.get("/capturarConsumoRAM/:idInstituicao/:idMaquina", (req, res) => {

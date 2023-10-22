@@ -30,24 +30,13 @@ dialog.addEventListener('sl-show', () => {
       
       if(dados.emUso == 1) statusUso.style.color = "#BF80FF"
 
-      let strikes = containerStrikes.children;
-      switch(dados.qtdStrikes) {
-         case 1:
-            strikes[0].style.color = `red`;
-            break;
-         case 2:
-            for (let i = 0; i <= 1; i++) {
-               const strike = strikes[i];
-               strike.style.color = `red`;
-            }
-            break;
-         default:
-            for (let i = 0; i <= 2; i++) {
-               const strike = strikes[i];
-               strike.style.color = `red`;
-            }
-            break;
-      }
+      const strikes = document.querySelectorAll(".strikes");
+
+      strikes.forEach((strike, index) => {
+         if (index < dados.qtdStrikes) {
+            strike.style.color = "red";
+         }
+      });
    })
 })
 
