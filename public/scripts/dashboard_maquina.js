@@ -15,17 +15,16 @@ dialog.addEventListener('sl-show', () => {
             capcddRAM = document.getElementById("modal_capcdd_ram"),
             disco = document.getElementById("modal_disco"),
             capcddDisco = document.getElementById("modal_capcdd_disco"),
-            containerStrikes = document.getElementById("modal_strikes"),
             statusUso = document.getElementById("modal_uso");
 
       nome.innerHTML = dados.nome;
       so.innerHTML = dados.so;
       cpu.innerHTML = dados.componenteCPU;
-      procss.innerHTML = `${dados.capacidadeCPU} GHz`;
+      procss.innerHTML = `${dados.capacidadeCPU}GHz`;
       ram.innerHTML = dados.componenteRAM;
-      capcddRAM.innerHTML = `${dados.capacidadeRAM} gb`;
+      capcddRAM.innerHTML = `${dados.capacidadeRAM}gb`;
       disco.innerHTML = dados.componenteDisco;
-      capcddDisco.innerHTML = `${dados.capacidadeDisco} gb`;
+      capcddDisco.innerHTML = `${dados.capacidadeDisco}gb`;
       statusUso.innerHTML = dados.emUso == 0 ? `OFF` : `ON`;
       
       if(dados.emUso == 1) statusUso.style.color = "#BF80FF"
@@ -347,16 +346,19 @@ function capturarNovoDadoDisco(idInstituicao, idMaquina) {
 
 google.charts.setOnLoadCallback(() => {
    capturarDadosCPU(1, 2).then((dados) => {
+      dados = dados.reverse();
       drawCPU(dados);
       verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
    });
 
    capturarDadosRAM(1, 2).then((dados) => {
+      dados = dados.reverse();
       drawRAM(dados);
       verifConsumo(dados, null, "A máquina X registrou um alto consumo de RAM.");
    });
 
    capturarDadosDisco(1, 2).then((dados) => {
+      dados = dados.reverse();
       drawDisco(dados)
       verifConsumo(dados, null, "A máquina X registrou um alto consumo de Disco.")
    });
