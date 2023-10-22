@@ -28,6 +28,9 @@ function mostrarTodasMaquinas() {
 
          const maquinaItem = document.createElement("div");
          maquinaItem.classList.add("maquina-item");
+         maquinaItem.onclick = () => {
+            window.location.replace("http://localhost:3333/dashboard/dashboard_maquina.html")
+         }
 
          maquinaItem.innerHTML = `
             <img src="../assets/img/Icone/windows_icon.svg" alt="" class="so">

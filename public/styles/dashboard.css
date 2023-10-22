@@ -237,3 +237,7 @@ body {
    grid-row-start: 2;
    grid-row-end: 4;
 }
+
+.maquina-item {
+   cursor: pointer;
+}
