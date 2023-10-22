@@ -44,6 +44,13 @@
 <body>
    <body onload="validarAcesso(), carregarFeed()"></body>
    
+
+   <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
+    
+    <sl-button slot="footer" variant="primary"></sl-button>
+  </sl-drawer>
+
+
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
       
@@ -275,8 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-
 function filtrosTipo(){
    fetch(`/usuarios/qtdTotal/${sessionStorage.instituicao}`)
    .then((qtdTotal) => {
@@ -337,8 +342,12 @@ function carregarFeed() {
                         
                         for (var i = 0; i < listaUsuarios.length; i++) {
                             var usuario = listaUsuarios[i];
+
+                            
                             
                             var linhaTable = document.createElement("tr");
+                            linhaTable.setAttribute('id', `usuario_${usuario.idUsuario}`)
+
                             var celulaNome = document.createElement("td");
                             var celulaEmail = document.createElement("td");
                             var celulaTipo = document.createElement("td");
@@ -350,17 +359,10 @@ function carregarFeed() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <sl-dialog id="modalDeletar${usuario.idUsuario}" class="dialog-overview">
-                             Deseja mesmo excluir este usuario?
-                             <br>
-                             <span>${usuario.nomeUsuario}</span>
-                             <sl-button slot="footer" variant="primary">Close</sl-button>
-                           </sl-dialog>
                            
-                           <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${usuario.idUsuario})">
                             `;
 
                             linhaTable.appendChild(celulaNome);
@@ -527,30 +529,81 @@ function mostrar_dados(idUsuario) {
         });
 }
 
+
+
 function deletar(idUsuario, tipoPermissao) {
     if (tipoPermissao == "0") {
 
-        const dialog = document.getElementById(`modalDeletar${idUsuario}`);
-        console.log(dialog)
-
-        const openButton = dialog.nextElementSibling;
-        const closeButton = dialog.querySelector('sl-button[slot="footer"]');
-
-        openButton.addEventListener('click', () => dialog.show());
-        closeButton.addEventListener('click', () => dialog.hide());
-
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            width:"900px",
+            height:"200px",
+            html: ` Voce nao possui permissão para deletar`,
+        })
+        
+  
         return false;
     }
     else {
+        Swal.fire({
+            title: 'Você tem certeza que deseja deletar?',
+            color: '#FFF',
+            width:"600px",
+            height:"800px",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Deletar',
+            denyButtonText: `Não Deletar`,
+            confirmButtonColor: '#FF5555',
+            denyButtonColor: '#424242',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/usuarios/deletar/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idUsuarioPE: idUsuario
+                    })
+                }).then(function (resposta) {
+                    if (resposta.ok) {
+                     location.reload()
 
-        const dialog = document.getElementById(`modalDeletar${idUsuario}`);
-        console.log(dialog)
+                     /*
+                        Swal.fire('Saved!', '', 'success')
+                     
+                        Swal.fire({
+                            icon: 'success',
+                            color: '#FFF',
+                            text: 'Usuário deletado com sucesso',
+                        })
+                        document.getElementById('okButton').addEventListener('click', function () {
+                            Swal.close();
+                        });
+                     */
 
-        const openButton = dialog.nextElementSibling;
-        const closeButton = dialog.querySelector('sl-button[slot="footer"]');
+                    } else {
+                        Swal.fire('Falha ao deletar o usuário', '', 'error')
+                    }
+                }).catch(function (resposta) {
+                    console.log(resposta);
+                });
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'warning',
+                    color: '#FFF',
+                    title: 'Bom trabalho!',
+                    text: 'Usuário não deletado',
+                    confirmButtonColor: '#4CAF50'
+                })
 
-        openButton.addEventListener('click', () => dialog.show());
-        closeButton.addEventListener('click', () => dialog.hide());
+
+            }
+        });
+        
+        
     }
 }
 
