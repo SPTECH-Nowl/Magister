@@ -140,7 +140,7 @@ body {
 }
 
 .maquina-item .so {
-   width: 45%;
+   width: 40%;
 }
 
 .stat {
@@ -241,4 +241,8 @@ body {
    grid-column-end: 4;
    grid-row-start: 2;
    grid-row-end: 4;
+}
+
+.maquina-item {
+   cursor: pointer;
 }

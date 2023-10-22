@@ -192,4 +192,11 @@ a {
    width: 100% !important;
 }
 
-/* alert */
+sl-tooltip::part(body) {
+   background-color: #ebe7e7;
+   color: #252525;
+}
+
+sl-tooltip::part(base__arrow) {
+   background-color: #ebe7e7;
+}

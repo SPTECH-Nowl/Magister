@@ -64,6 +64,7 @@ function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
 function capturarTodasMaquinas(idInstituicao) {
     var instrucao = `
     SELECT
+        m.idMaquina as id,
         m.nome AS nome,
         m.emUso AS emUso,
         (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,

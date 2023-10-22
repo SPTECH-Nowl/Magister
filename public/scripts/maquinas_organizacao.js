@@ -21,6 +21,7 @@ function mostrarTodasMaquinas() {
    capturarTodasMaquinas(1).then((dadosMaquinas) => {
       console.log(dadosMaquinas);
       dadosMaquinas.forEach(maquina => {
+         let id = maquina.id;
          let nome = maquina.nome;
          let emUso = maquina.emUso == 0 ? "OFF" : "ON";
          let qtdStrikes = maquina.qtdStrikes;
@@ -28,6 +29,11 @@ function mostrarTodasMaquinas() {
 
          const maquinaItem = document.createElement("div");
          maquinaItem.classList.add("maquina-item");
+         maquinaItem.onclick = () => {
+            sessionStorage.nomeMaquina = nome;
+            sessionStorage.idMaquina = id;
+            window.location.replace("http://localhost:3333/dashboard/dashboard_maquina.html");
+         }
 
          maquinaItem.innerHTML = `
             <img src="../assets/img/Icone/windows_icon.svg" alt="" class="so">
