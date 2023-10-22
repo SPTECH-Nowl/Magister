@@ -15,6 +15,7 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/alert/alert.js"></script>
+   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.11.0/cdn/components/tooltip/tooltip.js"></script>
 
    <!-- ChartJS -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -36,27 +37,35 @@
 
       <ul class="nav-list">
          <li>
-            <a href="dashboard_geral.html">
-               <img src="../assets/img/elements/dash.svg" alt="">
-            </a>
+            <sl-tooltip content="Dashboard Geral" placement="right">
+               <a href="dashboard_geral.html">
+                  <img src="../assets/img/elements/dash.svg" alt="">
+               </a>
+            </sl-tooltip>
          </li>
       
          <li>
-            <a href="maquinas_organizacao.html">
-               <img src="../assets/img/elements/pc.svg" alt="">
-            </a>
+            <sl-tooltip content="Maquinas de organização" placement="right">
+               <a href="maquinas_organizacao.html">
+                  <img src="../assets/img/elements/pc.svg" alt="">
+               </a>
+            </sl-tooltip>
          </li>
       
          <li>
-            <a href="processos.html">
-               <img src="../assets/img/elements/programa.svg" alt="">
-            </a>
+            <sl-tooltip content="Processos permitidos" placement="right">
+               <a href="processos.html">
+                  <img src="../assets/img/elements/programa.svg" alt="">
+               </a>
+            </sl-tooltip>
          </li>
       
          <li>
-            <a href="usuarios.html">
-               <img src="../assets/img/elements/usuario.svg" alt="">
-            </a>
+            <sl-tooltip content="Usuários" placement="right">
+               <a href="usuarios.html">
+                  <img src="../assets/img/elements/usuario.svg" alt="">
+               </a>
+            </sl-tooltip>
          </li>
       </ul>
       
