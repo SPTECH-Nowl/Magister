@@ -3,6 +3,22 @@ body {
     font-family: var(--font-text);
  }
 
+
+ .center-button {
+   display: block;
+   margin: 0 auto;
+}
+
+
+ /* Adicione essas classes ao seu arquivo CSS */
+.valid-input {
+   border: 1px solid #4CAF50; /* Borda verde para campos válidos */
+}
+
+.invalid-input {
+   border: 1px solid #FF5555; /* Borda vermelha para campos inválidos */
+}
+
 .charts-container {
     display: flex;
     justify-content: center;

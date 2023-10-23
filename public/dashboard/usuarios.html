@@ -217,54 +217,102 @@ function buscarUsuario() {
 
 }
 
- 
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
     adicionarUsuarioButton.addEventListener('click', function() {
         Swal.fire({
             title: 'Adicionar Usuário',
-            width:"900px",
-            height:"200px",
+            titleClass: 'custom-title',
             html:
-                '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input">' +
-                '<input type="email" id="emailInput" placeholder="Email" class="swal2-input">' +
-                '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input">'+
-                '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input">',
+                '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input" style="border-radius: 15px;">' +
+                '<input type="email" id="emailInput" placeholder="Email" class="swal2-input" style="border-radius: 15px;">' +
+                '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input" style="border-radius: 15px;">' +
+                '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input" style="border-radius: 15px;">',
             showCancelButton: true,
-            confirmButtonText: 'Adicionar usuário',
             cancelButtonText: 'Cancelar',
+            cancelButtonClass: 'custom-cancel-button',
+            confirmButtonText: 'Adicionar Usuário',
             showLoaderOnConfirm: true,
-            preConfirm: () => {
-                const nome = Swal.getPopup().querySelector('#nomeInput').value;
-                const email = Swal.getPopup().querySelector('#emailInput').value;
-                const senha = Swal.getPopup().querySelector('#senhaInput').value;
-                const tipoInput = Swal.getPopup().querySelector('#tipoInput').value;
-
-                return fetch(`/usuarios/cadastrarNaDash`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        nomeUsuario: nome,
-                        emailUsuario: email,
-                        senhaUsuario: senha,
-                        nivPermissao: tipoInput,
-                        instituicao: sessionStorage.instituicao
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Erro no servidor');
-                    }
-                })
-                .catch(error => {
-                    Swal.showValidationMessage(`Erro: ${error}`);
-                });
+            customClass: {
+                container: 'custom-modal',
             },
-            allowOutsideClick: () => !Swal.isLoading()
+            onOpen: () => {
+                const customModal = Swal.getPopup();
+                customModal.style.backgroundColor = 'white';
+                customModal.style.width = '800px';
+                customModal.style.borderRadius = '15px';
+            },
+            onBeforeOpen: () => {
+                const confirmButton = Swal.getConfirmButton();
+                const cancelButton = Swal.getCancelButton();
+                if (confirmButton && cancelButton) {
+                    confirmButton.style.backgroundColor = '#6D499D';
+                    confirmButton.style.borderRadius = '15px';
+
+                    cancelButton.style.backgroundColor = '#6D499D';
+                    cancelButton.style.borderRadius = '15px';
+                    cancelButton.style.marginRight = '15px';
+                }
+            },
+            preConfirm: () => {
+                // Validação dos campos
+                const nomeInput = document.getElementById('nomeInput');
+                const emailInput = document.getElementById('emailInput');
+                const senhaInput = document.getElementById('senhaInput');
+                const tipoInput = document.getElementById('tipoInput');
+
+                const nome = nomeInput.value;
+                const email = emailInput.value;
+                const senha = senhaInput.value;
+                const tipo = tipoInput.value;
+
+                // Função para definir o estilo dos inputs
+                function setFieldStyle(input, isValid) {
+                    if (isValid) {
+                        input.style.borderColor = '#4CAF50'; // Borda verde para campos válidos
+                    } else {
+                        input.style.borderColor = '#FF5555'; // Borda vermelha para campos inválidos
+                    }
+                }
+
+                // Validação do campo Nome
+                if (nome.length < 3) {
+                    setFieldStyle(nomeInput, false);
+                    Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
+                    return false;
+                } else {
+                    setFieldStyle(nomeInput, true);
+                }
+
+                // Validação do campo Email
+                if (!email.includes('@')) {
+                    setFieldStyle(emailInput, false);
+                    Swal.showValidationMessage('O email deve conter o símbolo "@".');
+                    return false;
+                } else {
+                    setFieldStyle(emailInput, true);
+                }
+
+                // Validação do campo Senha
+                if (senha.length < 5) {
+                    setFieldStyle(senhaInput, false);
+                    Swal.showValidationMessage('A senha deve ter pelo menos 5 caracteres.');
+                    return false;
+                } else {
+                    setFieldStyle(senhaInput, true);
+                }
+
+                // Validação do campo Tipo
+                if (tipo !== '1' && tipo !== '2' && tipo !== '3') {
+                    setFieldStyle(tipoInput, false);
+                    Swal.showValidationMessage('O tipo só pode ser 1, 2 ou 3.');
+                    return false;
+                } else {
+                    setFieldStyle(tipoInput, true);
+                }
+
+                // Resto da lógica de adicionar o usuário
+            },
         })
         .then((result) => {
             if (result.isConfirmed) {
@@ -274,7 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 
 
 function filtrosTipo(){
@@ -493,6 +540,7 @@ function limparFormulario() {
     document.getElementById("form_postagem").reset();
 }
 
+
 function mostrar_dados(idUsuario) {
     fetch(`/usuarios/mostrar_dados/${idUsuario}`)
         .then(function (response) {
@@ -504,19 +552,24 @@ function mostrar_dados(idUsuario) {
         })
         .then(function (dadosUsuario) {
             if (dadosUsuario && dadosUsuario.length > 0) {
-                const usuario = dadosUsuario[0]; // Os dados são um array, pegamos o primeiro item
+                const usuario = dadosUsuario[0];
                 console.log("Dados recebidos dos usuários: ", JSON.stringify(usuario));
                 Swal.fire({
-                    title: 'Dados do cliente',
-                    width:"500px",
-                    height:"550px",
-                    confirmButtonColor: 'cornflowerblue',
+                    title: 'Dados do Cliente',
+                    titleClass: 'custom-title',
+                    width: '700px', // Reduza a largura para 700px (ajuste conforme necessário)
                     html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                         <span><b>Nome</b>: ${usuario.nome}</span>
                         <span><b>Email</b>: ${usuario.email}</span>
                         <span><b>Senha:</b> ${usuario.senha}</span>
                         <span><b>nivPermissao:</b> ${usuario.fkTipoUsuario}</span>
                     </div>`,
+                    confirmButtonColor: '#6D499D', // Cor do botão "OK"
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        container: 'custom-modal', // Classe personalizada para o modal
+                        confirmButton: 'custom-confirm-button', // Classe personalizada para o botão "OK"
+                    },
                 });
             } else {
                 console.error('Dados do usuário não encontrados na resposta da API.');
@@ -528,31 +581,73 @@ function mostrar_dados(idUsuario) {
 }
 
 function deletar(idUsuario, tipoPermissao) {
+    const customClass = {
+        container: 'custom-modal',
+        title: 'custom-title',
+    };
+    
+    const defaultModalOptions = {
+        customClass,
+        onOpen: () => {
+            const customModal = Swal.getPopup();
+            customModal.style.backgroundColor = 'white';
+            customModal.style.width = '400px';
+            customModal.style.height = '350px';
+            customModal.style.borderRadius = '15px';
+        },
+    };
+
     if (tipoPermissao == "0") {
-
-        const dialog = document.getElementById(`modalDeletar${idUsuario}`);
-        console.log(dialog)
-
-        const openButton = dialog.nextElementSibling;
-        const closeButton = dialog.querySelector('sl-button[slot="footer"]');
-
-        openButton.addEventListener('click', () => dialog.show());
-        closeButton.addEventListener('click', () => dialog.hide());
-
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            html: `Você não possui permissão para deletar`,
+            customClass,
+        });
         return false;
-    }
-    else {
-
-        const dialog = document.getElementById(`modalDeletar${idUsuario}`);
-        console.log(dialog)
-
-        const openButton = dialog.nextElementSibling;
-        const closeButton = dialog.querySelector('sl-button[slot="footer"]');
-
-        openButton.addEventListener('click', () => dialog.show());
-        closeButton.addEventListener('click', () => dialog.hide());
+    } else {
+        Swal.fire({
+            title: 'Você tem certeza que deseja deletar?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Deletar',
+            denyButtonText: 'Não Deletar',
+            confirmButtonColor: '#FF5555',
+            denyButtonColor: '#4CAF50',
+            ...defaultModalOptions,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/usuarios/deletar/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idUsuarioPE: idUsuario,
+                    }),
+                }).then(function (resposta) {
+                    if (resposta.ok) {
+                        location.reload();
+                    } else {
+                        Swal.fire('Falha ao deletar o usuário', '', 'error');
+                    }
+                }).catch(function (resposta) {
+                    console.log(resposta);
+                });
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Bom trabalho!',
+                    text: 'Usuário não deletado',
+                    confirmButtonColor: '#4CAF50',
+                    ...defaultModalOptions,
+                });
+            }
+        });
     }
 }
+
+
 
 function testar() {
     aguardar();
@@ -568,72 +663,128 @@ function testar() {
 
     return false;
 }
-
 function alterar(idUsuario) {
-   fetch(`/usuarios/listarPorUsuario/${idUsuario}`)
-   .then((dadosUsuario)=>{
-
-      if(dadosUsuario.ok){
-
-         dadosUsuario.json().then((dadosUsuario)=>{
-            Swal.fire({
-        title: 'Alterar Usuário',
-        html:
-            `<input type="text" id="nomeInput" placeholder="Nome" value="${dadosUsuario[0].nome}" class="swal2-input">` +
-            `<input type="email" id="emailInput" placeholder="Email" value="${dadosUsuario[0].email}" class="swal2-input">` +
-            `<input type="password" id="senhaInput" placeholder="Senha" value="${dadosUsuario[0].senha}" class="swal2-input">`+
-            `<input type="text" id="tipoInput" placeholder="Tipo" value="${dadosUsuario[0].nivPermissao}" class="swal2-input">`,
-        showCancelButton: true,
-        confirmButtonText: 'Alterar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#74C365',
-        cancelButtonColor: '#FF5555',
-        preConfirm: () => {
-            var nome = document.getElementById('nomeInput').value;
-            var email = document.getElementById('emailInput').value;
-            var senha = document.getElementById('senhaInput').value;
-            var nivPermissao = document.getElementById('tipoInput').value;
-
-                return fetch(`/usuarios/editar`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        nomeUsuario: nome,
-                        emailUsuario: email,
-                        senhaUsuario: senha,
-                        nivPermissao: nivPermissao,
-                        idUsuario: idUsuario
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Erro no servidor');
-                    }
-                })
-                .catch(error => {
-                    Swal.showValidationMessage(`Erro: ${error}`);
-                });
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Sucesso!', 'Usuario atualizado com sucesso!', 'success');
-                location.reload();
+    fetch(`/usuarios/listarPorUsuario/${idUsuario}`)
+    .then((dadosUsuario) => {
+        if (dadosUsuario.ok) {
+            dadosUsuario.json().then((dadosUsuario) => {
+            // Verifique se todos os campos estão vazios
+            if (
+                dadosUsuario[0].nome === "" &&
+                dadosUsuario[0].email === "" &&
+                dadosUsuario[0].senha === "" &&
+                dadosUsuario[0].nivPermissao === ""
+            ) {
+                Swal.fire("Atenção", "Todos os campos estão vazios. Não é possível editar.", "warning");
+                return;
             }
-        });
-         })
-      } else {
-         alert("Falha ao editar usuario")
-      }
-   })
-    
 
-        }
+            Swal.fire({
+                title: 'Editar Usuário',
+                titleClass: 'custom-title',
+                html:
+                    `<input type="text" id="nomeInput" placeholder="Nome" value="${dadosUsuario[0].nome}" class="swal2-input" style="border-radius: 15px;">` +
+                    `<input type="email" id="emailInput" placeholder="Email" value="${dadosUsuario[0].email}" class="swal2-input" style="border-radius: 15px;">` +
+                    `<input type="password" id="senhaInput" placeholder="Senha" value="${dadosUsuario[0].senha}" class="swal2-input" style="border-radius: 15px;">` +
+                    `<input type="text" id="tipoInput" placeholder="Tipo" value="${dadosUsuario[0].nivPermissao}" class="swal2-input" style="border-radius: 15px;">`,
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Salvar',
+                showLoaderOnConfirm: true,
+                customClass: {
+                    container: 'custom-modal',
+                },
+                onOpen: () => {
+                    const customModal = Swal.getPopup();
+                    customModal.style.backgroundColor = 'white';
+                    customModal.style.width = '800px';
+                    customModal.style.height = '600px';
+                    customModal.style.borderRadius = '15px';
+                },
+                onBeforeOpen: () => {
+                    const confirmButton = Swal.getConfirmButton();
+                    const cancelButton = Swal.getCancelButton();
+                    if (confirmButton && cancelButton) {
+                        confirmButton.style.backgroundColor = '#6D499D';
+                        confirmButton.style.borderRadius = '15px';
+                        confirmButton.style.marginRight = '15px';
+
+                        cancelButton.style.backgroundColor = '#6D499D';
+                        cancelButton.style.borderRadius = '15px';
+                    }
+                },
+                preConfirm: () => {
+                    // Validação dos campos
+                    const nomeInput = document.getElementById('nomeInput');
+                    const emailInput = document.getElementById('emailInput');
+                    const senhaInput = document.getElementById('senhaInput');
+                    const tipoInput = document.getElementById('tipoInput');
+
+                    const nome = nomeInput.value;
+                    const email = emailInput.value;
+                    const senha = senhaInput.value;
+                    const tipo = tipoInput.value;
+
+                    // Função para definir o estilo dos inputs
+                    function setFieldStyle(input, isValid) {
+                        if (isValid) {
+                            input.style.borderColor = '#4CAF50'; // Borda verde para campos válidos
+                        } else {
+                            input.style.borderColor = '#FF5555'; // Borda vermelha para campos inválidos
+                        }
+                    }
+
+                    // Validação do campo Nome
+                    if (nome.length < 3) {
+                        setFieldStyle(nomeInput, false);
+                        Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
+                        return false;
+                    } else {
+                        setFieldStyle(nomeInput, true);
+                    }
+
+                    // Validação do campo Email
+                    if (!email.includes('@')) {
+                        setFieldStyle(emailInput, false);
+                        Swal.showValidationMessage('O email deve conter o símbolo "@".');
+                        return false;
+                    } else {
+                        setFieldStyle(emailInput, true);
+                    }
+
+                    // Validação do campo Senha
+                    if (senha.length < 5) {
+                        setFieldStyle(senhaInput, false);
+                        Swal.showValidationMessage('A senha deve ter pelo menos 5 caracteres.');
+                        return false;
+                    } else {
+                        setFieldStyle(senhaInput, true);
+                    }
+
+                    // Validação do campo Tipo
+                    if (tipo !== '1' && tipo !== '2' && tipo !== '3') {
+                        setFieldStyle(tipoInput, false);
+                        Swal.showValidationMessage('O tipo só pode ser 1, 2 ou 3.');
+                        return false;
+                    } else {
+                        setFieldStyle(tipoInput, true);
+                    }
+
+                    // Resto da lógica para salvar as alterações
+                },
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Sucesso!', 'Usuário atualizado com sucesso!', 'success');
+                    location.reload();
+                }
+            });
+        });
+    } else {
+        Swal.fire("error", "Falha ao editar usuário", "error");
+    }
+    });
+}
 
 
 </script>
