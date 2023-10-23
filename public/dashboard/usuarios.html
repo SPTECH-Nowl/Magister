@@ -607,7 +607,6 @@ function mostrar_dados(idUsuario) {
         });
 }
 
-
 function deletar(idUsuario, tipoPermissao) {
     if (tipoPermissao === "0") {
         Swal.fire({
@@ -647,6 +646,7 @@ function deletar(idUsuario, tipoPermissao) {
                     })
                 }).then(function (resposta) {
                     if (resposta.ok) {
+                        Swal.fire('Usuário deletado com sucesso', '', 'success');
                         location.reload();
                     } else {
                         Swal.fire('Falha ao deletar o usuário', '', 'error');
