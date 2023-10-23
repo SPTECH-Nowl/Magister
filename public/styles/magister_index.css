@@ -48,6 +48,10 @@ body::-webkit-scrollbar-thumb {
     transition: all .25s ease-in-out;
     border: none;
 }
+ 
+.headerWrapper{
+    display: none;
+}
 
 .nav-logo-img {
     width: 200px;
