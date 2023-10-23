@@ -4,6 +4,12 @@ Site institucional da empresa, onde apresentamos quem nós somos, nossos valores
 
 Site construido para a o segundo semestre de 2023 da faculdade SPTECH.
 
+# 🦉 Sistema - Magister
+
+Sistema de monitoramento de computadores de escolas técnicas, com o monitoramento de desempenho de memória RAM, memória rígida, processador e janelas abertas além de trazer inovações como o sistema de Strikes, baseado nas ações feitas na máquina.
+
+Site construido para a o segundo semestre de 2023 da faculdade SPTECH.
+
 👷🏻‍♂️🔨 Desenvolvido por:
 
  -Cauã Gustavo | @h.Cauã Gustavo
