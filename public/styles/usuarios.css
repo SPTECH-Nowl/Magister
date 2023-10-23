@@ -10,13 +10,12 @@ body {
 }
 
 
- /* Adicione essas classes ao seu arquivo CSS */
 .valid-input {
-   border: 1px solid #4CAF50; /* Borda verde para campos válidos */
+   border: 1px solid #4CAF50; 
 }
 
 .invalid-input {
-   border: 1px solid #FF5555; /* Borda vermelha para campos inválidos */
+   border: 1px solid #FF5555; 
 }
 
 .charts-container {
