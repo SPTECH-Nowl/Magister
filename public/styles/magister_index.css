@@ -118,7 +118,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .head-mar {
-    /* height: 400px; */
+    height: 400px;
 }
 
 .onda {
@@ -166,6 +166,7 @@ body::-webkit-scrollbar-thumb {
     /* padding: 0;
     margin: 0;
     border: none; */
+    margin-top: 8vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
