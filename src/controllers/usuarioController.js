@@ -120,7 +120,8 @@ function cadastrarNaDash(req, res) {
     var instituicaoVar = req.body.instituicao;
 
     console.log(nomeVar, emailVar, senhaVar, nivPerm, instituicaoVar)
-
+    console.log("tamo no controller")
+    
     if (nomeVar == undefined) {
         res.status(400).send("Seu nome está indefinido");
     } else if (emailVar == undefined) {

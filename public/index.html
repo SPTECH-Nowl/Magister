@@ -13,6 +13,42 @@
 </head>
 <body>
 
+    
+<div class="headerWrapper">
+    <a class="nav-logo-a" href="#">
+        <img class="nav-logo-img" src="./assets/img/Logos/logoMagisterPreto.png" alt="Magister">
+    </a>
+
+    <div class="navMobileWrapper">
+        <div style="position: relative;">
+            <button id="menuSwitch">&#9776;</button>
+                    <div id="navMobile" >
+                        <div class="navMobileHeader">
+                            <a class="nav-logo-a" href="#">
+                                <img class="nav-logo-img-mobile" src="./assets/img/Logos/LogoMagisterRoxo.png" alt="Magister">
+                            </a>
+
+                            <button id="menuSwitchMobile">&#9776;</button>
+                        </div>
+
+                        <div class="OptionsWrapperTop">
+                           <a href="#sobre" class="navLinkMobile">Sobre</a>
+                           <a href="#missoes" class="navLinkMobile">Missões</a>
+                           <a href="#fale-aqui" class="navLinkMobile">Fale aqui</a>
+                        </div>
+
+                        <div class="OptionsWrapperBottom">
+                            <a href="login_cadastro.html" class="nav-btn texto-r">Entrar</a>
+
+                            <span>All Rights Reserved 2023 ©</span>
+                        </div>
+                </div>                
+        </div>
+    </div>
+</div>
+
+
+
     <nav id="nav">
         <a class="nav-logo-a" href="#">
             <img class="nav-logo-img" src="./assets/img/Logos/LogoMagisterBranco.png" alt="Magister">
@@ -208,4 +244,53 @@
         }
     }
 
+
+
+    var menuSwitch = document.getElementById("menuSwitch");
+    var menuSwitchMobile = document.getElementById("menuSwitchMobile");
+
+    var navMobile = document.getElementById("navMobile");
+    var sectionsArray = document.getElementsByTagName("section");
+
+    menuSwitchMobile.addEventListener("click", function(){
+        if (navMobile.style.display === "flex") {
+            navMobile.style.display = "none"
+
+            navMobile.classList.remove("requires-no-scroll")
+
+            for(i = 0; i < sectionsArray.length; i++){
+                sectionsArray[i].style.filter = "brightness(1)"
+            }
+
+        } else {
+            navMobile.style.display = "flex"
+
+            for(i = 0; i < sectionsArray.length; i++){
+                sectionsArray[i].style.filter = "brightness(0.7)"
+            }
+            
+            navMobile.classList.add("requires-no-scroll")
+        }
+    });
+
+    menuSwitch.addEventListener("click", function(){
+        if (navMobile.style.display === "flex") {
+            navMobile.style.display = "none"
+
+            navMobile.classList.remove("requires-no-scroll")
+
+            for(i = 0; i < sectionsArray.length; i++){
+                sectionsArray[i].style.filter = "brightness(1)"
+            }
+
+        } else {
+            navMobile.style.display = "flex"
+
+            for(i = 0; i < sectionsArray.length; i++){
+                sectionsArray[i].style.filter = "brightness(0.7)"
+            }
+            
+            navMobile.classList.add("requires-no-scroll")
+        }
+    });
 </script>
