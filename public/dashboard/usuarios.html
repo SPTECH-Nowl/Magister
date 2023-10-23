@@ -224,6 +224,7 @@ function buscarUsuario() {
 
 }
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
     adicionarUsuarioButton.addEventListener('click', function() {
@@ -318,7 +319,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     setFieldStyle(tipoInput, true);
                 }
 
-                // Resto da lógica de adicionar o usuário
+                // Simule a adição de um usuário (substitua isso com sua lógica real)
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 1000);
+                });
             },
         })
         .then((result) => {
@@ -329,6 +335,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+            
 
 
 
@@ -584,6 +592,8 @@ function mostrar_dados(idUsuario) {
             console.error('Erro na requisição:', erro);
         });
 }
+
+
 function deletar(idUsuario, tipoPermissao) {
     if (tipoPermissao === "0") {
         Swal.fire({

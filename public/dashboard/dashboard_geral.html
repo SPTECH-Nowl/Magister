@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <link rel="stylesheet" href="../styles/global.css">
-   <link rel="stylesheet" href="../styles/dashboard.css">   
+   <link rel="stylesheet" href="../styles/dashboard.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
@@ -13,65 +14,58 @@
 
    <!-- Shoelace -->
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
-   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
-   <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/alert/alert.js"></script>
+   <script type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
+   <script type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/alert/alert.js"></script>
 
    <!-- Google Charts -->
    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
    <!-- Funções -->
-   
+   <script src="../scripts/dashboard_geral.js" defer></script>
 
    <title>Dashboard Geral</title>
 </head>
+
 <body>
-   
+
    <div class="alert-toast-wrapper"></div>
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
-      
+
       <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
 
       <ul class="nav-list">
-         <ul class="nav-list">
-            <li>
-               <sl-tooltip content="Dashboard Geral" placement="right">
-                  <a href="dashboard_geral.html">
-                     <img src="../assets/img/elements/dash.svg" alt="">
-                  </a>
-               </sl-tooltip>
-            </li>
-         
-            <li>
-               <sl-tooltip content="Maquinas de organização" placement="right">
-                  <a href="maquinas_organizacao.html">
-                     <img src="../assets/img/elements/pc.svg" alt="">
-                  </a>
-               </sl-tooltip>
-            </li>
-         
-            <li>
-               <sl-tooltip content="Processos permitidos" placement="right">
-                  <a href="processos.html">
-                     <img src="../assets/img/elements/programa.svg" alt="">
-                  </a>
-               </sl-tooltip>
-            </li>
-         
-            <li>
-               <sl-tooltip content="Usuários" placement="right">
-                  <a href="usuarios.html">
-                     <img src="../assets/img/elements/usuario.svg" alt="">
-                  </a>
-               </sl-tooltip>
-            </li>
-         </ul>
-         
+         <li>
+            <a href="">
+               <img src="../assets/img/elements/dash.svg" alt="">
+            </a>
+         </li>
+
+         <li>
+            <a href="maquinas_organizacao.html">
+               <img src="../assets/img/elements/pc.svg" alt="">
+            </a>
+         </li>
+
+         <li>
+            <a href="">
+               <img src="../assets/img/elements/programa.svg" alt="">
+            </a>
+         </li>
+
+         <li>
+            <a href="usuarios.html">
+               <img src="../assets/img/elements/usuario.svg" alt="">
+            </a>
+         </li>
+      </ul>
+
+
       <ul>
          <li>
-            <a href="../login_cadastro.html">
             <img src="../assets/img/elements/settings.svg" alt="">
-            </a>
          </li>
       </ul>
    </div>
@@ -79,31 +73,154 @@
    <div class="dash-content">
       <h1>Dashboard Geral</h1>
       <div class="grid grid-geral">
+
          <div class="chart-container">
-            
+            <p class="chart-text">Nº de Strikes na Semana: </p>
+            <p class="chart-info" id="qtd_strike_semana">14 <span class="chart-text">Strikes</span></p>
          </div>
+
          <div class="chart-container">
-            
+            <p class="chart-text">Nº de Alertas na Semana: </p>
+            <p class="chart-info" id="qtd_alertas_semana">50 <span class="chart-text">Alertas</span></p>
          </div>
+
          <div class="chart-container">
-            
+            <p class="chart-text">Nº de Strikes na Semana: </p>
+            <div class="chart-div">
+
+               <div class="chart-div-left">
+                  <p class="chart-info" id="qtd_mais_strikes">30 <span class="chart-text">Strikes</span></p>
+                  <p class="chart-text" id="dia_mais_strikes">DD/MM/YYYY</p>
+               </div>
+
+               <div class="chart-div-right">
+                  <button id="1_mes" class="chart-btn chart-btn-active" onclick="handleChartBtn('1_mes')">1 mês</button>
+                  <button id="3_meses" class="chart-btn" onclick="handleChartBtn('3_meses')">3 meses</button>
+                  <button id="6_meses" class="chart-btn" onclick="handleChartBtn('6_meses')">6 meses</button>
+               </div>
+
+            </div>
          </div>
+
          <div class="chart-container">
-            
+            <div class="chart-div">
+               <div id="strikepie"></div>
+               
+               <div class="chart-div-right">
+                  <p class="chart-graph-info">77%</p>
+                  <p class="chart-mini-text">das Máquinas possuem Strike</p>
+               </div>
+            </div>
+
          </div>
+
          <div class="chart-container">
-            
+            <div class="chart-div">
+               <div id="alertadiscopie"></div>
+               
+               <div class="chart-div-right">
+                  <p class="chart-graph-info">80%</p>
+                  <p class="chart-mini-text">das Máquinas acima do limite de Disco</p>
+               </div>
+            </div>
+
          </div>
+
          <div class="chart-container list-chart">
+            <p class="chart-text">Máquinas com mais defeitos: </p>
+            <table id="chart_ranking" class="chart-ranking">
+               <thead>
+                  <th>Máquina</th>
+                  <th>Nº Strikes</th>
+                  <th>Nº Alertas</th>
+                  <th>Ver Máquina</th>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>Mqn 01</td>
+                     <td>12</td>
+                     <td>24</td>
+                     <td><a href="#">Ver Mais</a></td>
+                  </tr>
+                  <tr>
+                     <td>Mqn 01</td>
+                     <td>12</td>
+                     <td>24</td>
+                     <td><a href="#">Ver Mais</a></td>
+                  </tr>
+                  <tr>
+                     <td>Mqn 01</td>
+                     <td>12</td>
+                     <td>24</td>
+                     <td><a href="#">Ver Mais</a></td>
+                  </tr>
+                  </tr>
+                  <tr>
+                     <td>Mqn 01</td>
+                     <td>12</td>
+                     <td>24</td>
+                     <td><a href="#">Ver Mais</a></td>
+                  </tr>
+                  </tr>
+                  <tr>
+                     <td>Mqn 01</td>
+                     <td>12</td>
+                     <td>24</td>
+                     <td><a href="#">Ver Mais</a></td>
+                  </tr>
+               </tbody>
+            </table>
+
+            <!-- <div id="chart_ranking" class="chart-ranking">
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+               <div class="ranking-row">
+                  <p class="chart-mini-text">Máquina 01</p>
+                  <hr class="ranking-divider">
+               </div>
+                
+            </div> -->
             
          </div>
-         <div class="chart-container">
-            
+
+         <div class="chart-container column-chart">
+            <p class="chart-text">Máquinas com mais uso de CPU e RAM da semana: </p>
+            <div id="cpuramcolumn"></div>
          </div>
-         <div class="chart-container">
-            
-         </div>
+
+         <!-- <div class="chart-container">
+
+         </div> -->
       </div>
    </div>
 </body>
+
 </html>
