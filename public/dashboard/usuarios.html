@@ -584,51 +584,58 @@ function mostrar_dados(idUsuario) {
             console.error('Erro na requisição:', erro);
         });
 }
-
-
-
 function deletar(idUsuario, tipoPermissao) {
-    const customClass = {
-        container: 'custom-modal',
-        title: 'custom-title',
-    };
-    
-    const defaultModalOptions = {
-        customClass,
-        onOpen: () => {
-            const customModal = Swal.getPopup();
-            customModal.style.backgroundColor = 'white';
-            customModal.style.width = '400px';
-            customModal.style.height = '350px';
-            customModal.style.borderRadius = '15px';
-        },
-    };
-
-    if (tipoPermissao == "0") {
-
-        const dialog = document.getElementById(`modalDeletar${idUsuario}`);
-        console.log(dialog)
-
-        const openButton = dialog.nextElementSibling;
-        const closeButton = dialog.querySelector('sl-button[slot="footer"]');
-
-        openButton.addEventListener('click', () => dialog.show());
-        closeButton.addEventListener('click', () => dialog.hide());
-
+    if (tipoPermissao === "0") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Você não possui permissão para deletar',
+            customClass: {
+                confirmButton: 'swal2-button-custom'
+            }
+        });
         return false;
-    }
-    else {
-
-        const dialog = document.getElementById(`modalDeletar${idUsuario}`);
-        console.log(dialog)
-
-        const openButton = dialog.nextElementSibling;
-        const closeButton = dialog.querySelector('sl-button[slot="footer"]');
-
-        openButton.addEventListener('click', () => dialog.show());
-        closeButton.addEventListener('click', () => dialog.hide());
+    } else {
+        Swal.fire({
+            title: 'Você tem certeza que deseja deletar?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Deletar',
+            denyButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            denyButtonColor: '#3085d6',
+            customClass: {
+                confirmButton: 'swal2-button-custom',
+                popup: 'swal2-popup-custom'
+            },
+            width: '400px',
+            heightAuto: false,
+            customHeight: '700px' // Aumento maior na altura
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/usuarios/deletar/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idUsuarioPE: idUsuario
+                    })
+                }).then(function (resposta) {
+                    if (resposta.ok) {
+                        location.reload();
+                    } else {
+                        Swal.fire('Falha ao deletar o usuário', '', 'error');
+                    }
+                }).catch(function (resposta) {
+                    console.log(resposta);
+                });
+            }
+        });
     }
 }
+
+
 
 
 
