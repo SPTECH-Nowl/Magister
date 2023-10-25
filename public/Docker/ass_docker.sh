@@ -25,15 +25,15 @@ if [ $? -eq 0 ]
             sudo systemctl enable docker
             sleep 2
             sudo docker pull mysql:5.7
-            sudo docker run -d -p 3306:3306 --name ContainerBancoDados -e "MYSQL_DATABASE=magister" -e "MYSQL_ROOT_PASSWORD=aluno" mysql:5.7
+            sudo docker run -d -p 3306:3306 --name MagisterNowl -e "MYSQL_DATABASE=magister" -e "MYSQL_ROOT_PASSWORD=aluno" mysql:5.7
             echo "Docker instalado com sucesso e container criado com sucesso!"
             sleep 2
             echo "Agora iremos criar as tabelas no banco de dados"
             sleep 2
-            sudo docker exec -i ContainerBancoDados mysql -uroot -aluno magister < script.sql
+            sudo docker exec -i MagisterNowl mysql -uroot -aluno magister < script.sql
             echo "Tabelas criadas com sucesso!"
             echo "Tudo configurado com sucesso, até a próxima!"
-        else
+        else, .
             echo "Você optou por não instalar o Docker por enquanto, até a próxima então!"
             
         fi

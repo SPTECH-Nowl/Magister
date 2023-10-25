@@ -9,6 +9,9 @@
    text-overflow: ellipsis;
 }
 
+
+
+
 .input:focus {
    border: none;
    outline: none;
@@ -68,4 +71,69 @@
 
 .wdt-100 {
    width: 100% !important;
+}
+
+
+.input_processo {
+   width: 80%;
+   background-color: transparent;
+   border: transparent;
+   font-size: 1.2rem;
+   margin-right: 10%;
+   text-overflow: ellipsis;
+}
+
+
+
+.input_processo:focus {
+   border: none;
+   outline: none;
+}
+
+.input_processo::placeholder {
+   color: #bdbdbd;
+}
+
+.input_processo-wrapper {
+   display: flex;
+   gap: 4px;
+   align-items: center;
+   width: fit-content;
+   margin-left: 10%;
+   border-radius: 25px;
+   padding: 0.5rem 0.6rem;
+   border: 1px solid #E6E6E6;
+   background-color: #FBFBFD;
+   transition: .3s ease-in-out;
+   box-shadow: 0px 0px 0px 0px rgba(32, 32, 64, 0.10) inset, 
+               0px 0px 1px 0px rgba(32, 32, 64, 0.10) inset, 
+               0px 1px 1px 0px rgba(32, 32, 64, 0.09) inset, 
+               0px 3px 2px 0px rgba(32, 32, 64, 0.05) inset, 
+               0px 5px 2px 0px rgba(32, 32, 64, 0.01) inset, 
+               0px 7px 2px 0px rgba(32, 32, 64, 0.00) inset;
+}
+
+.input_processo-wrapper i {
+   color: #bdbdbd;
+   font-size: 1.4rem;
+}
+
+.ph-eye {
+   display: none;
+}
+
+.input_processo-wrapper.password .ph-eye {
+   display: block;
+}
+
+.ph-magnifying-glass {
+   display: none;
+}
+
+.input_processo-wrapper.icon .ph-magnifying-glass {
+   display: block;
+}
+
+.input_processo-wrapper:focus-within {
+   border: 1px solid var(--color-roxoEscuro) !important;
 }
