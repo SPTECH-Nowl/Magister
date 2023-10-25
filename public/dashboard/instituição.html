@@ -4,11 +4,11 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
    <link rel="stylesheet" href="../styles/usuarios.css">
-   <link rel="stylesheet" href="../styles/alerta.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
   
 
-   
+
+   <script src="../scripts/instituicao.jss"></script>
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    <!-- JQuery -->
@@ -40,11 +40,11 @@
    <script src="../scripts/funcoes.js"></script>
    <script src="../scripts/processo.js"></script>
 
-   <title>Magister | Processos</title>
+   <title>Magister | Instituição</title>
 
 </head>
 <body>
-   <body onload="validarAcessoProcesso(), carregarFeedProcesso()"></body>
+   <body onload="validarAcessoInstituicao(), carregarFeedInstituicao()"></body>
    
 
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
@@ -103,12 +103,12 @@
 
 
    <div class="charts-container">
-      <h1>Programas permitidos</h1>
+      <h1>Instituições</h1>
       <div class="top-users">
 
          <div class="flex-row gap-1" id="orderOptions"></div>
 
-         <div class="container-selects" style="gap: 2%;">
+         <div class="container-selects" style="gap: 1%;">
 
        
             <sl-select id="ordem_az"  style="left: 7%;" placeholder="Ordem alfabética" pill filled clearable>
@@ -116,14 +116,19 @@
                 <sl-option value="ord_z_a">Z à A</sl-option>
               </sl-select>
 
+              <sl-select id="ordem_az"  style="gap: 15%;" placeholder="Instituição" pill filled clearable>
+                <sl-option value="ord_a_a">A à Z</sl-option>
+                <sl-option value="ord_z_a">Z à A</sl-option>
+              </sl-select>
+
             <div class="flex-row gap-1 pesquisarEAdd">
                <div class="input_processo-wrapper icon wdt-100">
                   <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por um processo" onkeyup="buscarUsuario()"
+                  <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por uma instituição" onkeyup="buscarUsuario()"
                      fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
                </div>
-               <button class="btn primario" style="left: 5%;" id="adicionarProcesso">Adicionar processo</button>
+               <button class="btn primario" style="left: 2%;" id="adicionarEscola">Adicionar Escola</button>
             </div>
          </div>
 
@@ -138,7 +143,9 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Nome do processo</th>
+                        <th>Sigla</th>
+                        <th>Código</th>
+                        <th>Respónsavel</th>
                         <th></th>
                     </tr>
                 </thead>

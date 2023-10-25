@@ -537,7 +537,7 @@ function alterar(idUsuario) {
                             '<input type="text" id="tipoInput" placeholder="Tipo" value="' + dadosUsuario[0].nivPermissao + '" class="swal2-input" style="border-radius: 15px;">',
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
-                        confirmButtonText: 'Salvar',
+                        confirmButtonText: 'Salvar Usuario',
                         showLoaderOnConfirm: true,
                         customClass: {
                             container: 'custom-modal',

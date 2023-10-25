@@ -206,7 +206,7 @@ module.exports = {
     listarInstrutor,
 
     listarPorProcesso,
-    cadastrarNaDashProcesso,
+    cadastrarDashProcesso,
     editarProcesso,
     deletarProcesso,
     mostrar_dadosProcesso,

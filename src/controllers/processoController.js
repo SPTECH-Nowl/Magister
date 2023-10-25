@@ -112,7 +112,7 @@ function mostrar_dadosProcesso(req, res) {
         );
 }
 
-function cadastrarNaDashProcesso(req, res) {
+function cadastrarDashProcesso(req, res) {
     var nomeProgramaVar = req.body.nomePrograma;
     var nomeProcessoVar = req.body.nomeProcesso;
     var instituicaoVar = req.body.instituicao;
@@ -129,7 +129,7 @@ function cadastrarNaDashProcesso(req, res) {
     } else {
 
         // Passe os valores como parâmetro e vá para o arquivoprocessoModel.js
-       processoModel.cadastrarNaDashProcesso(nomeProgramaVar,nomeProcessoVar, instituicaoVar)
+       processoModel.cadastrarDashProcesso(nomeProgramaVar,nomeProcessoVar, instituicaoVar)
             .then(
                 function (resultado) {
                     res.json(resultado);
@@ -148,8 +148,8 @@ function cadastrarNaDashProcesso(req, res) {
 }
 
 function editarProcesso(req, res) {
-    var nomeProgramaVar = req.body.nomePrograma;
-    var nomeProcessoVar = req.body.nomeProcesso;
+    var nomePrograma = req.body.nomePrograma;
+    var nomeProcesso = req.body.nomeProcesso;
     var idProcesso = req.body.idProcesso;
 
    processoModel.editarProcesso(nomePrograma, nomeProcesso, idProcesso)
@@ -274,7 +274,7 @@ module.exports = {
     listarInstrutor,
 
     listarPorProcesso,
-    cadastrarNaDashProcesso,
+    cadastrarDashProcesso,
     editarProcesso,
     deletarProcesso,
     mostrar_dadosProcesso,
