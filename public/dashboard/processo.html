@@ -38,11 +38,11 @@
 
    <script src="../scripts/funcoes.js"></script>
 
-   <title>Magister | Usuários</title>
+   <title>Magister | Processos</title>
 
 </head>
 <body>
-   <body onload="validarAcesso(), carregarFeed()"></body>
+   <body onload="validarAcessoProcesso(), carregarFeedProcesso()"></body>
    
 
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
@@ -109,7 +109,7 @@
          <div class="container-selects">
 
        
-            <sl-select id="ordem_az" placeholder="Ordem alfabética" pill filled clearable>
+            <sl-select id="ordem_az"  style="left: 7%;" placeholder="Ordem alfabética" pill filled clearable>
                 <sl-option value="ord_a_a">A à Z</sl-option>
                 <sl-option value="ord_z_a">Z à A</sl-option>
               </sl-select>

@@ -75,7 +75,7 @@
 
 
 .input_processo {
-   width: 80%;
+   width: 52%;
    background-color: transparent;
    border: transparent;
    font-size: 1.2rem;
@@ -100,7 +100,7 @@
    align-items: center;
    width: fit-content;
    margin-left: 10%;
-   border-radius: 25px;
+   border-radius: 5px;
    padding: 0.5rem 0.6rem;
    border: 1px solid #E6E6E6;
    background-color: #FBFBFD;
