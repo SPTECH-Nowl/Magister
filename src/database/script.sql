@@ -382,4 +382,3 @@ WHERE idInstituicao = 1
 GROUP BY m.idMaquina;
 
 select * from usuario;
-
