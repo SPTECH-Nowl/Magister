@@ -61,21 +61,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 // Validação do campo Nome
-                if (nomePrograma.length < 3) {
+                if (nomeEscola.length < 3) {
                     setFieldStyle(nomeInput, false);
                     Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
                     return false;
                 } else {
-                    setFieldStyle(nomeInput, true);
+                    setFieldStyle(nomeEscolaInput, true);
                 }
 
-                // Validação do campo Email
-                if (nomeProcesso.length < 3) {
+                // Validação do campo sigla
+                if (sigla.length < 2) {
                     setFieldStyle(nomeInput, false);
-                    Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
+                    Swal.showValidationMessage('A sigla deve ter pelo menos 2 caracteres.');
                     return false;
                 } else {
-                    setFieldStyle(nomeInput, true);
+                    setFieldStyle(siglaInput, true);
+                }
+
+
+                   // Validação do campo codigo
+                   if (codigo.length < 2) {
+                    setFieldStyle(codigoInput, false);
+                    Swal.showValidationMessage('O codigo deve ser hexadecimal.');
+                    return false;
+                } else {
+                    setFieldStyle(codigoInput, true);
+                }
+
+
+                
+                   // Validação do campo responsavel
+                   if (responsavel.length < 2) {
+                    setFieldStyle(responsavelInput, false);
+                    Swal.showValidationMessage('O responsavel deve conter pelo menos 2 caracteres.');
+                    return false;
+                } else {
+                    setFieldStyle(responsavelInput, true);
                 }
 
                 // Simule a adição de um usuário (substitua isso com sua lógica real)

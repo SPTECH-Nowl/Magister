@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const adicionarEscolaButton = document.getElementById('adicionarProcesso');
-    adicionarEscolaButton.addEventListener('click', function() {
+    const adicionarProcessoButton = document.getElementById('adicionarProcesso');
+    adicionarProcessoButton.addEventListener('click', function() {
         Swal.fire({
             title: 'Adicionar Programa',
             titleClass: 'custom-title',
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     Swal.showValidationMessage('O programa deve ter pelo menos 3 caracteres.');
                     return false;
                 } else {
-                    setFieldStyle(nomeInput, true);
+                    setFieldStyle(nomeProgramaInput, true);
                 }
 
                 // Validação do campo Processo
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     Swal.showValidationMessage('O processo deve ter pelo menos 3 caracteres.');
                     return false;
                 } else {
-                    setFieldStyle(nomeInput, true);
+                    setFieldStyle(nomeProcessoInput, true);
                 }
 
                 // Simule a adição de um usuário (substitua isso com sua lógica real)
