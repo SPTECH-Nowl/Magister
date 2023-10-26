@@ -1,4 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
+    carregarFeedProcesso()
+   });
+
+
+
+   function buscarProcesso() {
+    var nomeDigitado = input_busca.value
+    var instituicao = sessionStorage.instituicao
+ 
+       if (nomeDigitado.length < 3){
+          carregarFeed()
+       } else {
+          fetch(`/processo/pesquisarProcesso/${nomeDigitado}/${instituicao}`)
+             .then((processoBuscado =>{
+                if(processoBuscado.status == 204){
+                   var tableescolas = document.getElementById("listaDeProcesso");
+                   tableescolas.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                }else {
+                     processoBuscado.json().then(function (processoBuscado) {
+                         var tableescolas = document.getElementById("listaDeProcesso");
+                         tableescolas.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+ 
+                         console.log(processoBuscado)
+                         
+                         for (var i = 0; i < processoBuscado.length; i++) {
+                             var processo = processoBuscado[i];
+                             
+                             var celulaNomePrograma = document.createElement("td");
+                             var celulaNomeProcesso = document.createElement("td");
+                             var celulaBotoes = document.createElement("td");
+ 
+                             celulaNomePrograma.textContent = processo.nomePrograma;
+                             celulaNomeProcesso.textContent = processo.nomeProcesso;
+                            
+ 
+                             // Adicione os botões com base no ID do usuário
+                             celulaBotoes.innerHTML = `
+                            
+                             <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${processo.idProcesso}" onclick="deletar(${processo.idProcesso}, ${sessionStorage.nivPerm})">
+                             <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${processo.idProcesso})">
+                             <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${processo.idProcesso})">
+                             `;
+ 
+                             linhaTable.appendChild(celulaNomePrograma);
+                             linhaTable.appendChild(celulaNomeProcesso);
+                 
+ 
+                             tableProcesso.appendChild(linhaTable);
+                         }
+                     });
+                 }
+ 
+    }))
+       }
+ 
+ }
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
     const adicionarProcessoButton = document.getElementById('adicionarProcesso');
     adicionarProcessoButton.addEventListener('click', function() {
         Swal.fire({
@@ -99,6 +167,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
+
+function filtrosTipo(){
+    fetch(`/processo/qtdTotal/${sessionStorage.instituicao}`)
+    .then((qtdTotal) => {
+       if (qtdTotal.ok){
+          fetch(`/processo/qtdAdministrador/${sessionStorage.instituicao}`)
+          .then((qtdTotalAdm) => {
+             fetch(`/processo/qtdInstrutor/${sessionStorage.instituicao}`)
+                .then((qtdTotalInstrutor) => {
+                   if (qtdTotalInstrutor.ok){
+                      qtdTotal.json().then((qtdTotal) => {
+                         qtdTotalAdm.json().then((qtdTotalAdm) =>{
+                            qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
+                               var orderOptions = document.getElementById("orderOptions")
+ 
+                                  var spanTotal = document.createElement("span")
+                                  var spanTotalAdministrador = document.createElement("span")
+                                  var spanTotalInstrutor = document.createElement("span")
+ 
+                                  spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
+                                  spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
+                                  spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
+ 
+                                  spanTotal.onclick = carregarFeed
+                                  spanTotalAdministrador.onclick = carregarFeedAdm
+                                  spanTotalInstrutor.onclick = carregarFeedInstrutor
+ 
+                                  orderOptions.appendChild(spanTotal)
+                                  orderOptions.appendChild(spanTotalAdministrador)
+                                  orderOptions.appendChild(spanTotalInstrutor)
+ 
+ 
+                            })
+                         })                        
+                      })
+ 
+                   }
+                })
+          })
+       }
+    })
+ }
+ 
+
+
+
+
+
+
 function carregarFeedProcesso() {
     var codInstituicao = sessionStorage.instituicao;
     fetch(`/processo/listar/${codInstituicao}`)
@@ -115,27 +234,27 @@ function carregarFeedProcesso() {
                         console.log(listaProcesso)
                         
                         for (var i = 0; i < listaProcesso.length; i++) {
-                            var Processo = listaProcesso[i];
+                            var processo = listaProcesso[i];
 
                             
                             
                             var linhaTable = document.createElement("tr");
-                            linhaTable.setAttribute('id', `Processo_${Processo.idProcesso}`)
+                            linhaTable.setAttribute('id', `processo_${Processo.idProcesso}`)
 
                             var celulaNomePrograma = document.createElement("td");
                             var celulaNomeProcesso = document.createElement("td");
                             var celulaBotoes = document.createElement("td");
 
-                            celulaNomePrograma.textContent = Processo.nomePrograma;
-                            celulaNomeProcesso.textContent = Processo.nomeProcesso;
+                            celulaNomePrograma.textContent = processo.nomePrograma;
+                            celulaNomeProcesso.textContent = processo.nomeProcesso;
                            
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
                            
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${Processo.idProcesso}" onclick="deletar(${Processo.idProcesso}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${Processo.idProcesso})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${Processo.idProcesso})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${processo.idProcesso}" onclick="deletar(${processo.idProcesso}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${processo.idProcesso})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${processo.idProcesso})">
                             `;
 
                             linhaTable.appendChild(celulaNomePrograma);

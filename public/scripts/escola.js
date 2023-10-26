@@ -2,6 +2,66 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarFeedEscola()
    });
 
+
+
+   function buscarEscola() {
+    var nomeDigitado = input_busca.value
+    var instituicao = sessionStorage.instituicao
+ 
+       if (nomeDigitado.length < 3){
+          carregarFeed()
+       } else {
+          fetch(`/escola/pesquisarEscola/${nomeDigitado}/${instituicao}`)
+             .then((escolaBuscado =>{
+                if(escolaBuscado.status == 204){
+                   var tableescolas = document.getElementById("listaDeEscolas");
+                   tableescolas.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                }else {
+                     escolaBuscado.json().then(function (escolaBuscado) {
+                         var tableescolas = document.getElementById("listaDeEscolas");
+                         tableescolas.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+ 
+                         console.log(escolaBuscado)
+                         
+                         for (var i = 0; i < escolaBuscadoBuscado.length; i++) {
+                             var escola = escolaBuscado[i];
+                             
+                             var celulaNomeEscola = document.createElement("td");
+                             var celulaSigla = document.createElement("td");
+                             var celulaCodigo = document.createElement("td");
+                             var celulaResponsavel = document.createElement("td");
+                             var celulaBotoes = document.createElement("td");
+                             var celulaBotoes = document.createElement("td");
+ 
+                             celulaNomeEscola.textContent = escola.nomeEscola;
+                             celulaSigla.textContent = escola.sigla;
+                             celulaCodigo.textContent = escola.codigo;
+                             celulaResponsavel.textContent = escola.responsavel;
+
+                               // Adicione os botões com base no ID do usuário
+                               celulaBotoes.innerHTML = `
+                           
+                               <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idEscola}" onclick="deletar(${escola.idEscola}, ${sessionStorage.nivPerm})">
+                               <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idEscola})">
+                               <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${escola.idEscola})">
+                               `;
+   
+                               linhaTable.appendChild(celulaNomeEscola);
+                               linhaTable.appendChild(celulaSigla);
+                               linhaTable.appendChild(celulaCodigo);
+                               linhaTable.appendChild(celulaResponsavel);
+   
+                               tableescola.appendChild(linhaTable);
+                         }
+                     });
+                 }
+ 
+    }))
+       }
+ 
+ }
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarEscolaButton = document.getElementById('adicionarEscola');
     adicionarEscolaButton.addEventListener('click', function() {
@@ -130,6 +190,59 @@ return new Promise((resolve) => {
 });
 
 
+function filtrosTipo(){
+    fetch(`/escola/qtdTotal/${sessionStorage.instituicao}`)
+    .then((qtdTotal) => {
+       if (qtdTotal.ok){
+          fetch(`/escola/qtdAdministrador/${sessionStorage.instituicao}`)
+          .then((qtdTotalAdm) => {
+             fetch(`/escola/qtdInstrutor/${sessionStorage.instituicao}`)
+                .then((qtdTotalInstrutor) => {
+                   if (qtdTotalInstrutor.ok){
+                      qtdTotal.json().then((qtdTotal) => {
+                         qtdTotalAdm.json().then((qtdTotalAdm) =>{
+                            qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
+                               var orderOptions = document.getElementById("orderOptions")
+ 
+                                  var spanTotal = document.createElement("span")
+                                  var spanTotalAdministrador = document.createElement("span")
+                                  var spanTotalInstrutor = document.createElement("span")
+ 
+                                  spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
+                                  spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
+                                  spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
+ 
+                                  spanTotal.onclick = carregarFeed
+                                  spanTotalAdministrador.onclick = carregarFeedAdm
+                                  spanTotalInstrutor.onclick = carregarFeedInstrutor
+ 
+                                  orderOptions.appendChild(spanTotal)
+                                  orderOptions.appendChild(spanTotalAdministrador)
+                                  orderOptions.appendChild(spanTotalInstrutor)
+ 
+ 
+                            })
+                         })                        
+                      })
+ 
+                   }
+                })
+          })
+       }
+    })
+ }
+ 
+
+
+
+
+
+
+
+
+
+
+
 function carregarFeedEscola() {
     var codInstituicao = sessionStorage.instituicao;
     fetch(`/escola/listar/${codInstituicao}`)
@@ -146,7 +259,7 @@ function carregarFeedEscola() {
                         console.log(listaEscola)
                         
                         for (var i = 0; i < listaEscola.length; i++) {
-                            var Escola = listaEscola[i];
+                            var escola = listaEscola[i];
 
                             
                             
@@ -159,17 +272,17 @@ function carregarFeedEscola() {
                             var celulaResponsavel = document.createElement("td");
                             var celulaBotoes = document.createElement("td");
 
-                            celulaNomeEscola.textContent = Escola.nomeEscola;
-                            celulaSigla.textContent = Escola.sigla;
-                            celulaCodigo.textContent = Escola.codigo;
-                            celulaResponsavel.textContent = Escola.responsavel;
+                            celulaNomeEscola.textContent = escola.nomeEscola;
+                            celulaSigla.textContent = escola.sigla;
+                            celulaCodigo.textContent = escola.codigo;
+                            celulaResponsavel.textContent = escola.responsavel;
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
                            
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${Escola.idEscola}" onclick="deletar(${Escola.idEscola}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${Escola.idEscola})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${Escola.idEscola})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idEscola}" onclick="deletar(${escola.idEscola}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idEscola})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${escola.idEscola})">
                             `;
 
                             linhaTable.appendChild(celulaNomeEscola);
