@@ -348,7 +348,7 @@ google.charts.setOnLoadCallback(() => {
    capturarDadosCPU(1, 2).then((dados) => {
       dados = dados.reverse();
       drawCPU(dados);
-      verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de RAM.`);
+      verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de CPU.`);
    });
 
    capturarDadosRAM(1, 2).then((dados) => {

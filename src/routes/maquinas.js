@@ -11,7 +11,7 @@ router.get("/capturarTodosDadosMaquina/:idInstituicao/:idMaquina", (req, res) =>
     maquinaController.capturarTodosDadosMaquina(req, res);
 });
 
-router.get("/capturarTodasMaquinas/:idInstituicao", (req, res) => {
+router.get("/capturarTodasMaquinas/:idInstituicao?:dtAdicao&:ordAlfabetica&:qtdStrikes&:emUso&:estado", (req, res) => {
     maquinaController.capturarTodasMaquinas(req, res);
 })
 
