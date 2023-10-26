@@ -1,7 +1,8 @@
 var express = require("express");
 var router = express.Router();
 
-var escolaController = require("../controllers/escolaControllerr");
+var escolaController = require("../controllers/escolaController");
+
 
 
 router.get("/listar/:codInstituicao", function (req, res) {
