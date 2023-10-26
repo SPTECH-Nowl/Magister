@@ -119,7 +119,7 @@ function cadastrarDashEscola(req, res) {
     var codigoVar  = req.body.codigo;
     var responsavelVar  = req.body.responsavel;
 
-    console.log(nomeProgramaVar, nomeProcessoVar)
+    console.log(nomeProgramaVar, nomeEscolaVar)
     console.log("tamo no controller")
     
     if (nomeEscolaVar == undefined) {
@@ -134,7 +134,7 @@ function cadastrarDashEscola(req, res) {
         res.status(400).send("Seu código hexadecimal está indefinido");
     } else {
 
-        // Passe os valores como parâmetro e vá para o arquivoprocessoModel.js
+        // Passe os valores como parâmetro e vá para o arquivoEscolaModel.js
     escolaModel.cadastrarDashEscola(nomeEscolaVar,siglaVar,codigoVar,responsavelVar, instituicaoVar)
             .then(
                 function (resultado) {
@@ -153,14 +153,14 @@ function cadastrarDashEscola(req, res) {
     }
 }
 
-function editarProcesso(req, res) {
+function editarEscola(req, res) {
     var nomeEscolaVar = req.body.nomeEscola;
     var  siglaVar  = req.body.sigla;
     var codigoVar  = req.body.codigo;
     var  idEscola = req.body.idEscola;
 
 
-   escolaModel.editarProcesso(nomeEscolaVar,siglaVar,codigoVar,responsavelVar, idEscola)
+   escolaModel.editarEscola(nomeEscolaVar,siglaVar,codigoVar,responsavelVar, idEscola)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -194,7 +194,7 @@ function deletarEscola(req, res) {
 }
 
 function testar(req, res) {
-    console.log("ENTRAMOS NA processoController");
+    console.log("ENTRAMOS NA EscolaController");
     res.json("ESTAMOS FUNCIONANDO!");
 }
 
@@ -205,7 +205,7 @@ function qtdTotal(req, res){
     if (instituicao == undefined) {
         res.status(400).send("A instituicao não foi capturada!")
     } else {
-       processoModel.qtdTotal(instituicao)            
+       EscolaModel.qtdTotal(instituicao)            
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -230,7 +230,7 @@ function qtdAdministrador(req, res){
     if (instituicao == undefined) {
         res.status(400).send("A instituicao não foi capturada!")
     } else {
-        processoModel.qtdAdministrador(instituicao)            
+        EscolaModel.qtdAdministrador(instituicao)            
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -255,7 +255,7 @@ function qtdInstrutor(req, res){
     if (instituicao == undefined) {
         res.status(400).send("A instituicao não foi capturada!")
     } else {
-        processoModelModel.qtdInstrutor(instituicao)            
+        EscolaModelModel.qtdInstrutor(instituicao)            
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -282,10 +282,11 @@ module.exports = {
     listarInstrutor,
 
     listarPorEscola,
-    cadastrarDashProcesso,
-    editarProcesso,
-    deletarProcesso,
-    mostrar_dadosProcesso,
+    cadastrarDashEscola,
+    editarEscola,
+    deletarEscola,
+    mostrar_dadosEscola,
+    pesquisarEscola,
 
     qtdTotal,
     qtdAdministrador,

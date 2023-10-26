@@ -1,18 +1,15 @@
 var database = require("../database/config")
 
 
-function listarPorEscola(codInstituicao) {
-    var instrucao = `
+function listar(codInstituicao) {
+    var instrução = `
     SELECT
-        p.idProcesso,
-        p.nomeProcesso,
-        p.nomeAplicativo,
-        p.idInstituicao,
-        i.nome as nomeInstituicao,
-        i.sigla
-    FROM processo p
-    JOIN instituicao i ON p.idInstituicao = i.idInstituicao
-    WHERE p.idInstituicao = ${codInstituicao};
+        i.idInstituicao,
+        i.nome,
+        i.sigla,
+        i.codigoHex
+    FROM instituicao i
+    WHERE i.idInstituicao = ${codInstituicao};
     `;
 
     console.log("Executando a instrução SQL: \n" + instrução);
@@ -23,18 +20,16 @@ function listarPorEscola(codInstituicao) {
 function pesquisarEscola(nomeEscola, instituicao) {
     var instrucao = `
     SELECT
-        p.idProcesso,
-        p.nomeProcesso,
-        p.nomeAplicativo,
-        p.fkInstituicao as idInstituicao,
-        i.nome as nomeInstituicao,
-        i.sigla
-    FROM processo p
-    JOIN instituicao i ON p.fkInstituicao = i.idInstituicao
-    WHERE p.nomeProcesso LIKE '%${nomeEscola}' AND p.fkInstituicao = ${instituicao};
+        i.idInstituicao,
+        i.nome,
+        i.sigla,
+        i.codigoHex
+    FROM instituicao i
+    WHERE i.nome LIKE '%${nomeEscola}' AND i.idInstituicao = ${instituicao};
     `;
     return database.executar(instrucao);
 }
+
 
 
 
@@ -57,6 +52,7 @@ function listarAdm(codInstituicao) {
     return database.executar(instrução);
 }
 
+
 function listarInstrutor(codInstituicao) {
     var instrução = `
     SELECT
@@ -75,19 +71,19 @@ function listarInstrutor(codInstituicao) {
     console.log("Executando a instrução SQL: \n" + instrução);
     return database.executar(instrução);
 }
+
+
+
 function listarPorEscola(idEscola) {
-    console.log("Acessando o modelo de processo...\n\n");
+    console.log("Acessando o modelo de instituição...\n\n");
     var instrucao = `
     SELECT
-        p.idProcesso,
-        p.nomeProcesso,
-        p.nomeAplicativo,
-        p.fkInstituicao AS idInstituicao,
-        i.nome AS nomeInstituicao,
-        i.sigla
-    FROM processo p
-    JOIN instituicao i ON p.fkInstituicao = i.idInstituicao
-    WHERE p.idProcesso = ${idEscola};
+        i.idInstituicao,
+        i.nome,
+        i.sigla,
+        i.codigoHex
+    FROM instituicao i
+    WHERE i.idInstituicao = ${idEscola};
     `;
     console.log("Executando a instrução SQL: \n" + instrução);
     return database.executar(instrução);
@@ -95,72 +91,65 @@ function listarPorEscola(idEscola) {
 
 
 
-function mostrar_dadosEscola(idEscola) {
-    var instrução = `
-    SELECT 
-        usuario.nome AS nome, 
-        usuario.email,
-        usuario.senha,
-        usuario.fkTipoUsuario, 
-        instituicao.nome AS instituicao_nome
-    FROM 
-        usuario
-    JOIN instituicao 
-        ON usuario.FkInstituicao = instituicao.idInstituicao
-    WHERE usuario.idUsuario = ${idEscola};
-    `;
-    console.log("Executando a instrução SQL: \n" + instrução);
-    return database.executar(instrução);
-}
-
-
-
-function cadastrarDashEscola(nomePrograma, nomeProcesso, idInstituicao) {
-    console.log("Cadastrando processo...");
-    
-    if (!isNaN(idInstituicao)) {
-        var instrucao = `
-            INSERT INTO processo (nomeProcesso, nomeAplicativo, idInstituicao) 
-            VALUES ('${nomePrograma}', '${nomeProcesso}', ${idInstituicao});
-        `;
-        return database.executar(instrucao)
-            .catch(function (erro) {
-                console.error("Erro ao realizar o cadastro do processo:", erro);
-                return Promise.reject("Erro ao realizar o cadastro do processo: " + erro.message);
-            });
-    } else {
-        console.error('ID da instituição não é um valor numérico válido.');
-        return Promise.reject('ID da instituição inválido.');
-    }
-}
-
-
-function editarProcesso(nomeProcesso, nomeAplicativo, idInstituicao, idProcesso) {
+function mostrar_dadosEscola(idInstituicao) {
     var instrucao = `
-    UPDATE processo
-    SET nomeProcesso = '${nomeProcesso}', nomeAplicativo = '${nomeAplicativo}', idInstituicao = ${idInstituicao}
-    WHERE idProcesso = ${idProcesso};
+    SELECT 
+        nome,
+        sigla,
+        codigoHex
+    FROM 
+        instituicao
+    WHERE idInstituicao = ${idInstituicao};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+
+
+function cadastrarDashEscola(nomeInstituicao, sigla, codigoHex) {
+    console.log("Cadastrando instituição...");
+
+    var instrucao = `
+        INSERT INTO instituicao (nome, sigla, codigoHex) 
+        VALUES ('${nomeInstituicao}', '${sigla}', '${codigoHex}');
+    `;
+    
+    return database.executar(instrucao)
+        .catch(function (erro) {
+            console.error("Erro ao realizar o cadastro da instituição:", erro);
+            return Promise.reject("Erro ao realizar o cadastro da instituição: " + erro.message);
+        });
+}
+
+
+
+function editarEscola(nomeInstituicao, sigla, codigoHex, idInstituicao) {
+    var instrucao = `
+    UPDATE instituicao
+    SET nome = '${nomeInstituicao}', sigla = '${sigla}', codigoHex = '${codigoHex}'
+    WHERE idInstituicao = ${idInstituicao};
     `;
     return database.executar(instrucao)
         .catch(function (erro) {
-            console.error("Erro ao editar o processo:", erro);
-            return Promise.reject("Erro ao editar o processo: " + erro.message);
+            console.error("Erro ao editar a instituição:", erro);
+            return Promise.reject("Erro ao editar a instituição: " + erro.message);
         });
 }
 
 
-
-function deletarProcesso(idProcesso) {
+function deletarEscola(idInstituicao) {
     var instrucao = `
-    DELETE FROM processo WHERE idProcesso = ${idProcesso};
+    DELETE FROM instituicao WHERE idInstituicao = ${idInstituicao};
     `;
-    console.log("Executando a instrução SQL: \n" + instrução);
-    return database.executar(instrução)
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao)
         .catch(function (erro) {
-            console.error("Erro ao deletar o processo:", erro);
-            return Promise.reject("Erro ao deletar o processo: " + erro.message);
+            console.error("Erro ao deletar a instituição:", erro);
+            return Promise.reject("Erro ao deletar a instituição: " + erro.message);
         });
 }
+
 
 
 
@@ -210,6 +199,7 @@ module.exports = {
     editarEscola,
     deletarEscola,
     mostrar_dadosEscola,
+    pesquisarEscola,
 
     qtdTotal,
     qtdAdministrador,
