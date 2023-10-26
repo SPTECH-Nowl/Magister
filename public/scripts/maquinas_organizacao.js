@@ -1,6 +1,22 @@
+function getSelectedValues() {
+   const nodeList = document.querySelectorAll("sl-select");
+   const selects = [...nodeList, nodeList];
+   
+   return {
+      dtAdicao: selects[0].value,
+      ordemAaZ: selects[1].value,
+      qtdStrikes: selects[2].value,
+      emUso: selects[3].value,
+      estado: selects[4].value,
+      elementos: selects[5]
+   }
+}
+
 function capturarTodasMaquinas(idInstituicao) {
+   const s = getSelectedValues();
+   console.log(s)
    return new Promise((resolve, reject) => {
-      fetch(`/maquinas/capturarTodasMaquinas/:idInstituicao`)
+      fetch(`/maquinas/capturarTodasMaquinas/${idInstituicao}?${s.dtAdicao}&${s.ordemAaZ}&${s.qtdStrikes}&${s.emUso}&${s.estado}`)
       .then((response) => {
          if(response.ok) {
             response.json().then((response) => {
@@ -15,10 +31,10 @@ function capturarTodasMaquinas(idInstituicao) {
    }) 
 }
 
-function mostrarTodasMaquinas() {
+function mostrarTodasMaquinas(idInstituicao) {
    const maquinas = document.getElementById("maquinas");
 
-   capturarTodasMaquinas(1).then((dadosMaquinas) => {
+   capturarTodasMaquinas(idInstituicao).then((dadosMaquinas) => {
       console.log(dadosMaquinas);
       dadosMaquinas.forEach(maquina => {
          let id = maquina.id;
@@ -80,6 +96,12 @@ function mostrarTodasMaquinas() {
    });
 }
 
+getSelectedValues().elementos.forEach((elemento) => {
+   elemento.addEventListener('sl-change', event => {
+      mostrarTodasMaquinas(1);
+   })
+})
+
 window.onload = () => {
-   mostrarTodasMaquinas()
+   mostrarTodasMaquinas(1)
 }
