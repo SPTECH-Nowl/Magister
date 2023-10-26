@@ -170,7 +170,6 @@ return new Promise((resolve) => {
             sigla: sigla,
             codigo: codigo,
             responsavel: responsavel,
-            instituicao: sessionStorage.instituicao
         })
     }).then((response)=>{
         if(response.ok){

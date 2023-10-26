@@ -107,12 +107,12 @@ function mostrar_dadosEscola(idInstituicao) {
 
 
 
-function cadastrarDashEscola(nomeInstituicao, sigla, codigoHex) {
+function cadastrarDashEscola(nomeInstituicao, sigla, codigoHex,responsavel) {
     console.log("Cadastrando instituição...");
 
     var instrucao = `
-        INSERT INTO instituicao (nome, sigla, codigoHex) 
-        VALUES ('${nomeInstituicao}', '${sigla}', '${codigoHex}');
+        INSERT INTO instituicao (nome, sigla, codigoHex,responsavel) 
+        VALUES ('${nomeInstituicao}', '${sigla}', '${codigoHex}','${responsavel}');
     `;
     
     return database.executar(instrucao)
