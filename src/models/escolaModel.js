@@ -1,21 +1,6 @@
 var database = require("../database/config")
 
 
-function listar(codInstituicao) {
-    var instrução = `
-    SELECT
-        i.idInstituicao,
-        i.nome,
-        i.sigla,
-        i.codigoHex
-    FROM instituicao i
-    WHERE i.idInstituicao = ${codInstituicao};
-    `;
-
-    console.log("Executando a instrução SQL: \n" + instrução);
-    return database.executar(instrução);
-}
-
 
 function pesquisarEscola(nomeEscola, instituicao) {
     var instrucao = `
@@ -190,7 +175,6 @@ function qtdInstrutor(instituicao){
 
 
 module.exports = {
-    listar,
     listarAdm,
     listarInstrutor,
 

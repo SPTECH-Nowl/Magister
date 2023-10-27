@@ -2,21 +2,6 @@ var  escolaModel = require("../models/escolaModel");
 
 var sessoes = [];
 
-function listar(req, res) {
-    var codInstituicao = req.params.codInstituicao;
-
-   escolaModel.listar(codInstituicao).then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!");
-        }
-    }).catch(function (erro) {
-        console.log(erro);
-        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
-}
 
 function listarAdm(req, res) {
     var codInstituicao = req.params.codInstituicao;
@@ -275,9 +260,6 @@ function qtdInstrutor(req, res){
 }
 
 module.exports = {
-    entrar,
-    cadastrar,
-    listar,
     listarAdm,
     listarInstrutor,
 
