@@ -267,7 +267,6 @@ function qtdInstrutor(req, res){
 }
 
 module.exports = {
-    listarProcessos,
     listarAdm,
     listarInstrutor,
 

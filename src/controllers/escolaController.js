@@ -273,9 +273,6 @@ function qtdInstrutor(req, res){
 }
 
 module.exports = {
-    entrar,
-    cadastrar,
-    listar,
     listarAdm,
     listarInstrutor,
 
