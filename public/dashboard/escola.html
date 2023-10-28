@@ -4,6 +4,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
    <link rel="stylesheet" href="../styles/usuarios.css">
+   <link rel="stylesheet" href="../components/button/button.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
   
 
@@ -30,9 +31,10 @@
    <script src="../components/navbar/navbar.js" defer></script>
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
-   <script src="../components/dialog/dialog.js" defer></script>
+
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+ 
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -46,11 +48,6 @@
 <body>
    <body onload="validarAcessoInstituicao()"></body>
    
-
-   <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
-    
-    <sl-button slot="footer" variant="primary"></sl-button>
-  </sl-drawer>
 
 
    <div class="side-menu">
@@ -75,14 +72,14 @@
         </li>
      
         <li>
-           <sl-tooltip content="Processos permitidos" placement="right">
+           <sl-tooltip content="Programas" placement="right">
               <a href="processo.html">
                  <img src="../assets/img/elements/programa.svg" alt="">
               </a>
            </sl-tooltip>
         </li>
         <li>
-         <sl-tooltip content="Escolas permitidos" placement="right">
+         <sl-tooltip content="Instituições" placement="right">
             <a href="escola.html">
                <img src="../assets/img/elements/graduation-cap.svg" alt="">
             </a>

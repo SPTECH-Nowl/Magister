@@ -11,6 +11,8 @@ router.get("/listarInstituicoes", function (req, res) {
     instituicaoController.listarInstituicoes(req, res);
 })
 
-
+router.post("/cadastrarDashEscola", function (req, res) {
+    instituicaoController.cadastrarDashEscola(req, res);
+ })
 
 module.exports = router;

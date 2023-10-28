@@ -116,9 +116,6 @@ function cadastrarDashEscola(req, res) {
     var siglaVar  = req.body.sigla;
     var codigoVar  = req.body.codigo;
     var responsavelVar  = req.body.responsavel;
-
-    console.log(nomeProgramaVar, nomeEscolaVar)
-    console.log("tamo no controller")
     
     if (nomeEscolaVar == undefined) {
         res.status(400).send("Seu nome está indefinido");

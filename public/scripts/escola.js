@@ -1,8 +1,8 @@
+document.addEventListener("DOMContentLoaded", ()=>{
+    carregarFeedEscola()
+})
 
-
-
-
-   function buscarEscola() {
+function buscarEscola() {
     var nomeDigitado = input_busca.value
     var instituicao = sessionStorage.instituicao
  
@@ -59,9 +59,9 @@
  
  }
 
-
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarEscolaButton = document.getElementById('adicionarEscola');
+
     adicionarEscolaButton.addEventListener('click', function() {
         Swal.fire({
             title: 'Adicionar Escola',
@@ -69,8 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
             html:
                 '<input type="text" id="nomeEscolaInput" placeholder="Nome da Escola" class="swal2-input" style="border-radius: 15px;">' +
                 '<input type="text" id="siglaInput" placeholder="Sigla" class="swal2-input" style="border-radius: 15px;">' +
-                '<input type="text" id="codigoInput" placeholder="Código Hexadecimal" class="swal2-input" style="border-radius: 15px;">' +
-                '<input type="text" id="responsavelInput" placeholder="Responsável" class="swal2-input" style="border-radius: 15px;">' ,
+                '<div style="display: flex; gap: 1rem; align-items: center">' +
+                '<input type="text" id="codigoInput" placeholder="Código Hexadecimal" disabled class="swal2-input" style="border-radius: 15px;">' +
+                '<button onclick="gerarCodigoHexadecimal()" class="btn primario" style="width: fit-content;"><img src="../assets/img/icone/dice-six.svg"></button>' +
+                '</div>',
             
             confirmButtonText: 'Adicionar Escola',
             showLoaderOnConfirm: true,
@@ -103,12 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const nomeEscolaInput = document.getElementById('nomeEscolaInput');
                 const siglaInput = document.getElementById('siglaInput');
                 const codigoInput = document.getElementById('codigoInput');
-                const responsavelInput = document.getElementById('responsavelInput');
 
                 const nomeEscola = nomeEscolaInput.value;
                 const sigla = siglaInput.value;
                 const codigo = codigoInput.value;
-                const responsavel = responsavelInput.value;
 
                 // Função para definir o estilo dos inputs
                 function setFieldStyle(input, isValid) {
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 // Validação do campo Código Hexadecimal
-                if (!/^[0-9A-Fa-f]+$/.test(codigo)) {
+                if (codigo.length > 6) {
                     setFieldStyle(codigoInput, false);
                     Swal.showValidationMessage('O código deve ser hexadecimal.');
                     return false;
@@ -146,19 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     setFieldStyle(codigoInput, true);
                 }
 
-                // Validação do campo Responsável
-                if (responsavel.length < 2) {
-                    setFieldStyle(responsavelInput, false);
-                    Swal.showValidationMessage('O responsável deve conter pelo menos 2 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(responsavelInput, true);
-                }
 
     
 
 return new Promise((resolve) => {
-    fetch("/escola/cadastrarDashEscola", {
+    fetch("/instituicoes/cadastrarDashEscola", {
         method: "POST",
         headers: {
             "Content-type": "application/json"
@@ -167,7 +159,6 @@ return new Promise((resolve) => {
             nomeEscola: nomeEscola,
             sigla: sigla,
             codigo: codigo,
-            responsavel: responsavel,
         })
     }).then((response)=>{
         if(response.ok){
@@ -187,82 +178,36 @@ return new Promise((resolve) => {
 });
 
 
-function filtrosTipo(){
-    fetch(`/escola/qtdTotal/${sessionStorage.instituicao}`)
-    .then((qtdTotal) => {
-       if (qtdTotal.ok){
-          fetch(`/escola/qtdAdministrador/${sessionStorage.instituicao}`)
-          .then((qtdTotalAdm) => {
-             fetch(`/escola/qtdInstrutor/${sessionStorage.instituicao}`)
-                .then((qtdTotalInstrutor) => {
-                   if (qtdTotalInstrutor.ok){
-                      qtdTotal.json().then((qtdTotal) => {
-                         qtdTotalAdm.json().then((qtdTotalAdm) =>{
-                            qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
-                               var orderOptions = document.getElementById("orderOptions")
- 
-                                  var spanTotal = document.createElement("span")
-                                  var spanTotalAdministrador = document.createElement("span")
-                                  var spanTotalInstrutor = document.createElement("span")
- 
-                                  spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
-                                  spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
-                                  spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
- 
-                                  spanTotal.onclick = carregarFeed
-                                  spanTotalAdministrador.onclick = carregarFeedAdm
-                                  spanTotalInstrutor.onclick = carregarFeedInstrutor
- 
-                                  orderOptions.appendChild(spanTotal)
-                                  orderOptions.appendChild(spanTotalAdministrador)
-                                  orderOptions.appendChild(spanTotalInstrutor)
- 
- 
-                            })
-                         })                        
-                      })
- 
-                   }
-                })
-          })
-       }
-    })
- }
- 
-
-
 function carregarFeedEscola() {
-    fetch(`/instituicao/listar`)
-        .then(function (listaEscola) {
-            if (listaEscola.ok) {
-                if (listaEscola.status == 204) {
+    fetch(`/instituicoes/listarInstituicoes`)
+        .then(function (listaDeEscolas) {
+            if (listaDeEscolas.ok) {
+
+
+                if (listaDeEscolas.status == 204) {
                     var tableEscola = document.getElementById("listaDeEscola");
                     tableEscola.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
                 } else {
-                    listaEscola.json().then(function (listaEscola) {
+                    listaDeEscolas.json().then(function (listaDeEscolas) {
                         var tableEscola = document.getElementById("listaDeEscola");
                         tableEscola.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
 
-                        console.log(listaEscola)
+        
                         
-                        for (var i = 0; i < listaEscola.length; i++) {
-                            var escola = listaEscola[i];
+                        for (var i = 0; i < listaDeEscolas.length; i++) {
+                            var escola = listaDeEscolas[i];
 
-                            
-                            
                             var linhaTable = document.createElement("tr");
-                            linhaTable.setAttribute('id', `Escola_${Escola.idEscola}`)
+                            linhaTable.setAttribute('id', `Escola_${escola.idInstituicao}`)
 
                             var celulaNomeEscola = document.createElement("td");
                             var celulaSigla = document.createElement("td");
                             var celulaCodigo = document.createElement("td");
-                            var celulaResponsavel = document.createElement("td");
                             var celulaBotoes = document.createElement("td");
 
-                            celulaNomeEscola.textContent = escola.nomeEscola;
+                            celulaNomeEscola.textContent = escola.nome;
                             celulaSigla.textContent = escola.sigla;
-                            celulaCodigo.textContent = escola.codigo;
-                            celulaResponsavel.textContent = escola.responsavel;
+                            celulaCodigo.textContent = escola.codigoHex;
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
@@ -275,9 +220,9 @@ function carregarFeedEscola() {
                             linhaTable.appendChild(celulaNomeEscola);
                             linhaTable.appendChild(celulaSigla);
                             linhaTable.appendChild(celulaCodigo);
-                            linhaTable.appendChild(celulaResponsavel);
+                            linhaTable.appendChild(celulaBotoes)
 
-                            tableescola.appendChild(linhaTable);
+                            tableEscola.appendChild(linhaTable);
                         }
                     });
                 }
@@ -289,7 +234,6 @@ function carregarFeedEscola() {
             console.error(resposta);
         });
 }
-
 
 function mostrar_dadosEscola(idEscola) {
     fetch(`/escola/mostrar_dadosEscola/${idEscola}`)
@@ -381,11 +325,7 @@ function deletarEscola(idEscola, tipoPermissao) {
         });
     }
 }
-
-
-
-
-
+    
 function testar() {
     aguardar();
 
@@ -400,6 +340,7 @@ function testar() {
 
     return false;
 }
+
 function alterar(idEscola) {
     fetch(`/escola/listarPorEscola/${idEscola}`)
         .then((dadosEscola) => {
@@ -538,7 +479,17 @@ function alterar(idEscola) {
         });
 }
 
+function gerarCodigoHexadecimal() {
+    const caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let codigo = '';
+  
+    for (let i = 0; i < 6; i++) {
+      const indice = Math.floor(Math.random() * caracteres.length);
+      codigo += caracteres.charAt(indice);
+    }
+  
+    var inputCodigo = document.getElementById("codigoInput")
+    inputCodigo.value = codigo
+}
 
-document.addEventListener("DOMContentLoaded", function() {
-    carregarFeedEscola()
-})
+  
