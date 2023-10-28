@@ -7,6 +7,10 @@ router.get("/buscarIdInst/:codigoVar", function (req, res) {
     instituicaoController.buscarIdInst(req, res);
 })
 
+router.get("/listarInstituicoes", function (req, res) {
+    instituicaoController.listarInstituicoes(req, res);
+})
+
 
 
 module.exports = router;

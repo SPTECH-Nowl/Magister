@@ -2,7 +2,7 @@ var  processoModel = require("../models/processoModel");
 
 var sessoes = [];
 
-function listar(req, res) {
+function listarProcessos(req, res) {
     var codInstituicao = req.params.codInstituicao;
 
    processoModel.listar(codInstituicao).then(function (resultado) {
@@ -267,9 +267,7 @@ function qtdInstrutor(req, res){
 }
 
 module.exports = {
-    entrar,
-    cadastrar,
-    listar,
+    listarProcessos,
     listarAdm,
     listarInstrutor,
 

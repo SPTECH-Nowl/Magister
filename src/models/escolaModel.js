@@ -9,7 +9,6 @@ function listar(codInstituicao) {
         i.sigla,
         i.codigoHex
     FROM instituicao i
-    WHERE i.idInstituicao = ${codInstituicao};
     `;
 
     console.log("Executando a instrução SQL: \n" + instrução);

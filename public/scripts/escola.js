@@ -1,6 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
-    carregarFeedEscola()
-   });
+
 
 
 
@@ -233,18 +231,8 @@ function filtrosTipo(){
  
 
 
-
-
-
-
-
-
-
-
-
 function carregarFeedEscola() {
-    var codInstituicao = sessionStorage.instituicao;
-    fetch(`/escola/listar/${codInstituicao}`)
+    fetch(`/instituicao/listar`)
         .then(function (listaEscola) {
             if (listaEscola.ok) {
                 if (listaEscola.status == 204) {
@@ -549,3 +537,8 @@ function alterar(idEscola) {
             }
         });
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    carregarFeedEscola()
+})

@@ -5,7 +5,7 @@ var escolaController = require("../controllers/escolaController");
 
 
 
-router.get("/listar/:codInstituicao", function (req, res) {
+router.get("/listar", function (req, res) {
   escolaController.listar(req, res);
 });
 

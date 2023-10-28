@@ -3,9 +3,7 @@ var  escolaModel = require("../models/escolaModel");
 var sessoes = [];
 
 function listar(req, res) {
-    var codInstituicao = req.params.codInstituicao;
-
-   escolaModel.listar(codInstituicao).then(function (resultado) {
+   escolaModel.listar().then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
