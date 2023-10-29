@@ -2,54 +2,53 @@ document.addEventListener("DOMContentLoaded", ()=>{
     carregarFeedEscola()
 })
 
-function buscarEscola() {
+function buscarInstituicao() {
     var nomeDigitado = input_busca.value
-    var instituicao = sessionStorage.instituicao
+
  
        if (nomeDigitado.length < 3){
-          carregarFeed()
+          carregarFeedEscola()
        } else {
-          fetch(`/escola/pesquisarEscola/${nomeDigitado}/${instituicao}`)
+          fetch(`/instituicoes/pesquisarInstituicao/${nomeDigitado}`)
              .then((escolaBuscado =>{
                 if(escolaBuscado.status == 204){
-                   var tableescolas = document.getElementById("listaDeEscolas");
-                   tableescolas.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                   var tableEscolas = document.getElementById("listaDeEscola");
+                   tableEscolas.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
                 }else {
                      escolaBuscado.json().then(function (escolaBuscado) {
-                         var tableescolas = document.getElementById("listaDeEscolas");
-                         tableescolas.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+                         var tableEscolas = document.getElementById("listaDeEscola");
+                         tableEscolas.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
  
-                         console.log(escolaBuscado)
                          
-                         for (var i = 0; i < escolaBuscadoBuscado.length; i++) {
-                             var escola = escolaBuscado[i];
-                             
-                             var celulaNomeEscola = document.createElement("td");
-                             var celulaSigla = document.createElement("td");
-                             var celulaCodigo = document.createElement("td");
-                             var celulaResponsavel = document.createElement("td");
-                             var celulaBotoes = document.createElement("td");
-                             var celulaBotoes = document.createElement("td");
- 
-                             celulaNomeEscola.textContent = escola.nomeEscola;
-                             celulaSigla.textContent = escola.sigla;
-                             celulaCodigo.textContent = escola.codigo;
-                             celulaResponsavel.textContent = escola.responsavel;
+                         for (var i = 0; i < escolaBuscado.length; i++) {
+                            var escola = escolaBuscado[i];
 
-                               // Adicione os botões com base no ID do usuário
-                               celulaBotoes.innerHTML = `
+                            var linhaTable = document.createElement("tr");
+                            linhaTable.setAttribute('id', `Escola_${escola.idInstituicao}`)
+
+                            var celulaNomeEscola = document.createElement("td");
+                            var celulaSigla = document.createElement("td");
+                            var celulaCodigo = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNomeEscola.textContent = escola.nome;
+                            celulaSigla.textContent = escola.sigla;
+                            celulaCodigo.textContent = escola.codigoHex;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
                            
-                               <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idEscola}" onclick="deletar(${escola.idEscola}, ${sessionStorage.nivPerm})">
-                               <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idEscola})">
-                               <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${escola.idEscola})">
-                               `;
-   
-                               linhaTable.appendChild(celulaNomeEscola);
-                               linhaTable.appendChild(celulaSigla);
-                               linhaTable.appendChild(celulaCodigo);
-                               linhaTable.appendChild(celulaResponsavel);
-   
-                               tableescola.appendChild(linhaTable);
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idInstituicao}" onclick="deletarEscola(${escola.idInstituicao}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idInstituicao})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="dadosInstituicao(${escola.idInstituicao})">
+                            `;
+
+                            linhaTable.appendChild(celulaNomeEscola);
+                            linhaTable.appendChild(celulaSigla);
+                            linhaTable.appendChild(celulaCodigo);
+                            linhaTable.appendChild(celulaBotoes)
+
+                            tableEscolas.appendChild(linhaTable);
                          }
                      });
                  }
@@ -212,9 +211,9 @@ function carregarFeedEscola() {
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
                            
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idEscola}" onclick="deletar(${escola.idEscola}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idEscola})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${escola.idEscola})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idInstituicao}" onclick="deletarEscola(${escola.idInstituicao}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idInstituicao})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="dadosInstituicao(${escola.idInstituicao})">
                             `;
 
                             linhaTable.appendChild(celulaNomeEscola);
@@ -235,8 +234,8 @@ function carregarFeedEscola() {
         });
 }
 
-function mostrar_dadosEscola(idEscola) {
-    fetch(`/escola/mostrar_dadosEscola/${idEscola}`)
+function dadosInstituicao(idEscola) {
+    fetch(`/instituicoes/dadosInstituicao/${idEscola}`)
         .then(function (response) {
             if (!response.ok) {
                 console.error('Erro na resposta da API:', response.status);
@@ -247,16 +246,16 @@ function mostrar_dadosEscola(idEscola) {
         .then(function (dadosEscola) {
             if (dadosEscola && dadosEscola.length > 0) {
                 const escola = dadosEscola[0];
+
                 console.log("Dados recebidos da escola: ", JSON.stringify(escola));
                 Swal.fire({
                     title: 'Dados da escola',
                     titleClass: 'custom-title',
                     width: '700px', // Reduza a largura para 700px (ajuste conforme necessário)
                     html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                        <span><b>Escola</b>: ${escola.nomeEscola}</span>
+                        <span><b>Escola</b>: ${escola.nome}</span>
                         <span><b>Sigla</b>: ${escola.sigla}</span>
-                        <span><b>Código:</b> ${escola.codigo}</span>
-                        <span><b>responsavel:</b> ${escola.responsavel}</span>
+                        <span><b>Código hexadecimal:</b> ${escola.codigoHex}</span>
                     </div>`,
                     confirmButtonColor: '#6D499D', // Cor do botão "OK"
                     confirmButtonText: 'OK',
@@ -275,7 +274,7 @@ function mostrar_dadosEscola(idEscola) {
 }
 
 function deletarEscola(idEscola, tipoPermissao) {
-    if (tipoPermissao === "0") {
+    if (tipoPermissao === "3") {
         Swal.fire({
             icon: 'error',
             title: 'Erro',
@@ -303,7 +302,7 @@ function deletarEscola(idEscola, tipoPermissao) {
             customHeight: '700px' // Aumento maior na altura
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/escola/deletarEscola/`, {
+                fetch(`/instituicoes/deletarEscola`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -325,30 +324,16 @@ function deletarEscola(idEscola, tipoPermissao) {
         });
     }
 }
-    
-function testar() {
-    aguardar();
-
-    var formulario = new URLSearchParams(new FormData(document.getElementById("form_postagem")));
-
-    var divResultado = document.getElementById("div_feed");
-
-    divResultado.appendChild(document.createTextNode(formulario.get("descricao")));
-    divResultado.innerHTML = formulario.get("descricao");
-
-
-
-    return false;
-}
+ 
 
 function alterar(idEscola) {
-    fetch(`/escola/listarPorEscola/${idEscola}`)
+    fetch(`/instituicoes/listarInstituicaoEsp/${idEscola}`)
         .then((dadosEscola) => {
             if (dadosEscola.ok) {
                 dadosEscola.json().then((dadosEscola) => {
-                    // Verifique se todos os campos estão vazios
+                    
                     if (
-                        dadosEscola[0].nomeEscola === "" &&
+                        dadosEscola[0].nome === "" &&
                         dadosEscola[0].sigla === "" &&
                         dadosEscola[0].codigo === "" &&
                         dadosEscola[0].responsavel === ""
@@ -361,10 +346,9 @@ function alterar(idEscola) {
                         title: 'Editar escola',
                         titleClass: 'custom-title',
                         html:
-                            '<input type="nomeEscola" id="nomeEscolaInput" placeholder="NomeEscola" value="' + dadosEscola[0].nomeEscola + '" class="swal2-input" style="border-radius: 15px;">' +
+                            '<input type="nomeEscola" id="nomeEscolaInput" placeholder="NomeEscola" value="' + dadosEscola[0].nome + '" class="swal2-input" style="border-radius: 15px;">' +
                             '<input type="sigla" id="siglaInput" placeholder="sigla" value="' + dadosEscola[0].sigla + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="codigo" id="codigoInput" placeholder="codigo" value="' + dadosEscola[0].codigo + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="responsavel" id="responsavelInput" placeholder="responsavel" value="' + dadosEscola[0].responsavel + '" class="swal2-input" style="border-radius: 15px;">',
+                            '<input type="codigo" disabled id="codigoInput" placeholder="codigo" value="' + dadosEscola[0].codigoHex + '" class="swal2-input" style="border-radius: 15px;">',
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar Escola',
@@ -394,8 +378,6 @@ function alterar(idEscola) {
                             confirmButton.addEventListener('click', () => {
                                 const nomeEscolaInput = document.getElementById('nomeEscolaInput');
                                 const siglaInput = document.getElementById('siglaInput');
-                                const codigoInput = document.getElementById('codigoInput');
-                                const responsavelInput = document.getElementById('responsavelInput');
 
                                 // Função para definir o estilo dos inputs
                                 function setFieldStyle(input, isValid) {
@@ -407,7 +389,7 @@ function alterar(idEscola) {
                                 }
 
                                 // Validação do campo Nome
-                if (nomeEscola.length < 3) {
+                if (dadosEscola[0].nome.length < 3) {
                     setFieldStyle(nomeEscolaInput, false);
                     Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
                     return false;
@@ -416,7 +398,7 @@ function alterar(idEscola) {
                 }
 
                 // Validação do campo Sigla
-                if (sigla.length < 2) {
+                if (dadosEscola[0].sigla.length < 2) {
                     setFieldStyle(siglaInput, false);
                     Swal.showValidationMessage('A sigla deve ter pelo menos 2 caracteres.');
                     return false;
@@ -424,36 +406,17 @@ function alterar(idEscola) {
                     setFieldStyle(siglaInput, true);
                 }
 
-                // Validação do campo Código Hexadecimal
-                if (!/^[0-9A-Fa-f]+$/.test(codigo)) {
-                    setFieldStyle(codigoInput, false);
-                    Swal.showValidationMessage('O código deve ser hexadecimal.');
-                    return false;
-                } else {
-                    setFieldStyle(codigoInput, true);
-                }
 
-                // Validação do campo Responsável
-                if (responsavel.length < 2) {
-                    setFieldStyle(responsavelInput, false);
-                    Swal.showValidationMessage('O responsável deve conter pelo menos 2 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(responsavelInput, true);
-                }
 
-                                fetch("/escola/editarEscola", {
+                                fetch("/instituicoes/editarInstituicao", {
                                     method: "put",
                                     headers: {
                                         "Content-Type": "application/json"
                                     },
                                     body: JSON.stringify({
-                                        nomeEscola: nomeEscola,
-                                        sigla: sigla,
-                                        codigo: codigo,
-                                        responsavel: responsavel,
-                                        idEscola : idEscola,
-                                        instituicao: sessionStorage.instituicao
+                                        nomeEscola: nomeEscolaInput.value,
+                                        sigla: siglaInput.value,
+                                        idEscola : dadosEscola[0].idInstituicao,
                                     })
                                 })
                                 .then(response => {

@@ -1,9 +1,10 @@
-// const validarAcesso = () => {
-//    var acesso = sessionStorage.nivPerm;
-//    var nome = sessionStorage.nomeUsuario;
+const validarAcesso = () => {
+   var acesso = sessionStorage.nivPerm;
+   var nome = sessionStorage.nomeUsuario;
 
-//    if(acesso >= 2 && acesso != undefined && acesso != null) {
-//       b_usuario.innerHTML = nome;
-//    } else {
-//    }
-// }
+   if(acesso != undefined && acesso != null) {
+      b_usuario.innerHTML = nome;
+   } else {
+    window.location = "public/index.html"
+   }
+}

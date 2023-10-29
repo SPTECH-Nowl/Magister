@@ -9,7 +9,8 @@
 
 
  <!-- BACK END DO CRU DE USUARIO-->
-   <script src="..//scripts/usuario.js"></script>
+   <script src="../scripts/usuario.js"></script>
+
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    <!-- JQuery -->
@@ -44,7 +45,7 @@
 
 </head>
 <body>
-   <body onload="validarAcesso(), carregarFeed()"></body>
+   <body onload="carregarFeed()"></body>
    
 
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
@@ -170,3 +171,8 @@
 </body>
 </html>
 
+<script>
+  document.addEventListener("DOMContentLoaded", ()=>{
+   validarAcesso();
+  })
+</script>

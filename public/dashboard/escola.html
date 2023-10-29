@@ -10,6 +10,9 @@
 
 
    <script src="../scripts/escola.js"></script>
+   <script src="../scripts/funcoes.js"></script>
+
+
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    <!-- JQuery -->
@@ -31,6 +34,8 @@
    <script src="../components/navbar/navbar.js" defer></script>
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
+   <script src="../components/input/input.js" defer></script>
+   <link rel="stylesheet" href="../components/input/input.css">
 
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
@@ -46,7 +51,7 @@
 
 </head>
 <body>
-   <body onload="validarAcessoInstituicao()"></body>
+   <body>
    
 
 
@@ -124,16 +129,18 @@
                 <sl-option value="ord_z_a">Z à A</sl-option>
               </sl-select>
 
-            <div class="flex-row gap-1 pesquisarEAdd">
-               <div class="input_processo-wrapper icon wdt-100">
+              <div class="flex-row gap-1 pesquisarEAdd">
+               <div class="input-wrapper icon wdt-100">
                   <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por uma instituição" onkeyup="buscarUsuario()"
+                  <input type="text" class="input" id="input_busca" placeholder="Pesquisar por uma instituição" onkeyup="buscarInstituicao()"
                      fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
                </div>
-               <button class="btn primario" style="left: 2%;" id="adicionarEscola">Adicionar Escola</button>
+               <button class="btn primario" id="adicionarEscola">Adicionar Instituição</button>
             </div>
+
          </div>
+
 
 
       </div>
@@ -167,6 +174,8 @@
 
 
 <script>
-
+document.addEventListener("DOMContentLoaded", ()=>{
+   validarAcesso();
+})
 
 </script>
