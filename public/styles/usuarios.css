@@ -210,3 +210,29 @@ td:nth-child(1), th:nth-child(1){
    transition: 0.5s ease-in;
 }
 
+
+/* Estilo do tooltip para a ação "Excluir" (vermelho) */
+.tippy-popper.delete-action {
+   background-color: #FF5555 !important; /* Cor de fundo vermelha com !important */
+   color: #fff !important; /* Cor do texto branco com !important */
+   border: 2px solid #FF5555 !important; /* Borda vermelha com !important */
+}
+
+/* Estilo do tooltip para a ação "Editar" (verde) */
+.tippy-popper.edit-action {
+   background-color: #4CAF50 !important; /* Cor de fundo verde com !important */
+   color: #fff !important; /* Cor do texto branco com !important */
+   border: 2px solid #4CAF50 !important; /* Borda verde com !important */
+}
+
+/* Estilo do tooltip para a ação "Mais Informações" (azul) */
+.tippy-popper.info-action {
+   background-color: #3498db !important; /* Cor de fundo azul com !important */
+   color: #fff !important; /* Cor do texto branco com !important */
+   border: 2px solid #3498db !important; /* Borda azul com !important */
+}
+
+
+.tippy-popper {
+   z-index: 9999; /* Ajuste o z-index conforme necessário */
+}

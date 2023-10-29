@@ -11,7 +11,6 @@
 
 
 
-
 .input:focus {
    border: none;
    outline: none;
@@ -75,11 +74,10 @@
 
 
 .input_processo {
-   width: 52%;
+   width: 100%;
    background-color: transparent;
    border: transparent;
    font-size: 1.2rem;
-   margin-right: 10%;
    text-overflow: ellipsis;
 }
 
@@ -96,12 +94,11 @@
 
 .input_processo-wrapper {
    display: flex;
-   gap: 4px;
+   gap: 8px;
    align-items: center;
    width: fit-content;
-   margin-left: 10%;
-   border-radius: 5px;
-   padding: 0.5rem 0.6rem;
+   border-radius: 30px;
+   padding: 0.5rem 1rem;
    border: 1px solid #E6E6E6;
    background-color: #FBFBFD;
    transition: .3s ease-in-out;

@@ -36,12 +36,13 @@ function buscarInstituicao() {
                             celulaCodigo.textContent = escola.codigoHex;
 
                             // Adicione os botões com base no ID do usuário
-                            celulaBotoes.innerHTML = `
-                           
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idInstituicao}" onclick="deletarEscola(${escola.idInstituicao}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idInstituicao})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="dadosInstituicao(${escola.idInstituicao})">
-                            `;
+                     celulaBotoes.innerHTML = `
+    <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Escola" onclick="deletarEscola(${escola.idInstituicao}, ${sessionStorage.nivPerm})">
+    <img src="../assets/img/Icone/editIcon.svg" class="tooltip edit-action" title="Editar Escola" onclick="alterar(${escola.idInstituicao})">
+    <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip info-action" title="Mais Informações" onclick="dadosInstituicao(${escola.idInstituicao})">
+`;
+
+
 
                             linhaTable.appendChild(celulaNomeEscola);
                             linhaTable.appendChild(celulaSigla);
@@ -209,12 +210,14 @@ function carregarFeedEscola() {
                             celulaCodigo.textContent = escola.codigoHex;
 
                             // Adicione os botões com base no ID do usuário
-                            celulaBotoes.innerHTML = `
-                           
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${escola.idInstituicao}" onclick="deletarEscola(${escola.idInstituicao}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${escola.idInstituicao})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="dadosInstituicao(${escola.idInstituicao})">
-                            `;
+                     celulaBotoes.innerHTML = `
+    <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Escola" onclick="deletarEscola(${escola.idInstituicao}, ${sessionStorage.nivPerm})">
+    <img src="../assets/img/Icone/editIcon.svg" class="tooltip edit-action" title="Editar Escola" onclick="alterar(${escola.idInstituicao})">
+    <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip info-action" title="Mais Informações" onclick="dadosInstituicao(${escola.idInstituicao})">
+`;
+
+
+                        
 
                             linhaTable.appendChild(celulaNomeEscola);
                             linhaTable.appendChild(celulaSigla);

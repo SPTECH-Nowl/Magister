@@ -38,10 +38,11 @@ function buscarUsuario() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                            `;
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Escola">
+                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Escola">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações">
+                        `;
+                                                
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -271,6 +272,8 @@ function carregarFeed() {
                             <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${usuario.idUsuario})">
                             `;
 
+
+                            
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
                             linhaTable.appendChild(celulaTipo);
@@ -318,12 +321,33 @@ function carregarFeedAdm() {
                             celulaEmail.textContent = usuario.email;
                             celulaTipo.textContent = usuario.nivPermissao;
 
-                            // Adicione os botões com base no ID do usuário
-                            celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                            `;
+                          
+celulaBotoes.innerHTML = `
+<img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usuário" data-id="${usuario.idUsuario}">
+<img src="../assets/img/Icone/editIcon.svg" class="tooltip edit-action" title="Editar Usuário" data-id="${usuario.idUsuario}">
+<img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip info-action" title="Mais Informações" data-id="${usuario.idUsuario}">
+`;
+
+
+document.addEventListener("DOMContentLoaded", function() {
+tippy(".tooltip", {
+    content(reference) {
+        const id = reference.getAttribute("data-id");
+        return `
+            <div>
+                <button onclick="mostrar_dados(${id})">Mais Informações</button>
+                <button onclick="alterar(${id})">Editar Usuário</button>
+                <button onclick="deletar(${id}, ${sessionStorage.nivPerm})">Excluir Usuário</button>
+            </div>
+        `;
+    },
+    placement: 'top',
+    interactive: true, // Isso permite que você clique nos botões dentro da dica de ferramenta
+});
+});
+
+
+                
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -372,12 +396,31 @@ function carregarFeedInstrutor() {
                             celulaEmail.textContent = usuario.email;
                             celulaTipo.textContent = usuario.nivPermissao;
 
-                            // Adicione os botões com base no ID do usuário
-                            celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                            `;
+                          
+celulaBotoes.innerHTML = `
+<img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usuário" data-id="${usuario.idUsuario}">
+<img src="../assets/img/Icone/editIcon.svg" class="tooltip edit-action" title="Editar Usuário" data-id="${usuario.idUsuario}">
+<img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip info-action" title="Mais Informações" data-id="${usuario.idUsuario}">
+`;
+
+
+document.addEventListener("DOMContentLoaded", function() {
+tippy(".tooltip", {
+    content(reference) {
+        const id = reference.getAttribute("data-id");
+        return `
+            <div>
+                <button onclick="mostrar_dados(${id})">Mais Informações</button>
+                <button onclick="alterar(${id})">Editar Usuário</button>
+                <button onclick="deletar(${id}, ${sessionStorage.nivPerm})">Excluir Usuário</button>
+            </div>
+        `;
+    },
+    placement: 'top',
+    interactive: true, // Isso permite que você clique nos botões dentro da dica de ferramenta
+});
+});
+
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);

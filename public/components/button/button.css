@@ -20,6 +20,21 @@
    border: 2px solid var(--color-purple-500);
 }
 
+
+.btn.primario.processo {
+   background-color: var(--color-purple-500);
+   color: var(--color-gray-100);
+   border: 2px solid var(--color-purple-500);
+   margin-right: 1%;
+}
+
+.btn.primario.escola {
+   background-color: var(--color-purple-500);
+   color: var(--color-gray-100);
+   border: 2px solid var(--color-purple-500);
+   margin-right: 2%;
+}
+
 .btn.secundario {
    background-color: var(--color-purple-700);
    color: var(--color-gray-100);
