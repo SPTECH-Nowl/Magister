@@ -38,10 +38,11 @@ function buscarUsuario() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                            `;
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Escola">
+                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Escola">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações">
+                        `;
+                                                
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -265,12 +266,21 @@ function carregarFeed() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                           
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${usuario.idUsuario})">
-                            `;
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                        `;
+                     
+                        
+                        document.addEventListener("DOMContentLoaded", function () {
+                            carregarFeed(); // Chame a função para carregar a tabela de usuários
+                            tippy(".tooltip", {
+                                placement: "top",
+                            });
+                        });
 
+
+                            
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
                             linhaTable.appendChild(celulaTipo);
@@ -319,11 +329,21 @@ function carregarFeedAdm() {
                             celulaTipo.textContent = usuario.nivPermissao;
 
                             // Adicione os botões com base no ID do usuário
+
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                            `;
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                        `;
+                     
+                        
+                        document.addEventListener("DOMContentLoaded", function () {
+                            carregarFeed(); // Chame a função para carregar a tabela de usuários
+                            tippy(".tooltip", {
+                                placement: "top",
+                            });
+                        });
+
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -373,11 +393,12 @@ function carregarFeedInstrutor() {
                             celulaTipo.textContent = usuario.nivPermissao;
 
                             // Adicione os botões com base no ID do usuário
-                            celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                          celulaBotoes.innerHTML = `
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usúario"  id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/editIcon.svg"  class="tooltip edit-action" title="Editar Usúario"  id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                            <img src="../assets/img/Icone/moreInfoIcon.svg"  class="tooltip info-action" title="Mais Informações"  id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
                             `;
+                
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);

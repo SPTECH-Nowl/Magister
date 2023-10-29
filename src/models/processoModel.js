@@ -217,6 +217,7 @@ function qtdInstrutor(instituicao){
 
 module.exports = {
    
+    listarProcessos,
     listarAdm,
     listarInstrutor,
 

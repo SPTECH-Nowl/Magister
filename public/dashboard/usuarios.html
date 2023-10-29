@@ -8,8 +8,19 @@
   
 
 
+
+<!-- Inclua a biblioteca Tippy.js -->
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.min.js"></script>
+
+
+
+
  <!-- BACK END DO CRU DE USUARIO-->
-   <script src="..//scripts/usuario.js"></script>
+   <script src="../scripts/usuario.js"></script>
+
+
+
+
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    <!-- JQuery -->
@@ -44,7 +55,7 @@
 
 </head>
 <body>
-   <body onload="validarAcesso(), carregarFeed()"></body>
+   <body onload="carregarFeed()"></body>
    
 
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
@@ -75,14 +86,14 @@
         </li>
      
         <li>
-           <sl-tooltip content="Processos permitidos" placement="right">
+           <sl-tooltip content="Programas" placement="right">
               <a href="processo.html">
                  <img src="../assets/img/elements/programa.svg" alt="">
               </a>
            </sl-tooltip>
         </li>
         <li>
-         <sl-tooltip content="Processos permitidos" placement="right">
+         <sl-tooltip content="Instituições" placement="right">
             <a href="escola.html">
                <img src="../assets/img/elements/graduation-cap.svg" alt="">
             </a>
@@ -99,9 +110,11 @@
 
       <ul>
          <li>
+            <sl-tooltip content="Sair" placement="right" >
             <a href="../login_cadastro.html">
             <img src="../assets/img/elements/settings.svg" alt="">
             </a>
+         </sl-tooltip>
          </li>
       </ul>
    </div>
@@ -170,3 +183,8 @@
 </body>
 </html>
 
+<script>
+  document.addEventListener("DOMContentLoaded", ()=>{
+   validarAcesso();
+  })
+</script>

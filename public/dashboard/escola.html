@@ -4,11 +4,19 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
    <link rel="stylesheet" href="../styles/usuarios.css">
+   <link rel="stylesheet" href="../components/button/button.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
   
 
 
    <script src="../scripts/escola.js"></script>
+   <script src="../scripts/funcoes.js"></script>
+
+
+<!-- Biblioteca de tooltips dos modais -->
+ <link rel="stylesheet" href="https://unpkg.com/tippy.js@6.3.1/dist/tippy.css" />
+<script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy.all.min.js"></script>
+
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    <!-- JQuery -->
@@ -30,27 +38,25 @@
    <script src="../components/navbar/navbar.js" defer></script>
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
-   <script src="../components/dialog/dialog.js" defer></script>
+   <script src="../components/input/input.js" defer></script>
+   <link rel="stylesheet" href="../components/input/input.css">
+
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+ 
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
    <script src="../scripts/funcoes.js"></script>
-   <script src="../scripts/processo.js"></script>
+   <script src="../scripts/escola.js"></script>
 
    <title>Magister | Instituição</title>
 
 </head>
 <body>
-   <body onload="validarAcessoInstituicao(), carregarFeedEscola()"></body>
+   <body>
    
-
-   <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
-    
-    <sl-button slot="footer" variant="primary"></sl-button>
-  </sl-drawer>
 
 
    <div class="side-menu">
@@ -75,14 +81,14 @@
         </li>
      
         <li>
-           <sl-tooltip content="Processos permitidos" placement="right">
+           <sl-tooltip content="Programas" placement="right">
               <a href="processo.html">
                  <img src="../assets/img/elements/programa.svg" alt="">
               </a>
            </sl-tooltip>
         </li>
         <li>
-         <sl-tooltip content="Escolas permitidos" placement="right">
+         <sl-tooltip content="Instituições" placement="right">
             <a href="escola.html">
                <img src="../assets/img/elements/graduation-cap.svg" alt="">
             </a>
@@ -97,13 +103,15 @@
         </li>
      </ul>
 
-      <ul>
-         <li>
-            <a href="../login_cadastro.html">
-            <img src="../assets/img/elements/settings.svg" alt="">
-            </a>
-         </li>
-      </ul>
+     <ul>
+      <li>
+         <sl-tooltip content="Sair" placement="right" >
+         <a href="../login_cadastro.html">
+         <img src="../assets/img/elements/settings.svg" alt="">
+         </a>
+      </sl-tooltip>
+      </li>
+   </ul>
    </div>
 
 
@@ -127,16 +135,18 @@
                 <sl-option value="ord_z_a">Z à A</sl-option>
               </sl-select>
 
-            <div class="flex-row gap-1 pesquisarEAdd">
-               <div class="input_processo-wrapper icon wdt-100">
+              <div class="flex-row gap-1 pesquisarEAdd">
+               <div class="input-wrapper icon wdt-100">
                   <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por uma instituição" onkeyup="buscarUsuario()"
+                  <input type="text" class="input" id="input_busca" placeholder="Pesquisar por uma instituição" onkeyup="buscarInstituicao()"
                      fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
                </div>
-               <button class="btn primario" style="left: 2%;" id="adicionarEscola">Adicionar Escola</button>
+               <button class="btn primario escola" id="adicionarEscola">Adicionar Instituição</button>
             </div>
+
          </div>
+
 
 
       </div>
@@ -151,11 +161,10 @@
                         <th>Nome</th>
                         <th>Sigla</th>
                         <th>Código</th>
-                        <th>Respónsavel</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody class="user-list-tbody" id="listaDeProcesso">
+                <tbody class="user-list-tbody" id="listaDeEscola">
                     <!-- Nenhuma linha aqui -->
                 </tbody>
             </table>
@@ -168,3 +177,11 @@
    
 </body>
 </html>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+   validarAcesso();
+})
+
+</script>

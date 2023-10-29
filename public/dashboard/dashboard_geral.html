@@ -24,6 +24,7 @@
 
    <!-- Funções -->
    <script src="../scripts/dashboard_geral.js" defer></script>
+   <script src="../scripts/funcoes.js"></script>
 
    <title>Dashboard Geral</title>
 </head>
@@ -54,14 +55,14 @@
          </li>
 
          <li>
-            <sl-tooltip content="Processos permitidos" placement="right">
+            <sl-tooltip content="Programas" placement="right">
             <a href="processo.html">
                <img src="../assets/img/elements/programa.svg" alt="">
             </a>
          </sl-tooltip>
          </li>
          <li>
-            <sl-tooltip content="Escolas permitidas" placement="right">
+            <sl-tooltip content="Instituições" placement="right">
                <a href="escola.html">
                   <img src="../assets/img/elements/graduation-cap.svg" alt="">
                </a>
@@ -80,7 +81,11 @@
 
       <ul>
          <li>
+            <sl-tooltip content="Sair" placement="right" >
+            <a href="../login_cadastro.html">
             <img src="../assets/img/elements/settings.svg" alt="">
+            </a>
+         </sl-tooltip>
          </li>
       </ul>
    </div>
@@ -239,3 +244,9 @@
 </body>
 
 </html>
+
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+   validarAcesso();
+})
+</script>
