@@ -20,21 +20,36 @@ function listarProcessos(codInstituicao) {
 }
 
 
-function pesquisarProcesso(nomeProcesso, instituicao) {
+function listaAppUsados(idUsuario) {
     var instrucao = `
-    SELECT
-        p.idProcesso,
-        p.nomeProcesso,
-        p.nomeAplicativo,
-        p.fkInstituicao as idInstituicao,
-        i.nome as nomeInstituicao,
-        i.sigla
-    FROM processo p
-    JOIN instituicao i ON p.fkInstituicao = i.idInstituicao
-    WHERE p.nomeProcesso LIKE '%${nomeProcesso}' AND p.fkInstituicao = ${instituicao};
+    SELECT DISTINCT
+    p.idProcesso,
+    p.nomeProcesso,
+    p.nomeAplicativo,
+    per.fkUsuario
+FROM processo p
+LEFT JOIN permissaoProcesso pp ON p.idProcesso = pp.fkProcesso
+LEFT JOIN permissao per ON pp.fkPermissao = per.idPermissao
+WHERE  per.fkUsuario = ${idUsuario};
     `;
     return database.executar(instrucao);
 }
+
+function listaAppNaoUsados(idUsuario) {
+    var instrucao = `
+    SELECT DISTINCT
+    p.idProcesso,
+    p.nomeProcesso,
+    p.nomeAplicativo,
+    per.fkUsuario
+FROM processo p
+LEFT JOIN permissaoProcesso pp ON p.idProcesso = pp.fkProcesso
+LEFT JOIN permissao per ON pp.fkPermissao = per.idPermissao
+WHERE  per.fkUsuario != ${idUsuario};
+    `;
+    return database.executar(instrucao);
+}
+
 
 
 
@@ -210,7 +225,8 @@ module.exports = {
     editarProcesso,
     deletarProcesso,
     mostrar_dadosProcesso,
-
+    listaAppUsados,
+    listaAppNaoUsados,
     qtdTotal,
     qtdAdministrador,
     qtdInstrutor,

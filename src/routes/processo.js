@@ -20,8 +20,12 @@ router.get("/listarPorProcesso/:idProcesso", function (req, res) {
    processoController.listarPorUsuario(req, res);
 });
 
-router.get("/pesquisarProcesso/:nomeProcesso/:instituicao", function (req, res) {
-   processoController.pesquisarUsuario(req, res);
+router.get("/listaAppUsados/:idUsuario", function (req, res) {
+   processoController.listaAppUsados(req, res);
+});
+
+router.get("/listaAppNaoUsados/:idUsuario", function (req, res) {
+   processoController.listaAppNaoUsados(req, res);
 });
 
 

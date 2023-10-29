@@ -4,10 +4,6 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
-   <link rel="stylesheet" href="../styles/usuarios.css">
-   <link rel="stylesheet" href="../styles/listaApp.css">
-
-   <link rel="stylesheet" href="../styles/alerta.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
 
 
@@ -35,7 +31,7 @@
    <script src="../components/navbar/navbar.js" defer></script>
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
-   <!-- <script src="../components/dialog/dialog.js" defer></script> -->
+   <script src="../components/dialog/dialog.js" defer></script>
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -44,11 +40,14 @@
 
    <script src="../scripts/funcoes.js"></script>
 
-   <title>Magister | Processos</title>
+   <title>Magister | Lista de aplicativos</title>
 
 </head>
 
 <body>
+
+   <body></body>
+
 
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
 
@@ -79,18 +78,12 @@
 
          <li>
             <sl-tooltip content="Processos permitidos" placement="right">
-               <a href="processo.html">
+               <a href="processos.html">
                   <img src="../assets/img/elements/programa.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
-            <sl-tooltip content="Escolas permitidas" placement="right">
-               <a href="escola.html">
-                  <img src="../assets/img/elements/graduation-cap.svg" alt="">
-               </a>
-            </sl-tooltip>
-         </li>
+
          <li>
             <sl-tooltip content="Usuários" placement="right">
                <a href="usuarios.html">
@@ -112,75 +105,14 @@
 
 
    <div class="charts-container">
-      <h1>Programas permitidos</h1>
+      <h1>Lista de aplicativos</h1>
       <div class="top-users">
 
-         <div class="flex-row gap-1" id="orderOptions"></div>
 
-         <div class="container-selects" style="gap: 2%;">
-
-
-            <sl-select id="ordem_az" style="left: 7%;" placeholder="Ordem alfabética" pill filled clearable>
-               <sl-option value="ord_a_a">A à Z</sl-option>
-               <sl-option value="ord_z_a">Z à A</sl-option>
-            </sl-select>
-
-            <div class="flex-row gap-1 pesquisarEAdd">
-               <div class="input_processo-wrapper icon wdt-100">
-                  <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por um processo"
-                     onkeyup="buscarUsuario()" fontSize="1rem">
-                  <i class="ph ph-eye" id="teste_ph"></i>
-               </div>
-               <button id="adicionarProcesso" class="btn primario" style="left: 5%;">Adicionar processo</button>
-            </div>
-         </div>
-
-
-      </div>
-      <div class="charts-content">
-         <div class="chart-grid cols-1">
-
-
-            <div class="tableWrapper">
-               <table>
-                  <thead>
-                     <tr>
-                        <th>Nome</th>
-                        <th>Nome do processo</th>
-                        <th></th>
-                     </tr>
-                  </thead>
-                  <tbody class="user-list-tbody" id="listaDeProcesso">
-                     <!-- Nenhuma linha aqui -->
-                  </tbody>
-               </table>
-            </div>
-         </div>
+       
       </div>
 
-
-      <div class="listaAplicativos dfNone">
-
-         <div class="aplicativosPermitidos divMaior" id="aplicativosPermitidos">
-            <!-- *não colocar nada* -->
-         </div>
-         <div class="opcoes divMedia" id="divBotoes">
-          
-         </div>
-         <div class="aplicativospermitidosUsados divMaior" id="aplicativospermitidosUsados">
-            <!-- *não colocar nada* -->
-
-         </div>
-      </div>
    </div>
-   </div>
-
-
 </body>
 
 </html>
-<script src="../scripts/processo.js"></script>
-
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
