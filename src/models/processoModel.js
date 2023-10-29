@@ -30,22 +30,22 @@ function listaAppUsados(idUsuario) {
 FROM processo p
 LEFT JOIN permissaoProcesso pp ON p.idProcesso = pp.fkProcesso
 LEFT JOIN permissao per ON pp.fkPermissao = per.idPermissao
-WHERE  per.fkUsuario = ${idUsuario};
+WHERE  pp.fkPermissao = ${idUsuario};
     `;
     return database.executar(instrucao);
 }
 
 function listaAppNaoUsados(idUsuario) {
     var instrucao = `
-    SELECT DISTINCT
-    p.idProcesso,
+
+    SELECT p.idProcesso,
     p.nomeProcesso,
-    p.nomeAplicativo,
-    per.fkUsuario
-FROM processo p
-LEFT JOIN permissaoProcesso pp ON p.idProcesso = pp.fkProcesso
-LEFT JOIN permissao per ON pp.fkPermissao = per.idPermissao
-WHERE  per.fkUsuario != ${idUsuario};
+    p.nomeAplicativo
+    FROM processo p
+    WHERE p.idProcesso NOT IN (
+      SELECT pp.fkProcesso
+      FROM permissaoProcesso pp
+      WHERE pp.fkPermissao = ${idUsuario});
     `;
     return database.executar(instrucao);
 }
@@ -130,23 +130,18 @@ function mostrar_dadosProcesso(idProcesso) {
 
 
 
-function cadastrarDashProcesso(nomePrograma, nomeProcesso, idInstituicao) {
+function publicar(idProcesso,idUsuario) {
     console.log("Cadastrando processo...");
-    
-    if (!isNaN(idInstituicao)) {
+
         var instrucao = `
-            INSERT INTO processo (nomeProcesso, nomeAplicativo, idInstituicao) 
-            VALUES ('${nomePrograma}', '${nomeProcesso}', ${idInstituicao});
+        insert into permissaoProcesso ( fkProcesso, fkPermissao,dataAlocacao) values(${idProcesso},${idUsuario}, NOW());
         `;
         return database.executar(instrucao)
             .catch(function (erro) {
                 console.error("Erro ao realizar o cadastro do processo:", erro);
                 return Promise.reject("Erro ao realizar o cadastro do processo: " + erro.message);
             });
-    } else {
-        console.error('ID da instituição não é um valor numérico válido.');
-        return Promise.reject('ID da instituição inválido.');
-    }
+   
 }
 
 
@@ -165,12 +160,12 @@ function editarProcesso(nomeProcesso, nomeAplicativo, idInstituicao, idProcesso)
 
 
 
-function deletarProcesso(idProcesso) {
+function deletarProcesso(idProcesso,idUsuario) {
     var instrucao = `
-    DELETE FROM processo WHERE idProcesso = ${idProcesso};
+    delete from permissaoProcesso where fkProcesso = ${idProcesso} and fkPermissao =${idUsuario};
     `;
-    console.log("Executando a instrução SQL: \n" + instrução);
-    return database.executar(instrução)
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao)
         .catch(function (erro) {
             console.error("Erro ao deletar o processo:", erro);
             return Promise.reject("Erro ao deletar o processo: " + erro.message);
@@ -179,8 +174,8 @@ function deletarProcesso(idProcesso) {
 
 
 
-function qtdTotal(instituicao){
-    
+function qtdTotal(instituicao) {
+
     var instrucao = `
     
     select count(idUsuario) as qtdTotal FROM usuario
@@ -191,8 +186,8 @@ function qtdTotal(instituicao){
 
 
 
-function qtdAdministrador(instituicao){
-    
+function qtdAdministrador(instituicao) {
+
     var instrucao = `
     
     select count(idUsuario) as qtdTotal FROM usuario
@@ -204,8 +199,8 @@ function qtdAdministrador(instituicao){
 
 
 
-function qtdInstrutor(instituicao){
-    
+function qtdInstrutor(instituicao) {
+
     var instrucao = `
     
     select count(idUsuario) as qtdTotal FROM usuario
@@ -216,13 +211,12 @@ function qtdInstrutor(instituicao){
 
 
 module.exports = {
-   
+
     listarProcessos,
     listarAdm,
     listarInstrutor,
-
+    publicar,
     listarPorProcesso,
-    cadastrarDashProcesso,
     editarProcesso,
     deletarProcesso,
     mostrar_dadosProcesso,
@@ -232,5 +226,5 @@ module.exports = {
     qtdAdministrador,
     qtdInstrutor,
 
-   
+
 }

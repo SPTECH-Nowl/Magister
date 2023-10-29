@@ -131,7 +131,7 @@
                   <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por um processo"
                      onkeyup="buscarUsuario()" fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
-               </div>
+               </div>   
                <button class="btn primario processo" id="adicionarProcesso">Adicionar processo</button>
             </div>
          </div>
@@ -148,11 +148,11 @@
                      <tr>
                         <th>Nome</th>
                         <th>Nome do processo</th>
-                        <th></th>
+                        <th>Status</th>
                      </tr>
                   </thead>
                   <tbody class="user-list-tbody" id="listaDeProcesso">
-                     <!-- Nenhuma linha aqui -->
+                     <!--* Nenhuma linha aqui* -->
                   </tbody>
                </table>
             </div>
@@ -160,7 +160,7 @@
       </div>
 
 
-      <div class="listaAplicativos dfNone">
+      <div class="listaAplicativos dfNone" id="listaApp">
 
          <div class="aplicativosPermitidos divMaior" id="aplicativosPermitidos">
             <!-- *não colocar nada* -->

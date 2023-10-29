@@ -1,5 +1,7 @@
 var express = require("express");
 var router = express.Router();
+console.log("cheguei aqui");
+
 
 var processoController = require("../controllers/processoController");
 
@@ -44,7 +46,7 @@ router.get("/pesquisar/:descricao", function (req, res) {
 
 
 
-router.post("/publicar/:idProcesso", function (req, res) {
+router.post("/publicar/:idProcesso/:idUsuario", function (req, res) {
    processoController.publicar(req, res);
 });
 
@@ -52,20 +54,18 @@ router.put("/editarProcesso", function (req, res) {
    processoController.editar(req, res);
 });
 
-router.delete("/deletarProcesso/", function (req, res) {
-   processoController.deletar(req, res);
+router.delete("/deletarProcesso", function (req, res) {
+   processoController.deletarProcesso(req, res);
 });
 
 router.put("/editarProcesso", function (req, res) {
    processoController.editar(req, res);
 });
 
+
+
 router.get("/mostrar_dadosProcesso", function (req, res) {
    processoController.mostrar_dados(req, res);
-});
-
-router.delete("/deletarProcesso", function (req, res) {
-   processoController.deletar(req, res);
 });
 
 

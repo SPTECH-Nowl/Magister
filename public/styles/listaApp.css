@@ -221,9 +221,9 @@ h2 {
 
 
 
-/* .dfActive{
-  display: block;
+.dfActive{
+  display: flex;
 }
  .dfNone{
   display: none;
-} */
+}

@@ -1,11 +1,11 @@
-var  processoModel = require("../models/processoModel");
+var processoModel = require("../models/processoModel");
 
 var sessoes = [];
 
 function listarProcessos(req, res) {
     var codInstituicao = req.params.codInstituicao;
 
-   processoModel.listar(codInstituicao).then(function (resultado) {
+    processoModel.listar(codInstituicao).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -21,7 +21,7 @@ function listarProcessos(req, res) {
 function listarAdm(req, res) {
     var codInstituicao = req.params.codInstituicao;
 
-   processoModel.listarAdm(codInstituicao).then(function (resultado) {
+    processoModel.listarAdm(codInstituicao).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -35,7 +35,7 @@ function listarAdm(req, res) {
 }
 
 function listaAppUsados(req, res) {
- 
+
     var idUsuario = req.params.idUsuario
 
     processoModel.listaAppUsados(idUsuario).then(function (resultado) {
@@ -52,7 +52,7 @@ function listaAppUsados(req, res) {
 }
 
 function listaAppNaoUsados(req, res) {
- 
+
     var idUsuario = req.params.idUsuario
 
     processoModel.listaAppNaoUsados(idUsuario).then(function (resultado) {
@@ -71,7 +71,7 @@ function listaAppNaoUsados(req, res) {
 function listarInstrutor(req, res) {
     var codInstituicao = req.params.codInstituicao;
 
-        processoModel.listarInstrutor(codInstituicao).then(function (resultado) {
+    processoModel.listarInstrutor(codInstituicao).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -114,7 +114,7 @@ function listarPorProcesso(req, res) {
 function mostrar_dadosProcesso(req, res) {
     var idProcesso = req.params.idProcesso;
 
-   processoModel.mostrar_dadosProcesso(idProcesso)
+    processoModel.mostrar_dadosProcesso(idProcesso)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -129,39 +129,30 @@ function mostrar_dadosProcesso(req, res) {
         );
 }
 
-function cadastrarDashProcesso(req, res) {
-    var nomeProgramaVar = req.body.nomePrograma;
-    var nomeProcessoVar = req.body.nomeProcesso;
-    var instituicaoVar = req.body.instituicao;
+function publicar(req, res) {
+    var idProcesso = req.params.idProcesso
+    var idUsuario = req.params.idUsuario
 
-    console.log(nomeProgramaVar, nomeProcessoVar)
     console.log("tamo no controller")
-    
-    if (nomeProgramaVar == undefined) {
-        res.status(400).send("Seu nome está indefinido");
-    } else if (nomeProcessoVar == undefined) {
-        res.status(400).send("Seu email está indefinido");
-    } else if (instituicaoVar == undefined) {
-        res.status(400).send("Seu código hexadecimal está indefinido");
-    } else {
 
-        // Passe os valores como parâmetro e vá para o arquivoprocessoModel.js
-       processoModel.cadastrarDashProcesso(nomeProgramaVar,nomeProcessoVar, instituicaoVar)
-            .then(
-                function (resultado) {
-                    res.json(resultado);
-                }
-            ).catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao realizar o cadastro! Erro: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
-                }
-            );
-    }
+
+    // Passe os valores como parâmetro e vá para o arquivoprocessoModel.js
+    processoModel.publicar(idProcesso, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+
 }
 
 function editarProcesso(req, res) {
@@ -169,7 +160,7 @@ function editarProcesso(req, res) {
     var nomeProcesso = req.body.nomeProcesso;
     var idProcesso = req.body.idProcesso;
 
-   processoModel.editarProcesso(nomePrograma, nomeProcesso, idProcesso)
+    processoModel.editarProcesso(nomePrograma, nomeProcesso, idProcesso)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -185,9 +176,14 @@ function editarProcesso(req, res) {
 }
 
 function deletarProcesso(req, res) {
-    var idProcesso = req.body.idProcessoPE;
+    console.log("tamo no controller")
 
-    processoModel.deletarProcesso(idProcesso)
+    var idProcesso = req.body.idProcessoS;
+    var idUsuario = req.body.idUsuarioS;
+
+
+    // Passe os valores como parâmetro e vá para o arquivoprocessoModel.js
+    processoModel.deletarProcesso(idProcesso, idUsuario)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -200,6 +196,10 @@ function deletarProcesso(req, res) {
                 res.status(500).json(erro.sqlMessage);
             }
         );
+
+
+
+
 }
 
 function testar(req, res) {
@@ -208,77 +208,77 @@ function testar(req, res) {
 }
 
 
-function qtdTotal(req, res){
+function qtdTotal(req, res) {
     var instituicao = req.params.instituicao
-    
+
     if (instituicao == undefined) {
         res.status(400).send("A instituicao não foi capturada!")
     } else {
-       processoModel.qtdTotal(instituicao)            
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
+        processoModel.qtdTotal(instituicao)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
     }
 
 }
 
-function qtdAdministrador(req, res){
+function qtdAdministrador(req, res) {
     var instituicao = req.params.instituicao
-    
+
     if (instituicao == undefined) {
         res.status(400).send("A instituicao não foi capturada!")
     } else {
-        processoModel.qtdAdministrador(instituicao)            
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
+        processoModel.qtdAdministrador(instituicao)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
     }
 
 }
 
-function qtdInstrutor(req, res){
+function qtdInstrutor(req, res) {
     var instituicao = req.params.instituicao
-    
+
     if (instituicao == undefined) {
         res.status(400).send("A instituicao não foi capturada!")
     } else {
-        processoModelModel.qtdInstrutor(instituicao)            
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
+        processoModelModel.qtdInstrutor(instituicao)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
     }
 
 }
@@ -286,16 +286,15 @@ function qtdInstrutor(req, res){
 module.exports = {
     listarAdm,
     listarInstrutor,
-listaAppUsados,
+    listaAppUsados,
     listaAppNaoUsados,
-    cadastrarDashProcesso,
     editarProcesso,
     deletarProcesso,
     mostrar_dadosProcesso,
-
+    publicar,
     qtdTotal,
     qtdAdministrador,
     qtdInstrutor,
 
-   
+
 }
