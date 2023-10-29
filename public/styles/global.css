@@ -144,6 +144,16 @@ ul li img {
    width: 1.4rem;
 }
 
+ul li .react {
+   width: 1.7rem;
+}
+
+
+ul li .instituicoes {
+   width: 1.7rem;
+}
+
+
 .side-menu {
    position: relative;
    display: flex;
