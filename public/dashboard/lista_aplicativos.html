@@ -4,6 +4,10 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
+   <link rel="stylesheet" href="../styles/usuarios.css">
+   <link rel="stylesheet" href="../styles/listaApp.css">
+
+   <link rel="stylesheet" href="../styles/alerta.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
 
 
@@ -31,7 +35,7 @@
    <script src="../components/navbar/navbar.js" defer></script>
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
-   <script src="../components/dialog/dialog.js" defer></script>
+   <!-- <script src="../components/dialog/dialog.js" defer></script> -->
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -40,14 +44,11 @@
 
    <script src="../scripts/funcoes.js"></script>
 
-   <title>Magister | Lista de aplicativos</title>
+   <title>Magister | Processos</title>
 
 </head>
 
 <body>
-
-   <body></body>
-
 
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
 
@@ -60,6 +61,15 @@
 
       <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
       <ul class="nav-list">
+
+         <li>
+            <sl-tooltip content="Lista aplicativos" placement="right">
+               <a href="lista_aplicativos.html">
+                  <img class="react" src="/assets/img/elements/lista_aplicativos.svg" alt="" width="1.7rem">
+               </a>
+            </sl-tooltip>
+         </li>
+
          <li>
             <sl-tooltip content="Dashboard Geral" placement="right">
                <a href="dashboard_geral.html">
@@ -78,12 +88,18 @@
 
          <li>
             <sl-tooltip content="Processos permitidos" placement="right">
-               <a href="processos.html">
+               <a href="processo.html">
                   <img src="../assets/img/elements/programa.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-
+         <li>
+            <sl-tooltip content="Instituições" placement="right">
+               <a href="escola.html">
+                  <img class="instituicoes" src="/assets/img/elements/graduation-cap.svg" alt="" width="1.7rem">
+               </a>
+            </sl-tooltip>
+         </li>
          <li>
             <sl-tooltip content="Usuários" placement="right">
                <a href="usuarios.html">
@@ -105,14 +121,49 @@
 
 
    <div class="charts-container">
-      <h1>Lista de aplicativos</h1>
+      <h1>Programas permitidos</h1>
       <div class="top-users">
 
+         <div class="flex-row gap-1" id="orderOptions"></div>
 
-       
+         <div class="container-selects" style="gap: 2%;">
+
+
+            <sl-select id="ordem_az" style="left: 7%;" placeholder="Ordem alfabética" pill filled clearable>
+               <sl-option value="ord_a_a">A à Z</sl-option>
+               <sl-option value="ord_z_a">Z à A</sl-option>
+            </sl-select>
+
+            <div class="flex-row gap-1 pesquisarEAdd">
+               <div class="input_processo-wrapper icon wdt-100">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" class="input_processo" id="input_processos" placeholder="Pesquisar por um processo"
+                     onkeyup="buscarProcesso()" fontSize="1rem">
+                  <i class="ph ph-eye" id="teste_ph"></i>
+               </div>
+               <button class="btn primario processo" id="adicionarProcesso">Adicionar processo</button>
+            </div>
+         </div>
+
+
       </div>
+      <div class="charts-content">
+         <div class="chart-grid cols-1">
 
-   </div>
-</body>
 
-</html>
+            <div class="tableWrapper">
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Nome</th>
+                        <th>Nome do processo</th>
+                        <th></th>
+                     </tr>
+                  </thead>
+                  <tbody class="user-list-tbody" id="listaDeProcesso">
+                     <!-- Nenhuma linha aqui -->
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
