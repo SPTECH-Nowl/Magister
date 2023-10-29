@@ -178,40 +178,46 @@ function listarProcessos(idUsuario) {
                     tebleProcesso.innerHTML = "<tr><td colspan='4'>Nenhum processo sendo monitorado.</td></tr>";
                 } else {
                     listaAppUsados.json().then(function (listaAppUsados) {
-                        var tebleProcesso = document.getElementById("listaDeProcesso");
-                        tebleProcesso.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
 
-                        console.log(listaAppUsados)
+                        if (listaAppUsados.length > 0) {
 
-                        for (var i = 0; i < listaAppUsados.length; i++) {
-                            var processo = listaAppUsados[i];
+                            var tebleProcesso = document.getElementById("listaDeProcesso");
+                            tebleProcesso.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+
+                            console.log(listaAppUsados)
+
+                            for (var i = 0; i < listaAppUsados.length; i++) {
+                                var processo = listaAppUsados[i];
 
 
 
-                            var linhaTable = document.createElement("tr");
-                            linhaTable.setAttribute('id', `processo_${processo.idProcesso}`)
+                                var linhaTable = document.createElement("tr");
+                                linhaTable.setAttribute('id', `processo_${processo.idProcesso}`)
 
-                            var celulaNomeApp = document.createElement("td");
-                            var celulaNomeProcesso = document.createElement("td");
-                            var celulaStatus = document.createElement("td");
+                                var celulaNomeApp = document.createElement("td");
+                                var celulaNomeProcesso = document.createElement("td");
+                                var celulaStatus = document.createElement("td");
 
-                            celulaNomeApp.textContent = processo.nomeAplicativo;
-                            celulaNomeProcesso.textContent = processo.nomeProcesso;
-                            celulaStatus.textContent = "Ativo";
+                                celulaNomeApp.textContent = processo.nomeAplicativo;
+                                celulaNomeProcesso.textContent = processo.nomeProcesso;
+                                celulaStatus.textContent = "Ativo";
 
-                            document.addEventListener("DOMContentLoaded", function () {
-                                carregarFeed(); // Chame a função para carregar a tabela de usuários
-                                tippy(".tooltip", {
-                                    placement: "top",
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    carregarFeed(); // Chame a função para carregar a tabela de usuários
+                                    tippy(".tooltip", {
+                                        placement: "top",
+                                    });
                                 });
-                            });
-                            linhaTable.appendChild(celulaNomeApp);
-                            linhaTable.appendChild(celulaNomeProcesso);
-                            linhaTable.appendChild(celulaStatus);
+                                linhaTable.appendChild(celulaNomeApp);
+                                linhaTable.appendChild(celulaNomeProcesso);
+                                linhaTable.appendChild(celulaStatus);
 
-                            tebleProcesso.appendChild(linhaTable);
+                                tebleProcesso.appendChild(linhaTable);
+                            }
                         }
+
                     });
+
                 }
             } else {
                 throw ('Houve um erro na API!');
@@ -229,66 +235,67 @@ function atualizarProcessos(idUsuario) {
 }
 
 function adicionarProcessoLista(idUsuario) {
-if (listaProcessoDisp.length>0) {
+    if (listaProcessoDisp.length > 0) {
 
-    for (var i = 0; i < listaProcessoDisp.length; i++) {
-        console.log(listaProcessoDisp.length);
-        var idProcesso = listaProcessoDisp[i]
-        fetch(`/processo/publicar/${idProcesso}/${idUsuario}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-          
-        }).then(function (resposta) {
-            if (resposta.ok) {
-                listaAppNaoUsados(idUser)
-                listaAppNaoUsados(idUser)
-                listaApp(idUser)
-            } else {
-                console.log("erro no cadastro")
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
+        for (var i = 0; i < listaProcessoDisp.length; i++) {
+            console.log(listaProcessoDisp.length);
+            var idProcesso = listaProcessoDisp[i]
+            fetch(`/processo/publicar/${idProcesso}/${idUsuario}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-    }}
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    listaAppNaoUsados(idUser)
+                    listaAppUsados(idUser)
+                    listaApp(idUser)
+                } else {
+                    console.log("erro no cadastro")
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        }
+    }
 }
 
 
 
 function removerProcessoLista(idUsuario) {
-    if (listaProcessoUsado.length>0) {
-    
+    if (listaProcessoUsado.length > 0) {
 
-    for (var i = 0; i < listaProcessoUsado.length; i++) {
-        console.log(listaProcessoUsado.length);
-        var idProcesso = listaProcessoUsado[i]
-        console.log("cheguei aqui");
-        fetch(`/processo/deletarProcesso`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
+
+        for (var i = 0; i < listaProcessoUsado.length; i++) {
+            console.log(listaProcessoUsado.length);
+            var idProcesso = listaProcessoUsado[i]
+            console.log("cheguei aqui");
+            fetch(`/processo/deletarProcesso`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({
-                    idProcessoS:idProcesso,
-                    idUsuarioS:idUsuario
+                    idProcessoS: idProcesso,
+                    idUsuarioS: idUsuario
                 })
-          
-        }).then(function (resposta) {
-            if (resposta.ok) {
-                console.log("deletou");
-                listaAppNaoUsados(idUser)
-                listaAppNaoUsados(idUser)
-                listaApp(idUser)
-            } else {
-                console.log("erro no cadastro")
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
 
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    console.log("deletou");
+                    listaAppNaoUsados(idUser)
+                    listaAppUsados(idUser)
+                    listaApp(idUser)
+                } else {
+                    console.log("erro no cadastro")
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        }
     }
-}
 
 }
