@@ -61,7 +61,7 @@
         return database.executar(instrucao);
     }
 
-    function capturarTodasMaquinas(idInstituicao, dtAdicao = '',ordAlfabetica = '', qtdStrikes = '', emUso = '',estado = '') {
+    function capturarTodasMaquinas(idInstituicao, dtAdicao = '',ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '') {
         ordAlfabetica = dtAdicao && ordAlfabetica ? ordAlfabetica.replace('ORDER BY ', ', ') : ordAlfabetica;
         
         var instrucao = `
@@ -79,9 +79,11 @@
         LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
         JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
         WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado}
+        GROUP BY m.idMaquina
         ${dtAdicao}${ordAlfabetica}
-        GROUP BY m.idMaquina;
+        ;
         `
+        console.log(instrucao);
 
         return database.executar(instrucao);
     }

@@ -16,16 +16,30 @@ function capturarTodasMaquinas(idInstituicao) {
    const s = getSelectedValues();
    console.log(s)
    return new Promise((resolve, reject) => {
-      fetch(`/maquinas/capturarTodasMaquinas/${idInstituicao}?${s.dtAdicao}&${s.ordemAaZ}&${s.qtdStrikes}&${s.emUso}&${s.estado}`)
+      fetch(`/maquinas/capturarTodasMaquinas/`, 
+      {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+            idInstituicao: idInstituicao,
+            dtAdicao: s.dtAdicao,
+            ordAlfabetica: s.ordemAaZ,
+            qtdStrikes: s.qtdStrikes,
+            emUso: s.emUso,
+            estado: s.estado
+         })
+      })
       .then((response) => {
-         if(response.ok) {
+         if(response.ok) { 
             response.json().then((response) => {
                resolve(response);
             });
          }
       })
       .catch((error) => {
-         console.log("Erro de requisição", error)
+         console.log("Erro de requisição.", error)
          reject(error);
       })
    }) 
@@ -98,6 +112,8 @@ function mostrarTodasMaquinas(idInstituicao) {
 
 getSelectedValues().elementos.forEach((elemento) => {
    elemento.addEventListener('sl-change', event => {
+      let maquinas = document.getElementById('maquinas');
+      maquinas.innerHTML = '';
       mostrarTodasMaquinas(1);
    })
 })

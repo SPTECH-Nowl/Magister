@@ -43,14 +43,14 @@ function capturarTodosDadosMaquina(req, res) {
 }
 
 function capturarTodasMaquinas(req, res) {
-    let idInstituicao = req.params.idInstituicao;
-    let dtAdicao = req.params.dtAdicao == 'mais_antigo' ? '' : '';
-    let ordAlfabetica = req.params.ordAlfabetica == 'ord_a_z' ? 'ORDER BY m.nome' : 'ORDER BY m.nome DESC';
-    let qtdStrikes = req.params.qtdStrikes;
-    let emUso = req.params.emUso ? 'AND m.emUso = 1' : 'AND m.emUso = 0';
-    let estado = req.params.estado;
+    let idInstituicao = req.body.idInstituicao;
+    let dtAdicao = req.body.dtAdicao == 'mais_antigo' ? '' : '';
+    let ordAlfabetica = req.body.ordAlfabetica == 'ord_a_z' ? 'ORDER BY m.nome' : 'ORDER BY m.nome DESC';
+    let qtdStrikes = req.body.qtdStrikes;
+    let emUso = req.body.emUso;
+    let estado = req.body.estado;
 
-    
+    if(emUso) emUso = req.body.emUso == 'true' ? 'AND m.emUso = 1' : 'AND m.emUso = 0';
 
     switch(qtdStrikes) {
         case 'zero_stk':
@@ -78,8 +78,7 @@ function capturarTodasMaquinas(req, res) {
 
     switch(estado) {
         case 'critico':
-            estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Crítico'` 
-            break;
+           break;
         case 'alerta':
             estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Alerta'`;
             break;
