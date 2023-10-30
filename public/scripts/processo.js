@@ -264,130 +264,38 @@ function adicionarProcessoLista(idUsuario) {
 
 
 
+function removerProcessoLista(idUsuario) {
+    if (listaProcessoUsado.length > 0) {
 
 
-function testar() {
-    aguardar();
+        for (var i = 0; i < listaProcessoUsado.length; i++) {
+            console.log(listaProcessoUsado.length);
+            var idProcesso = listaProcessoUsado[i]
+            console.log("cheguei aqui");
+            fetch(`/processo/deletarProcesso`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idProcessoS: idProcesso,
+                    idUsuarioS: idUsuario
+                })
 
-    var formulario = new URLSearchParams(new FormData(document.getElementById("form_postagem")));
-
-    var divResultado = document.getElementById("div_feed");
-
-    divResultado.appendChild(document.createTextNode(formulario.get("descricao")));
-    divResultado.innerHTML = formulario.get("descricao");
-
-
-
-    return false;
-}
-function alterar(idProcesso) {
-    fetch(`/processo/listarPorProcesso/${idProcesso}`)
-        .then((dadosProcesso) => {
-            if (dadosProcesso.ok) {
-                dadosProcesso.json().then((dadosProcesso) => {
-                    // Verifique se todos os campos estão vazios
-                    if (
-                      dadosProcesso[0].nomePrograma === "" &&
-                      dadosProcesso[0].nomeProcesso === "" 
-                    ) {
-                        Swal.fire("Atenção", "Todos os campos estão vazios. Não é possível editar.", "warning");
-                        return;
-                    }
-
-                    Swal.fire({
-                        title: 'Editar Programa',
-                        titleClass: 'custom-title',
-                        html:
-                            '<input type="nomePrograma" id="nomeProgramaInput" placeholder="nomePrograma" value="' + dadosProcesso[0].nomePrograma + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="nomeProcesso" id="nomeProcessoInput" placeholder="nomeProcesso" value="' + dadosProcesso[0].nomeProcesso + '" class="swal2-input" style="border-radius: 15px;">' ,
-                        showCancelButton: true,
-                        cancelButtonText: 'Cancelar',
-                        confirmButtonText: 'Salvar Programa',
-                        showLoaderOnConfirm: true,
-                        customClass: {
-                            container: 'custom-modal',
-                        },
-                        onOpen: () => {
-                            const customModal = Swal.getPopup();
-                            customModal.style.backgroundColor = 'white';
-                            customModal.style.width = '800px';
-                            customModal.style.height = '600px';
-                            customModal.style.borderRadius = '15px';
-                        },
-                        onBeforeOpen: () => {
-                            const confirmButton = Swal.getConfirmButton();
-                            const cancelButton = Swal.getCancelButton();
-                            if (confirmButton && cancelButton) {
-                                confirmButton.style.backgroundColor = '#6D499D';
-                                confirmButton.style.borderRadius = '15px';
-                                confirmButton.style.marginRight = '15px';
-
-                                cancelButton.style.backgroundColor = '#6D499D';
-                                cancelButton.style.borderRadius = '15px';
-                            }
-
-                            confirmButton.addEventListener('click', () => {
-                                const nomeProgramaInput = document.getElementById('nomeProgramaInput');
-                                const nomeProcessoInput = document.getElementById('nomeProcessoInput');
-                                
-                                // Função para definir o estilo dos inputs
-                                function setFieldStyle(input, isValid) {
-                                    if (isValid) {
-                                        input.style.borderColor = '#4CAF50'; 
-                                    } else {
-                                        input.style.borderColor = '#FF5555'; 
-                                    }
-                                }
-
-                                // Validação do campo programa
-                if (nomePrograma.length < 3) {
-                    setFieldStyle(nomeProgramaInput, false);
-                    Swal.showValidationMessage('O nome do programa deve ter pelo menos 3 caracteres.');
-                    return false; 
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    console.log("deletou");
+                    listaAppNaoUsados(idUser)
+                    listaAppUsados(idUser)
+                    listaApp(idUser)
                 } else {
-                    setFieldStyle(nomePogramaInput, true);
+                    console.log("erro no cadastro")
                 }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
 
-                // Validação do campo processo
-                if (nomeProcesso.length < 2) {
-                    setFieldStyle(nomeProcessoInput, false);
-                    Swal.showValidationMessage('O nome do processo deve ter pelo menos 2 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(nomeProcessoInput, true);
-                }
+        }
+    }
 
-                                fetch("/processo/editarProcesso", {
-                                    method: "put",
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    },
-                                    body: JSON.stringify({
-                                        nomePrograma: nomePrograma,
-                                        nomeProcesso: nomeProcesso,
-                                        idProcesso : idProcesso,
-                                        instituicao: sessionStorage.instituicao
-                                    })
-                                })
-                                .then(response => {
-                                    if (response.ok) {
-                                        return response.json();
-                                    }
-                                })
-                                .then(result => {
-                                    if (result) {
-                                        Swal.fire('Sucesso!', 'Programa atualizado com sucesso!', 'success');
-                                        location.reload();
-                                    } else {
-                                        Swal.fire("error", "Falha ao editar Programa", "error");
-                                    }
-                                });
-                            });
-                        },
-                    });
-                });
-            } else {
-                Swal.fire("error", "Falha ao editar Programa", "error");
-            }
-        });
 }
