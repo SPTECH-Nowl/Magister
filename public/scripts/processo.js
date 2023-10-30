@@ -1,212 +1,223 @@
-document.addEventListener('DOMContentLoaded', function() {
-    carregarFeedProcesso()
-   });
+var idUser = sessionStorage.idUsuario;
+
+divBotoes.innerHTML = `
+<div class="botao nUsar" onclick="removerProcessoLista(${idUser})" ><ion-icon class="seta" name="chevron-back-outline"></ion-icon></div>
+
+<div class="botao usar" onclick="adicionarProcessoLista(${idUser})" ><ion-icon class="seta" name="chevron-forward-outline"></ion-icon></div>
+
+<div class="botoesActions">
+   <button class="botaoAction desativado" id="btnAtualizar"
+      onclick="atualizarProcessos(${idUser})">Atualizar</button>
+   <button class="botaoAction ativo" id="btnSair" onclick="fecharTela()">Sair</button>
+</div>
+`;
 
 
 
-function buscarProcesso() {
-    var nomeDigitado = input_busca.value
-    var instituicao = sessionStorage.instituicao
- 
-       if (nomeDigitado.length < 3){
-          carregarFeed()
-       } else {
-          fetch(`/processo/pesquisarProcesso/${nomeDigitado}/${instituicao}`)
-             .then((processoBuscado =>{
-                if(processoBuscado.status == 204){
-                   var tableescolas = document.getElementById("listaDeProcesso");
-                   tableescolas.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
-                }else {
-                     processoBuscado.json().then(function (processoBuscado) {
-                         var tableescolas = document.getElementById("listaDeProcesso");
-                         tableescolas.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
- 
-                         console.log(processoBuscado)
-                         
-                         for (var i = 0; i < processoBuscado.length; i++) {
-                             var processo = processoBuscado[i];
-                             
-                             var celulaNomePrograma = document.createElement("td");
-                             var celulaNomeProcesso = document.createElement("td");
-                             var celulaBotoes = document.createElement("td");
- 
-                             celulaNomePrograma.textContent = processo.nomePrograma;
-                             celulaNomeProcesso.textContent = processo.nomeProcesso;
-                            
- 
-                             // Adicione os botões com base no ID do usuário
-                             celulaBotoes.innerHTML = `
-                            
-                             <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${processo.idProcesso}" onclick="deletar(${processo.idProcesso}, ${sessionStorage.nivPerm})">
-                             <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${processo.idProcesso})">
-                             <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${processo.idProcesso})">
-                             `;
- 
-                             linhaTable.appendChild(celulaNomePrograma);
-                             linhaTable.appendChild(celulaNomeProcesso);
-                 
- 
-                             tableProcesso.appendChild(linhaTable);
-                         }
-                     });
-                 }
- 
-    }))
-       }
- 
+
+
+
+
+
+let listaProcessoDisp = [];
+let listaProcessoUsado = [];
+
+var adicionarProcesso = document.getElementById(`adicionarProcesso`);
+var listaApp = document.getElementById(`listaApp`);
+adicionarProcesso.addEventListener('click', function () {
+    listaApp.classList.remove('dfNone')
+    listaApp.classList.add('dfActive')
+})
+
+function fecharTela() {
+    listaApp.classList.remove('dfActive')
+    listaApp.classList.add('dfNone')
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const adicionarProcessoButton = document.getElementById('adicionarProcesso');
-    adicionarProcessoButton.addEventListener('click', function() {
-        Swal.fire({
-            title: 'Adicionar Programa',
-            titleClass: 'custom-title',
-            html:
-                '<input type="programa" id="nomeProgramaInput" placeholder="NomePrograma" class="swal2-input" style="border-radius: 15px;">' +
-                '<input type="processo" id="nomeProcessoInput" placeholder="NomeProcesso" class="swal2-input" style="border-radius: 15px;">' ,
-            
-            confirmButtonText: 'Adicionar Programa',
-            showLoaderOnConfirm: true,
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            cancelButtonClass: 'custom-cancel-button',
-            customClass: {
-                container: 'custom-modal',
-            },
-            onOpen: () => {
-                const customModal = Swal.getPopup();
-                customModal.style.backgroundColor = 'white';
-                customModal.style.width = '800px';
-                customModal.style.borderRadius = '15px';
-            },
-            onBeforeOpen: () => {
-                const confirmButton = Swal.getConfirmButton();
-                const cancelButton = Swal.getCancelButton();
-                if (confirmButton && cancelButton) {
-                    confirmButton.style.backgroundColor = '#6D499D';
-                    confirmButton.style.borderRadius = '15px';
+function alterarLista(id) {
+    var elemento = document.getElementById(`boxProcessoDisp${id}`);
+    elemento.addEventListener("click", function () {
+        if (elemento.classList.contains("boxProcessoActive")) {
+            elemento.classList.remove('boxProcessoActive')
+            var itemParaRemover = id;
+            listaProcessoDisp = listaProcessoDisp.filter(item => item !== itemParaRemover);
+            console.log("lista" + listaProcessoDisp);
 
-                    cancelButton.style.backgroundColor = '#6D499D';
-                    cancelButton.style.borderRadius = '15px';
-                    cancelButton.style.marginRight = '15px';
-                }
-            },
-            preConfirm: () => {
-                // Validação dos campos
-                const nomeProgramaInput = document.getElementById('nomeProgramaInput');
-                const nomeProcessoInput = document.getElementById('nomeProcessoInput');
-                
 
-                const nomePrograma = nomeProgramaInput.value;
-                const nomeProcesso = nomeProcessoInput.value;
-               
+        } else {
+            elemento.classList.add('boxProcessoActive')
+            listaProcessoDisp.push(id);
+            console.log("lista" + listaProcessoDisp);
 
-                // Função para definir o estilo dos inputs
-                function setFieldStyle(input, isValid) {
-                    if (isValid) {
-                        input.style.borderColor = '#4CAF50'; // Borda verde para campos válidos
-                    } else {
-                        input.style.borderColor = '#FF5555'; // Borda vermelha para campos inválidos
+        }
+        mudarbtn()
+    })
+}
+
+
+
+function alterarListaUsados(id) {
+    var elemento = document.getElementById(`boxProcessoActive${id}`);
+    elemento.addEventListener("click", function () {
+        if (elemento.classList.contains("boxProcessoActive")) {
+            elemento.classList.remove('boxProcessoActive')
+            var itemParaRemover = id;
+            listaProcessoUsado = listaProcessoUsado.filter(item => item !== itemParaRemover);
+            console.log("lista" + listaProcessoUsado);
+
+
+        } else {
+            elemento.classList.add('boxProcessoActive')
+            listaProcessoUsado.push(id);
+            console.log("lista" + listaProcessoUsado);
+
+        }
+        mudarbtn()
+    })
+}
+
+
+function mudarbtn() {
+    var btn = document.getElementById("btnAtualizar")
+
+    if (listaProcessoDisp.length > 0 || listaProcessoUsado.length > 0) {
+        btn.classList.remove('desativado')
+        btn.classList.add('ativo')
+
+    } else {
+        btn.classList.remove('ativo')
+        btn.classList.add('desativado')
+
+    }
+}
+
+
+function atualizarProcessos() {
+    if (listaProcessoDisp.length > 0 || listaProcessoUsado.length > 0) {
+        console.log("atualizar");
+    } else {
+        console.log("Listas sem itens");
+    }
+}
+
+listaAppUsados(idUser);
+
+function listaAppUsados(idUsuario) {
+
+    fetch(`/processo/listaAppUsados/${idUsuario}`)
+        .then((listaAppUsados => {
+            if (listaAppUsados.status == 204) {
+                console.log("deu erro");
+            } else {
+                listaAppUsados.json().then(function (listaAppUsados) {
+                    var aplicativosPermitidos = document.getElementById("aplicativospermitidosUsados");
+                    aplicativosPermitidos.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+                    console.log(listaAppUsados)
+
+                    aplicativospermitidosUsados.innerHTML = "   <h2>Ativados pelo professor</h2>"
+
+                    for (var i = 0; i < listaAppUsados.length; i++) {
+                        var processo = listaAppUsados[i];
+
+                        aplicativospermitidosUsados.innerHTML += `
+                                <div class="boxProcesso" id="boxProcessoActive${processo.idProcesso}" onclick="alterarListaUsados(${processo.idProcesso})">
+                                   <div class="imagem"><img src="../assets/img/iconsProcesso/icon_sql_workbench.png" alt=""></div>
+                                   <div class="nomeProcesso">${processo.nomeAplicativo}</div>
+                                </div>
+                        `
                     }
-                }
-
-                // Validação do campo Programa
-                if (nomePrograma.length < 3) {
-                    setFieldStyle(nomeInput, false);
-                    Swal.showValidationMessage('O programa deve ter pelo menos 3 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(nomeProgramaInput, true);
-                }
-
-                // Validação do campo Processo
-                if (nomeProcesso.length < 3) {
-                    setFieldStyle(nomeInput, false);
-                    Swal.showValidationMessage('O processo deve ter pelo menos 3 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(nomeProcessoInput, true);
-                }
-
-                // Simule a adição de um usuário (substitua isso com sua lógica real)
-                return new Promise((resolve) => {
-                        fetch("/processo/cadastrarDashProcesso", {
-                            method: "POST",
-                            headers: {
-                                "Content-type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                nomePrograma: nomePrograma,
-                                nomeProcesso: nomeProcesso,
-                                instituicao: sessionStorage.instituicao
-                            })
-                        }).then((response)=>{
-                            if(response.ok){
-                                location.reload();
-                            }
-                        })
                 });
-            },
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Sucesso!', 'O PROGRAMA foi cadastrado com sucesso.', 'success');
-                location.reload();
             }
-        });
-    });
-});
 
- 
-function carregarFeedProcesso() {
-    
-    var codInstituicao = sessionStorage.instituicao;
+        }))
 
-    fetch(`/processo/listar/${codInstituicao}`)
-        .then(function (listaProcesso) {
-            if (listaProcesso.ok) {
-                if (listaProcesso.status == 204) {
-                    var tableProcesso = document.getElementById("listaDeProcesso");
-                    tableProcesso.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+
+}
+
+
+
+listaAppNaoUsados(idUser);
+
+function listaAppNaoUsados(idUsuario) {
+
+    fetch(`/processo/listaAppNaoUsados/${idUsuario}`)
+        .then((listaAppNaoUsados => {
+            if (listaAppNaoUsados.status == 204) {
+                console.log("deu erro");
+            } else {
+                listaAppNaoUsados.json().then(function (listaAppNaoUsados) {
+                    var aplicativosPermitidos = document.getElementById("aplicativosPermitidos");
+                    aplicativosPermitidos.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+                    console.log(listaAppNaoUsados)
+
+                    aplicativosPermitidos.innerHTML = "<h2>Disponiveis para uso</h2>"
+
+                    for (var i = 0; i < listaAppNaoUsados.length; i++) {
+                        var processo = listaAppNaoUsados[i];
+
+                        aplicativosPermitidos.innerHTML += `
+                            <div class="boxProcesso" id="boxProcessoDisp${processo.idProcesso}" onclick="alterarLista(${processo.idProcesso})">
+                            <div class="imagem"><img src="../assets/img/iconsProcesso/icon_sql_workbench.png" alt=""></div>
+                            <div class="nomeProcesso">${processo.nomeAplicativo}</div>
+                         </div>
+                        `
+                    }
+                });
+            }
+
+        }))
+}
+
+listarProcessos(idUser)
+function listarProcessos(idUsuario) {
+    fetch(`/processo/listaAppUsados/${idUsuario}`)
+        .then(function (listaAppUsados) {
+            if (listaAppUsados.ok) {
+                if (listaAppUsados.status == 204) {
+                    var tebleProcesso = document.getElementById("listaDeProcesso");
+                    tebleProcesso.innerHTML = "<tr><td colspan='4'>Nenhum processo sendo monitorado.</td></tr>";
                 } else {
-                    listaProcesso.json().then(function (listaProcesso) {
-                        var tableProcesso = document.getElementById("listaDeProcesso");
-                        tableProcesso.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+                    listaAppUsados.json().then(function (listaAppUsados) {
 
-                        console.log(listaProcesso)
-                        
-                        for (var i = 0; i < listaProcesso.length; i++) {
-                            var processo = listaProcesso[i];
+                        if (listaAppUsados.length > 0) {
 
-                            
-                            
-                            var linhaTable = document.createElement("tr");
-                            linhaTable.setAttribute('id', `processo_${Processo.idProcesso}`)
+                            var tebleProcesso = document.getElementById("listaDeProcesso");
+                            tebleProcesso.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
 
-                            var celulaNomePrograma = document.createElement("td");
-                            var celulaNomeProcesso = document.createElement("td");
-                            var celulaBotoes = document.createElement("td");
+                            console.log(listaAppUsados)
 
-                            celulaNomePrograma.textContent = processo.nomePrograma;
-                            celulaNomeProcesso.textContent = processo.nomeProcesso;
-                           
+                            for (var i = 0; i < listaAppUsados.length; i++) {
+                                var processo = listaAppUsados[i];
 
-                            // Adicione os botões com base no ID do usuário
-                            celulaBotoes.innerHTML = `
-                           
-                            <img src="../assets/img/Icone/deleteIcon.svg" id="btn_delete${processo.idProcesso}" onclick="deletar(${processo.idProcesso}, ${sessionStorage.nivPerm})">
-                            <img src="../assets/img/Icone/editIcon.svg" label ="btn_update" onclick="alterar(${processo.idProcesso})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" label ="btn_get" onclick="mostrar_dados(${processo.idProcesso})">
-                            `;
 
-                            linhaTable.appendChild(celulaNomePrograma);
-                            linhaTable.appendChild(celulaNomeProcesso);
-                
 
-                            tableProcesso.appendChild(linhaTable);
+                                var linhaTable = document.createElement("tr");
+                                linhaTable.setAttribute('id', `processo_${processo.idProcesso}`)
+
+                                var celulaNomeApp = document.createElement("td");
+                                var celulaNomeProcesso = document.createElement("td");
+                                var celulaStatus = document.createElement("td");
+
+                                celulaNomeApp.textContent = processo.nomeAplicativo;
+                                celulaNomeProcesso.textContent = processo.nomeProcesso;
+                                celulaStatus.textContent = "Ativo";
+
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    carregarFeed(); // Chame a função para carregar a tabela de usuários
+                                    tippy(".tooltip", {
+                                        placement: "top",
+                                    });
+                                });
+                                linhaTable.appendChild(celulaNomeApp);
+                                linhaTable.appendChild(celulaNomeProcesso);
+                                linhaTable.appendChild(celulaStatus);
+
+                                tebleProcesso.appendChild(linhaTable);
+                            }
                         }
+
                     });
+
                 }
             } else {
                 throw ('Houve um erro na API!');
@@ -218,96 +229,57 @@ function carregarFeedProcesso() {
 }
 
 
-function mostrar_dadosProcesso(idProcesso) {
-    fetch(`/processo/mostrar_dadosProcesso/${idProcesso}`)
-        .then(function (response) {
-            if (!response.ok) {
-                console.error('Erro na resposta da API:', response.status);
-                return;
-            }
-            return response.json();
-        })
-        .then(function (dadosProcesso) {
-            if (dadosProcesso && dadosProcesso.length > 0) {
-                const processo = dadosProcesso[0];
-                console.log("Dados recebidos do Processo: ", JSON.stringify(processo));
-                Swal.fire({
-                    title: 'Dados da Processo',
-                    titleClass: 'custom-title',
-                    width: '700px', // Reduza a largura para 700px (ajuste conforme necessário)
-                    html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                        <span><b>Nome Programa</b>: ${processo.nomePrograma}</span>
-                        <span><b>Nome Processo</b>: ${processo.nomeProcesso}</span>
-                    </div>`,
-                    confirmButtonColor: '#6D499D', // Cor do botão "OK"
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        container: 'custom-modal', // Classe personalizada para o modal
-                        confirmButton: 'custom-confirm-button', // Classe personalizada para o botão "OK"
-                    },
-                });
-            } else {
-                console.error('Dados do processo não encontrados na resposta da API.');
-            }
-        })
-        .catch(function (erro) {
-            console.error('Erro na requisição:', erro);
-        });
+function atualizarProcessos(idUsuario) {
+    adicionarProcessoLista(idUsuario)
+    removerProcessoLista(idUsuario)
 }
 
-function deletarProcesso(idProcesso, tipoPermissao) {
-    if (tipoPermissao === "0") {
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro',
-            text: 'Você não possui permissão para deletar',
-            customClass: {
-                confirmButton: 'swal2-button-custom'
-            }
-        });
-        return false;
-    } else {
-        Swal.fire({
-            title: 'Você tem certeza que deseja deletar?',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'Deletar',
-            denyButtonText: 'Cancelar',
-            confirmButtonColor: '#d33',
-            denyButtonColor: '#3085d6',
-            customClass: {
-                confirmButton: 'swal2-button-custom',
-                popup: 'swal2-popup-custom'
-            },
-            width: '400px',
-            heightAuto: false,
-            customHeight: '700px' // Aumento maior na altura
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`/processo/deletarProcesso/`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        idProcessoPE: idProcesso
-                    })
-                }).then(function (resposta) {
-                    if (resposta.ok) {
-                        Swal.fire('Processo deletado com sucesso', '', 'success');
-                        location.reload();
-                    } else {
-                        Swal.fire('Falha ao deletar o Processo', '', 'error');
-                    }
-                }).catch(function (resposta) {
-                    console.log(resposta);
-                });
-            }
-        });
+function adicionarProcessoLista(idUsuario) {
+    if (listaProcessoDisp.length > 0) {
+
+        for (var i = 0; i < listaProcessoDisp.length; i++) {
+            console.log(listaProcessoDisp.length);
+            var idProcesso = listaProcessoDisp[i]
+            fetch(`/processo/publicar/${idProcesso}/${idUsuario}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    listaAppNaoUsados(idUser)
+                    listaAppUsados(idUser)
+                    listaApp(idUser)
+                } else {
+                    console.log("erro no cadastro")
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        }
     }
 }
 
 
+
+
+
+function testar() {
+    aguardar();
+
+    var formulario = new URLSearchParams(new FormData(document.getElementById("form_postagem")));
+
+    var divResultado = document.getElementById("div_feed");
+
+    divResultado.appendChild(document.createTextNode(formulario.get("descricao")));
+    divResultado.innerHTML = formulario.get("descricao");
+
+
+
+    return false;
+}
 function alterar(idProcesso) {
     fetch(`/processo/listarPorProcesso/${idProcesso}`)
         .then((dadosProcesso) => {

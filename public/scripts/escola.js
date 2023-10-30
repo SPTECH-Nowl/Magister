@@ -146,9 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     setFieldStyle(codigoInput, true);
                 }
 
-
-    
-
 return new Promise((resolve) => {
     fetch("/instituicoes/cadastrarDashEscola", {
         method: "POST",
