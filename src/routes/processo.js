@@ -8,13 +8,6 @@ router.get("/listar/:codInstituicao", function (req, res) {
    processoController.listar(req, res);
 });
 
-router.get("/listarAdm/:codInstituicao", function (req, res) {
-   processoController.listarAdm(req, res);
-});
-
-router.get("/listarInstrutor/:codInstituicao", function (req, res) {
-   processoController.listarInstrutor(req, res);
-});
 
 router.get("/listarPorProcesso/:idProcesso", function (req, res) {
    processoController.listarPorUsuario(req, res);
@@ -77,4 +70,6 @@ router.get("/qtdAdministrador/:instituicao", function (req, res) {
 router.get("/qtdInstrutor/:instituicao", function (req, res) {
    processoController.qtdInstrutor(req, res)
 })
+
+
 module.exports = router;

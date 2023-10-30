@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-   function buscarProcesso() {
+function buscarProcesso() {
     var nomeDigitado = input_busca.value
     var instituicao = sessionStorage.instituicao
  
@@ -54,17 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }))
        }
  
- }
-
-
-
-
-
-
-
-
-
-
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarProcessoButton = document.getElementById('adicionarProcesso');
@@ -168,58 +158,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-
-function filtrosTipo(){
-    fetch(`/processo/qtdTotal/${sessionStorage.instituicao}`)
-    .then((qtdTotal) => {
-       if (qtdTotal.ok){
-          fetch(`/processo/qtdAdministrador/${sessionStorage.instituicao}`)
-          .then((qtdTotalAdm) => {
-             fetch(`/processo/qtdInstrutor/${sessionStorage.instituicao}`)
-                .then((qtdTotalInstrutor) => {
-                   if (qtdTotalInstrutor.ok){
-                      qtdTotal.json().then((qtdTotal) => {
-                         qtdTotalAdm.json().then((qtdTotalAdm) =>{
-                            qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
-                               var orderOptions = document.getElementById("orderOptions")
  
-                                  var spanTotal = document.createElement("span")
-                                  var spanTotalAdministrador = document.createElement("span")
-                                  var spanTotalInstrutor = document.createElement("span")
- 
-                                  spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
-                                  spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
-                                  spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
- 
-                                  spanTotal.onclick = carregarFeed
-                                  spanTotalAdministrador.onclick = carregarFeedAdm
-                                  spanTotalInstrutor.onclick = carregarFeedInstrutor
- 
-                                  orderOptions.appendChild(spanTotal)
-                                  orderOptions.appendChild(spanTotalAdministrador)
-                                  orderOptions.appendChild(spanTotalInstrutor)
- 
- 
-                            })
-                         })                        
-                      })
- 
-                   }
-                })
-          })
-       }
-    })
- }
- 
-
-
-
-
-
-
 function carregarFeedProcesso() {
+    
     var codInstituicao = sessionStorage.instituicao;
+
     fetch(`/processo/listar/${codInstituicao}`)
         .then(function (listaProcesso) {
             if (listaProcesso.ok) {
@@ -365,23 +308,6 @@ function deletarProcesso(idProcesso, tipoPermissao) {
 }
 
 
-
-
-
-function testar() {
-    aguardar();
-
-    var formulario = new URLSearchParams(new FormData(document.getElementById("form_postagem")));
-
-    var divResultado = document.getElementById("div_feed");
-
-    divResultado.appendChild(document.createTextNode(formulario.get("descricao")));
-    divResultado.innerHTML = formulario.get("descricao");
-
-
-
-    return false;
-}
 function alterar(idProcesso) {
     fetch(`/processo/listarPorProcesso/${idProcesso}`)
         .then((dadosProcesso) => {

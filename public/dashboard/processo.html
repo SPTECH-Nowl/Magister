@@ -44,15 +44,8 @@
 
 </head>
 <body>
-   <body onload="validarAcessoProcesso(), carregarFeedProcesso()"></body>
+   <body onload="carregarFeedProcesso()"></body>
    
-
-   <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
-    
-    <sl-button slot="footer" variant="primary"></sl-button>
-  </sl-drawer>
-
-
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
       
@@ -168,4 +161,6 @@
 document.addEventListener("DOMContentLoaded", ()=>{
    validarAcesso();
 })
+
+
 </script>
