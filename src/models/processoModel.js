@@ -26,7 +26,8 @@ function listaAppUsados(idUsuario) {
     p.idProcesso,
     p.nomeProcesso,
     p.nomeAplicativo,
-    per.fkUsuario
+    per.fkUsuario,
+    per.nome
 FROM processo p
 LEFT JOIN permissaoProcesso pp ON p.idProcesso = pp.fkProcesso
 LEFT JOIN permissao per ON pp.fkPermissao = per.idPermissao
@@ -144,6 +145,20 @@ function publicar(idProcesso,idUsuario) {
    
 }
 
+function adicionarProcesso(nomeApp,nomeProcesso) {
+    console.log("Cadastrando processo...");
+
+        var instrucao = `
+        INSERT INTO processo (nomeProcesso, nomeAplicativo) VALUES ('${nomeApp}','${nomeProcesso}');
+        `;
+        return database.executar(instrucao)
+            .catch(function (erro) {
+                console.error("Erro ao realizar o cadastro do processo:", erro);
+                return Promise.reject("Erro ao realizar o cadastro do processo: " + erro.message);
+            });
+   
+}
+
 
 function editarProcesso(nomeProcesso, nomeAplicativo, idInstituicao, idProcesso) {
     var instrucao = `
@@ -225,6 +240,6 @@ module.exports = {
     qtdTotal,
     qtdAdministrador,
     qtdInstrutor,
-
+    adicionarProcesso
 
 }

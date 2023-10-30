@@ -202,6 +202,35 @@ function deletarProcesso(req, res) {
 
 }
 
+
+function adicionarProcesso(req, res) {
+    console.log("tamo no controller")
+
+    var nomeApp = req.body.nomeApp;
+    var nomeProcesso = req.body.nomeProcesso;
+
+
+    // Passe os valores como parâmetro e vá para o arquivoprocessoModel.js
+    processoModel.adicionarProcesso(nomeApp, nomeProcesso)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+
+
+
+
+}
+
+
 function testar(req, res) {
     console.log("ENTRAMOS NA processoController");
     res.json("ESTAMOS FUNCIONANDO!");
@@ -295,6 +324,6 @@ module.exports = {
     qtdTotal,
     qtdAdministrador,
     qtdInstrutor,
-
+    adicionarProcesso
 
 }

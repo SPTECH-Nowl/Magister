@@ -37,7 +37,9 @@ router.get("/pesquisar/:descricao", function (req, res) {
 });
 
 
-
+router.post("/adicionarProcesso", function (req, res) {
+   processoController.adicionarProcesso(req, res);
+})
 
 router.post("/publicar/:idProcesso/:idUsuario", function (req, res) {
    processoController.publicar(req, res);

@@ -1,4 +1,11 @@
 var idUser = sessionStorage.idUsuario;
+let listaProcessoDisp = [];
+let listaProcessoUsado = [];
+
+listaAppUsados(idUser);
+listarProcessos(idUser)
+
+
 
 divBotoes.innerHTML = `
 <div class="botao nUsar" onclick="removerProcessoLista(${idUser})" ><ion-icon class="seta" name="chevron-back-outline"></ion-icon></div>
@@ -13,15 +20,6 @@ divBotoes.innerHTML = `
 `;
 
 
-
-
-
-
-
-
-let listaProcessoDisp = [];
-let listaProcessoUsado = [];
-
 var adicionarProcesso = document.getElementById(`adicionarProcesso`);
 var listaApp = document.getElementById(`listaApp`);
 adicionarProcesso.addEventListener('click', function () {
@@ -32,6 +30,8 @@ adicionarProcesso.addEventListener('click', function () {
 function fecharTela() {
     listaApp.classList.remove('dfActive')
     listaApp.classList.add('dfNone')
+    listarProcessos(idUser)
+
 }
 
 function alterarLista(id) {
@@ -100,7 +100,6 @@ function atualizarProcessos() {
     }
 }
 
-listaAppUsados(idUser);
 
 function listaAppUsados(idUsuario) {
 
@@ -110,8 +109,8 @@ function listaAppUsados(idUsuario) {
                 console.log("deu erro");
             } else {
                 listaAppUsados.json().then(function (listaAppUsados) {
-                    var aplicativosPermitidos = document.getElementById("aplicativospermitidosUsados");
-                    aplicativosPermitidos.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+                    var aplicativospermitidosUsados = document.getElementById("aplicativospermitidosUsados");
+                    aplicativospermitidosUsados.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
                     console.log(listaAppUsados)
 
                     aplicativospermitidosUsados.innerHTML = "   <h2>Ativados pelo professor</h2>"
@@ -162,13 +161,18 @@ function listaAppNaoUsados(idUsuario) {
                          </div>
                         `
                     }
+
+                    aplicativosPermitidos.innerHTML += `
+                            <div class="boxProcesso boxNovoProcesso ativo" id="criarProcesso" onclick="criarProcessoPersonalizado()">
+                            <div class="adicionarProcesso"><ion-icon name="add-sharp" class=" iconAdd"></ion-icon> Adicionar Processo</div>
+                         </div>
+                        `
                 });
             }
 
         }))
 }
 
-listarProcessos(idUser)
 function listarProcessos(idUsuario) {
     fetch(`/processo/listaAppUsados/${idUsuario}`)
         .then(function (listaAppUsados) {
@@ -179,7 +183,6 @@ function listarProcessos(idUsuario) {
                 } else {
                     listaAppUsados.json().then(function (listaAppUsados) {
 
-                        if (listaAppUsados.length > 0) {
 
                             var tebleProcesso = document.getElementById("listaDeProcesso");
                             tebleProcesso.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
@@ -198,7 +201,7 @@ function listarProcessos(idUsuario) {
                                 var celulaNomeProcesso = document.createElement("td");
                                 var celulaStatus = document.createElement("td");
 
-                                celulaNomeApp.textContent = processo.nomeAplicativo;
+                                celulaNomeApp.textContent = processo.nome;
                                 celulaNomeProcesso.textContent = processo.nomeProcesso;
                                 celulaStatus.textContent = "Ativo";
 
@@ -214,7 +217,6 @@ function listarProcessos(idUsuario) {
 
                                 tebleProcesso.appendChild(linhaTable);
                             }
-                        }
 
                     });
 
@@ -250,7 +252,7 @@ function adicionarProcessoLista(idUsuario) {
                 if (resposta.ok) {
                     listaAppNaoUsados(idUser)
                     listaAppUsados(idUser)
-                    listaApp(idUser)
+                    listarProcessos(idUser)
                 } else {
                     console.log("erro no cadastro")
                 }
@@ -285,9 +287,9 @@ function removerProcessoLista(idUsuario) {
             }).then(function (resposta) {
                 if (resposta.ok) {
                     console.log("deletou");
-                    listaAppNaoUsados(idUser)
                     listaAppUsados(idUser)
-                    listaApp(idUser)
+                    listaAppNaoUsados(idUser)
+                    listarProcessos(idUser)
                 } else {
                     console.log("erro no cadastro")
                 }
@@ -298,4 +300,79 @@ function removerProcessoLista(idUsuario) {
         }
     }
 
+}
+
+function criarProcessoPersonalizado(idUser) {
+    Swal.fire({
+        title: 'Criar processo personalizado',
+        titleClass: 'custom-title',
+        html:
+            '<input type="text" id="nomeInput" placeholder="Nome EX:(Chrome)" class="swal2-input" style="border-radius: 15px;">' +
+            '<input type="email" id="processoInput" placeholder="Processo EX:(Chrome.exe)"  class="swal2-input" style="border-radius: 15px;">' ,
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Criar Processo',
+        showLoaderOnConfirm: true,
+        customClass: {
+            container: 'custom-modal',
+        },
+        onOpen: () => {
+            const customModal = Swal.getPopup();
+            customModal.style.backgroundColor = 'white';
+            customModal.style.width = '600px';
+            customModal.style.height = '500px';
+            customModal.style.borderRadius = '15px';
+        },
+        onBeforeOpen: () => {
+            const confirmButton = Swal.getConfirmButton();
+            const cancelButton = Swal.getCancelButton();
+            if (confirmButton && cancelButton) {
+                confirmButton.style.backgroundColor = '#6D499D';
+                confirmButton.style.borderRadius = '15px';
+                confirmButton.style.marginRight = '15px';
+
+                cancelButton.style.backgroundColor = '#6D499D';
+                cancelButton.style.borderRadius = '15px';
+            }
+
+            confirmButton.addEventListener('click', () => {
+                const nomeInput = document.getElementById('nomeInput').value;
+                const processoInput = document.getElementById('processoInput').value;
+      
+
+                // Função para definir o estilo dos inputs
+                function setFieldStyle(input, isValid) {
+                    if (isValid) {
+                        input.style.borderColor = '#4CAF50'; 
+                    } else {
+                        input.style.borderColor = '#FF5555'; 
+                    }
+                }
+
+                fetch("/processo/adicionarProcesso", {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeApp: nomeInput,
+                        nomeProcesso: processoInput,
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                })
+                .then(result => {
+                    if (result) {
+                        Swal.fire('Sucesso!', 'Processo adicionado com sucesso!', 'success');
+                        location.reload();
+                    } else {
+                        Swal.fire("error", "Falha ao cadastras processo", "error");
+                    }
+                });
+            });
+        },
+    });             
 }
