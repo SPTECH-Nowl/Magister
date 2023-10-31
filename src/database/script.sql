@@ -236,7 +236,8 @@ INSERT INTO strike (dataHora, validade, motivo, fkMaquina) VALUES
 	('2022-04-15 09:30:45', 0, 'Acesso não autorizado', 21),
 	('2022-03-20 14:45:30', 1, 'Uso indevido', 22),
 	('2022-02-25 16:30:15', 1, 'Tentativa de fechamento do processo', 23),
-	('2022-01-30 10:20:30', 0, 'Acesso não autorizado', 24);
+	('2022-01-30 10:20:30', 0, 'Acesso não autorizado', 24),
+    ('2022-01-30 10:20:30', 0, 'Acesso não autorizado', 2);
 
 -- INSERTS COMPONENTE
 INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
@@ -338,47 +339,61 @@ WHERE
 LIMIT 1;
 
 -- select de tudo da máquina
-SELECT 
-	m.idMaquina as id,
-	m.nome as nome,
-    m.so as so,
-    m.emUso as emUso,
-	(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
-    as componenteRAM,
-    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
-    as capacidadeRAM,
-	(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
-    as componenteCPU,
-    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
-    as capacidadeCPU,
-    (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
-    as componenteDisco,
-    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
-    as capacidadeDisco,
-    (SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE fkMaquina = 1) as qtdStrikes
-FROM maquina m
-JOIN componente c ON c.fkMaquina = m.idMaquina
-JOIN hardware ram ON c.fkHardware = ram.idHardware
-JOIN hardware cpu ON c.fkHardware = cpu.idHardware
-JOIN hardware disco ON c.fkHardware = disco.idHardware
-WHERE
-	m.idMaquina = 1
-LIMIT 1;
-
+	SELECT 
+		m.idMaquina as id,
+		m.nome as nome,
+		m.so as so,
+		m.emUso as emUso,
+		(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
+		as componenteRAM,
+		(SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
+		as capacidadeRAM,
+		(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
+		as componenteCPU,
+		(SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
+		as capacidadeCPU,
+		(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
+		as componenteDisco,
+		(SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
+		as capacidadeDisco,
+		(SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE fkMaquina = 1) as qtdStrikes
+	FROM maquina m
+	JOIN componente c ON c.fkMaquina = m.idMaquina
+	JOIN hardware ram ON c.fkHardware = ram.idHardware
+	JOIN hardware cpu ON c.fkHardware = cpu.idHardware
+	JOIN hardware disco ON c.fkHardware = disco.idHardware;
 
 SELECT
-    m.nome AS nome,
-    m.emUso as emUso,
-	(SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,
-    CASE
-        WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
-        WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
-        ELSE 'Normal'
-    END AS status
+	CASE
+		WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
+		WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
+		ELSE 'Normal'
+	END AS status
 FROM maquina m
 LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
 JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
-WHERE idInstituicao = 1
+WHERE idInstituicao = 1 AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) > 1
 GROUP BY m.idMaquina;
 
-select * from usuario;
+SELECT idMaquina, nome, (SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE idMaquina = 1) as qtdStrikes FROM maquina;
+
+SELECT idMaquina FROM maquina;
+
+        SELECT
+            m.idMaquina as id,
+            m.nome AS nome,
+            m.emUso AS emUso,
+            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,
+            CASE
+                WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
+                WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
+                ELSE 'Normal'
+            END AS status
+        FROM maquina m
+        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+        JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+        WHERE idInstituicao = 1        
+        GROUP BY m.idMaquina;
+        
+        
+	SELECT * FROM maquina ORDER BY fkInstituicao;

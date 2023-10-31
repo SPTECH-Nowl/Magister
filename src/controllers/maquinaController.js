@@ -44,7 +44,6 @@ function capturarTodosDadosMaquina(req, res) {
 
 function capturarTodasMaquinas(req, res) {
     let idInstituicao = req.body.idInstituicao;
-    let dtAdicao = req.body.dtAdicao == 'mais_antigo' ? '' : '';
     let ordAlfabetica = req.body.ordAlfabetica == 'ord_a_z' ? 'ORDER BY m.nome' : 'ORDER BY m.nome DESC';
     let qtdStrikes = req.body.qtdStrikes;
     let emUso = req.body.emUso;
@@ -90,7 +89,7 @@ function capturarTodasMaquinas(req, res) {
             break;
     }
 
-    maquinaModel.capturarTodasMaquinas(idInstituicao, dtAdicao, ordAlfabetica, qtdStrikes, emUso, estado)
+    maquinaModel.capturarTodasMaquinas(idInstituicao, ordAlfabetica, qtdStrikes, emUso, estado)
         .then((response) => {
             res.json(response);
         })

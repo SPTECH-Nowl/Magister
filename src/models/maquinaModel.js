@@ -61,9 +61,7 @@
         return database.executar(instrucao);
     }
 
-    function capturarTodasMaquinas(idInstituicao, dtAdicao = '',ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '') {
-        ordAlfabetica = dtAdicao && ordAlfabetica ? ordAlfabetica.replace('ORDER BY ', ', ') : ordAlfabetica;
-        
+    function capturarTodasMaquinas(idInstituicao, ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '') {
         var instrucao = `
         SELECT
             m.idMaquina as id,
@@ -80,7 +78,7 @@
         JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
         WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado}
         GROUP BY m.idMaquina
-        ${dtAdicao}${ordAlfabetica}
+        ${ordAlfabetica}
         ;
         `
         console.log(instrucao);
