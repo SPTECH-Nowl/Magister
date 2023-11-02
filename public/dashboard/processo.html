@@ -10,8 +10,10 @@
    <link rel="stylesheet" href="../styles/alerta.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
 
+   <script src="../scripts/processo.js"></script>
 
-
+   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    <!-- JQuery -->
@@ -42,7 +44,7 @@
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
-   <script src="../scripts/funcoes.js"></script>
+   <script src="../scripts/funcoes.js" defer></script>
 
    <title>Magister | Processos</title>
 
@@ -60,43 +62,42 @@
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
 
       <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
+
       <ul class="nav-list">
-
-
- 
-
-
-         <li>
+   
+         <li id="dash_geral_item">
             <sl-tooltip content="Dashboard Geral" placement="right">
                <a href="dashboard_geral.html">
                   <img src="../assets/img/elements/dash.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-
-         <li>
+      
+         <li id="maquinas_organizacao_item">
             <sl-tooltip content="Maquinas de organização" placement="right">
                <a href="maquinas_organizacao.html">
                   <img src="../assets/img/elements/pc.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-
-         <li>
+      
+         <li id="programas_item">
             <sl-tooltip content="Programas" placement="right">
                <a href="processo.html">
                   <img src="../assets/img/elements/programa.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
+
+         <li id="instituicoes_item">
             <sl-tooltip content="Instituições" placement="right">
                <a href="escola.html">
-                  <img class="instituicoes" src="/assets/img/elements/graduation-cap.svg" alt="" width="1.7rem">
+                  <img src="/assets/img/elements/graduation-cap.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
+
+         <li id="usuarios_item">
             <sl-tooltip content="Usuários" placement="right">
                <a href="usuarios.html">
                   <img src="../assets/img/elements/usuario.svg" alt="">
@@ -104,19 +105,18 @@
             </sl-tooltip>
          </li>
       </ul>
+      
 
       <ul>
          <li>
-            <sl-tooltip content="Sair" placement="right">
+            <sl-tooltip content="Sair" placement="right" >
             <a href="../login_cadastro.html">
-               <img src="../assets/img/elements/settings.svg" alt="">
+            <img src="../assets/img/elements/settings.svg" alt="">
             </a>
-            <sl-tooltip content="Sair" placement="right">
+         </sl-tooltip>
          </li>
       </ul>
    </div>
-
-
 
    <div class="charts-container">
       <h1>Programas permitidos</h1>
@@ -187,7 +187,8 @@
 </body>
 
 </html>
-<script src="../scripts/processo.js"></script>
-
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script>
+   document.addEventListener("DOMContentLoaded", ()=>{
+      validarAcesso(3);
+   });
+</script>

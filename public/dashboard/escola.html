@@ -9,13 +9,13 @@
   
 
 
-   <script src="../scripts/escola.js"></script>
-   <script src="../scripts/funcoes.js"></script>
+   <script src="../scripts/escola.js" defer></script>
+   <script src="../scripts/funcoes.js" defer></script>
 
 
 <!-- Biblioteca de tooltips dos modais -->
- <link rel="stylesheet" href="https://unpkg.com/tippy.js@6.3.1/dist/tippy.css" />
-<script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy.all.min.js"></script>
+   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6.3.1/dist/tippy.css" />
+   <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy.all.min.js"></script>
 
    <!-- Phosphor Icons -->
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -61,65 +61,63 @@
 
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
-      
+
       <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
+
       <ul class="nav-list">
+   
+         <li id="dash_geral_item">
+            <sl-tooltip content="Dashboard Geral" placement="right">
+               <a href="dashboard_geral.html">
+                  <img src="../assets/img/elements/dash.svg" alt="">
+               </a>
+            </sl-tooltip>
+         </li>
+      
+         <li id="maquinas_organizacao_item">
+            <sl-tooltip content="Maquinas de organização" placement="right">
+               <a href="maquinas_organizacao.html">
+                  <img src="../assets/img/elements/pc.svg" alt="">
+               </a>
+            </sl-tooltip>
+         </li>
+      
+         <li id="programas_item">
+            <sl-tooltip content="Programas" placement="right">
+               <a href="processo.html">
+                  <img src="../assets/img/elements/programa.svg" alt="">
+               </a>
+            </sl-tooltip>
+         </li>
 
-     
+         <li id="instituicoes_item">
+            <sl-tooltip content="Instituições" placement="right">
+               <a href="escola.html">
+                  <img src="/assets/img/elements/graduation-cap.svg" alt="">
+               </a>
+            </sl-tooltip>
+         </li>
 
-        <li>
-           <sl-tooltip content="Dashboard Geral" placement="right">
-              <a href="dashboard_geral.html">
-                 <img src="../assets/img/elements/dash.svg" alt="">
-              </a>
-           </sl-tooltip>
-        </li>
-     
-        <li>
-           <sl-tooltip content="Maquinas de organização" placement="right">
-              <a href="maquinas_organizacao.html">
-                 <img src="../assets/img/elements/pc.svg" alt="">
-              </a>
-           </sl-tooltip>
-        </li>
-     
-        <li>
-           <sl-tooltip content="Programas" placement="right">
-              <a href="processo.html">
-                 <img src="../assets/img/elements/programa.svg" alt="">
-              </a>
-           </sl-tooltip>
-        </li>
-        <li>
-         <sl-tooltip content="Instituições" placement="right">
-            <a href="escola.html">
-               <img class="instituicoes" src="/assets/img/elements/graduation-cap.svg" alt="" width="1.7rem">
+         <li id="usuarios_item">
+            <sl-tooltip content="Usuários" placement="right">
+               <a href="usuarios.html">
+                  <img src="../assets/img/elements/usuario.svg" alt="">
+               </a>
+            </sl-tooltip>
+         </li>
+      </ul>
+      
+
+      <ul>
+         <li>
+            <sl-tooltip content="Sair" placement="right" >
+            <a href="../login_cadastro.html">
+            <img src="../assets/img/elements/settings.svg" alt="">
             </a>
          </sl-tooltip>
-      </li>
-        <li>
-           <sl-tooltip content="Usuários" placement="right">
-              <a href="usuarios.html">
-                 <img src="../assets/img/elements/usuario.svg" alt="">
-              </a>
-           </sl-tooltip>
-        </li>
-     </ul>
-
-     
-
-     <ul>
-      <li>
-         <sl-tooltip content="Sair" placement="right" >
-         <a href="../login_cadastro.html">
-         <img src="../assets/img/elements/settings.svg" alt="">
-         </a>
-      </sl-tooltip>
-      </li>
-   </ul>
+         </li>
+      </ul>
    </div>
-
-
 
    <div class="charts-container">
       <h1>Instituições</h1>
@@ -185,8 +183,7 @@
 
 
 <script>
-document.addEventListener("DOMContentLoaded", ()=>{
-   validarAcesso();
-})
-
+   document.addEventListener("DOMContentLoaded", ()=>{
+      validarAcesso(1);
+   });
 </script>

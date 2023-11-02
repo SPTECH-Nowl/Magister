@@ -179,7 +179,11 @@ ul li .instituicoes {
 
 .nav-list {
    position: absolute;
-   top: 40%;
+   top: 35%;
+}
+
+.nav-list img{
+   width: 1.8rem;
 }
 
 a {

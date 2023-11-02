@@ -114,10 +114,10 @@ getSelectedValues().elementos.forEach((elemento) => {
    elemento.addEventListener('sl-change', event => {
       let maquinas = document.getElementById('maquinas');
       maquinas.innerHTML = '';
-      mostrarTodasMaquinas(1);
+      mostrarTodasMaquinas(localStorage.getItem("instituicao"));
    })
 })
 
 window.onload = () => {
-   mostrarTodasMaquinas(1)
+   mostrarTodasMaquinas(localStorage.getItem("instituicao"))
 }

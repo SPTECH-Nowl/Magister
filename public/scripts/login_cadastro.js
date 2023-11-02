@@ -249,15 +249,15 @@ function entrar() {
         fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
              {cache: "no-cache"}).then((informacoesUsuario) =>{
                 if(informacoesUsuario.ok){
-                    setInterval(4000);
+                    setInterval(2000);
                     swal('sucess','Redirecionando para dashboard','sucess')
                     informacoesUsuario.json().then(infosUser =>{
                         console.log(infosUser)
-                        sessionStorage.emailUsuario = infosUser.email
-                        sessionStorage.nomeUsuario = infosUser.nome
-                        sessionStorage.idUsuario = infosUser.idUsuario
-                        sessionStorage.nivPerm = infosUser.fkTipoUsuario
-                        sessionStorage.instituicao = infosUser.fkInstituicao
+                        localStorage.setItem("email", infosUser.email);
+                        localStorage.setItem("nome", infosUser.nome);
+                        localStorage.setItem("id", infosUser.idUsuario);
+                        localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
+                        localStorage.setItem("instituicao", infosUser.fkInstituicao);
                         
                         window.location = "dashboard/dashboard_geral.html"
                     })

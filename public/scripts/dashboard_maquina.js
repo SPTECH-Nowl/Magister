@@ -6,7 +6,10 @@ const closeButton = dialog.querySelector('button');
 openButton.addEventListener('click', () => dialog.show());
 closeButton.addEventListener('click', () => dialog.hide());
 dialog.addEventListener('sl-show', () => {
-   capturarTodosDadosMaquina(1, 2).then((dados) => {
+   let idInstituicao = localStorage.getItem("instituicao");
+   let idMaquina = sessionStorage.idMaquina;
+
+   capturarTodosDadosMaquina(idInstituicao, idMaquina).then((dados) => {
       const nome = document.getElementById("modal_nome"),
             so = document.getElementById("modal_so"),
             cpu = document.getElementById("modal_cpu"),
@@ -345,25 +348,28 @@ function capturarNovoDadoDisco(idInstituicao, idMaquina) {
 }
 
 google.charts.setOnLoadCallback(() => {
-   capturarDadosCPU(1, 2).then((dados) => {
+   let idInstituicao = localStorage.getItem("instituicao");
+   let idMaquina = sessionStorage.idMaquina;
+
+   capturarDadosCPU(idInstituicao, idMaquina).then((dados) => {
       dados = dados.reverse();
       drawCPU(dados);
       verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de CPU.`);
    });
 
-   capturarDadosRAM(1, 2).then((dados) => {
+   capturarDadosRAM(idInstituicao, idMaquina).then((dados) => {
       dados = dados.reverse();
       drawRAM(dados);
       verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de RAM.`);
    });
 
-   capturarDadosDisco(1, 2).then((dados) => {
+   capturarDadosDisco(idInstituicao, idMaquina).then((dados) => {
       dados = dados.reverse();
       drawDisco(dados)
       verifConsumo(dados, null, `A máquina ${sessionStorage.nomeMaquina} registrou um alto consumo de Disco.`)
    });
 
-   capturarDadosMaquina(1, 2).then((dados) => {
+   capturarDadosMaquina(idInstituicao, idMaquina).then((dados) => {
       const nomeMaquina = document.getElementById("nome_maquina");
       const soMaquina = document.getElementById("so");
       const ramMaquina = document.getElementById("ram");

@@ -26,11 +26,12 @@
 
    <!-- Funções -->
    <script src="../scripts/dashboard_maquina.js" defer></script>
+   <script src="../scripts/funcoes.js" defer></script>
 
    <!-- Biblioteca do SHOELACE -->
    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/shoelace-autoloader.js"></script>
 
-   <!-- scriot do botão de suporte -->
+   <!-- script do botão de suporte -->
    <script src="../scripts/suporte.js"></script>
 
    <title>Dashboard de máquina</title>
@@ -39,14 +40,12 @@
    <div class="alert-toast-wrapper"></div>
    <div class="side-menu">
       <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
-      
+
       <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
 
       <ul class="nav-list">
-
-     
-
-         <li>
+   
+         <li id="dash_geral_item">
             <sl-tooltip content="Dashboard Geral" placement="right">
                <a href="dashboard_geral.html">
                   <img src="../assets/img/elements/dash.svg" alt="">
@@ -54,7 +53,7 @@
             </sl-tooltip>
          </li>
       
-         <li>
+         <li id="maquinas_organizacao_item">
             <sl-tooltip content="Maquinas de organização" placement="right">
                <a href="maquinas_organizacao.html">
                   <img src="../assets/img/elements/pc.svg" alt="">
@@ -62,21 +61,23 @@
             </sl-tooltip>
          </li>
       
-         <li>
+         <li id="programas_item">
             <sl-tooltip content="Programas" placement="right">
                <a href="processo.html">
                   <img src="../assets/img/elements/programa.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
+
+         <li id="instituicoes_item">
             <sl-tooltip content="Instituições" placement="right">
                <a href="escola.html">
-                  <img class="instituicoes" src="/assets/img/elements/graduation-cap.svg" alt="" width="1.7rem">
+                  <img src="/assets/img/elements/graduation-cap.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
+
+         <li id="usuarios_item">
             <sl-tooltip content="Usuários" placement="right">
                <a href="usuarios.html">
                   <img src="../assets/img/elements/usuario.svg" alt="">
@@ -96,6 +97,7 @@
          </li>
       </ul>
    </div>
+
    <div class="dash-content">
       <h1>Desempenho da <span id="nome_maquina"></span></h1>
       <div class="chart-grid">
@@ -181,7 +183,7 @@
               </sl-alert>
                <button class="btn primario btn-full" id="solicitarSuporteBtn">Solicitar suporte para esta máquina</button>
              </sl-dialog>
-            <button class="btn primario">Ver hardware</button>
+            <button class="btn primario ver-hardware">Ver hardware</button>
          </div>
          <div class="chart-container">
             <h3>Uso de CPU</h3>
@@ -205,7 +207,7 @@
 </html>
 
 <script>
-document.addEventListener("DOMContentLoaded", ()=>{
-   validarAcesso();
-})
+   document.addEventListener("DOMContentLoaded", ()=>{
+      validarAcesso(3);
+   });
 </script>

@@ -39,7 +39,7 @@
 
       <ul class="nav-list">
    
-         <li>
+         <li id="dash_geral_item">
             <sl-tooltip content="Dashboard Geral" placement="right">
                <a href="dashboard_geral.html">
                   <img src="../assets/img/elements/dash.svg" alt="">
@@ -47,7 +47,7 @@
             </sl-tooltip>
          </li>
       
-         <li>
+         <li id="maquinas_organizacao_item">
             <sl-tooltip content="Maquinas de organização" placement="right">
                <a href="maquinas_organizacao.html">
                   <img src="../assets/img/elements/pc.svg" alt="">
@@ -55,21 +55,23 @@
             </sl-tooltip>
          </li>
       
-         <li>
+         <li id="programas_item">
             <sl-tooltip content="Programas" placement="right">
                <a href="processo.html">
                   <img src="../assets/img/elements/programa.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
+
+         <li id="instituicoes_item">
             <sl-tooltip content="Instituições" placement="right">
                <a href="escola.html">
-                  <img class="instituicoes" src="/assets/img/elements/graduation-cap.svg" alt="" width="1.7rem">
+                  <img src="/assets/img/elements/graduation-cap.svg" alt="">
                </a>
             </sl-tooltip>
          </li>
-         <li>
+
+         <li id="usuarios_item">
             <sl-tooltip content="Usuários" placement="right">
                <a href="usuarios.html">
                   <img src="../assets/img/elements/usuario.svg" alt="">
@@ -242,11 +244,9 @@
       </div>
    </div>
 </body>
-
 </html>
-
 <script>
-document.addEventListener("DOMContentLoaded", ()=>{
-   validarAcesso();
-})
+   document.addEventListener("DOMContentLoaded", ()=>{
+      validarAcesso(3);
+   });
 </script>
