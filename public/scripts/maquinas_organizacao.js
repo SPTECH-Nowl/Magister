@@ -107,6 +107,16 @@ function mostrarTodasMaquinas(idInstituicao) {
                break;
          }
       });
+   }).then(() => {
+      if(!maquinas.childElementCount) {
+         maquinas.innerHTML = `
+         <div class="sem-resultado">
+         <img src="../assets/img/elements/naufragio.svg" alt="">
+         <h2>Nenhum resultado encontrado</h2>
+         <h3>Tente utilizar outras opções de filtragem</h3>
+         </div>
+         `;
+      } 
    });
 }
 
@@ -115,7 +125,7 @@ getSelectedValues().elementos.forEach((elemento) => {
       let maquinas = document.getElementById('maquinas');
       maquinas.innerHTML = '';
       mostrarTodasMaquinas(localStorage.getItem("instituicao"));
-   })
+   });
 })
 
 window.onload = () => {
