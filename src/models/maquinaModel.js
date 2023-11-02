@@ -9,11 +9,11 @@
             m.nome as nome,
             m.so as so,
             m.emUso as emUso,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
+            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
             as capacidadeRAM,
-            (SELECT especificidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
+            (SELECT especificidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
             as capacidadeCPU,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
+            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
             as capacidadeDisco
         FROM maquina m
         JOIN componente c ON c.fkMaquina = m.idMaquina
@@ -21,7 +21,7 @@
         JOIN hardware cpu ON c.fkHardware = cpu.idHardware
         JOIN hardware disco ON c.fkHardware = disco.idHardware
         WHERE
-            m.idMaquina = 1
+            m.idMaquina = ${idMaquina}
         LIMIT 1;
         `;
 
