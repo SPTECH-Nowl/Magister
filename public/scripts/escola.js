@@ -208,7 +208,7 @@ function carregarFeedEscola() {
 
                             // Adicione os botões com base no ID do usuário
                      celulaBotoes.innerHTML = `
-    <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Escola" onclick="deletarEscola(${escola.idInstituicao}, ${localStorage.getItem(nivPerm)})">
+                     <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Escola" onclick="deletarEscola(${escola.idInstituicao}, ${localStorage.getItem("nivPerm")})">
     <img src="../assets/img/Icone/editIcon.svg" class="tooltip edit-action" title="Editar Escola" onclick="alterar(${escola.idInstituicao})">
     <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip info-action" title="Mais Informações" onclick="dadosInstituicao(${escola.idInstituicao})">
 `;
