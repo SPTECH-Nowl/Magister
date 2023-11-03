@@ -232,7 +232,18 @@ function validar_senha() {
     
 
 
-
+function criarGrupoPermissao(idUsuario, nomeUsuario){
+  fetch("/processo/criarGrupoPerm", {
+    method: "POST",
+    headers: {
+        "Content-type": "application/json"
+    },
+    body: JSON.stringify({
+        nome: nomeUsuario,
+        idUsuario: idUsuario
+    })
+  })
+}
 
 
 // Validações de login e cadastro
@@ -249,17 +260,34 @@ function entrar() {
         fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
              {cache: "no-cache"}).then((informacoesUsuario) =>{
                 if(informacoesUsuario.ok){
-                    setInterval(2000);
-                    swal('sucess','Redirecionando para dashboard','sucess')
+
                     informacoesUsuario.json().then(infosUser =>{
-                        console.log(infosUser)
-                        localStorage.setItem("email", infosUser.email);
-                        localStorage.setItem("nome", infosUser.nome);
-                        localStorage.setItem("id", infosUser.idUsuario);
-                        localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
-                        localStorage.setItem("instituicao", infosUser.fkInstituicao);
                         
-                        window.location = "dashboard/dashboard_geral.html"
+                        fetch(`/processo/getGrupoPerm/${infosUser.idUsuario}`)
+                        .then((response)=>{
+                            if(response.status = 204){
+                                criarGrupoPermissao(infosUser.idUsuariom, infosUser.nome);
+                                
+                                localStorage.setItem("email", infosUser.email);
+                                localStorage.setItem("nome", infosUser.nome);
+                                localStorage.setItem("idUsuario", infosUser.idUsuario);
+                                localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
+                                localStorage.setItem("instituicao", infosUser.fkInstituicao);
+                                
+                                window.location = "dashboard/dashboard_geral.html"
+                            } else{
+                                localStorage.setItem("email", infosUser.email);
+                                localStorage.setItem("nome", infosUser.nome);
+                                localStorage.setItem("idUsuario", infosUser.idUsuario);
+                                localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
+                                localStorage.setItem("instituicao", infosUser.fkInstituicao);
+                                
+                                window.location = "dashboard/dashboard_geral.html"
+                            }
+                        })
+                        
+
+
                     })
 
                 } else {
@@ -310,8 +338,12 @@ fetch(`/instituicoes/buscarIdInst/${codigoVar}`, {
             }).then(function (resposta) {
                 if (resposta.ok) {
                     toggleLogin()
-                    swal("Parábens","Redirecionando para dashboard","sucess");
-                    window.location = "login_cadastro.html"
+                    resposta.json().then((resposta)=>{
+
+
+                        window.location = "login_cadastro.html"
+                    })
+                    
                 } else {
                     console.log("erro no cadastro")
                 }

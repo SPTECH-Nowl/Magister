@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function buscarUsuario() {
    var nomeDigitado = input_busca.value
-   var instituicao = sessionStorage.instituicao
+   var instituicao = localStorage.getItem("instituicao")
 
       if (nomeDigitado.length < 3){
          carregarFeed()
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 emailUsuario: email,
                                 senhaUsuario: senha,
                                 nivPermissao: tipo,
-                                instituicao: sessionStorage.instituicao
+                                instituicao: localStorage.getItem("instituicao")
                             })
                         }).then((response)=>{
                             if(response.ok){
@@ -190,12 +190,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function filtrosTipo(){
-   fetch(`/usuarios/qtdTotal/${sessionStorage.instituicao}`)
+   fetch(`/usuarios/qtdTotal/${localStorage.getItem("instituicao")}`)
    .then((qtdTotal) => {
       if (qtdTotal.ok){
-         fetch(`/usuarios/qtdAdministrador/${sessionStorage.instituicao}`)
+         fetch(`/usuarios/qtdAdministrador/${localStorage.getItem("instituicao")}`)
          .then((qtdTotalAdm) => {
-            fetch(`/usuarios/qtdInstrutor/${sessionStorage.instituicao}`)
+            fetch(`/usuarios/qtdInstrutor/${localStorage.getItem("instituicao")}`)
                .then((qtdTotalInstrutor) => {
                   if (qtdTotalInstrutor.ok){
                      qtdTotal.json().then((qtdTotal) => {
@@ -233,7 +233,7 @@ function filtrosTipo(){
 
 
 function carregarFeed() {
-    var codInstituicao = sessionStorage.instituicao;
+    var codInstituicao = localStorage.getItem("instituicao");
     fetch(`/usuarios/listar/${codInstituicao}`)
         .then(function (listaUsuarios) {
             if (listaUsuarios.ok) {
@@ -266,7 +266,7 @@ function carregarFeed() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
                             <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
                             <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
                         `;
@@ -300,7 +300,7 @@ function carregarFeed() {
 }
 
 function carregarFeedAdm() {
-    var codInstituicao = sessionStorage.instituicao;
+    var codInstituicao = localStorage.getItem("instituicao");
 
     fetch(`/usuarios/listarAdm/${codInstituicao}`)
         .then(function (listaUsuarios) {
@@ -331,7 +331,7 @@ function carregarFeedAdm() {
                             // Adicione os botões com base no ID do usuário
 
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
                             <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
                             <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
                         `;
@@ -364,7 +364,7 @@ function carregarFeedAdm() {
 }
 
 function carregarFeedInstrutor() {
-    var codInstituicao = sessionStorage.instituicao;
+    var codInstituicao = localStorage.getItem("instituicao");
 
     fetch(`/usuarios/listarInstrutor/${codInstituicao}`)
         .then(function (listaUsuarios) {
@@ -394,7 +394,7 @@ function carregarFeedInstrutor() {
 
                             // Adicione os botões com base no ID do usuário
                           celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usúario"  id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${sessionStorage.nivPerm})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usúario"  id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
                             <img src="../assets/img/Icone/editIcon.svg"  class="tooltip edit-action" title="Editar Usúario"  id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
                             <img src="../assets/img/Icone/moreInfoIcon.svg"  class="tooltip info-action" title="Mais Informações"  id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
                             `;

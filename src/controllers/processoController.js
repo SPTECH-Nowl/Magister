@@ -18,6 +18,57 @@ function listarProcessos(req, res) {
     });
 }
 
+function getPermissao(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    processoModel.getPermissao(idUsuario).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+
+function criarGrupoPerm(req, res) {
+    var idUsuario = req.body.idUsuario;
+    var nome = req.body.nome;
+
+    processoModel.criarGrupoPerm(idUsuario, nome).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function getGrupoPerm(req, res) {
+    var idUsuario = req.params.idUsuario;
+    
+
+    processoModel.criarGrupoPerm(idUsuario).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function listarAdm(req, res) {
     var codInstituicao = req.params.codInstituicao;
 
@@ -324,6 +375,9 @@ module.exports = {
     qtdTotal,
     qtdAdministrador,
     qtdInstrutor,
-    adicionarProcesso
+    adicionarProcesso,
+    getPermissao,
+    criarGrupoPerm,
+    getGrupoPerm
 
 }

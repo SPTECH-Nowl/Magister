@@ -10,10 +10,23 @@ router.get("/listar/:codInstituicao", function (req, res) {
    processoController.listar(req, res);
 });
 
-
 router.get("/listarPorProcesso/:idProcesso", function (req, res) {
    processoController.listarPorUsuario(req, res);
 });
+
+
+router.get("/getPermissao/:idUsuario", function (req, res) {
+   processoController.getPermissao(req, res);
+});
+
+router.post("/criarGrupoPerm", function (req, res) {
+   processoController.criarGrupoPerm(req, res);
+})
+
+router.get("/getGrupoPerm/:idUsuario", function (req, res) {
+   processoController.getGrupoPerm(req, res);
+});
+
 
 router.get("/listaAppUsados/:idUsuario", function (req, res) {
    processoController.listaAppUsados(req, res);
@@ -31,6 +44,8 @@ router.get("/mostrar_dadosProcesso/:idProcesso", function (req, res) {
 router.post("/cadastrarNaDashProcesso", function (req, res) {
    processoController.cadastrarNaDashProcesso(req, res);
 })
+
+
 
 router.get("/pesquisar/:descricao", function (req, res) {
    processoController.pesquisarDescricao(req, res);

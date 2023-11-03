@@ -19,6 +19,27 @@ function listarProcessos(codInstituicao) {
     return database.executar(instrução);
 }
 
+function getPermissao(idUsuario) {
+    var instrucao = `
+    select * from permissao where fkUsuario = ${idUsuario};    `;
+
+    return database.executar(instrucao);
+}
+
+function criarGrupoPerm(idUsuario, nome){
+    var instrucao = `
+    insert into permissao(nome, fkUsuario) values ('${nome}'    , ${idUsuario});`
+
+    return database.executar(instrucao)
+}
+
+function getGrupoPerm(idUsuario){
+    var instrucao = `
+    select * from permissao where fkUsuario = ${idUsuario}`
+
+    return database.executar(instrucao)
+}
+
 
 function listaAppUsados(idUsuario) {
     var instrucao = `
@@ -131,11 +152,11 @@ function mostrar_dadosProcesso(idProcesso) {
 
 
 
-function publicar(idProcesso,idUsuario) {
+function publicar(idProcesso, permUser) {
     console.log("Cadastrando processo...");
 
         var instrucao = `
-        insert into permissaoProcesso ( fkProcesso, fkPermissao,dataAlocacao) values(${idProcesso},${idUsuario}, NOW());
+        insert into permissaoProcesso (fkProcesso, fkPermissao, dataAlocacao) values(${idProcesso},${permUser}, NOW());
         `;
         return database.executar(instrucao)
             .catch(function (erro) {
@@ -240,6 +261,9 @@ module.exports = {
     qtdTotal,
     qtdAdministrador,
     qtdInstrutor,
-    adicionarProcesso
+    adicionarProcesso,
+    getPermissao,
+    criarGrupoPerm,
+    getGrupoPerm
 
 }
