@@ -1,0 +1,31 @@
+td:nth-child(1),
+th:nth-child(1) {
+    width: 20%;
+    max-width: 20%;
+}
+
+td:nth-child(2),
+th:nth-child(2) {
+    width: 20%;
+    max-width: 20%;
+}
+
+td:nth-child(3),
+th:nth-child(3) {
+    width: 30%;
+    max-width: 30%;
+}
+
+td:nth-child(4),
+th:nth-child(4) {
+    width: 15%;
+    max-width: 15%;
+}
+
+td:nth-child(6),
+th:nth-child(6) {
+    width: 15%;
+    max-width: 15%;
+    display: flex;
+    gap: 5px;
+}

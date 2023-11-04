@@ -158,7 +158,8 @@ ul li .instituicoes {
    position: relative;
    display: flex;
    align-items: center;
-   justify-content: space-between;
+   justify-content: space-around;
+   gap: 90%;
    flex-direction: column;
    width: 4vw;
    height: 100vh;
@@ -167,19 +168,28 @@ ul li .instituicoes {
    border-radius: 0 25px 25px 0;
 }
 
+.side-menu.dark-menu {
+   background: linear-gradient(358deg, #18072e 18.16%, #602da7 80.1%);   
+}
+
+.side-menu.black-menu {
+   background: linear-gradient(358deg, #0f0f0f 18.16%, #363636 38.1%);   
+}
+
 .logo-nav {
    width: 40px;
 }
 
 .wave-menu {
    width: 100%;
+   height: 15%;
    position: absolute;
    z-index: -1;
 }
 
 .nav-list {
    position: absolute;
-   top: 35%;
+   top: 28%;
 }
 
 .nav-list img{

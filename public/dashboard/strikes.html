@@ -1,0 +1,190 @@
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/usuarios.css">
+    <link rel="stylesheet" href="../styles/strikes.css">
+    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
+
+    <!-- Inclua a biblioteca Tippy.js -->
+    <script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.min.js"></script>
+
+    <!-- BACK END DO CRUD DE STRIKES-->
+    <script src="../scripts/strike.js"></script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Shoelace -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/select/select.js"></script>
+        
+    <!-- Componentes -->
+    <script src="../components/input/input.js" defer></script>
+    <link rel="stylesheet" href="../components/input/input.css">
+
+    <script src="../components/select/select.js" defer></script>
+    <link rel="stylesheet" href="../components/select/select.css">
+
+    <script src="../components/button/button.js" defer></script>
+    <link rel="stylesheet" href="../components/button/button.css">
+
+    <script src="../components/navbar/navbar.js" defer></script>
+    <link rel="stylesheet" href="../components/navbar/navbar.css">
+
+    <script src="../components/dialog/dialog.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+    <script src="../scripts/funcoes.js" defer></script>
+
+    <title>Magister | Strikes</title>
+
+</head>
+
+<body>
+
+    <body onload="carregarFeed()"></body>
+
+
+    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
+
+        <sl-button slot="footer" variant="primary"></sl-button>
+    </sl-drawer>
+
+
+    <div class="side-menu">
+        <img src="../assets/img/elements/wave-menu.svg" alt="" class="wave-menu">
+
+        <img src="../assets/img/Logos/logoMagister.svg" alt="" class="logo-nav">
+
+        <ul class="nav-list">
+
+            <li id="dash_geral_item">
+                <sl-tooltip content="Dashboard Geral" placement="right">
+                    <a href="dashboard_geral.html">
+                        <img src="../assets/img/elements/dash.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+
+            <li id="maquinas_organizacao_item">
+                <sl-tooltip content="Maquinas de organização" placement="right">
+                    <a href="maquinas_organizacao.html">
+                        <img src="../assets/img/elements/pc.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+
+            <li id="programas_item">
+                <sl-tooltip content="Programas" placement="right">
+                    <a href="processo.html">
+                        <img src="../assets/img/elements/programa.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+
+            <li id="instituicoes_item">
+                <sl-tooltip content="Instituições" placement="right">
+                    <a href="escola.html">
+                        <img src="/assets/img/elements/graduation-cap.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+
+            <li id="usuarios_item">
+                <sl-tooltip content="Usuários" placement="right">
+                    <a href="usuarios.html">
+                        <img src="../assets/img/elements/usuario.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+
+            <li id="strikes_item">
+                <sl-tooltip content="Strikes" placement="right">
+                    <a href="strikes.html">
+                        <img src="../assets/img/elements/strike.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+        </ul>
+
+
+        <ul>
+            <li>
+                <sl-tooltip content="Sair" placement="right">
+                    <a href="../login_cadastro.html">
+                        <img src="../assets/img/elements/settings.svg" alt="">
+                    </a>
+                </sl-tooltip>
+            </li>
+        </ul>
+    </div>
+
+    <div class="charts-container">
+        <h1>Strikes</h1>
+        <div class="top-users">
+
+            <div class="flex-row gap-1" id="orderOptions"></div>
+
+            <div class="container-selects">
+
+                <div class="flex-row gap-1 pesquisarEAdd">
+                    <div class="input-wrapper icon wdt-100">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" class="input" id="input_busca" placeholder="Pesquisar por uma máquina"
+                            onkeyup="buscarStrike()" fontSize="1rem">
+                        <i class="ph ph-eye" id="teste_ph"></i>
+                    </div>
+                    <button class="btn primario" id="adicionarStrike?">Adicionar strike?????</button>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="charts-content">
+            <div class="chart-grid cols-1">
+
+                <div class="tableWrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Máquina</th>
+                                <th>Data e Hora</th>
+                                <th>Processo</th>
+                                <th>Duração</th>
+                                <th>Situação</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="strike-list-tbody" id="listaDeStrikes">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        validarAcesso(2);
+    });
+</script>
