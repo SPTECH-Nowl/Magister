@@ -21,6 +21,26 @@ function listar(req, res) {
     });
 }
 
+function listarSituacao(req, res) {
+    console.log('no controller');
+    var codInstituicao = req.params.codInstituicao;
+    var situacao = req.params.situacao;
+
+    strikeModel.listarSituacao(codInstituicao, situacao)
+    .then(function (resultado) {
+        console.log('no then do controller');
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar os strikes com situação: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function contadores(req, res) {
     console.log('no controller');
     var codInstituicao = req.params.codInstituicao;
@@ -43,5 +63,6 @@ function contadores(req, res) {
 
 module.exports = {
     listar,
+    listarSituacao,
     contadores
 }

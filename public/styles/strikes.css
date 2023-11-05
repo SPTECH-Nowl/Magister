@@ -51,3 +51,11 @@ th:nth-child(6) {
 #orderOptions span:nth-child(5) {
     color: var(--color-gray-600);
 }
+
+.container-selects {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}

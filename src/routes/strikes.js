@@ -7,6 +7,10 @@ router.get("/listar/:codInstituicao", function (req, res) {
     strikeController.listar(req, res);
 });
 
+router.get("/listar/situacao/:codInstituicao/:situacao", function (req, res) {
+    strikeController.listarSituacao(req, res);
+});
+
 router.get("/contadores/:codInstituicao", function (req, res) {
     strikeController.contadores(req, res);
 });

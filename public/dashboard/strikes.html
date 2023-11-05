@@ -149,8 +149,23 @@
                     </div>
                     <button class="btn primario" id="adicionarStrike?">Adicionar strike?????</button>
                 </div>
+
+                
             </div>
 
+            <div class="container-selects">
+                <sl-select id="dt_hr" placeholder="Data e Hora" pill filled clearable>
+                   <sl-option value="mais_recente">Mais recente</sl-option>
+                   <sl-option value="mais_antigo">Mais antiga</sl-option>
+                 </sl-select>
+ 
+                 <sl-select id="situacao" placeholder="Situação" pill filled clearable>
+                   <sl-option value="ativo">Ativo</sl-option>
+                   <sl-option value="valido">Válido</sl-option>
+                   <sl-option value="invalido">Inválido</sl-option>
+                   <sl-option value="inativo">Inativo</sl-option>
+                 </sl-select>
+            </div>
 
         </div>
         <div class="charts-content">
@@ -162,7 +177,7 @@
                             <tr>
                                 <th>Máquina</th>
                                 <th>Data e Hora</th>
-                                <th>Processo</th>
+                                <th>Motivo</th>
                                 <th>Duração</th>
                                 <th>Situação</th>
                                 <th></th>
