@@ -29,3 +29,25 @@ th:nth-child(6) {
     display: flex;
     gap: 5px;
 }
+
+#orderOptions span {
+    cursor: pointer;
+    color: var(--color-gray-800);
+    font-weight: 700;
+}
+
+#orderOptions span:nth-child(2) {
+    color: var(--color-blue-500);
+}
+
+#orderOptions span:nth-child(3) {
+    color: var(--color-green-500);
+}
+
+#orderOptions span:nth-child(4) {
+    color: var(--color-coral);
+}
+
+#orderOptions span:nth-child(5) {
+    color: var(--color-gray-600);
+}

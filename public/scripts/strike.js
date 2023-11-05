@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('carreguei');
     carregarFeed()
-    // filtrosTipo()
+    contadoresStrike()
    });
 
 
@@ -234,21 +234,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function carregarFeed() {
-    console.log('na função');
     var codInstituicao = localStorage.getItem("instituicao");
     fetch(`/strikes/listar/${codInstituicao}`)
         .then(function (listaStrikes) {
-            console.log('voltou do fetch');
             console.log(listaStrikes);
             if (listaStrikes.ok) {
                 if (listaStrikes.status == 204) {
-                    console.log('204 se pa');
                     var tableStrikes = document.getElementById("listaDeStrikes");
                     tableStrikes.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
                 } else {
-                    console.log('no else');
                     listaStrikes.json().then(function (listaStrikes) {
-                        console.log('no then do else');
 
                         var tableStrikes = document.getElementById("listaDeStrikes");
                         tableStrikes.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
@@ -301,7 +296,6 @@ function carregarFeed() {
                             tableStrikes.appendChild(linhaTable);
                         }
                     })
-                    console.log('depois do then do else');
                 }
             } else {
                 throw ('Houve um erro na API!');
@@ -311,6 +305,44 @@ function carregarFeed() {
             console.error(resposta);
         });
 }
+
+function contadoresStrike(){
+    fetch(`/strikes/contadores/${localStorage.getItem("instituicao")}`)
+    .then((contadores) => {
+        if (contadores.ok) {
+            contadores.json().then(function (contadores) {
+                var orderOptions = document.getElementById("orderOptions")
+
+                    var spanTotal = document.createElement("span")
+                    var spanAtivos = document.createElement("span")
+                    var spanValidos = document.createElement("span")
+                    var spanInvalidos = document.createElement("span")
+                    var spanInativos = document.createElement("span")
+
+                    spanTotal.textContent = `Total(${contadores[0].total})`
+                    spanAtivos.textContent = `Ativos(${contadores[0].ativos})`
+                    spanValidos.textContent = `Válidos(${contadores[0].validos})`
+                    spanInvalidos.textContent = `Inválidos(${contadores[0].invalidos})`
+                    spanInativos.textContent = `Ativos(${contadores[0].inativos})`
+
+                    
+
+                    spanTotal.onclick = carregarFeed
+                    // spanTotalAdministrador.onclick = carregarFeedAdm
+                    // spanTotalInstrutor.onclick = carregarFeedInstrutor
+
+                    orderOptions.appendChild(spanTotal)
+                    orderOptions.appendChild(spanAtivos)
+                    orderOptions.appendChild(spanValidos)
+                    orderOptions.appendChild(spanInvalidos)
+                    orderOptions.appendChild(spanInativos)
+
+            })
+        }
+    })
+}
+ 
+ 
 
 // function carregarFeedAdm() {
 //     var codInstituicao = localStorage.getItem("instituicao");

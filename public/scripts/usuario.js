@@ -250,8 +250,6 @@ function carregarFeed() {
                         for (var i = 0; i < listaUsuarios.length; i++) {
                             var usuario = listaUsuarios[i];
 
-                            
-                            
                             var linhaTable = document.createElement("tr");
                             linhaTable.setAttribute('id', `usuario_${usuario.idUsuario}`)
 
