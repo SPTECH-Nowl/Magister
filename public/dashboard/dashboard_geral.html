@@ -124,9 +124,9 @@
                </div>
 
                <div class="chart-div-right">
-                  <button id="1_mes" class="chart-btn chart-btn-active" onclick="handleChartBtn('1_mes')">1 mês</button>
-                  <button id="3_meses" class="chart-btn" onclick="handleChartBtn('3_meses')">3 meses</button>
-                  <button id="6_meses" class="chart-btn" onclick="handleChartBtn('6_meses')">6 meses</button>
+                  <button id="1_mes" class="chart-btn chart-btn-active" onclick="handleChartBtn('1_mes')" id="strike_primeiro_mes">1 mês</button>
+                  <button id="3_meses" class="chart-btn" onclick="handleChartBtn('3_meses')" id="strike_terceiro_mes">3 meses</button>
+                  <button id="6_meses" class="chart-btn" onclick="handleChartBtn('6_meses')" id="strike_sexto_mes">6 meses</button>
                </div>
 
             </div>
@@ -137,7 +137,7 @@
                <div id="strikepie"></div>
                
                <div class="chart-div-right">
-                  <p class="chart-graph-info">77%</p>
+                  <p class="chart-graph-info" id="porcentagem_strikes">77%</p>
                   <p class="chart-mini-text">das Máquinas possuem Strike</p>
                </div>
             </div>
@@ -149,7 +149,7 @@
                <div id="alertadiscopie"></div>
                
                <div class="chart-div-right">
-                  <p class="chart-graph-info">80%</p>
+                  <p class="chart-graph-info" id="porcentagem_disco">80%</p>
                   <p class="chart-mini-text">das Máquinas acima do limite de Disco</p>
                </div>
             </div>
@@ -157,7 +157,7 @@
          </div>
 
          <div class="chart-container list-chart">
-            <p class="chart-text">Máquinas com mais defeitos: </p>
+            <p class="chart-text" id="maquinas_mais_defeito">Máquinas com mais defeitos: </p>
             <table id="chart_ranking" class="chart-ranking">
                <thead>
                   <th>Máquina 01</th>
@@ -201,54 +201,15 @@
                </tbody>
             </table>
 
-            <!-- <div id="chart_ranking" class="chart-ranking">
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-               <div class="ranking-row">
-                  <p class="chart-mini-text">Máquina 01</p>
-                  <hr class="ranking-divider">
-               </div>
-                
-            </div> -->
             
          </div>
 
          <div class="chart-container column-chart">
-            <p class="chart-text">Máquinas com mais uso de CPU e RAM da semana: </p>
+            <p class="chart-text" id="maquinas_cpu_ram">Máquinas com mais uso de CPU e RAM da semana: </p>
             <div id="cpuramcolumn"></div>
          </div>
 
-         <!-- <div class="chart-container">
-
-         </div> -->
+         
       </div>
    </div>
 </body>

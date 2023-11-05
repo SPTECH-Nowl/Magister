@@ -379,3 +379,105 @@ INSERT INTO permissaoProcesso (dataAlocacao, fkPermissao, fkProcesso) VALUES
 	('2023-08-23 12:02:15', 7, 2),
 	('2023-08-23 12:03:00', 8, 3),
 	('2023-08-23 12:03:45', 9, 3);
+    
+    
+    
+    -- SELECT PARA PORCENTAGEM DE MAQUINAS ACIMA DO DISCO
+   SELECT
+    (SELECT COUNT(*) FROM maquina) AS total_maquinas,
+    (SELECT COUNT(*) FROM componente c
+     JOIN hardware h ON c.fkHardware = h.idHardware
+     WHERE h.capacidade > c.max) AS maquinas_acima_limite,
+    (SELECT COUNT(*) FROM componente c
+     JOIN hardware h ON c.fkHardware = h.idHardware
+     WHERE h.capacidade > c.max) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_acima_limite_disco;
+
+
+
+-- SELECT PARA VER PORCENTAGEM DE STRIKES DAS MAQUINAS
+SELECT
+    (SELECT COUNT(*) FROM maquina) AS total_maquinas,
+    (SELECT COUNT(DISTINCT fkMaquina) FROM strike) AS maquinas_com_strikes,
+    (SELECT COUNT(DISTINCT fkMaquina) FROM strike) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_maquinas_com_strikes;
+    
+    
+    
+-- SELECT PARA VER PORCENTAGEM DE ALERTAS DAS MÁQUINAS
+SELECT
+    (SELECT COUNT(*) FROM maquina) AS total_maquinas,
+    (SELECT COUNT(DISTINCT fkMaquina) FROM historico) AS maquinas_com_alertas,
+    (SELECT COUNT(DISTINCT fkMaquina) FROM historico) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_maquinas_com_alertas;
+
+
+
+
+
+-- SELECT PARA VER QUANTOS STRIKES TEVE NA SEMANA
+SELECT COUNT(*) AS total_strikes_semana
+FROM strike
+WHERE YEARWEEK(dataHora, 1) = YEARWEEK(NOW(), 1);
+
+
+
+-- SELECT PARA VER O DIA QUE HOUVE MAIS STRIKES
+SELECT DATE(dataHora) AS Dia, COUNT(*) AS TotalStrikes
+FROM strike
+GROUP BY Dia
+ORDER BY TotalStrikes DESC
+LIMIT 1;
+
+
+-- SELECT PRA VER QUANTOS STRIKES TEVE NA SEMANA, NO 1 MES, NO 3 MES E NO 6 MES
+SELECT COUNT(*) AS strikes_semana
+FROM strike
+WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 7 DAY);
+
+SELECT COUNT(*) AS strikes_primeiro_mes
+FROM strike
+WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 1 MONTH);
+
+SELECT COUNT(*) AS strikes_terceiro_mes
+FROM strike
+WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 3 MONTH);
+
+SELECT COUNT(*) AS strikes_sexto_mes
+FROM strike
+WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 6 MONTH);
+
+
+-- SELECT AUTOMATIZADO PARA VER A MAQUINA QUE ESTÁ COM MAIS DEFEITO DE ACORDO NOME DA MAQUINA,COM NUMERO DE STRIKES E NUMERO DE ALERTAS
+SELECT m.nome AS nome_maquina, 
+        IFNULL(s.strikes, 0) AS numero_strikes, 
+        IFNULL(a.alertas, 0) AS numero_alertas
+ FROM maquina m
+ LEFT JOIN (
+     SELECT fkMaquina, COUNT(*) AS strikes
+     FROM strike
+     WHERE DATEDIFF(NOW(), dataHora) <= 7
+     GROUP BY fkMaquina
+ ) s ON m.idMaquina = s.fkMaquina
+ LEFT JOIN (
+     SELECT fkMaquina, COUNT(*) AS alertas
+     FROM strike
+     WHERE DATEDIFF(NOW(), dataHora) <= 7
+     GROUP BY fkMaquina
+ ) a ON m.idMaquina = a.fkMaquina
+ ORDER BY (s.strikes + a.alertas) DESC
+ LIMIT 1;
+
+
+
+-- SELECT PARA MAQUINAS QUE MAIS USARAM RAM E CPU NA SEMANA
+SELECT m.nome AS nome_maquina,
+    AVG(CASE WHEN h.fkHardware = 1 THEN h.consumo ELSE 0 END) AS uso_medio_cpu,
+    AVG(CASE WHEN h.fkHardware = 2 THEN h.consumo ELSE 0 END) AS uso_medio_ram
+FROM maquina m
+JOIN historico h ON m.idMaquina = h.fkMaquina
+WHERE h.dataHora >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+GROUP BY m.idMaquina, m.nome
+ORDER BY uso_medio_cpu DESC, uso_medio_ram DESC
+LIMIT 10;
+
+
+
+
