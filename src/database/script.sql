@@ -6,6 +6,11 @@ CREATE TABLE tipoUsuario (
     tipoUsuario VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE situacao (
+	idSituacao INT PRIMARY KEY AUTO_INCREMENT,
+    situacao VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE medida (
 	idMedida INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50),
@@ -23,6 +28,12 @@ CREATE TABLE processo (
 	idProcesso INT PRIMARY KEY AUTO_INCREMENT,
 	nomeProcesso VARCHAR(100) NOT NULL,
 	nomeAplicativo VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE atuacao (
+	idAtuacao INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(75) NOT NULL,
+    descricao VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE tipoHardware (
@@ -67,8 +78,11 @@ CREATE TABLE strike (
     dataHora DATETIME NOT NULL,
     validade TINYINT NOT NULL,
     motivo VARCHAR(255) DEFAULT 'Sem motivo definido',
+    duracao INT NOT NULL,
     fkMaquina INT, CONSTRAINT strikFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina)
+		REFERENCES maquina(idMaquina),
+	fkSituacao INT, CONSTRAINT strikFkSit FOREIGN KEY (fkSituacao)
+		REFERENCES situacao(idSituacao)
 );
   
   CREATE TABLE componente (
@@ -83,17 +97,16 @@ CREATE TABLE strike (
 CREATE TABLE permissao (
 	idPermissao INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(45) NOT NULL,
+    fkAtuacao INT, CONSTRAINT permFkAtuac FOREIGN KEY (fkAtuacao)
+		REFERENCES atuacao(idAtuacao),
     fkUsuario INT, CONSTRAINT permFKUsu FOREIGN KEY (fkUsuario)
 		REFERENCES usuario(idUsuario)
 );
-
-
 
 CREATE TABLE historico (
 	idHistorico INT PRIMARY KEY AUTO_INCREMENT,
 	dataHora DATETIME NOT NULL,
 	consumo DOUBLE NOT NULL,
-     qtdJanelasAbertas INT NOT NULL,
 	fkMaquina INT, CONSTRAINT histFkMaq FOREIGN KEY (fkMaquina)
 		REFERENCES maquina(idMaquina),
 	fkHardware INT, CONSTRAINT histFkHard FOREIGN KEY (fkHardware)
@@ -101,10 +114,6 @@ CREATE TABLE historico (
 	fkComponente INT, CONSTRAINT histFkComp FOREIGN KEY (fkComponente)
 		REFERENCES componente(idComponente)
 );
-
-select * from historico;
-select * from usuario;
-
 
 CREATE TABLE historicoProcesso (
 	idHistoricoProcesso INT PRIMARY KEY AUTO_INCREMENT,
@@ -126,15 +135,25 @@ CREATE TABLE permissaoProcesso (
 		REFERENCES permissao (idPermissao)
 );
 
+-- EXCLUIR BANCO
+-- drop database magister;
+
 -- dados mocados para teste java
 
-select * from hardware;
+select * from usuario;
 
 -- INSERTS TIPOUSUARIO
 INSERT INTO tipoUsuario (tipoUsuario) VALUES 
 	('ADM Nowl'),
     ('ADM da Instituição'),
     ('Professor');
+    
+-- INSERTS SITUACAO
+INSERT INTO situacao (situacao) VALUES 
+	('Ativo'),
+    ('Inativo'),
+    ('Válido'),
+    ('Inválido');
 
 -- INSERTS MEDIDA
 INSERT INTO medida (nome, unidade) VALUES
@@ -146,12 +165,35 @@ INSERT INTO instituicao (nome, sigla, codigoHex) VALUES
 	('Nowl', 'nowl', '000000'),
 	('São Paulo Tech School', 'SPTech', 'ABC123'),
 	('Universidade São Paulo', 'USP', '456FED'),
-	('ETEC de Guaianases', 'ETG', '123456');
+	('ETEC de Guaianases', 'ETG', '123456'),
+	('Escola Técnica de Informática', 'ETI', '7890AB'),
+	('Instituto de Tecnologia e Informação', 'ITI', 'CDEF01'),
+	('Faculdade de Ciências da Computação', 'FCC', '234567'),
+	('Centro de Ensino de Tecnologia Avançada', 'CETA', '89ABCD');
+
 
 -- INSERTS PROCESSO
 INSERT INTO processo (nomeProcesso, nomeAplicativo) VALUES
 	('Google Chrome', 'chrome.exe'),
-	('MySQL Workbench', 'MySQLWorkbench.exe');
+	('MySQL Workbench', 'MySQLWorkbench.exe'),
+    ('Visual Studio', 'devenv.exe'),
+    ('NetBeans', 'netbeans.exe'),
+    ('Sublime Text', 'sublime_text.exe'),
+    ('Atom', 'atom.exe'),
+    ('PyCharm', 'pycharm.exe'),
+    ('WebStorm', 'webstorm.exe'),
+    ('Notepad++', 'notepad++.exe'),
+    ('NetBeans', 'netbeans64.exe'),
+    ('Code::Blocks', 'codeblocks.exe'),
+    ('Spyder', 'spyder.exe');
+
+
+    
+-- INSERTS ATUACAO
+INSERT INTO atuacao (nome, descricao) VALUES
+	('Conversar com aluno', 'Nenhuma ação com a máquina monitorada, o instrutor irá conversar com o aluno sobre a situação.'),
+	('Pop up', 'Notificar o aluno com uma imagem em sua tela e um som de notificação.'),
+	('Alarme', 'Um efeito sonoro de alarme será soado na máquina.');
 
 -- INSERTS TIPOHARDWARE
 INSERT INTO tipoHardware (tipo, fkMedida) VALUES
@@ -163,84 +205,98 @@ INSERT INTO tipoHardware (tipo, fkMedida) VALUES
 INSERT INTO usuario (nome, email, senha, fkInstituicao, fkTipoUsuario) VALUES
 	('Jhulia Cristina', 'jhulia.silva@sptech.school', 'Salada123@', 1, 1),
 	('Will Dantas Adolpho', 'will.adolpho@sptech.school', 'SelokoPai69#', 2, 2),
+	('João Gabriel', 'joao.gabriel@sptech.school', 'Salada123@', 2, 2),
 	('Yuri Martins', 'yuri.silva@pwc.com', 'WorkForce@23', 4, 3),
 	('Tiago Alves', 'tiago.asilva@sptech.school', 'WorkForce@23', 2, 3),
-	('Caua Gustavo de Souza Mesquita', 'caua.web.data.viz.gustavo.de.souza.mesquita@gmail.com', 'DataAqcuIno69@', 1, 1);
+	('Caua Gustavo de Souza Mesquita', 'caua.web.data.viz.gustavo.de.souza.mesquita@gmail.com', 'DataAqcuIno69@', 1, 1),
+    ('Naruto Uzumaki', 'naruto.uzumaki@sptech.school', 'Rasengan123@', 3, 2),
+    ('Sasuke Uchiha', 'sasuke.uchiha@sptech.school', 'Sharingan456@', 1, 2),
+    ('Sakura Haruno', 'sakura.haruno@sptech.school', 'CherryBlossom789@', 4, 3),
+    ('Kakashi Hatake', 'kakashi.hatake@sptech.school', 'SharinganSenseiABC@', 5, 3),
+    ('Hinata Hyuga', 'hinata.hyuga@sptech.school', 'Byakugan123@', 3, 2),
+    ('Rock Lee', 'rock.lee@sptech.school', 'DynamicEntry456@', 1, 2),
+    ('Neji Hyuga', 'neji.hyuga@sptech.school', 'GentleFist789@', 4, 3),
+    ('Tenten', 'tenten@sptech.school', 'WeaponMasterABC@', 5, 3);
+
+
 
 -- INSERTS HARDWARE
 INSERT INTO hardware (fabricante, modelo, capacidade, especificidade, fkTipoHardware) VALUES
-	('Intel', 'i5-10400F', 3.3, 'Quad-core', 2),
-	('Kingston', ' Fury Beast', 8, 'DDR4', 3),
+	('Intel', 'i5-10400F', 3.3, 'Quad-core', 3),
+	('Kingston', ' Fury Beast', 8, 'DDR4', 2),
 	('Seagate', 'Barracuda', 2048, 'HD', 1),
-	('TGT', 'Egon T2', 256, 'SSD', 1);
+	('TGT', 'Egon T2', 256, 'SSD', 1),
+    ('AMD', 'Ryzen 5 5600X', 4.6, 'Hexa-core', 3),
+    ('Crucial', 'MX500', 1000, 'SSD', 1),
+    ('Western Digital', 'Black', 4000, 'HD', 1),
+    ('NVIDIA', 'GeForce RTX 3070', 8, 'GPU', 3),
+    ('Intel', 'i9-11900K', 5.3, 'Octa-core', 3),
+    ('G.Skill', 'Trident Z', 32, 'DDR4', 2),
+    ('Samsung', '860 EVO', 2000, 'SSD', 1),
+    ('ASUS', 'ROG Strix', 12, 'GPU', 2),
+    ('Corsair', 'Vengeance RGB Pro', 16, 'DDR4', 2),
+    ('Seagate', 'FireCuda', 500, 'SSD', 1);
 
+
+-- INSERTS MAQUINA
+-- Inserir registros na tabela maquina com fkUsuario e fkHardware
 -- INSERTS MAQUINA
 INSERT INTO maquina (nome, SO, emUso, fkInstituicao) VALUES
 	('Desktop-G7205', 'Windows 10', 1, 1),
 	('Desktop-G1234', 'Windows 11', 0, 1),
 	('Desktop-F5412', 'Linux Ubuntu', 1, 2),
-	('Desktop-C9436', 'Arch Linux', 1, 3);
+	('Desktop-C9436', 'Arch Linux', 1, 3),
+	('Laptop-XB350', 'Windows 10', 1, 1),
+	('Workstation-HP123', 'Windows 11', 0, 1),
+	('Server-UBT600', 'Linux Ubuntu', 1, 2),
+	('Desktop-AL2022', 'Arch Linux', 1, 3),
+	('Laptop-Dell555', 'Windows 10', 0, 2),
+	('Workstation-ASUS', 'Windows 11', 1, 2),
+	('Server-RedHat', 'Red Hat Enterprise Linux', 1, 1),
+	('Desktop-IBM2023', 'Fedora', 0, 4),
+	('Laptop-HP1122', 'Ubuntu', 1, 3),
+	('Workstation-Lenovo', 'Debian', 0, 4);
 
-INSERT INTO maquina (nome, SO, emUso, fkInstituicao) VALUES
-('Desktop-G7205', 'Windows 10', 1, 1),
-('Desktop-G1234', 'Windows 11', 0, 1),
-('Desktop-F5412', 'Linux Ubuntu', 1, 1),
-('Desktop-C9436', 'Arch Linux', 1, 1),
-('Desktop-X3456', 'Windows 10', 1, 1),
-('Desktop-Y6789', 'Windows 11', 0, 1),
-('Desktop-Z0123', 'Linux Ubuntu', 1, 1),
-('Desktop-A4567', 'Arch Linux', 1, 1),
-('Desktop-B7890', 'Windows 10', 1, 1),
-('Desktop-D8901', 'Windows 11', 0, 1),
-('Desktop-E2345', 'Linux Ubuntu', 1, 1),
-('Desktop-H6789', 'Arch Linux', 1, 1),
-('Desktop-I1234', 'Windows 10', 1, 1),
-('Desktop-J5678', 'Windows 11', 0, 1),
-('Desktop-K9012', 'Linux Ubuntu', 1, 1),
-('Desktop-L3456', 'Arch Linux', 1, 1),
-('Desktop-M7890', 'Windows 10', 1, 1),
-('Desktop-N8901', 'Windows 11', 0, 1),
-('Desktop-O2345', 'Linux Ubuntu', 1, 1),
-('Desktop-P6789', 'Arch Linux', 1, 1);
 
+    
+    
+    
+    -- INSERT STRIKES
 -- INSERTS STRIKE
-INSERT INTO strike (dataHora, validade, motivo, fkMaquina) VALUES
-	('2023-09-23 12:57:00', 1, null, 1),
-	('2022-12-12 15:15:15', 0, 'Uso indevido', 9),
-	('2023-07-05 17:42:57', 1, 'Tentaviva de fechamento do processo', 6),
-	('2023-09-23 12:57:00', 1, null, 7),
-	('2022-12-12 15:15:15', 0, 'Uso indevido', 3),
-	('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 8),
-	('2023-08-15 14:20:00', 1, 'Uso indevido', 2),
-	('2022-11-11 11:11:11', 0, 'Tentativa de acesso não autorizado', 2),
-	('2023-06-30 09:30:45', 1, 'Acesso não autorizado', 3),
-	('2023-05-25 17:15:00', 1, 'Uso indevido', 4),
-	('2022-10-10 10:10:10', 0, 'Tentativa de fechamento do processo', 4),
-	('2023-03-03 03:03:03', 1, 'Acesso não autorizado', 4),
-	('2023-08-20 09:45:30', 1, 'Uso indevido', 5),
-	('2023-07-10 14:30:15', 0, 'Tentativa de acesso não autorizado', 6),
-	('2023-06-05 16:20:30', 1, 'Uso indevido', 7),
-	('2023-05-10 10:15:00', 1, 'Tentativa de fechamento do processo', 8),
-	('2023-04-15 09:30:45', 0, 'Acesso não autorizado', 9),
-	('2023-03-20 14:45:30', 1, 'Uso indevido', 10),
-	('2023-02-25 16:30:15', 1, 'Tentativa de acesso não autorizado', 11),
-	('2023-01-30 10:20:30', 0, 'Acesso não autorizado', 12),
-	('2022-12-05 17:15:00', 1, 'Uso indevido', 13),
-	('2022-11-10 10:15:15', 1, 'Tentativa de fechamento do processo', 14),
-	('2022-10-15 09:30:45', 0, 'Uso indevido', 15),
-	('2022-09-20 14:45:30', 1, 'Tentativa de acesso não autorizado', 16),
-	('2022-08-25 16:30:15', 1, 'Uso indevido', 17),
-	('2022-07-30 10:20:30', 0, 'Tentativa de fechamento do processo', 18),
-	('2022-06-05 17:15:00', 1, 'Uso indevido', 1),
-	('2022-05-10 10:15:15', 1, 'Tentativa de acesso não autorizado', 20),
-	('2022-04-15 09:30:45', 0, 'Acesso não autorizado', 21),
-	('2022-03-20 14:45:30', 1, 'Uso indevido', 22),
-	('2022-02-25 16:30:15', 1, 'Tentativa de fechamento do processo', 23),
-	('2022-01-30 10:20:30', 0, 'Acesso não autorizado', 24),
-    ('2022-01-30 10:20:30', 0, 'Acesso não autorizado', 2);
+-- INSERTS STRIKE
+INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
+('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
+('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
+('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 1, 3),
+('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 1, 2),
+('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 1, 3),
+('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 1, 2),
+('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 6, 2),
+('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 6, 3),
+('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 6, 2),
+('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 5, 3),
+('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 6, 2),
+('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 6, 2),
+('2023-11-09 10:45:00', 0, 'Conversando com Luigi Jadeu', 120, 6, 3);
 
+
+    
+
+
+
+    
 -- INSERTS COMPONENTE
 INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
+	(default, 1, 1),
+	(default, 1, 2),
+	(default, 1, 3),
+	(default, 2, 1),
+	(80, 2, 2),
+	(default, 2, 4),
+	(90, 3, 1),
+	(90, 3, 2),
+	(95, 3, 3),
+	(90, 3, 4),
 	(default, 1, 1),
 	(default, 1, 2),
 	(default, 1, 3),
@@ -253,13 +309,43 @@ INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
 	(90, 3, 4);
 
 -- INSERTS PERMISSAO
-INSERT INTO permissao (nome, fkUsuario) VALUES
-	('Urubu100', 3),
-	('Urubu200', 3),
-	('Aulinha Java', 4);
-
+INSERT INTO permissao (nome, fkAtuacao, fkUsuario) VALUES
+	('Urubu100', 1, 3),
+	('Urubu200', 3, 3),
+	('Aulinha Java', 2, 4),
+('Aula de S.O', 1, 1),
+  ('Aula de Análise', 2, 2),
+  ('Aula de Sócio', 3, 3),
+  ('Aula de Pesquisa Inovação', 1, 1),
+  ('Aula de Arq Comp', 2, 2),
+  ('Aula de T.I', 3, 3),
+  ('Aula de Algoritmo', 1, 1),
+  ('Aula de Algoritmo', 2, 2);
+  
+  
+  
 -- INSERTS HISTORICO
-select * from historico;
+INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
+	('2023-08-23 12:17:30', .5, 1, 1, 2),
+	('2023-08-23 12:17:35', .6, 1, 1, 2),
+	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+	('2023-08-23 12:17:30', .5, 1, 2, 2),
+	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+	('2023-08-23 12:17:30', 200, 1, 3, 2),
+	('2023-08-23 12:17:35', 200, 1, 3, 2),
+	('2023-08-23 12:17:40', 245, 1, 3, 2),
+  ('2023-08-23 12:17:30', .5, 1, 1, 2),
+  ('2023-08-23 12:17:35', .6, 1, 1, 2),
+  ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+  ('2023-08-23 12:17:30', .5, 1, 2, 2),
+  ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+  ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+  ('2023-08-23 12:17:30', 200, 1, 3, 2),
+  ('2023-08-23 12:17:35', 200, 1, 3, 2),
+  ('2023-08-23 12:17:40', 245, 1, 3, 2);
+
+
 -- INSERTS HISTORICOPROCESSO
 INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
@@ -270,130 +356,26 @@ INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2);
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
+	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
+	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
+	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
+	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
+	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
+
 
 -- INSERTS PERMISSAOPROCESSO
 INSERT INTO permissaoProcesso (dataAlocacao, fkPermissao, fkProcesso) VALUES
 	('2012-12-12 00:00:00', 1, 1),
 	('2012-12-12 00:00:25', 1, 2),
 	('2021-07-15 00:00:25', 2, 2),
-	('2023-03-27 00:00:25', 3, 1);
-    
-select * from historico;
-
-SELECT 
-	h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo
-FROM 
-	historico h
-JOIN componente c ON h.fkComponente = c.idComponente
-JOIN hardware hw ON c.fkHardware = hw.idHardware
-JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
-WHERE
-	th.tipo = 'RAM' AND h.fkMaquina = 2
-ORDER BY dataHora DESC
-LIMIT 10;
-
-SELECT 
-	h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
-FROM 
-	historico h
-JOIN componente c ON h.fkComponente = c.idComponente
-JOIN hardware hw ON c.fkHardware = hw.idHardware
-JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
-WHERE
-	th.tipo = 'Processador' AND h.fkMaquina = 2
-ORDER BY dataHora DESC
-LIMIT 10;
-
-SELECT 
-	h.idHistorico, DATE_FORMAT(h.dataHora, "%d/%m/%y %H:%i") as dataHora, h.consumo, c.max as maxConsumo
-FROM 
-	historico h
-JOIN componente c ON h.fkComponente = c.idComponente
-JOIN hardware hw ON c.fkHardware = hw.idHardware
-JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
-WHERE
-	th.tipo = 'RAM' AND h.fkMaquina = 2
-ORDER BY dataHora DESC
-LIMIT 1;
-
--- select de capacidade da maquina
-SELECT 
-	m.idMaquina as id,
-	m.nome as nome,
-    m.so as so,
-    m.emUso as emUso,
-    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
-    as capacidadeRAM,
-    (SELECT especificidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
-    as capacidadeCPU,
-    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
-    as capacidadeHD
-FROM maquina m
-JOIN componente c ON c.fkMaquina = m.idMaquina
-JOIN hardware ram ON c.fkHardware = ram.idHardware
-JOIN hardware cpu ON c.fkHardware = cpu.idHardware
-JOIN hardware disco ON c.fkHardware = disco.idHardware
-WHERE
-	m.idMaquina = 1
-LIMIT 1;
-
--- select de tudo da máquina
-	SELECT 
-		m.idMaquina as id,
-		m.nome as nome,
-		m.so as so,
-		m.emUso as emUso,
-		(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
-		as componenteRAM,
-		(SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = 1) 
-		as capacidadeRAM,
-		(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
-		as componenteCPU,
-		(SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = 1) 
-		as capacidadeCPU,
-		(SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
-		as componenteDisco,
-		(SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = 1) 
-		as capacidadeDisco,
-		(SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE fkMaquina = 1) as qtdStrikes
-	FROM maquina m
-	JOIN componente c ON c.fkMaquina = m.idMaquina
-	JOIN hardware ram ON c.fkHardware = ram.idHardware
-	JOIN hardware cpu ON c.fkHardware = cpu.idHardware
-	JOIN hardware disco ON c.fkHardware = disco.idHardware;
-
-SELECT
-	CASE
-		WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
-		WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
-		ELSE 'Normal'
-	END AS status
-FROM maquina m
-LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
-JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
-WHERE idInstituicao = 1 AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) > 1
-GROUP BY m.idMaquina;
-
-SELECT idMaquina, nome, (SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE idMaquina = 1) as qtdStrikes FROM maquina;
-
-SELECT idMaquina FROM maquina;
-
-        SELECT
-            m.idMaquina as id,
-            m.nome AS nome,
-            m.emUso AS emUso,
-            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,
-            CASE
-                WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
-                WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
-                ELSE 'Normal'
-            END AS status
-        FROM maquina m
-        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
-        JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
-        WHERE idInstituicao = 1        
-        GROUP BY m.idMaquina;
-        
-        
-	SELECT * FROM maquina ORDER BY fkInstituicao;
+	('2023-03-27 00:00:25', 3, 1),
+	('2023-08-23 12:00:00', 4, 1),
+	('2023-08-23 12:00:45', 5, 1),
+	('2023-08-23 12:01:30', 6, 2),
+	('2023-08-23 12:02:15', 7, 2),
+	('2023-08-23 12:03:00', 8, 3),
+	('2023-08-23 12:03:45', 9, 3);
