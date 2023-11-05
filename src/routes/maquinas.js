@@ -31,4 +31,12 @@ router.get("/capturarNovoDadoRAM/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarNovoDadoRAM(req, res);
 });
 
+router.get("/editarMaquina/:idInstituicao/:idMaquina", (req, res) => {
+    maquinaController.capturarNovoDadoRAM(req, res);
+});
+
+router.get("/deletarMaquina/:idInstituicao/:idMaquina", (req, res) => {
+    maquinaController.capturarNovoDadoRAM(req, res);
+});
+
 module.exports = router;

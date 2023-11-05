@@ -219,6 +219,81 @@ function capturarNovoDadoDisco(req, res) {
         })
 }
 
+
+function editarMaquina(req, res) {
+    var nomeMaquina = req.body.nomeMaquina;
+    var SistemaOperacional = req.body.SistemaOperacional;
+
+    if (nomeMaquina !== undefined) {
+        maquinaModel.obterNomeMaquina()
+            .then(function (valorAtual) {
+                if (valorAtual !== nomeMaquina) {
+                    // Atualizar o campo nomeMaquina
+                    maquinaModel.editarNomeMaquina(nomeMaquina)
+                        .then(function (resultado) {
+                            res.json(resultado);
+                        })
+                        .catch(function (erro) {
+                            console.log(erro);
+                            console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
+                            res.status(500).json(erro.sqlMessage);
+                        });
+                } else {
+                    res.json({ message: "O valor do campo nomeMaquina é o mesmo, nenhuma alteração foi feita." });
+                }
+            })
+            .catch(function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao obter o valor atual do campo nomeMaquina: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            });
+    } else if (SistemaOperacional !== undefined) {
+        maquinaModel.obterSistemaOperacional()
+            .then(function (valorAtual) {
+                if (valorAtual !== SistemaOperacional) {
+                    maquinaModel.editarSistemaOperacional(SistemaOperacional)
+                        .then(function (resultado) {
+                            res.json(resultado);
+                        })
+                        .catch(function (erro) {
+                            console.log(erro);
+                            console.log("Houve um erro ao realizar o post: ", erro.sqlMessage);
+                            res.status(500).json(erro.sqlMessage);
+                        });
+                } else {
+                    res.json({ message: "O valor do campo SistemaOperacional é o mesmo, nenhuma alteração foi feita." });
+                }
+            })
+            .catch(function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao obter o valor atual do campo SistemaOperacional: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            });
+    } else {
+        res.json({ message: "Nenhum campo foi atualizado." });
+    }
+}
+
+
+function deletarMaquina(req, res) {
+    var idMaquina = req.body.idMaquina;
+
+    usuarioModel.deletar(idMaquina)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+
 module.exports = {
     capturarDadosMaquina,
     capturarTodosDadosMaquina,
@@ -228,5 +303,7 @@ module.exports = {
     capturarConsumoDisco, 
     capturarNovoDadoRAM,
     capturarNovoDadoDisco,
-    capturarNovoDadoCPU
+    capturarNovoDadoCPU,
+    editarMaquina,
+    deletarMaquina
 }

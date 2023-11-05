@@ -193,6 +193,29 @@
         return database.executar(instrucao);
     }
 
+
+    function editarMaquina(idMaquina, nomeMaquina, SistemaOperacional, idInstituicao) {
+        var instrução = `
+        UPDATE maquina
+        SET nome = '${nomeMaquina}', SO = '${SistemaOperacional}'
+        WHERE idMaquina = ${idMaquina};
+        `;
+        return database.executar(instrução);
+    }
+
+    
+
+    function deletarMaquina(idMaquina,idInstituicao) {
+        var instrução = `
+        DELETE FROM maquina WHERE idMaquina = ${idMaquina};
+        `;
+        console.log("Executando a instrução SQL: \n" + instrução);
+        return database.executar(instrução);
+    }
+
+    
+
+
     module.exports = {
         capturarDadosMaquina,
         capturarTodosDadosMaquina,
@@ -202,5 +225,7 @@
         capturarConsumoDisco,
         capturarNovoDadoRAM,
         capturarNovoDadoDisco,
-        capturarNovoDadoCPU
+        capturarNovoDadoCPU,
+        editarMaquina,
+        deletarMaquina
     };
