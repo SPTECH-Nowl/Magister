@@ -10,12 +10,17 @@ function getSelectedValues() {
       elementos: selects[4]
    }
 }
-
+const searchInput = document.getElementById("input_pesquisa");
+searchInput.addEventListener('keypress', (e) => {
+   if(e.key === "Enter") {
+      e.preventDefault;
+      pesquisarPorNome();
+   }
+});
 function pesquisarPorNome() {
-   const searchValue = document.getElementById("input_pesquisa").value;
-         let maquinas = document.getElementById('maquinas');
-      maquinas.innerHTML = '';
-   mostrarTodasMaquinas(localStorage.getItem("instituicao"), searchValue).then(() => {
+   let maquinas = document.getElementById('maquinas');
+   maquinas.innerHTML = '';
+   mostrarTodasMaquinas(localStorage.getItem("instituicao"), searchInput.value).then(() => {
       if(!maquinas.childElementCount) {
          maquinas.innerHTML = `
          <div class="sem-resultado">
