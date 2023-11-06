@@ -131,6 +131,3 @@ getSelectedValues().elementos.forEach((elemento) => {
 window.onload = () => {
    mostrarTodasMaquinas(localStorage.getItem("instituicao"))
 }
-
-
-

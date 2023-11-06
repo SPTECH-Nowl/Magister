@@ -5,8 +5,28 @@ var sessoes = [];
 function listar(req, res) {
     console.log('no controller');
     var codInstituicao = req.params.codInstituicao;
+    var ativo = req.body.ativo;
+    var valido = req.body.valido;
+    var invalido = req.body.invalido;
+    var inativo = req.body.inativo;
 
-    strikeModel.listar(codInstituicao)
+    if (ativo) {
+        ativoModel = '';
+    }
+
+    if (valido) {
+        validoModel = '';
+    }
+
+    if (invalido) {
+        invalidoModel = '';
+    }
+
+    if (inativo) {
+        inativoModel = '';
+    }
+
+    strikeModel.listar((codInstituicao))
     .then(function (resultado) {
         console.log('no then do controller');
         if (resultado.length > 0) {

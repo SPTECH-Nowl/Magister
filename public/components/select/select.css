@@ -8,6 +8,10 @@ sl-select::part(form-control) {
    width: 12rem;
 }
 
+sl-select[multiple]::part(form-control) {
+   width: fit-content;
+}
+
 sl-select::part(combobox) {
    outline: none;
    box-shadow: none;
@@ -43,5 +47,21 @@ sl-option::part(base):hover {
 
 sl-select::part(clear-button),
 sl-select::part(expand-icon) {
+   color: var(--color-gray-100);
+}
+
+sl-select[multiple]::part(tag__base) {
+   background-color: var(--color-purple-700);
+   border: none;
+   box-shadow: inset ;
+}
+
+sl-select[multiple]::part(tag__content) {
+   color: var(--color-gray-100);
+   font-weight: bold;
+   font-family: var(--font-text);
+}
+
+sl-select[multiple]::part(tag__remove-button){
    color: var(--color-gray-100);
 }

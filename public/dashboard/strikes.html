@@ -6,13 +6,14 @@
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/usuarios.css">
     <link rel="stylesheet" href="../styles/strikes.css">
+
     <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
 
     <!-- Inclua a biblioteca Tippy.js -->
     <script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.min.js"></script>
 
     <!-- BACK END DO CRUD DE STRIKES-->
-    <script src="../scripts/strike.js"></script>
+    <script src="../scripts/strike.js" defer></script>
 
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -33,6 +34,7 @@
 
     <script src="../components/select/select.js" defer></script>
     <link rel="stylesheet" href="../components/select/select.css">
+
 
     <script src="../components/button/button.js" defer></script>
     <link rel="stylesheet" href="../components/button/button.css">
@@ -159,7 +161,7 @@
                    <sl-option value="mais_antigo">Mais antiga</sl-option>
                  </sl-select>
  
-                 <sl-select id="situacao" placeholder="Situação" pill filled clearable>
+                 <sl-select id="situacao" placeholder="Situação" pill filled clearable multiple max-options-visible=4>
                    <sl-option value="ativo">Ativo</sl-option>
                    <sl-option value="valido">Válido</sl-option>
                    <sl-option value="invalido">Inválido</sl-option>

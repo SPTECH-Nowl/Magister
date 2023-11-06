@@ -3,7 +3,7 @@ var router = express.Router();
 
 var strikeController = require("../controllers/strikeController");
 
-router.get("/listar/:codInstituicao", function (req, res) {
+router.post("/listar/:codInstituicao", function (req, res) {
     strikeController.listar(req, res);
 });
 

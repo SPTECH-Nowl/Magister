@@ -59,3 +59,7 @@ th:nth-child(6) {
     gap: 1.2rem;
     flex-wrap: wrap;
 }
+
+sl-select::part(form-control) {
+    width: 20rem;
+ }
