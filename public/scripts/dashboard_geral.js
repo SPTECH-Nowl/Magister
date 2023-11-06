@@ -1,3 +1,6 @@
+
+var idInstituicao = localStorage.getItem("instituicao")
+
 function handleChartBtn(btnId) {
     if (!document.getElementById(btnId).classList.contains('chart-btn-active')) {
 
@@ -10,38 +13,11 @@ function handleChartBtn(btnId) {
 google.charts.load("current", { packages: ["corechart", "bar"] });
 
 google.charts.setOnLoadCallback(() => {
-    drawPieStrike();
     drawPieAlertaDisco();
     drawColumnCPURAM();
 });
 
-function drawPieStrike() {
-    var data = google.visualization.arrayToDataTable([
-        ['Categoria', 'Quantidade de Strikes'],
-        ['Com Strike', 7],
-        ['Sem Stike', 2]
-    ]);
 
-    var options = {
-        legend: 'none',
-        pieSliceText: 'none',
-        title: '',
-        pieHole: 0.5,
-        backgroundColor: {
-            fill: "#f5f5f5"
-        },
-        slices: {
-            0: { color: '#4E2F78' },
-            1: { color: 'transparent' },
-        },
-        width: '150',
-        height: '150'
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById('strikepie'));
-    chart.draw(data, options);
-
-}
 
 function drawPieAlertaDisco() {
     var data = google.visualization.arrayToDataTable([
@@ -101,4 +77,135 @@ function drawColumnCPURAM() {
     var chart = new google.charts.Bar(document.getElementById('cpuramcolumn'));
 
     chart.draw(data, google.charts.Bar.convertOptions(options));
+}
+
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    getStrikesSemana(idInstituicao),
+    getInstInfos(idInstituicao),
+    getAlertasSemana(idInstituicao),
+    porcentagemStrikes(idInstituicao),
+    strikeNoMes(idInstituicao, 1)
+})
+
+function getInstInfos(idInstituicao){
+    var nomeInstituicao = document.getElementById("nomeInst")
+    fetch(`/instituicoes/listarInstituicaoEsp/${idInstituicao}`)
+    .then((dadosInstituicao)=>{
+        dadosInstituicao.json().then((dadosInstituicao)=>{
+            
+            nomeInstituicao.innerHTML = dadosInstituicao[0].nome
+        })
+    })
+}
+
+function getStrikesSemana(idInstituicao){
+    var spanStrike = document.getElementById("qtd_strike_semana");
+
+    fetch(`/strikes/getStrikes/${idInstituicao}`)
+    .then((qtdStrikesSemana) => {
+        qtdStrikesSemana.json().then((qtdStrikesSemana)=>{
+
+            spanStrike.innerHTML = qtdStrikesSemana[0].total_strikes;
+        })
+        
+    })
+}
+
+
+
+function getAlertasSemana(idInstituicao){
+    var spanAlertas = document.getElementById("qtd_alertas_semana");
+
+    fetch(`/strikes/getAlertas/${idInstituicao}`)
+    .then((qtdAlertasSemana) => {
+        qtdAlertasSemana.json().then((qtdAlertasSemana)=>{  
+            spanAlertas.innerHTML = qtdAlertasSemana[0].total_alertas;
+        })
+        
+    })
+}
+
+
+function porcentagemStrikes(idInstituicao){
+    fetch(`/maquinas/porcentagemStrikesMaquina/${idInstituicao}`)
+    .then((porcentagemStrikes)=>{
+        var porcentagemStrike = document.getElementById("porcentagem_strikes")
+
+        porcentagemStrikes.json().then((porcentagemStrikes)=>{
+            
+            porcentagemStrike.innerHTML = `${porcentagemStrikes[0].porcentagem_maquinas_com_strikes}%`
+
+            google.charts.setOnLoadCallback(() => {
+                drawPieStrike();
+            });
+
+            function drawPieStrike() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Categoria', 'Quantidade de Strikes'],
+                    ['Com Strike', `${porcentagemStrikes[0].maquinas_com_strike}`],
+                    ['Sem Stike', `${porcentagemStrikes[0].total_maquinas}`]
+                ]);
+            
+                var options = {
+                    legend: 'none',
+                    pieSliceText: 'none',
+                    title: '',
+                    pieHole: 0.5,
+                    backgroundColor: {
+                        fill: "#f5f5f5"
+                    },
+                    slices: {
+                        0: { color: '#4E2F78' },
+                        1: { color: 'transparent' },
+                    },
+                    width: '150',
+                    height: '150'
+                };
+            
+                var chart = new google.visualization.PieChart(document.getElementById('strikepie'));
+                chart.draw(data, options);
+                
+            }
+
+        })
+    })
+}
+
+
+//Rever, banco de dados tem bo nesse select
+function porcentagemMaquinasAcima(idInstituicao){
+    fetch(`/maquinas/porcentagemMaquinasAcima/${idInstituicao}`)
+    .then((porcentagemMaquina)=>{
+        var porcentagem = document.getElementById("porcentagem_disco")
+        
+        porcentagemMaquina.json().then((porcentagemMaquina)=>{
+            porcentagem.innerHTML = `${porcentagemMaquina[0].maquinas_acima_limite}%`
+        })
+    })
+
+
+}
+document.getElementById("1_mes").addEventListener("click", function() {
+    strikeNoMes(1, idInstituicao);
+  });
+
+  document.getElementById("3_meses").addEventListener("click", function() {
+    strikeNoMes(2, idInstituicao);
+  });
+
+  document.getElementById("6_meses").addEventListener("click", function() {
+    strikeNoMes(3, idInstituicao);
+  });
+
+function strikeNoMes(opcao, idInstituicao){
+    fetch(`/strikes/strikePMes/${opcao}/${idInstituicao}`)
+    .then(response => {
+        document.getElementById("qtd_mais_strikes").innerHTML = ""
+
+        response.json().then(response=>{
+            document.getElementById("qtd_mais_strikes").innerHTML = response[0].strikes_semana
+        })
+    })
 }

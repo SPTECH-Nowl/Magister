@@ -294,6 +294,34 @@ function deletarMaquina(req, res) {
 }
 
 
+
+function porcentagemStrikesMaquina(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+
+    maquinaModel.porcentagemStrikesMaquina(idInstituicao)
+        .then(function (response) {
+            res.json(response);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function porcentagemMaquinasAcima(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+
+    maquinaModel.porcentagemMaquinasAcima(idInstituicao)
+        .then(function (response) {
+            res.json(response);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+
 module.exports = {
     capturarDadosMaquina,
     capturarTodosDadosMaquina,
@@ -305,5 +333,7 @@ module.exports = {
     capturarNovoDadoDisco,
     capturarNovoDadoCPU,
     editarMaquina,
-    deletarMaquina
+    deletarMaquina,
+    porcentagemStrikesMaquina,
+    porcentagemMaquinasAcima
 }

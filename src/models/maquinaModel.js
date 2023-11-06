@@ -214,6 +214,34 @@
     }
 
     
+    function porcentagemStrikesMaquina(idInstituicao) {
+        var instrução = `
+        
+        SELECT
+        (SELECT COUNT(*) FROM maquina 
+        JOIN instituicao ON maquina.fkInstituicao = instituicao.idInstituicao
+        WHERE idInstituicao = ${idInstituicao}) AS total_maquinas,
+        (SELECT COUNT(DISTINCT fkMaquina) FROM strike) AS maquinas_com_strikes,
+        ROUND((SELECT COUNT(DISTINCT fkMaquina) FROM strike) / (SELECT COUNT(*) FROM maquina) * 100, 2) AS porcentagem_maquinas_com_strikes;
+    
+        `;
+        console.log("Executando a instrução SQL: \n" + instrução);
+        return database.executar(instrução);
+    }
+
+    function porcentagemMaquinasAcima(idInstituicao) {
+        var instrução = `
+        
+        SELECT
+        (SELECT COUNT(*) FROM maquina where fkInstituicao = ${idInstituicao}) AS total_maquinas,
+        (SELECT COUNT(*) FROM componente WHERE capacidade > max) AS maquinas_acima_limite,
+        (SELECT COUNT(*) FROM componente WHERE capacidade > max) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_acima_limite;
+    
+        `;
+        console.log("Executando a instrução SQL: \n" + instrução);
+        return database.executar(instrução);
+    }
+    
 
 
     module.exports = {
@@ -227,5 +255,7 @@
         capturarNovoDadoDisco,
         capturarNovoDadoCPU,
         editarMaquina,
-        deletarMaquina
+        deletarMaquina,
+        porcentagemStrikesMaquina,
+        porcentagemMaquinasAcima
     };

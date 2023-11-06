@@ -52,8 +52,82 @@ function contadores(codInstituicao) {
     return database.executar(instrução);
 }
 
+function getStrikes(idInstituicao) {
+    
+    var instrução = `
+	SELECT COUNT(*) as total_strikes
+    FROM strike
+    JOIN maquina ON strike.fkMaquina = maquina.idMaquina
+    JOIN instituicao ON maquina.fkInstituicao = instituicao.idInstituicao
+    WHERE YEARWEEK(dataHora, 1) = YEARWEEK(NOW(), 1) AND idInstituicao = ${idInstituicao};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
+function getAlertas(idInstituicao) {
+    
+    var instrução = `
+    SELECT COUNT(*) as total_alertas
+    FROM historico
+    JOIN maquina ON historico.fkMaquina = maquina.idMaquina
+    JOIN instituicao ON maquina.fkInstituicao = instituicao.idInstituicao
+    WHERE YEARWEEK(dataHora, 1) = YEARWEEK(NOW(), 1) AND idInstituicao = ${idInstituicao};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
+
+function strikePMes(idInstituicao, opcao) {
+    console.log("Cheguei nomodel  STRIKE")
+
+    var instrução;
+
+    
+    switch(opcao){
+        case 1:
+            var instrução = `
+            SELECT COUNT(*) AS strikes
+            FROM strike
+            JOIN maquina ON strike.fkMaquina = maquina.idMaquina
+            WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 1 MONTH) AND fkInstituicao = ${idInstituicao};
+            `;
+        break;
+
+        case 2:
+            var instrução = `
+            SELECT COUNT(*) AS strikes_semana
+            FROM strike
+            JOIN maquina ON strike.fkMaquina = maquina.idMaquina
+            WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 3 MONTH)  AND fkInstituicao = ${idInstituicao};
+            `;
+        break;
+
+        case 3:
+            var instrução = `
+            SELECT COUNT(*) AS strikes_semana
+            FROM strike
+            JOIN maquina ON strike.fkMaquina = maquina.idMaquina
+            WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 6 MONTH) AND fkInstituicao = ${idInstituicao};
+            `;
+        break;
+
+    }
+
+    console.log(instrução)
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
 module.exports = {
     listar,
     listarSituacao,
-    contadores
+    contadores,
+    getStrikes,
+    getAlertas,
+    strikePMes
 };

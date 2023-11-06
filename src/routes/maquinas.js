@@ -39,4 +39,14 @@ router.get("/deletarMaquina/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarNovoDadoRAM(req, res);
 });
 
+router.get("/porcentagemStrikesMaquina/:idInstituicao", (req, res) => {
+    maquinaController.porcentagemStrikesMaquina(req, res);
+});
+
+router.get("/porcentagemMaquinasAcima/:idInstituicao", (req, res) => {
+    maquinaController.porcentagemMaquinasAcima(req, res);
+});
+
+
+
 module.exports = router;
