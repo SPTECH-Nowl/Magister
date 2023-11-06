@@ -48,6 +48,7 @@ function capturarTodasMaquinas(req, res) {
     let qtdStrikes = req.body.qtdStrikes;
     let emUso = req.body.emUso;
     let estado = req.body.estado;
+    let pesquisa = `AND m.nome LIKE '%${req.body.pesquisa}%'`;
 
     if(emUso) emUso = req.body.emUso == 'true' ? 'AND m.emUso = 1' : 'AND m.emUso = 0';
 
@@ -89,7 +90,7 @@ function capturarTodasMaquinas(req, res) {
             break;
     }
 
-    maquinaModel.capturarTodasMaquinas(idInstituicao, ordAlfabetica, qtdStrikes, emUso, estado)
+    maquinaModel.capturarTodasMaquinas(idInstituicao, ordAlfabetica, qtdStrikes, emUso, estado, pesquisa)
         .then((response) => {
             res.json(response);
         })

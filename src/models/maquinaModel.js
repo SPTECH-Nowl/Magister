@@ -1,4 +1,4 @@
-    var database = require("../database/config")
+var database = require("../database/config")
 
 
 
@@ -61,7 +61,7 @@
         return database.executar(instrucao);
     }
 
-    function capturarTodasMaquinas(idInstituicao, ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '') {
+    function capturarTodasMaquinas(idInstituicao, ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '', pesquisa = '') {
         var instrucao = `
         SELECT
             m.idMaquina as id,
@@ -76,7 +76,7 @@
         FROM maquina m
         LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
         JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
-        WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado}
+        WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado} ${pesquisa}
         GROUP BY m.idMaquina
         ${ordAlfabetica}
         ;

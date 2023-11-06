@@ -109,10 +109,10 @@
             <div class="flex-row gap-1">
                <div class="input-wrapper icon wdt-100">
                   <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input" id="input_teste" placeholder="Buscar máquina..." fontSize="1rem">
+                  <input type="text" class="input" id="input_pesquisa" placeholder="Buscar máquina..." fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
                </div>
-               <button class="btn primario">Buscar</button>
+               <button class="btn primario" onclick="pesquisarPorNome()">Buscar</button>
             </div>
             <div class="container-selects">
                 <sl-select id="ordem_az" placeholder="Ordem alfabética" pill filled clearable>
@@ -153,4 +153,4 @@
    document.addEventListener("DOMContentLoaded", ()=>{
       validarAcesso(3);
    });
-</script>
+</script>   

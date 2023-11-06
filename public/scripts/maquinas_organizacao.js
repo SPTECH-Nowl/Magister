@@ -3,16 +3,32 @@ function getSelectedValues() {
    const selects = [...nodeList, nodeList];
    
    return {
-      dtAdicao: selects[0].value,
-      ordemAaZ: selects[1].value,
-      qtdStrikes: selects[2].value,
-      emUso: selects[3].value,
-      estado: selects[4].value,
-      elementos: selects[5]
+      ordemAaZ: selects[0].value,
+      qtdStrikes: selects[1].value,
+      emUso: selects[2].value,
+      estado: selects[3].value,
+      elementos: selects[4]
    }
 }
 
-function capturarTodasMaquinas(idInstituicao) {
+function pesquisarPorNome() {
+   const searchValue = document.getElementById("input_pesquisa").value;
+         let maquinas = document.getElementById('maquinas');
+      maquinas.innerHTML = '';
+   mostrarTodasMaquinas(localStorage.getItem("instituicao"), searchValue).then(() => {
+      if(!maquinas.childElementCount) {
+         maquinas.innerHTML = `
+         <div class="sem-resultado">
+         <img src="../assets/img/elements/naufragio.svg" alt="">
+         <h2>Nenhum resultado encontrado</h2>
+         <h3>Tente utilizar outras opções de filtragem</h3>
+         </div>
+         `;
+      } 
+   });
+}
+
+function capturarTodasMaquinas(idInstituicao, pesquisa) {
    const s = getSelectedValues();
    console.log(s)
    return new Promise((resolve, reject) => {
@@ -24,11 +40,11 @@ function capturarTodasMaquinas(idInstituicao) {
          },
          body: JSON.stringify({
             idInstituicao: idInstituicao,
-            dtAdicao: s.dtAdicao,
             ordAlfabetica: s.ordemAaZ,
             qtdStrikes: s.qtdStrikes,
             emUso: s.emUso,
-            estado: s.estado
+            estado: s.estado,
+            pesquisa: pesquisa 
          })
       })
       .then((response) => {
@@ -45,10 +61,10 @@ function capturarTodasMaquinas(idInstituicao) {
    }) 
 }
 
-function mostrarTodasMaquinas(idInstituicao) {
+function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
    const maquinas = document.getElementById("maquinas");
 
-   capturarTodasMaquinas(idInstituicao).then((dadosMaquinas) => {
+   capturarTodasMaquinas(idInstituicao, pesquisa).then((dadosMaquinas) => {
       console.log(dadosMaquinas);
       dadosMaquinas.forEach(maquina => {
          let id = maquina.id;
