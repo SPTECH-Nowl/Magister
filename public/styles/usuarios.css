@@ -66,15 +66,15 @@ body {
  
  table {
     width: 100%;
+    border-spacing: 0;
  }
 
  .tableWrapper{
     border-radius: 16px;
-    overflow: hidden;
     max-height: 100%;
-    overflow-y: auto;
     position: relative;
     overflow: scroll;
+    height: 80vh;
  }
 
  .tableWrapper::-webkit-scrollbar{

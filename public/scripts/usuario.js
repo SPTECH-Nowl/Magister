@@ -663,3 +663,11 @@ function alterar(idUsuario) {
             }
         });
 }
+
+const inputBusca = document.getElementById("input_busca");
+inputBusca.addEventListener("keypress", (e) => {
+    if(e.key === "Enter") {
+        e.preventDefault;
+        buscarUsuario();
+    }
+});

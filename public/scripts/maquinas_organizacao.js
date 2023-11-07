@@ -10,6 +10,7 @@ function getSelectedValues() {
       elementos: selects[4]
    }
 }
+
 const searchInput = document.getElementById("input_pesquisa");
 searchInput.addEventListener('keypress', (e) => {
    if(e.key === "Enter") {
