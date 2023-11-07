@@ -108,7 +108,7 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
          const strikes = maquinaItem.querySelectorAll(".strikes");
          const status_maquina = maquinaItem.querySelector(".status-maquina");
 
-         if (emUso === "ON") uso_maquina.style.color = "#BF80FF";
+         if (emUso === "ON") uso_maquina.style.color = "var(--color-blue-500)";
 
          strikes.forEach((strike, index) => {
             if (index < qtdStrikes) {
@@ -124,7 +124,7 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
                status_maquina.style.color = "yellow";
                break;
             default:
-               status_maquina.style.color = "#787878";
+               status_maquina.style.color = "var(--color-green-500)";
                break;
          }
       });

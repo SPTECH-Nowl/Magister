@@ -25,6 +25,7 @@ var database = require("../database/config")
         LIMIT 1;
         `;
 
+        console.log(instrucao);
         return database.executar(instrucao);
     }
 

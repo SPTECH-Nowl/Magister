@@ -78,6 +78,7 @@ function capturarTodasMaquinas(req, res) {
 
     switch(estado) {
         case 'critico':
+            estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Crítico'`;
            break;
         case 'alerta':
             estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Alerta'`;
