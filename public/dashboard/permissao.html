@@ -51,7 +51,7 @@
 
    <script src="../scripts/funcoes.js" defer></script>
 
-   <title>Magister | Usuários</title>
+   <title>Magister | Permissao</title>
 
 </head>
 <body>
@@ -96,12 +96,13 @@
       </li>
 
       <li id="permissao_item">
-         <sl-tooltip content="Permissões" placement="right">
-            <a href="processo.html">
-               <img src="../assets/img/elements/shield-check.svg" alt="">
-            </a>
-         </sl-tooltip>
-      </li>
+        <sl-tooltip content="Permissões" placement="right">
+           <a href="processo.html">
+              <img class="permissao" src="../assets/img/elements/shield-check.svg" alt="">
+           </a>
+        </sl-tooltip>
+     </li>
+
 
       <li id="instituicoes_item">
          <sl-tooltip content="Instituições" placement="right">
@@ -141,7 +142,7 @@
 </div>
 
    <div class="charts-container">
-      <h1>Usuários</h1>
+      <h1>Permissao</h1>
       <div class="top-users">
 
          <div class="flex-row gap-1" id="orderOptions"></div>
@@ -152,11 +153,11 @@
             <div class="flex-row gap-1 pesquisarEAdd">
                <div class="input-wrapper icon wdt-100">
                   <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input" id="input_busca" placeholder="Pesquisar por um usuário"
+                  <input type="text" class="input" id="input_busca" placeholder="Pesquisar por uma permissao"
                      fontSize="1rem">
                   <i class="ph ph-eye" id="teste_ph"></i>
                </div>
-               <button class="btn primario" id="adicionarUsuario">Adicionar usuário</button>
+               <button class="btn primario" id="adicionarPermissao">Adicionar  permissão</button>
             </div>
          </div>
 
@@ -171,13 +172,13 @@
                      <thead>
                         <tr>
                            <th>Nome</th>
-                           <th>Email</th>
-                           <th>Tipo</th>
+                           <th>Atuação</th>
+                           <th>Duração</th>
                            <th></th>
                         </tr>
                      </thead>
                
-                  <tbody class="user-list-tbody" id="listaDeUsuarios">
+                  <tbody class="user-list-tbody" id="listaDePermissao">
 
                   </tbody>
                </table>
