@@ -78,6 +78,8 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
          let emUso = maquina.emUso == 0 ? "OFF" : "ON";
          let qtdStrikes = maquina.qtdStrikes;
          let status = maquina.status;
+         let so = maquina.so.includes("Windows")? ` <img src="../assets/img/Icone/windows_icon.svg" alt="" class="so">` 
+         : ` <img src="../assets/img/Icone/linux_icon.svg" alt="" class="so">`;
 
          const maquinaItem = document.createElement("div");
          maquinaItem.classList.add("maquina-item");
@@ -88,7 +90,7 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
          }
 
          maquinaItem.innerHTML = `
-            <img src="../assets/img/Icone/windows_icon.svg" alt="" class="so">
+            ${so}
             <div class="stat">
                <div class="stat-texts">
                   <h2>${nome}</h2>

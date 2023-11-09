@@ -68,6 +68,7 @@ var database = require("../database/config")
             m.idMaquina as id,
             m.nome AS nome,
             m.emUso AS emUso,
+            m.SO AS so,
             (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,
             CASE
                 WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
