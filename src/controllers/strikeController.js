@@ -1,32 +1,73 @@
+const { text } = require("express");
 var strikeModel = require("../models/strikeModel");
 
 var sessoes = [];
 
 function listar(req, res) {
     console.log('no controller');
-    var codInstituicao = req.params.codInstituicao;
-    var ativo = req.body.ativo;
-    var valido = req.body.valido;
-    var invalido = req.body.invalido;
-    var inativo = req.body.inativo;
+    let codInstituicao = req.params.codInstituicao;
+    let dataHora = req.params.dataHora;
+    let ativo = req.params.ativo  == 'true' ? true : false;
+    let valido = req.params.valido  == 'true' ? true : false;
+    let invalido = req.params.invalido  == 'true' ? true : false;
+    let inativo = req.params.inativo  == 'true' ? true : false;
 
-    if (ativo) {
-        ativoModel = '';
+    let situacoes = [ativo, valido, invalido, inativo];
+    let texto = 'AND ';
+
+    console.log(situacoes);
+
+    if (situacoes.filter(Boolean).length >= 2) {
+        if (ativo) {
+            texto == 'AND ' ? texto += `situacao = 'Ativo'` : 
+            texto += `OR situacao = 'Ativo'`;
+        }
+    
+        if (valido) {
+            texto == 'AND ' ? texto += `situacao = 'Válido'` : 
+            texto += `OR situacao = 'Válido'`;
+        }
+    
+        if (invalido) {
+            texto == 'AND ' ? texto += `situacao = 'Inválido'` : 
+            texto += `OR situacao = 'Inválido'`;
+        }
+    
+        if (inativo) {
+            texto == 'AND ' ? texto += `situacao = 'Inativo'` : 
+            texto += `OR situacao = 'Inativo'`;
+        }
+
+    } else if(!ativo && !valido && !invalido && !inativo) {
+        texto += `situacao != 'Inativo'`;
+
+    } else {
+        if (ativo) {
+            texto += `situacao = 'Ativo'`;
+        }
+    
+        if (valido) {
+            texto += `situacao = 'Válido'`;
+        }
+    
+        if (invalido) {
+            texto += `situacao = 'Inválido'`;
+        }
+    
+        if (inativo) {
+            texto += `situacao = 'Inativo'`;
+        }
     }
 
-    if (valido) {
-        validoModel = '';
+    if (dataHora == 'mais_recente') {
+        texto += 'ORDER BY dataHora'
+    } else if (dataHora == 'mais_antigo') {
+        texto += 'ORDER BY dataHora DESC'
     }
 
-    if (invalido) {
-        invalidoModel = '';
-    }
+    console.log('controller, texto = ' + texto);
 
-    if (inativo) {
-        inativoModel = '';
-    }
-
-    strikeModel.listar((codInstituicao))
+    strikeModel.listar(codInstituicao, texto)
     .then(function (resultado) {
         console.log('no then do controller');
         if (resultado.length > 0) {

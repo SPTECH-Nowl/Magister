@@ -1,7 +1,7 @@
 var database = require("../database/config");
 
-function listar(codInstituicao) {
-    console.log('no model');
+function listar(codInstituicao, texto) {
+    console.log('no model' + codInstituicao + texto);
     var instrução = `
     SELECT maq.nome AS nome,
 		DATE_FORMAT(str.dataHora, '%Y-%m-%dT%H:%i:%s') AS dataHora, 
@@ -11,7 +11,7 @@ function listar(codInstituicao) {
         FROM strike AS str
 			JOIN situacao AS sit ON sit.idSituacao = str.fkSituacao
 			JOIN maquina AS maq ON maq.idMaquina = str.fkMaquina
-				WHERE situacao != 'Inativo' AND maq.fkInstituicao = ${codInstituicao};
+				WHERE maq.fkInstituicao = ${codInstituicao} ${texto};
     `;
 
     console.log("Executando a instrução SQL: \n" + instrução);

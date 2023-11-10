@@ -3,7 +3,7 @@ var router = express.Router();
 
 var strikeController = require("../controllers/strikeController");
 
-router.post("/listar/:codInstituicao", function (req, res) {
+router.get("/listar/:codInstituicao/:dataHora/:ativo/:valido/:invalido/:inativo", function (req, res) {
     strikeController.listar(req, res);
 });
 
