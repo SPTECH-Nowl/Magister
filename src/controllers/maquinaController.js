@@ -69,7 +69,7 @@ function capturarTodasMaquinas(req, res) {
             qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 2'
             break;
         case 'tres_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 3'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 3'
             break;
         default:
             qtdStrikes = '';

@@ -85,8 +85,6 @@ body::-webkit-scrollbar-thumb {
    gap: 1.5rem;
 }
 
-/* componentes */
-
 .display-none {
    display: none;
 }
@@ -146,9 +144,10 @@ ul li img {
    width: 1.4rem;
 }
 
-ul li .react {
-   width: 1.7rem;
+ul li .permissao {
+   width: 1.65rem;
 }
+
 
 
 ul li .instituicoes {
@@ -191,7 +190,7 @@ ul li .instituicoes {
 
 .nav-list {
    position: absolute;
-   top: 28%;
+   top: 20%;
 }
 
 .nav-list img{

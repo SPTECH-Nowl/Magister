@@ -12,22 +12,20 @@ function getFiltrosSelecionados() {
 }
 
 function carregarFeed() {
-    var codInstituicao = localStorage.getItem("instituicao");
     var selects = getFiltrosSelecionados();
+    var codInstituicao = localStorage.getItem("instituicao");
+    var dataHora = selects.dt_hr == '' ? 'mais_recente' : selects.dt_hr == 'mais_antigo' ? 'mais_antigo' : 'mais_recente';
+    var ativo = selects.situacao.includes('ativo');
+    var valido = selects.situacao.includes('valido');
+    var invalido = selects.situacao.includes('invalido');
+    var inativo = selects.situacao.includes('inativo');
 
-    fetch(`/strikes/listar/${codInstituicao}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application-json'
-        },
-        body: JSON.stringify({
-            dataHora: selects.dt_hr,
-            ativo: selects.situacao.includes('ativo') ? true : false,
-            valido: selects.situacao.includes('valido') ? true : false,
-            invalido: selects.situacao.includes('invalido') ? true : false,
-            inativo: selects.situacao.includes('inativo') ? true : false,
-        })
-    })
+    console.log(selects);
+    console.log(selects.dt_hr);
+
+    console.log(`/strikes/listar/${codInstituicao}/${dataHora}/${ativo}/${valido}/${invalido}/${inativo}`);
+
+    fetch(`/strikes/listar/${codInstituicao}/${dataHora}/${ativo}/${valido}/${invalido}/${inativo}`)
         .then(function (listaStrikes) {
             console.log(listaStrikes);
             if (listaStrikes.ok) {
@@ -240,8 +238,8 @@ function carregarFeedSituacao(situacao) {
 getFiltrosSelecionados().elementos.forEach((elemento) => {
     elemento.addEventListener('sl-change', event => {
        let strikes = document.getElementById('listaDeStrikes');
-    //    strikes.innerHTML = '';
-    //    mostrarTodasMaquinas(localStorage.getItem("instituicao"));
+       strikes.innerHTML = '';
+       carregarFeed();
     });
  })
 
