@@ -216,7 +216,8 @@ INSERT INTO usuario (nome, email, senha, fkInstituicao, fkTipoUsuario) VALUES
     ('Hinata Hyuga', 'hinata.hyuga@sptech.school', 'Byakugan123@', 3, 2),
     ('Rock Lee', 'rock.lee@sptech.school', 'DynamicEntry456@', 1, 2),
     ('Neji Hyuga', 'neji.hyuga@sptech.school', 'GentleFist789@', 4, 3),
-    ('Tenten', 'tenten@sptech.school', 'WeaponMasterABC@', 5, 3);
+    ('Tenten', 'tenten@sptech.school', 'WeaponMasterABC@', 5, 3),
+	('caua', 'caua@gmail.com', 'caua', 1, 1);
 
 
 

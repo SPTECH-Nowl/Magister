@@ -40,10 +40,10 @@ function contadores(codInstituicao) {
     console.log('no model');
     var instrução = `
     SELECT COUNT(idStrike) as 'total',
-        COUNT(if(fkSituacao = 1 , 1 ,null)) as 'ativos',
-        COUNT(if(fkSituacao = 2 ,1 ,null)) as 'inativos',
-        COUNT(if(fkSituacao = 3 , 1 ,null)) as 'validos',
-        COUNT(if(fkSituacao = 4 ,1 ,null)) as 'invalidos' FROM strike
+           COUNT(if(fkSituacao = 1 , 1 ,null)) as 'ativos',
+           COUNT(if(fkSituacao = 2 ,1 ,null)) as 'inativos',
+           COUNT(if(fkSituacao = 3 , 1 ,null)) as 'validos',
+           COUNT(if(fkSituacao = 4 ,1 ,null)) as 'invalidos' FROM strike
 			JOIN maquina ON idMaquina = fkMaquina
 				WHERE fkMaquina = ${codInstituicao};
     `;

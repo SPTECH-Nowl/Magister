@@ -36,7 +36,7 @@ function drawPieAlertaDisco() {
         },
         slices: {
             0: { color: '#4E2F78' },
-            1: { color: 'transparent' },
+            1: { color: '#BF80FF' },
         },
         width: '150',
         height: '150'
@@ -129,7 +129,7 @@ function getAlertasSemana(idInstituicao){
 
 function porcentagemStrikes(idInstituicao){
     fetch(`/maquinas/porcentagemStrikesMaquina/${idInstituicao}`)
-    .then((porcentagemStrikes)=>{
+    .then((porcentagemStrikes) => {
         var porcentagemStrike = document.getElementById("porcentagem_strikes")
 
         porcentagemStrikes.json().then((porcentagemStrikes)=>{
@@ -144,9 +144,11 @@ function porcentagemStrikes(idInstituicao){
 
                 var data = google.visualization.arrayToDataTable([
                     ['Categoria', 'Quantidade de Strikes'],
-                    ['Com Strike', `${porcentagemStrikes[0].maquinas_com_strike}`],
-                    ['Sem Stike', `${porcentagemStrikes[0].total_maquinas}`]
+                    ['Com Strike', porcentagemStrikes[0].maquinas_com_strikes],
+                    ['Sem Stike', porcentagemStrikes[0].total_maquinas]
                 ]);
+
+                console.log(porcentagemStrikes[0].maquinas_com_strikes, porcentagemStrikes[0].total_maquinas, porcentagemStrikes[0].porcentagem_maquinas_com_strikes);
             
                 var options = {
                     legend: 'none',
@@ -158,7 +160,7 @@ function porcentagemStrikes(idInstituicao){
                     },
                     slices: {
                         0: { color: '#4E2F78' },
-                        1: { color: 'transparent' },
+                        1: { color: '#BF80FF' },
                     },
                     width: '150',
                     height: '150'
