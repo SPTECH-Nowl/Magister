@@ -209,24 +209,24 @@ let database = require("../database/config")
 
     function deletarMaquina(idMaquina) {
         let deleteHistorico = `
-        DELETE FROM historico WHERE fkMaquina = ${idMaquina};
+            DELETE FROM historicoprocesso WHERE fkHistorico IN (SELECT idHistorico FROM historico WHERE fkMaquina = ${idMaquina});
         `;
-
+    
         let deleteComponente = `
-        DELETE FROM componente WHERE fkMaquina = ${idMaquina};
+            DELETE FROM componente WHERE fkMaquina = ${idMaquina};
         `;
         
         let deleteStrike = `
-        DELETE FROM strike WHERE fkMaquina = ${idMaquina};
+            DELETE FROM strike WHERE fkMaquina = ${idMaquina}
         `;
-
+    
         let deleteMaquina = `
-        DELETE FROM maquina WHERE idMaquina = ${idMaquina};
+            DELETE FROM maquina WHERE idMaquina = ${idMaquina};
         `;
-
+    
         return database.executar(deleteHistorico, deleteComponente, deleteStrike, deleteMaquina);
     }
-
+    
 
     
     function maisUsoCpuRamKpi(idInstituicao) {
