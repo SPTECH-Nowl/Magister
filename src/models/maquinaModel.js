@@ -215,35 +215,65 @@ var database = require("../database/config")
         return database.executar(instrução);
     }
 
+
     
-    function porcentagemStrikesMaquina(idInstituicao) {
-        var instrução = `
-        
-        SELECT
-        (SELECT COUNT(*) FROM maquina 
-        JOIN instituicao ON maquina.fkInstituicao = instituicao.idInstituicao
-        WHERE idInstituicao = ${idInstituicao}) AS total_maquinas,
-        (SELECT COUNT(DISTINCT fkMaquina) FROM strike) AS maquinas_com_strikes,
-        ROUND((SELECT COUNT(DISTINCT fkMaquina) FROM strike) / (SELECT COUNT(*) FROM maquina) * 100, 2) AS porcentagem_maquinas_com_strikes;
+    function maisUsoCpuRamKpi(idInstituicao) {
+        var instrucao = `
+                SELECT 
+                fkMaquina,
+                ROUND(MAX(COALESCE(CASE WHEN tipo = 'RAM' THEN consumo END, 0)), 2) AS maxConsumoRam,
+                ROUND(MAX(COALESCE(CASE WHEN tipo = 'Processador' THEN consumo END, 0)), 2) AS maxConsumoProcessador
+            FROM (
+                SELECT 
+                    h.fkMaquina,
+                    h.consumo, 
+                    c.max AS maxConsumo, 
+                    th.tipo,
+                    RANK() OVER (PARTITION BY h.fkMaquina, th.tipo ORDER BY h.consumo DESC) AS rnk
+                FROM 
+                    historico h
+                JOIN componente c ON h.fkComponente = c.idComponente
+                JOIN hardware hw ON c.fkHardware = hw.idHardware
+                JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+                JOIN maquina m ON h.fkMaquina = m.idMaquina
+                WHERE
+                    m.fkInstituicao = ${idInstituicao}
+                    AND WEEK(h.dataHora) = WEEK(NOW())  -- Modificado para usar WEEK diretamente
+            ) AS subconsulta
+            WHERE rnk = 1
+            GROUP BY fkMaquina
+            LIMIT 8;
     
         `;
-        console.log("Executando a instrução SQL: \n" + instrução);
-        return database.executar(instrução);
+        console.log("Executando a instrucao SQL: \n" + instrucao);
+        return database.executar(instrucao);
     }
 
-    function porcentagemMaquinasAcima(idInstituicao) {
-        var instrução = `
-        
+    
+    function maquinasMaisDefeitos(idInstituicao) {
+        var instrucao = `
         SELECT
-        (SELECT COUNT(*) FROM maquina where fkInstituicao = ${idInstituicao}) AS total_maquinas,
-        (SELECT COUNT(*) FROM componente WHERE capacidade > max) AS maquinas_acima_limite,
-        (SELECT COUNT(*) FROM componente WHERE capacidade > max) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_acima_limite;
-    
+            m.idMaquina AS fkMaquina,
+            COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,
+            COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) AS quantidadeAlertas,
+            RANK() OVER (ORDER BY COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) DESC) AS ranking
+        FROM
+            maquina m
+        LEFT JOIN strike s ON m.idMaquina = s.fkMaquina
+        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina AND h.consumo > 80
+        WHERE
+            m.fkInstituicao = ${idInstituicao}
+        GROUP BY
+            m.idMaquina
+        HAVING
+            quantidadeStrikes > 0 OR quantidadeAlertas > 0
+        ORDER BY
+            ranking
+        LIMIT 5;
         `;
-        console.log("Executando a instrução SQL: \n" + instrução);
-        return database.executar(instrução);
+        console.log("Executando a instrucao SQL: \n" + instrucao);
+        return database.executar(instrucao);
     }
-    
 
 
     module.exports = {
@@ -258,6 +288,7 @@ var database = require("../database/config")
         capturarNovoDadoCPU,
         editarMaquina,
         deletarMaquina,
-        porcentagemStrikesMaquina,
-        porcentagemMaquinasAcima
+        maisUsoCpuRamKpi,
+        maquinasMaisDefeitos
+
     };
