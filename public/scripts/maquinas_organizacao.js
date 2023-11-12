@@ -45,6 +45,7 @@ function capturarTodasMaquinas(idInstituicao, pesquisa) {
             'Content-Type': 'application/json',
          },
          body: JSON.stringify({
+            filtros: true,
             idInstituicao: idInstituicao,
             ordAlfabetica: s.ordemAaZ,
             qtdStrikes: s.qtdStrikes,
@@ -86,21 +87,23 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
          maquinaItem.onclick = () => {
             sessionStorage.nomeMaquina = nome;
             sessionStorage.idMaquina = id;
-            window.location.replace("http://localhost:3333/dashboard/dashboard_maquina.html");
+            window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
          }
 
          maquinaItem.innerHTML = `
-            ${so}
-            <div class="stat">
-               <div class="stat-texts">
-                  <h2>${nome}</h2>
-                  <span class="maquina-stat">Em uso: <highlight class="uso-maquina">${emUso}</highlight> </span>
-                  <span class="maquina-stat">Estado: <highlight class="status-maquina">${status}</highlight> </span>
-               </div>
-               <div class="stat-alerts">
-                  <i class="ph ph-warning strikes" data-qtd="${qtdStrikes}"></i>
-                  <i class="ph ph-warning strikes" data-qtd="${qtdStrikes}"></i>
-                  <i class="ph ph-warning strikes" data-qtd="${qtdStrikes}"></i>
+            <div class="maquina-container">
+               ${so}
+               <div class="stat">
+                  <div class="stat-texts">
+                     <h2>${nome}</h2>
+                     <span class="maquina-stat">Em uso: <highlight class="uso-maquina">${emUso}</highlight> </span>
+                     <span class="maquina-stat">Estado: <highlight class="status-maquina">${status}</highlight> </span>
+                  </div>
+                  <div class="stat-alerts">
+                     <i class="ph ph-warning strikes" data-qtd="${qtdStrikes}"></i>
+                     <i class="ph ph-warning strikes" data-qtd="${qtdStrikes}"></i>
+                     <i class="ph ph-warning strikes" data-qtd="${qtdStrikes}"></i>
+                  </div>
                </div>
             </div>
          `;

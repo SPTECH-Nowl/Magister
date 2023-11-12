@@ -123,11 +123,14 @@ body {
    border-radius: 5px;
 }
 
-
 .maquina-item {
+   width: 31%;
+}
+
+.maquina-container {
    display: flex;
    align-items: center;
-   width: 31%;
+   width: 100%;
    height: 30vh;
    background-color: #e2e1e1;
    border-radius: 20px;
@@ -135,7 +138,7 @@ body {
    gap: 1rem;
 }
 
-.maquina-item .so {
+.maquina-container img {
    width: 40%;
 }
 

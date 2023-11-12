@@ -44,61 +44,73 @@ function capturarTodosDadosMaquina(req, res) {
 
 function capturarTodasMaquinas(req, res) {
     let idInstituicao = req.body.idInstituicao;
-    let ordAlfabetica = req.body.ordAlfabetica == 'ord_a_z' ? 'ORDER BY m.nome' : 'ORDER BY m.nome DESC';
-    let qtdStrikes = req.body.qtdStrikes;
-    let emUso = req.body.emUso;
-    let estado = req.body.estado;
-    let pesquisa = `AND m.nome LIKE '%${req.body.pesquisa}%'`;
+    
+    if(req.body.filtros) {
+        let ordAlfabetica = req.body.ordAlfabetica === 'ord_z_a' ? 'ORDER BY m.nome DESC' : 'ORDER BY m.nome';
+        let qtdStrikes = req.body.qtdStrikes;
+        let emUso = req.body.emUso;
+        let estado = req.body.estado;
+        let pesquisa = `AND m.nome LIKE '%${req.body.pesquisa}%'`;
+    
+        if(emUso) emUso = req.body.emUso == 'true' ? 'AND m.emUso = 1' : 'AND m.emUso = 0';
+    
+        switch(qtdStrikes) {
+            case 'zero_stk':
+                qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 0'
+                break;
+            case 'um_stk':
+                qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 1'
+                break;
+            case 'um_ou_mais_stk':
+                qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 1'
+                break;
+            case 'dois_stk':
+                qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 2'
+                break;
+            case 'dois_ou_mais_stk':
+                qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 2'
+                break;
+            case 'tres_stk':
+                qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 3'
+                break;
+            default:
+                qtdStrikes = '';
+                break;
+        }
+    
+        switch(estado) {
+            case 'critico':
+                estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Crítico'`;
+               break;
+            case 'alerta':
+                estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Alerta'`;
+                break;
+            case 'normal':
+                estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Normal'` 
+                break;
+            default:
+                estado = '';
+                break;
+        }
 
-    if(emUso) emUso = req.body.emUso == 'true' ? 'AND m.emUso = 1' : 'AND m.emUso = 0';
-
-    switch(qtdStrikes) {
-        case 'zero_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 0'
-            break;
-        case 'um_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 1'
-            break;
-        case 'um_ou_mais_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 1'
-            break;
-        case 'dois_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 2'
-            break;
-        case 'dois_ou_mais_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 2'
-            break;
-        case 'tres_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 3'
-            break;
-        default:
-            qtdStrikes = '';
-            break;
-    }
-
-    switch(estado) {
-        case 'critico':
-            estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Crítico'`;
-           break;
-        case 'alerta':
-            estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Alerta'`;
-            break;
-        case 'normal':
-            estado = `AND (SELECT CASE WHEN MAX(h.consumo) >= 85 THEN 'Crítico' WHEN MAX(h.consumo) >= 70 THEN 'Alerta' ELSE 'Normal' END AS status FROM maquina ms LEFT JOIN historico h ON m.idMaquina = h.fkMaquina JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao WHERE idInstituicao = 1 AND ms.idMaquina = m.idMaquina GROUP BY m.idMaquina) LIKE 'Normal'` 
-            break;
-        default:
-            estado = '';
-            break;
-    }
-
-    maquinaModel.capturarTodasMaquinas(idInstituicao, ordAlfabetica, qtdStrikes, emUso, estado, pesquisa)
+        maquinaModel.capturarTodasMaquinas(idInstituicao, ordAlfabetica, qtdStrikes, emUso, estado, pesquisa)
         .then((response) => {
             res.json(response);
         })
         .catch((error) => {
             console.log(error);
             res.status(500).json(error.sqlMessage);
-        })
+        });
+    }
+
+    maquinaModel.capturarTodasMaquinas(idInstituicao)
+    .then((response) => {
+        res.json(response);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(500).json(error.sqlMessage);
+    });
 }
 
 function capturarConsumoRAM(req, res) {
