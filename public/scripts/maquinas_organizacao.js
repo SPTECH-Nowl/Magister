@@ -45,7 +45,6 @@ function capturarTodasMaquinas(idInstituicao, pesquisa) {
             'Content-Type': 'application/json',
          },
          body: JSON.stringify({
-            filtros: true,
             idInstituicao: idInstituicao,
             ordAlfabetica: s.ordemAaZ,
             qtdStrikes: s.qtdStrikes,
@@ -68,6 +67,28 @@ function capturarTodasMaquinas(idInstituicao, pesquisa) {
    }) 
 }
 
+function dashboardMaquina(nome, id) {
+   sessionStorage.nomeMaquina = nome;
+   sessionStorage.idMaquina = id;
+   window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
+}
+
+function deletarMaquina(idMaquina) {
+   fetch(`/maquinas/deletarMaquina/`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({idMaquina: idMaquina})
+   }).then((response) => {
+      if(response.ok) {
+         sessionStorage.clear(); 
+         location.reload();
+      }
+   }).catch((err) => {
+      console.log(err);
+      console.log("Houve um erro ao tentar deletar a máquina!")
+   })
+}
+
 function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
    const maquinas = document.getElementById("maquinas");
 
@@ -84,11 +105,6 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
 
          const maquinaItem = document.createElement("div");
          maquinaItem.classList.add("maquina-item");
-         maquinaItem.onclick = () => {
-            sessionStorage.nomeMaquina = nome;
-            sessionStorage.idMaquina = id;
-            window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
-         }
 
          maquinaItem.innerHTML = `
             <div class="maquina-container">
@@ -108,6 +124,7 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
             </div>
          `;
 
+         maquinaItem.id = nome.toLowerCase();
          maquinas.appendChild(maquinaItem);
 
          const uso_maquina = maquinaItem.querySelector(".uso-maquina");
@@ -133,6 +150,19 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
                status_maquina.style.color = "var(--color-green-500)";
                break;
          }
+
+         tippy(`#${nome}`, {
+            content: `
+            <button class="tippy-btn" onclick="dashboardMaquina('${nome}', ${id})">Ver info</button> 
+            <br>
+            <button class="tippy-btn" onclick="deletarMaquina(${id})">Deletar</button>
+            `,
+            placement: "top-end",
+            trigger: "click",
+            theme: "magister",
+            interactive: true,
+            allowHTML: true,
+         });
       });
    }).then(() => {
       if(!maquinas.childElementCount) {

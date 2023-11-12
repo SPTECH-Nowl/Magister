@@ -35,8 +35,8 @@ router.get("/editarMaquina/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarNovoDadoRAM(req, res);
 });
 
-router.get("/deletarMaquina/:idInstituicao/:idMaquina", (req, res) => {
-    maquinaController.capturarNovoDadoRAM(req, res);
+router.delete("/deletarMaquina/", (req, res) => {
+    maquinaController.deletarMaquina(req, res);
 });
 
 router.get("/maisUsoCpuRamKpi/:idInstituicao", (req, res) => {

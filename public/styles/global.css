@@ -244,3 +244,48 @@ sl-tooltip button {
    text-align: center;
    font-size: 2.4rem;
 }
+
+.tippy-box[data-theme~='magister'] {
+   background-color: var(--color-purple-500);
+ }
+
+ .tippy-box[data-theme~='magister'][data-placement^='top'] > .tippy-arrow::before {
+   border-top-color: var(--color-purple-500);
+ }
+ .tippy-box[data-theme~='magister'][data-placement^='bottom'] > .tippy-arrow::before {
+   border-bottom-color: var(--color-purple-500);
+ }
+ .tippy-box[data-theme~='magister'][data-placement^='left'] > .tippy-arrow::before {
+   border-left-color: var(--color-purple-500);
+ }
+ .tippy-box[data-theme~='magister'][data-placement^='right'] > .tippy-arrow::before {
+   border-right-color: var(--color-purple-500);
+ }
+
+.tippy-btn {
+   position: relative;
+   padding: 4px;
+   width: 100px;
+   cursor: pointer;
+   background: none;
+   border: none;
+   color: white;
+   text-align: left;
+   transition: .4s;
+   font-size: 1rem;
+}
+
+.tippy-btn::after {
+   content: '';
+   position: absolute;
+   width: 0%;
+   height: 1px;
+   background-color: white;
+   border-radius: 5px;
+   left: 0;
+   bottom: 0;
+}
+
+.tippy-btn:hover::after {
+   width: 60%;
+}

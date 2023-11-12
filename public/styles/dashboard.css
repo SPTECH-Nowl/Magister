@@ -125,6 +125,7 @@ body {
 
 .maquina-item {
    width: 31%;
+   position: relative;
 }
 
 .maquina-container {

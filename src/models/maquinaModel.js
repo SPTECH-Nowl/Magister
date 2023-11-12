@@ -1,9 +1,9 @@
-var database = require("../database/config")
+let database = require("../database/config")
 
 
 
     function capturarDadosMaquina(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             m.idMaquina as id,
             m.nome as nome,
@@ -30,7 +30,7 @@ var database = require("../database/config")
     }
 
     function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             m.idMaquina as id,
             m.nome as nome,
@@ -63,7 +63,7 @@ var database = require("../database/config")
     }
 
     function capturarTodasMaquinas(idInstituicao, ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '', pesquisa = '') {
-        var instrucao = `
+        let instrucao = `
         SELECT
             m.idMaquina as id,
             m.nome AS nome,
@@ -89,7 +89,7 @@ var database = require("../database/config")
     }
 
     function capturarConsumoRAM(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
         FROM 
@@ -106,7 +106,7 @@ var database = require("../database/config")
     }
 
     function capturarConsumoCPU(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
         FROM 
@@ -124,7 +124,7 @@ var database = require("../database/config")
     }
 
     function capturarConsumoDisco(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
@@ -142,7 +142,7 @@ var database = require("../database/config")
     }
 
     function capturarNovoDadoRAM(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
@@ -160,7 +160,7 @@ var database = require("../database/config")
     }
 
     function capturarNovoDadoCPU(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
@@ -178,7 +178,7 @@ var database = require("../database/config")
     }
 
     function capturarNovoDadoDisco(idMaquina, idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT 
             h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
@@ -197,28 +197,40 @@ var database = require("../database/config")
 
 
     function editarMaquina(idMaquina, nomeMaquina, SistemaOperacional, idInstituicao) {
-        var instrução = `
+        let instrucao = `
         UPDATE maquina
         SET nome = '${nomeMaquina}', SO = '${SistemaOperacional}'
         WHERE idMaquina = ${idMaquina};
         `;
-        return database.executar(instrução);
+        return database.executar(instrucao);
     }
 
     
 
-    function deletarMaquina(idMaquina,idInstituicao) {
-        var instrução = `
+    function deletarMaquina(idMaquina) {
+        let deleteHistorico = `
+        DELETE FROM historico WHERE fkMaquina = ${idMaquina};
+        `;
+
+        let deleteComponente = `
+        DELETE FROM componente WHERE fkMaquina = ${idMaquina};
+        `;
+        
+        let deleteStrike = `
+        DELETE FROM strike WHERE fkMaquina = ${idMaquina};
+        `;
+
+        let deleteMaquina = `
         DELETE FROM maquina WHERE idMaquina = ${idMaquina};
         `;
-        console.log("Executando a instrução SQL: \n" + instrução);
-        return database.executar(instrução);
+
+        return database.executar(deleteHistorico, deleteComponente, deleteStrike, deleteMaquina);
     }
 
 
     
     function maisUsoCpuRamKpi(idInstituicao) {
-        var instrucao = `
+        let instrucao = `
                 SELECT 
                 fkMaquina,
                 ROUND(MAX(COALESCE(CASE WHEN tipo = 'RAM' THEN consumo END, 0)), 2) AS maxConsumoRam,
@@ -251,7 +263,7 @@ var database = require("../database/config")
 
     
     function maquinasMaisDefeitos(idInstituicao) {
-        var instrucao = `
+        let instrucao = `
         SELECT
             m.idMaquina AS fkMaquina,
             COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,

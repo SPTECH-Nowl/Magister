@@ -28,61 +28,61 @@ const validarAcesso = (permMinima) => {
    }
 }
 
-function addDialog() {
-   const body = document.querySelector('body');
+// function addDialog() {
+//    const body = document.querySelector('body');
 
-   const dialog = document.createElement('sl-dialog');
-   dialog.setAttribute('label', '3º Strike - Nome da máquina');
-   dialog.setAttribute('strike-dialog', true);
-   dialog.classList.add('dialog-overview');
-   dialog.style.cssText = '--width: 80vw;';
+//    const dialog = document.createElement('sl-dialog');
+//    dialog.setAttribute('label', '3º Strike - Nome da máquina');
+//    dialog.setAttribute('strike-dialog', true);
+//    dialog.classList.add('dialog-overview');
+//    dialog.style.cssText = '--width: 80vw;';
    
-   const dialogContent = document.createElement('div');
-   dialogContent.textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-   dialog.appendChild(dialogContent);
+//    const dialogContent = document.createElement('div');
+//    dialogContent.textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+//    dialog.appendChild(dialogContent);
    
-   const dialogButtons = document.createElement('div');
-   dialogButtons.classList.add('stk-dialog-buttons');
+//    const dialogButtons = document.createElement('div');
+//    dialogButtons.classList.add('stk-dialog-buttons');
    
-   const approveButton = document.createElement('button');
-   approveButton.classList.add('btn', 'primario', 'btn-full');
-   approveButton.textContent = 'Aprovar strike';
-   dialogButtons.appendChild(approveButton);
+//    const approveButton = document.createElement('button');
+//    approveButton.classList.add('btn', 'primario', 'btn-full');
+//    approveButton.textContent = 'Aprovar strike';
+//    dialogButtons.appendChild(approveButton);
    
-   const reproveButton = document.createElement('button');
-   reproveButton.classList.add('btn', 'terciario', 'btn-full');
-   reproveButton.textContent = 'Reprovar strike';
-   dialogButtons.appendChild(reproveButton);
+//    const reproveButton = document.createElement('button');
+//    reproveButton.classList.add('btn', 'terciario', 'btn-full');
+//    reproveButton.textContent = 'Reprovar strike';
+//    dialogButtons.appendChild(reproveButton);
    
-   dialog.appendChild(dialogButtons);
+//    dialog.appendChild(dialogButtons);
 
-   body.insertBefore(dialog, body.childNodes[0]);
-}
+//    body.insertBefore(dialog, body.childNodes[0]);
+// }
 
-function mostrarStrikeDialog() {
-   const dialogStrike = document.querySelector("sl-dialog[strike-dialog]");
-   dialogStrike.show();
-}
+// function mostrarStrikeDialog() {
+//    const dialogStrike = document.querySelector("sl-dialog[strike-dialog]");
+//    dialogStrike.show();
+// }
 
-function verifStrikes() {
-   const idInstituicao = localStorage.getItem("instituicao");
+// function verifStrikes() {
+//    const idInstituicao = localStorage.getItem("instituicao");
    
-   fetch(`/maquina/capturarTodasMaquinas/`, {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-         filtros: false,
-         idInstituicao: idInstituicao,
-      })
-   }).then((response) => {
+//    fetch(`/maquina/capturarTodasMaquinas/`, {
+//       method: 'POST',
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//          filtros: false,
+//          idInstituicao: idInstituicao,
+//       })
+//    }).then((response) => {
 
-   })
-   .catch((err) => {
-      console.log("Erro de requisição.", err);
-      reject(err);
-   })
-}
+//    })
+//    .catch((err) => {
+//       console.log("Erro de requisição.", err);
+//       reject(err);
+//    })
+// }
 
-window.onload = () => {
-   addDialog();
-}
+// window.onload = () => {
+//    addDialog();
+// }
