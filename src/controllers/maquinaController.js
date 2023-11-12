@@ -297,31 +297,42 @@ function deletarMaquina(req, res) {
 
 
 
-function porcentagemStrikesMaquina(req, res) {
-    let idInstituicao = req.params.idInstituicao;
+function maisUsoCpuRamKpi(req, res) {
+    var idInstituicao = req.params.idInstituicao;
 
-    maquinaModel.porcentagemStrikesMaquina(idInstituicao)
-        .then(function (response) {
-            res.json(response);
-        })
-        .catch(function (erro) {
-            console.log(erro);
-            res.status(500).json(erro.sqlMessage)
-        })
+    maquinaModel.maisUsoCpuRamKpi(idInstituicao)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log(erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
 
-function porcentagemMaquinasAcima(req, res) {
-    let idInstituicao = req.params.idInstituicao;
+function maquinasMaisDefeitos(req, res) {
+    var idInstituicao = req.params.idInstituicao;
 
-    maquinaModel.porcentagemMaquinasAcima(idInstituicao)
-        .then(function (response) {
-            res.json(response);
-        })
-        .catch(function (erro) {
-            console.log(erro);
-            res.status(500).json(erro.sqlMessage)
-        })
+    maquinaModel.maquinasMaisDefeitos(idInstituicao)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log(erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
+
 
 
 module.exports = {
@@ -336,6 +347,6 @@ module.exports = {
     capturarNovoDadoCPU,
     editarMaquina,
     deletarMaquina,
-    porcentagemStrikesMaquina,
-    porcentagemMaquinasAcima
+    maisUsoCpuRamKpi,
+    maquinasMaisDefeitos
 }

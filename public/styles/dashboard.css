@@ -394,6 +394,7 @@ body {
 
 .chart-ranking td {
    padding: 5px;
+   text-align: center;
 }
 
 .chart-ranking a {

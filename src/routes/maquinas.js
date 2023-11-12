@@ -39,13 +39,14 @@ router.get("/deletarMaquina/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarNovoDadoRAM(req, res);
 });
 
-router.get("/porcentagemStrikesMaquina/:idInstituicao", (req, res) => {
-    maquinaController.porcentagemStrikesMaquina(req, res);
+router.get("/maisUsoCpuRamKpi/:idInstituicao", (req, res) => {
+    maquinaController.maisUsoCpuRamKpi(req, res);
 });
 
-router.get("/porcentagemMaquinasAcima/:idInstituicao", (req, res) => {
-    maquinaController.porcentagemMaquinasAcima(req, res);
+router.get("/maquinasMaisDefeitos/:idInstituicao", (req, res) => {
+    maquinaController.maquinasMaisDefeitos(req, res);
 });
+
 
 
 

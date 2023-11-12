@@ -121,54 +121,33 @@ function contadores(req, res) {
     });
 }
 
-
-function getStrikes(req, res) {
-    
-    var idInstituicao = req.params.idInstituicao;
-
-    strikeModel.getStrikes(idInstituicao)
-    .then(function (resultado) {
-        console.log('no then do controller');
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!");
-        }
-    }).catch(function (erro) {
-        console.log(erro);
-        console.log("Houve um erro ao buscar os contadores dos strikes: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
-}
-
-function getAlertas(req, res) {
-    
-    var idInstituicao = req.params.idInstituicao;
-
-    strikeModel.getAlertas(idInstituicao)
-    .then(function (resultado) {
-        console.log('no then do controller');
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!");
-        }
-    }).catch(function (erro) {
-        console.log(erro);
-        console.log("Houve um erro ao buscar os contadores dos strikes: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
-}
-
 function strikePMes(req, res) {
     var idInstituicao = req.params.idInstituicao;
     var opcao = req.params.opcao;
+    
+    var qtdMes;
 
-    console.log("Cheguei no controler STRIKE")
 
-    strikeModel.strikePMes(idInstituicao, opcao)
+    switch(opcao){
+        case "1":
+             qtdMes = "dataHora >= DATE_SUB(NOW(), INTERVAL 1 MONTH) AND";
+        break;
+
+        case "2":
+             qtdMes = "dataHora >= DATE_SUB(NOW(), INTERVAL 3 MONTH) AND";
+        break;
+
+        case "3":
+             qtdMes = "dataHora >= DATE_SUB(NOW(), INTERVAL 6 MONTH) AND";
+        break;
+
+        default:
+            qtdMes = "dataHora >= DATE_SUB(NOW(), INTERVAL 1 MONTH) AND";
+        break;
+    }
+
+    strikeModel.strikePMes(idInstituicao, qtdMes)
     .then(function (resultado) {
-        console.log('no then do controller');
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -181,12 +160,29 @@ function strikePMes(req, res) {
     });
 }
 
+
+function kpiInfos(req, res) {
+    var idInstituicao = req.params.idInstituicao;
+
+    strikeModel.kpiInfos(idInstituicao)
+    .then(function (resultado) {
+        console.log('no then do controller');
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Erro ao buscar informações de kpi: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
 
 module.exports = {
     listar,
     listarSituacao,
     contadores,
-    getStrikes,
-    getAlertas,
-    strikePMes
+    strikePMes,
+    kpiInfos
 }
