@@ -5,24 +5,21 @@ let database = require("../database/config")
     function capturarDadosMaquina(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            m.idMaquina as id,
-            m.nome as nome,
-            m.so as so,
-            m.emUso as emUso,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
-            as capacidadeRAM,
-            (SELECT especificidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
-            as capacidadeCPU,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
-            as capacidadeDisco
-        FROM maquina m
-        JOIN componente c ON c.fkMaquina = m.idMaquina
-        JOIN hardware ram ON c.fkHardware = ram.idHardware
-        JOIN hardware cpu ON c.fkHardware = cpu.idHardware
-        JOIN hardware disco ON c.fkHardware = disco.idHardware
-        WHERE
-            m.idMaquina = ${idMaquina}
-        LIMIT 1;
+        m.idMaquina as id,
+        m.nome as nome,
+        m.so as so,
+        m.emUso as emUso,
+        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 3 AND idMaquina = m.idMaquina LIMIT 1) 
+        as nucleos,
+        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 2 AND idMaquina = m.idMaquina LIMIT 1) 
+        as capacidadeCPU,
+        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 1 AND idMaquina = m.idMaquina LIMIT 1) 
+        as capacidadeDisco
+    FROM maquina m
+    WHERE
+        m.idMaquina = ${idMaquina}
+    LIMIT 1;
+    
         `;
 
         console.log(instrucao);
