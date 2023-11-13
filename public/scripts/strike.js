@@ -76,8 +76,8 @@ function carregarFeed() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete" onclick="deletar(${localStorage.getItem("nivPerm")})">
-                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update" onclick="alterar()">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Strikes" id="btn_delete" onclick="deletar(${localStorage.getItem("nivPerm")})">
+                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Strikes" id="btn_update" onclick="alterar()">
                             <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get" onclick="mostrar_dados()">
                         `;
                      
@@ -202,8 +202,8 @@ function carregarFeedSituacao(situacao) {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete" onclick="deletar(${localStorage.getItem("nivPerm")})">
-                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update" onclick="alterar()">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Strikes" id="btn_delete" onclick="deletar(${localStorage.getItem("nivPerm")})">
+                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Strikes" id="btn_update" onclick="alterar()">
                             <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get" onclick="mostrar_dados()">
                         `;
                      
