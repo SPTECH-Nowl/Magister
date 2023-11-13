@@ -69,7 +69,7 @@ let database = require("../database/config")
             m.nome AS nome,
             m.emUso AS emUso,
             m.SO AS so,
-            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina) AS qtdStrikes,
+            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes,
             CASE
                 WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
                 WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
@@ -205,26 +205,18 @@ let database = require("../database/config")
         return database.executar(instrucao);
     }
 
-    
-
     function deletarMaquina(idMaquina) {
-        let deleteHistorico = `
-            DELETE FROM historicoprocesso WHERE fkHistorico IN (SELECT idHistorico FROM historico WHERE fkMaquina = ${idMaquina});
-        `;
-    
-        let deleteComponente = `
-            DELETE FROM componente WHERE fkMaquina = ${idMaquina};
-        `;
-        
-        let deleteStrike = `
+        let instrucao = `
+        START TRANSACTION;
+            DELETE FROM historicoProcesso WHERE fkHistorico = (SELECT idHistorico FROM historico WHERE fkMaquina = ${idMaquina});
+            DELETE FROM historico WHERE fkMaquina = ${idMaquina}
+            DELETE FROM componente WHERE fkMaquina = ${idMaquina}
             DELETE FROM strike WHERE fkMaquina = ${idMaquina}
-        `;
-    
-        let deleteMaquina = `
             DELETE FROM maquina WHERE idMaquina = ${idMaquina};
+        COMMIT;
         `;
     
-        return database.executar(deleteHistorico, deleteComponente, deleteStrike, deleteMaquina);
+        return database.executar(instrucao);
     }
     
 
