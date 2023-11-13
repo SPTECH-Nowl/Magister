@@ -1,3 +1,11 @@
+function verifEdit() {
+   if(sessionStorage.editClicked) {
+      const dialogInfo = document.getElementById("dialog_info");
+      dialogInfo.show();
+      sessionStorage.removeItem("editClicked");
+   }
+}
+
 // funções e variáveis relacionadas aos modais
 const dialog = document.querySelector('.dialog-overview');
 const openButton = dialog.nextElementSibling;
@@ -598,4 +606,8 @@ function alterar(idMaquina) {
                Swal.fire("error", "Falha ao editar máquina", "error");
            }
        });
+}
+
+window.onload = () => {
+   verifEdit();
 }
