@@ -19,13 +19,14 @@ function carregarFeed() {
     var valido = selects.situacao.includes('valido');
     var invalido = selects.situacao.includes('invalido');
     var inativo = selects.situacao.includes('inativo');
+    var textoBusca = document.getElementById('input_busca').value == '' ? 'false' : document.getElementById('input_busca').value;
 
-    console.log(selects);
+    console.log(textoBusca);
     console.log(selects.dt_hr);
 
-    console.log(`/strikes/listar/${codInstituicao}/${dataHora}/${ativo}/${valido}/${invalido}/${inativo}`);
+    console.log(`/strikes/listar/${codInstituicao}/${dataHora}/${ativo}/${valido}/${invalido}/${inativo}/${textoBusca}`);
 
-    fetch(`/strikes/listar/${codInstituicao}/${dataHora}/${ativo}/${valido}/${invalido}/${inativo}`)
+    fetch(`/strikes/listar/${codInstituicao}/${dataHora}/${ativo}/${valido}/${invalido}/${inativo}/${textoBusca}`)
         .then(function (listaStrikes) {
             console.log(listaStrikes);
             if (listaStrikes.ok) {
@@ -135,8 +136,6 @@ function contadoresStrike(){
                     spanValidos.onclick = () => carregarFeedSituacao('Válido')
                     spanInvalidos.onclick = () => carregarFeedSituacao('Inválido')
                     spanInativos.onclick = () => carregarFeedSituacao('Inativo')
-                    // spanTotalAdministrador.onclick = carregarFeedAdm
-                    // spanTotalInstrutor.onclick = carregarFeedInstrutor
                     
                     orderOptions.appendChild(spanTotal)
                     orderOptions.appendChild(spanAtivos)
@@ -235,6 +234,13 @@ function carregarFeedSituacao(situacao) {
         });
 }
 
+document.getElementById('input_busca').addEventListener('keypress', (e) => {
+    if(e.key === "Enter") {
+        e.preventDefault;
+        carregarFeed();
+     }
+})
+
 getFiltrosSelecionados().elementos.forEach((elemento) => {
     elemento.addEventListener('sl-change', event => {
        let strikes = document.getElementById('listaDeStrikes');
@@ -243,7 +249,7 @@ getFiltrosSelecionados().elementos.forEach((elemento) => {
     });
  })
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     console.log('carreguei');
     carregarFeed()
     contadoresStrike()
