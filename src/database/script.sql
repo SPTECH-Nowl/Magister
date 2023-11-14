@@ -80,7 +80,7 @@ CREATE TABLE strike (
     motivo VARCHAR(255) DEFAULT 'Sem motivo definido',
     duracao INT NOT NULL,
     fkMaquina INT, CONSTRAINT strikFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
+		REFERENCES maquina(idMaquina) ON DELETE CASCADE,
 	fkSituacao INT, CONSTRAINT strikFkSit FOREIGN KEY (fkSituacao)
 		REFERENCES situacao(idSituacao)
 );
@@ -89,7 +89,7 @@ CREATE TABLE strike (
 	idComponente INT PRIMARY KEY AUTO_INCREMENT,
 	max INT NOT NULL DEFAULT 85,
     fkMaquina INT, CONSTRAINT compFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
+		REFERENCES maquina(idMaquina) ON DELETE CASCADE,
 	fkHardware INT, CONSTRAINT compFkHard FOREIGN KEY (fkHardware)
 		REFERENCES hardware(idHardware)
 );
@@ -108,20 +108,20 @@ CREATE TABLE historico (
 	dataHora DATETIME NOT NULL,
 	consumo DOUBLE NOT NULL,
 	fkMaquina INT, CONSTRAINT histFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
+		REFERENCES maquina(idMaquina) ON DELETE CASCADE,
 	fkHardware INT, CONSTRAINT histFkHard FOREIGN KEY (fkHardware)
 		REFERENCES hardware(idHardware),
 	fkComponente INT, CONSTRAINT histFkComp FOREIGN KEY (fkComponente)
-		REFERENCES componente(idComponente)
+		REFERENCES componente(idComponente) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE historicoProcesso (
 	idHistoricoProcesso INT PRIMARY KEY AUTO_INCREMENT,
     enderecoProcesso VARCHAR(200) NOT NULL,
     fkHistorico INT, CONSTRAINT histProcFkHist FOREIGN KEY (fkHistorico)
-		REFERENCES historico(idHistorico),
+		REFERENCES historico(idHistorico) ON DELETE CASCADE,
 	fkProcesso INT, CONSTRAINT histProcFkProc FOREIGN KEY (fkProcesso)
-		REFERENCES processo(idProcesso)
+		REFERENCES processo(idProcesso) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE permissaoProcesso (
@@ -281,7 +281,7 @@ INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) 
 ('2023-11-09 10:45:00', 0, 'Conversando com Luigi Jadeu', 120, 6, 3);
 
 
-    select * from usuario;
+    
 
 
 
@@ -465,9 +465,7 @@ SELECT m.nome AS nome_maquina,
  ) a ON m.idMaquina = a.fkMaquina
  ORDER BY (s.strikes + a.alertas) DESC
  LIMIT 1;
-
-
-
+ 
 -- SELECT PARA MAQUINAS QUE MAIS USARAM RAM E CPU NA SEMANA
 SELECT m.nome AS nome_maquina,
     AVG(CASE WHEN h.fkHardware = 1 THEN h.consumo ELSE 0 END) AS uso_medio_cpu,
@@ -478,7 +476,3 @@ WHERE h.dataHora >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
 GROUP BY m.idMaquina, m.nome
 ORDER BY uso_medio_cpu DESC, uso_medio_ram DESC
 LIMIT 10;
-
-
-
-

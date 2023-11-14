@@ -67,7 +67,7 @@ function mostrarStrikeDialog() {
 function verifStrikes() {
    const idInstituicao = localStorage.getItem("instituicao");
    
-   fetch(`/maquina/caminho/`).then((response) => {
+   fetch(`/maquinas/capturarStrikes/`).then((response) => {
 
    })
    .catch((err) => {
