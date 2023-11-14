@@ -204,13 +204,7 @@ let database = require("../database/config")
 
     function deletarMaquina(idMaquina) {
         let instrucao = `
-        START TRANSACTION;
-            DELETE FROM historicoProcesso WHERE fkHistorico = (SELECT idHistorico FROM historico WHERE fkMaquina = ${idMaquina});
-            DELETE FROM historico WHERE fkMaquina = ${idMaquina}
-            DELETE FROM componente WHERE fkMaquina = ${idMaquina}
-            DELETE FROM strike WHERE fkMaquina = ${idMaquina}
             DELETE FROM maquina WHERE idMaquina = ${idMaquina};
-        COMMIT;
         `;
     
         return database.executar(instrucao);
