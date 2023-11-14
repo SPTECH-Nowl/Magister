@@ -10,7 +10,7 @@ let database = require("../database/config")
         m.so as so,
         m.emUso as emUso,
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 3 AND idMaquina = m.idMaquina LIMIT 1) 
-        as nucleos,
+        as capacidadeRam,
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 2 AND idMaquina = m.idMaquina LIMIT 1) 
         as capacidadeCPU,
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 1 AND idMaquina = m.idMaquina LIMIT 1) 
@@ -265,6 +265,7 @@ let database = require("../database/config")
             m.idMaquina AS fkMaquina,
             COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,
             COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) AS quantidadeAlertas,
+            
             RANK() OVER (ORDER BY COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) DESC) AS ranking
         FROM
             maquina m

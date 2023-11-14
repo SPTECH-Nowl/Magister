@@ -43,8 +43,8 @@ function maisUsoCpuRamKpi(idInstituicao){
 
                     var options = {
                         chart: {
-                            title: '',
-                            subtitle: '',
+                            title: ' ',
+                            subtitle: ' ',
                         },
                         colors: ['#4E2F78', '#BF80FF'],
                         chartArea: {
