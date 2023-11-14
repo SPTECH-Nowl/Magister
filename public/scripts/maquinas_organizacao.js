@@ -73,6 +73,13 @@ function dashboardMaquina(nome, id) {
    window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
 }
 
+function editarMaquina(nome, id) {
+   sessionStorage.nomeMaquina = nome;
+   sessionStorage.idMaquina = id;
+   sessionStorage.editClicked = true;
+   window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
+}
+
 function deletarMaquina(idMaquina) {
    fetch(`/maquinas/deletarMaquina/`, {
       method: "DELETE",
@@ -154,6 +161,8 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
          tippy(`#${nome}`, {
             content: `
             <button class="tippy-btn" onclick="dashboardMaquina('${nome}', ${id})">Ver info</button> 
+            <br>
+            <button class="tippy-btn" onclick="editarMaquina('${nome}', ${id})">Editar</button>
             <br>
             <button class="tippy-btn" onclick="deletarMaquina(${id})">Deletar</button>
             `,

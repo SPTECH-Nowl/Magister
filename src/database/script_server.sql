@@ -1,146 +1,126 @@
 CREATE DATABASE magister;
+GO
+
 USE magister;
+GO
 
 CREATE TABLE tipoUsuario (
-	idTipoUsuario INT PRIMARY KEY AUTO_INCREMENT,
+idTipoUsuario INT PRIMARY KEY IDENTITY(1,1),
     tipoUsuario VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE situacao (
-	idSituacao INT PRIMARY KEY AUTO_INCREMENT,
+idSituacao INT PRIMARY KEY IDENTITY(1,1),
     situacao VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE medida (
-	idMedida INT PRIMARY KEY AUTO_INCREMENT,
+idMedida INT PRIMARY KEY IDENTITY(1,1),
     nome VARCHAR(50),
     unidade VARCHAR(5)
 );
 
 CREATE TABLE instituicao (
-	idInstituicao INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(50) NOT NULL,
-	sigla VARCHAR(30) NOT NULL,
-	codigoHex CHAR(6) NOT NULL
+idInstituicao INT PRIMARY KEY IDENTITY(1,1),
+nome VARCHAR(50) NOT NULL,
+sigla VARCHAR(30) NOT NULL,
+codigoHex CHAR(6) NOT NULL
 );
 
 CREATE TABLE processo (
-	idProcesso INT PRIMARY KEY AUTO_INCREMENT,
-	nomeProcesso VARCHAR(100) NOT NULL,
-	nomeAplicativo VARCHAR(100) NOT NULL
+idProcesso INT PRIMARY KEY IDENTITY(1,1),
+nomeProcesso VARCHAR(100) NOT NULL,
+nomeAplicativo VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE atuacao (
-	idAtuacao INT PRIMARY KEY AUTO_INCREMENT,
+idAtuacao INT PRIMARY KEY IDENTITY(1,1),
     nome VARCHAR(75) NOT NULL,
     descricao VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE tipoHardware (
-	idTipoHardware INT PRIMARY KEY AUTO_INCREMENT,
+idTipoHardware INT PRIMARY KEY IDENTITY(1,1),
     tipo VARCHAR(100) NOT NULL,
-    fkMedida INT, CONSTRAINT tipoHardFkMed FOREIGN KEY (fkMedida)
-		REFERENCES medida(idMedida)
+    fkMedida INT FOREIGN KEY REFERENCES medida(idMedida)
 );
 
 CREATE TABLE usuario (
-	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(50) NOT NULL,
-	email VARCHAR(100) UNIQUE NOT NULL,
-	senha VARCHAR(20) NOT NULL,
-	fkInstituicao INT, CONSTRAINT usuFkInst FOREIGN KEY (fkInstituicao)
-		REFERENCES instituicao(idInstituicao),
-	fkTipoUsuario INT, CONSTRAINT usuFkTipoUsu FOREIGN KEY (fkTipoUsuario)
-		REFERENCES tipoUsuario(idTipoUsuario)
+idUsuario INT PRIMARY KEY IDENTITY(1,1),
+nome VARCHAR(50) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+senha VARCHAR(20) NOT NULL,
+fkInstituicao INT FOREIGN KEY REFERENCES instituicao(idInstituicao),
+fkTipoUsuario INT FOREIGN KEY REFERENCES tipoUsuario(idTipoUsuario)
 );
 
 CREATE TABLE hardware (
-	idHardware INT PRIMARY KEY AUTO_INCREMENT,
-	fabricante VARCHAR(100) NOT NULL,
-	modelo VARCHAR(100) NOT NULL,
+idHardware INT PRIMARY KEY IDENTITY(1,1),
+fabricante VARCHAR(100) NOT NULL,
+modelo VARCHAR(100) NOT NULL,
     capacidade INT NOT NULL,
     especificidade VARCHAR(100),
-    fkTipoHardware INT, CONSTRAINT hardFkTipoHard FOREIGN KEY (fkTipoHardware)
-		REFERENCES tipoHardware(idTipoHardware)
+    fkTipoHardware INT FOREIGN KEY REFERENCES tipoHardware(idTipoHardware)
 );
 
 CREATE TABLE maquina (
-	idMaquina INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(50),
-	SO VARCHAR(75) NOT NULL,
-	emUso TINYINT NOT NULL,
-	fkInstituicao INT, CONSTRAINT maqFkInst FOREIGN KEY (fkInstituicao)
-		REFERENCES instituicao(idInstituicao)
+idMaquina INT PRIMARY KEY IDENTITY(1,1),
+nome VARCHAR(50),
+SO VARCHAR(75) NOT NULL,
+emUso TINYINT NOT NULL,
+fkInstituicao INT FOREIGN KEY REFERENCES instituicao(idInstituicao)
 );
-  
+ 
 CREATE TABLE strike (
-	idStrike INT PRIMARY KEY AUTO_INCREMENT,
+idStrike INT PRIMARY KEY IDENTITY(1,1),
     dataHora DATETIME NOT NULL,
     validade TINYINT NOT NULL,
     motivo VARCHAR(255) DEFAULT 'Sem motivo definido',
     duracao INT NOT NULL,
-    fkMaquina INT, CONSTRAINT strikFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
-	fkSituacao INT, CONSTRAINT strikFkSit FOREIGN KEY (fkSituacao)
-		REFERENCES situacao(idSituacao)
+    fkMaquina INT FOREIGN KEY REFERENCES maquina(idMaquina),
+fkSituacao INT FOREIGN KEY REFERENCES situacao(idSituacao)
 );
-  
-  CREATE TABLE componente (
-	idComponente INT PRIMARY KEY AUTO_INCREMENT,
-	max INT NOT NULL DEFAULT 85,
-    fkMaquina INT, CONSTRAINT compFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
-	fkHardware INT, CONSTRAINT compFkHard FOREIGN KEY (fkHardware)
-		REFERENCES hardware(idHardware)
+ 
+CREATE TABLE componente (
+idComponente INT PRIMARY KEY IDENTITY(1,1),
+max INT NOT NULL DEFAULT 85,
+    fkMaquina INT FOREIGN KEY REFERENCES maquina(idMaquina),
+fkHardware INT FOREIGN KEY REFERENCES hardware(idHardware)
 );
 
 CREATE TABLE permissao (
-	idPermissao INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(45) NOT NULL,
-    fkAtuacao INT, CONSTRAINT permFkAtuac FOREIGN KEY (fkAtuacao)
-		REFERENCES atuacao(idAtuacao),
-    fkUsuario INT, CONSTRAINT permFKUsu FOREIGN KEY (fkUsuario)
-		REFERENCES usuario(idUsuario)
+idPermissao INT PRIMARY KEY IDENTITY(1,1),
+nome VARCHAR(45) NOT NULL,
+    fkAtuacao INT FOREIGN KEY REFERENCES atuacao(idAtuacao),
+    fkUsuario INT FOREIGN KEY REFERENCES usuario(idUsuario)
 );
 
 CREATE TABLE historico (
-	idHistorico INT PRIMARY KEY AUTO_INCREMENT,
-	dataHora DATETIME NOT NULL,
-	consumo DOUBLE NOT NULL,
-	fkMaquina INT, CONSTRAINT histFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
-	fkHardware INT, CONSTRAINT histFkHard FOREIGN KEY (fkHardware)
-		REFERENCES hardware(idHardware),
-	fkComponente INT, CONSTRAINT histFkComp FOREIGN KEY (fkComponente)
-		REFERENCES componente(idComponente)
+idHistorico INT PRIMARY KEY IDENTITY(1,1),
+dataHora DATETIME NOT NULL,
+consumo FLOAT NOT NULL,
+fkMaquina INT FOREIGN KEY REFERENCES maquina(idMaquina),
+fkHardware INT FOREIGN KEY REFERENCES hardware(idHardware),
+fkComponente INT FOREIGN KEY REFERENCES componente(idComponente)
 );
 
 CREATE TABLE historicoProcesso (
-	idHistoricoProcesso INT PRIMARY KEY AUTO_INCREMENT,
+idHistoricoProcesso INT PRIMARY KEY IDENTITY(1,1),
     enderecoProcesso VARCHAR(200) NOT NULL,
-    fkHistorico INT, CONSTRAINT histProcFkHist FOREIGN KEY (fkHistorico)
-		REFERENCES historico(idHistorico),
-	fkProcesso INT, CONSTRAINT histProcFkProc FOREIGN KEY (fkProcesso)
-		REFERENCES processo(idProcesso)
+    fkHistorico INT FOREIGN KEY REFERENCES historico(idHistorico),
+fkProcesso INT FOREIGN KEY REFERENCES processo(idProcesso)
 );
 
 CREATE TABLE permissaoProcesso (
-	idPermissaoProcesso INT PRIMARY KEY AUTO_INCREMENT,
-	fkProcesso INT NOT NULL,
-	fkPermissao INT NOT NULL,
+idPermissaoProcesso INT PRIMARY KEY IDENTITY(1,1),
+fkProcesso INT NOT NULL,
+fkPermissao INT NOT NULL,
     dataAlocacao DATETIME NOT NULL,
-	CONSTRAINT permProcFkProc FOREIGN KEY (fkProcesso) 
-		REFERENCES processo (idProcesso),
-	CONSTRAINT permProcFkPerm FOREIGN KEY (fkPermissao)
-		REFERENCES permissao (idPermissao)
+CONSTRAINT permProcFkProc FOREIGN KEY (fkProcesso)
+REFERENCES processo (idProcesso),
+CONSTRAINT permProcFkPerm FOREIGN KEY (fkPermissao)
+REFERENCES permissao (idPermissao)
 );
-
--- EXCLUIR BANCO
--- drop database magister;
-
--- dados mocados para teste java
-
-select * from usuario;
 
 -- INSERTS TIPOUSUARIO
 INSERT INTO tipoUsuario (tipoUsuario) VALUES 
@@ -281,7 +261,7 @@ INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) 
 ('2023-11-09 10:45:00', 0, 'Conversando com Luigi Jadeu', 120, 6, 3);
 
 
-    select * from usuario;
+    
 
 
 
@@ -339,16 +319,12 @@ INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) V
   ('2023-08-23 12:17:30', .5, 1, 1, 2),
   ('2023-08-23 12:17:35', .6, 1, 1, 2),
   ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
-  ('2023-08-23 12:17:30', .5, 1, 2, 2),
-  ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
-  ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
-  ('2023-08-23 12:17:30', 200, 1, 3, 2),
-  ('2023-08-23 12:17:35', 200, 1, 3, 2),
-  ('2023-08-23 12:17:40', 245, 1, 3, 2);
+  ('2023-08-23 12:17:45', 5.1, 2, 1, 2);
 
 
--- INSERTS HISTORICOPROCESSO
-INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
+
+
+  INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
@@ -382,103 +358,6 @@ INSERT INTO permissaoProcesso (dataAlocacao, fkPermissao, fkProcesso) VALUES
 	('2023-08-23 12:03:45', 9, 3);
     
     
-    
-    -- SELECT PARA PORCENTAGEM DE MAQUINAS ACIMA DO DISCO
-   SELECT
-    (SELECT COUNT(*) FROM maquina) AS total_maquinas,
-    (SELECT COUNT(*) FROM componente c
-     JOIN hardware h ON c.fkHardware = h.idHardware
-     WHERE h.capacidade > c.max) AS maquinas_acima_limite,
-    (SELECT COUNT(*) FROM componente c
-     JOIN hardware h ON c.fkHardware = h.idHardware
-     WHERE h.capacidade > c.max) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_acima_limite_disco;
-
-
-
--- SELECT PARA VER PORCENTAGEM DE STRIKES DAS MAQUINAS
-SELECT
-    (SELECT COUNT(*) FROM maquina) AS total_maquinas,
-    (SELECT COUNT(DISTINCT fkMaquina) FROM strike) AS maquinas_com_strikes,
-    (SELECT COUNT(DISTINCT fkMaquina) FROM strike) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_maquinas_com_strikes;
-    
-    
-    
--- SELECT PARA VER PORCENTAGEM DE ALERTAS DAS MÁQUINAS
-SELECT
-    (SELECT COUNT(*) FROM maquina) AS total_maquinas,
-    (SELECT COUNT(DISTINCT fkMaquina) FROM historico) AS maquinas_com_alertas,
-    (SELECT COUNT(DISTINCT fkMaquina) FROM historico) / (SELECT COUNT(*) FROM maquina) * 100 AS porcentagem_maquinas_com_alertas;
-
-
-
-
-
--- SELECT PARA VER QUANTOS STRIKES TEVE NA SEMANA
-SELECT COUNT(*) AS total_strikes_semana
-FROM strike
-WHERE YEARWEEK(dataHora, 1) = YEARWEEK(NOW(), 1);
-
-
-
--- SELECT PARA VER O DIA QUE HOUVE MAIS STRIKES
-SELECT DATE(dataHora) AS Dia, COUNT(*) AS TotalStrikes
-FROM strike
-GROUP BY Dia
-ORDER BY TotalStrikes DESC
-LIMIT 1;
-
-
--- SELECT PRA VER QUANTOS STRIKES TEVE NA SEMANA, NO 1 MES, NO 3 MES E NO 6 MES
-SELECT COUNT(*) AS strikes_semana
-FROM strike
-WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 7 DAY);
-
-SELECT COUNT(*) AS strikes_primeiro_mes
-FROM strike
-WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 1 MONTH);
-
-SELECT COUNT(*) AS strikes_terceiro_mes
-FROM strike
-WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 3 MONTH);
-
-SELECT COUNT(*) AS strikes_sexto_mes
-FROM strike
-WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 6 MONTH);
-
-
--- SELECT AUTOMATIZADO PARA VER A MAQUINA QUE ESTÁ COM MAIS DEFEITO DE ACORDO NOME DA MAQUINA,COM NUMERO DE STRIKES E NUMERO DE ALERTAS
-SELECT m.nome AS nome_maquina, 
-        IFNULL(s.strikes, 0) AS numero_strikes, 
-        IFNULL(a.alertas, 0) AS numero_alertas
- FROM maquina m
- LEFT JOIN (
-     SELECT fkMaquina, COUNT(*) AS strikes
-     FROM strike
-     WHERE DATEDIFF(NOW(), dataHora) <= 7
-     GROUP BY fkMaquina
- ) s ON m.idMaquina = s.fkMaquina
- LEFT JOIN (
-     SELECT fkMaquina, COUNT(*) AS alertas
-     FROM strike
-     WHERE DATEDIFF(NOW(), dataHora) <= 7
-     GROUP BY fkMaquina
- ) a ON m.idMaquina = a.fkMaquina
- ORDER BY (s.strikes + a.alertas) DESC
- LIMIT 1;
-
-
-
--- SELECT PARA MAQUINAS QUE MAIS USARAM RAM E CPU NA SEMANA
-SELECT m.nome AS nome_maquina,
-    AVG(CASE WHEN h.fkHardware = 1 THEN h.consumo ELSE 0 END) AS uso_medio_cpu,
-    AVG(CASE WHEN h.fkHardware = 2 THEN h.consumo ELSE 0 END) AS uso_medio_ram
-FROM maquina m
-JOIN historico h ON m.idMaquina = h.fkMaquina
-WHERE h.dataHora >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
-GROUP BY m.idMaquina, m.nome
-ORDER BY uso_medio_cpu DESC, uso_medio_ram DESC
-LIMIT 10;
-
 
 
 

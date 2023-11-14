@@ -11,11 +11,12 @@ function listar(req, res) {
     let valido = req.params.valido  == 'true' ? true : false;
     let invalido = req.params.invalido  == 'true' ? true : false;
     let inativo = req.params.inativo  == 'true' ? true : false;
+    let textoBusca = req.params.textoBusca;
 
     let situacoes = [ativo, valido, invalido, inativo];
     let texto = 'AND ';
 
-    console.log(situacoes);
+    console.log('textoBusca = ' + textoBusca);
 
     if (situacoes.filter(Boolean).length >= 2) {
         if (ativo) {
@@ -58,11 +59,15 @@ function listar(req, res) {
             texto += `situacao = 'Inativo'`;
         }
     }
+    
+    if (textoBusca != 'false') {
+        texto += ` AND nome LIKE '%${textoBusca}%' `;
+    }
 
     if (dataHora == 'mais_recente') {
-        texto += 'ORDER BY dataHora'
+        texto += ' ORDER BY dataHora'
     } else if (dataHora == 'mais_antigo') {
-        texto += 'ORDER BY dataHora DESC'
+        texto += ' ORDER BY dataHora DESC'
     }
 
     console.log('controller, texto = ' + texto);

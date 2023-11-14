@@ -18,3 +18,7 @@ for(let i = 0; i < selects.length; i++) {
       chkSelectValue()
     });
 }
+
+window.addEventListener("DOMContentLoaded", (e) => {
+      chkSelectValue();
+})
