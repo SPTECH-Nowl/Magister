@@ -80,7 +80,7 @@ CREATE TABLE strike (
     motivo VARCHAR(255) DEFAULT 'Sem motivo definido',
     duracao INT NOT NULL,
     fkMaquina INT, CONSTRAINT strikFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
+		REFERENCES maquina(idMaquina) ON DELETE CASCADE,
 	fkSituacao INT, CONSTRAINT strikFkSit FOREIGN KEY (fkSituacao)
 		REFERENCES situacao(idSituacao)
 );
@@ -89,7 +89,7 @@ CREATE TABLE strike (
 	idComponente INT PRIMARY KEY AUTO_INCREMENT,
 	max INT NOT NULL DEFAULT 85,
     fkMaquina INT, CONSTRAINT compFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
+		REFERENCES maquina(idMaquina) ON DELETE CASCADE,
 	fkHardware INT, CONSTRAINT compFkHard FOREIGN KEY (fkHardware)
 		REFERENCES hardware(idHardware)
 );
@@ -97,6 +97,8 @@ CREATE TABLE strike (
 CREATE TABLE permissao (
 	idPermissao INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(45) NOT NULL,
+    emUso BOOLEAN NOT NULL,
+    duracaoStrikePadrao INT,
     fkAtuacao INT, CONSTRAINT permFkAtuac FOREIGN KEY (fkAtuacao)
 		REFERENCES atuacao(idAtuacao),
     fkUsuario INT, CONSTRAINT permFKUsu FOREIGN KEY (fkUsuario)
@@ -108,20 +110,20 @@ CREATE TABLE historico (
 	dataHora DATETIME NOT NULL,
 	consumo DOUBLE NOT NULL,
 	fkMaquina INT, CONSTRAINT histFkMaq FOREIGN KEY (fkMaquina)
-		REFERENCES maquina(idMaquina),
+		REFERENCES maquina(idMaquina) ON DELETE CASCADE,
 	fkHardware INT, CONSTRAINT histFkHard FOREIGN KEY (fkHardware)
 		REFERENCES hardware(idHardware),
 	fkComponente INT, CONSTRAINT histFkComp FOREIGN KEY (fkComponente)
-		REFERENCES componente(idComponente)
+		REFERENCES componente(idComponente) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE historicoProcesso (
 	idHistoricoProcesso INT PRIMARY KEY AUTO_INCREMENT,
     enderecoProcesso VARCHAR(200) NOT NULL,
     fkHistorico INT, CONSTRAINT histProcFkHist FOREIGN KEY (fkHistorico)
-		REFERENCES historico(idHistorico),
+		REFERENCES historico(idHistorico) ON DELETE CASCADE,
 	fkProcesso INT, CONSTRAINT histProcFkProc FOREIGN KEY (fkProcesso)
-		REFERENCES processo(idProcesso)
+		REFERENCES processo(idProcesso) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE permissaoProcesso (
@@ -163,7 +165,7 @@ INSERT INTO medida (nome, unidade) VALUES
 -- INSERTS INSTITUICAO
 INSERT INTO instituicao (nome, sigla, codigoHex) VALUES
 	('Nowl', 'nowl', '000000'),
-	('São Paulo Tech School', 'SPTech', 'ABC123'),
+	('São Paulo Tech School', 'SPTech', 'ABC123'	),
 	('Universidade São Paulo', 'USP', '456FED'),
 	('ETEC de Guaianases', 'ETG', '123456'),
 	('Escola Técnica de Informática', 'ETI', '7890AB'),
@@ -281,7 +283,7 @@ INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) 
 ('2023-11-09 10:45:00', 0, 'Conversando com Luigi Jadeu', 120, 6, 3);
 
 
-    select * from usuario;
+    
 
 
 
@@ -310,19 +312,19 @@ INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
 	(90, 3, 4);
 
 -- INSERTS PERMISSAO
-INSERT INTO permissao (nome, fkAtuacao, fkUsuario) VALUES
-	('Urubu100', 1, 3),
-	('Urubu200', 3, 3),
-	('Aulinha Java', 2, 4),
-('Aula de S.O', 1, 1),
-  ('Aula de Análise', 2, 2),
-  ('Aula de Sócio', 3, 3),
-  ('Aula de Pesquisa Inovação', 1, 1),
-  ('Aula de Arq Comp', 2, 2),
-  ('Aula de T.I', 3, 3),
-  ('Aula de Algoritmo', 1, 1),
-  ('Aula de Algoritmo', 2, 2);
-  
+INSERT INTO permissao (nome, emUso, duracaoStrikePadrao, fkAtuacao, fkUsuario)
+VALUES 
+  ('Aula de Programação Java', true, 30, 1, 1),
+  ('Aula de Banco de Dados SQL', false, 60, 2, 2),
+  ('Aula de Desenvolvimento Web', true, 45, 1, 3),
+  ('Aula de Estrutura de Dados', false, 30, 2, 4),
+  ('Aula de Sistemas Operacionais', true, 60, 1, 5),
+  ('Aula de Redes de Computadores', false, 45, 2, 6),
+  ('Aula de Engenharia de Software', true, 30, 1, 7),
+  ('Aula de Interface Gráfica', false, 60, 2, 8),
+  ('Aula de Testes de Software', true, 45, 1, 9),
+  ('Aula de Mobile App Development', false, 30, 2, 10);
+
   
   
 -- INSERTS HISTORICO
@@ -465,9 +467,7 @@ SELECT m.nome AS nome_maquina,
  ) a ON m.idMaquina = a.fkMaquina
  ORDER BY (s.strikes + a.alertas) DESC
  LIMIT 1;
-
-
-
+ 
 -- SELECT PARA MAQUINAS QUE MAIS USARAM RAM E CPU NA SEMANA
 SELECT m.nome AS nome_maquina,
     AVG(CASE WHEN h.fkHardware = 1 THEN h.consumo ELSE 0 END) AS uso_medio_cpu,
@@ -479,6 +479,15 @@ GROUP BY m.idMaquina, m.nome
 ORDER BY uso_medio_cpu DESC, uso_medio_ram DESC
 LIMIT 10;
 
-
-
-
+-- SELECT DA QUANTIDADE DE STRIKES POR MÁQUINA (ID apenas)
+        SELECT
+            m.idMaquina as id,
+            m.nome AS nome,
+            m.emUso AS emUso,
+            m.SO AS so,
+            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes
+        FROM maquina m
+        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+        JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+        WHERE idInstituicao = 1 
+        GROUP BY m.idMaquina;
