@@ -31,6 +31,14 @@ router.get("/capturarNovoDadoRAM/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarNovoDadoRAM(req, res);
 });
 
+router.get("/capturarNovoDadoCPU/:idInstituicao/:idMaquina", (req, res) => {
+    maquinaController.capturarNovoDadoCPU(req, res);
+});
+
+router.get("/capturarNovoDadoDisco/:idInstituicao/:idMaquina", (req, res) => {
+    maquinaController.capturarNovoDadoCPU(req, res);
+});
+
 router.get("/editarMaquina/:idInstituicao/:idMaquina", (req, res) => {
     maquinaController.capturarNovoDadoRAM(req, res);
 });

@@ -65,7 +65,7 @@ body::-webkit-scrollbar-thumb {
 
 .flex-row {
    display: flex;
-   flex-direction: row;
+   flex-direction: row !important;
 }
 
 .item-center {

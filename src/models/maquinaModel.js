@@ -13,12 +13,12 @@ let database = require("../database/config")
         as capacidadeRam,
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 2 AND idMaquina = m.idMaquina LIMIT 1) 
         as capacidadeCPU,
-        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 1 AND idMaquina = m.idMaquina TOP 1) 
+        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 1 AND idMaquina = m.idMaquina LIMIT 1) 
         as capacidadeDisco
     FROM maquina m
     WHERE
         m.idMaquina = ${idMaquina}
-    TOP 1;
+    LIMIT 1;
     
         `;
 
@@ -53,7 +53,7 @@ let database = require("../database/config")
         JOIN hardware disco ON c.fkHardware = disco.idHardware
         WHERE
             m.idMaquina = ${idMaquina}
-        TOP 1;
+        LIMIT 1;
         `
 
         return database.executar(instrucao);
@@ -95,9 +95,9 @@ let database = require("../database/config")
         JOIN hardware hw ON c.fkHardware = hw.idHardware
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
-            th.tipo = 'RAM' AND h.fkMaquina = 2
+            th.tipo = 'RAM' AND h.fkMaquina = ${idMaquina}
         ORDER BY dataHora DESC
-        TOP 8;
+        LIMIT 8;
         `
         return database.executar(instrucao);
     }
@@ -112,9 +112,9 @@ let database = require("../database/config")
         JOIN hardware hw ON c.fkHardware = hw.idHardware
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
-            th.tipo = 'Processador' AND h.fkMaquina = 2
+            th.tipo = 'Processador' AND h.fkMaquina = ${idMaquina}
         ORDER BY dataHora DESC
-        TOP 8;
+        LIMIT 8;
         `
 
         return database.executar(instrucao);
@@ -130,9 +130,9 @@ let database = require("../database/config")
         JOIN hardware hw ON c.fkHardware = hw.idHardware
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
-            th.tipo = 'Disco' AND h.fkMaquina = 2
+            th.tipo = 'Disco' AND h.fkMaquina = ${idMaquina}
         ORDER BY dataHora DESC
-        TOP 8;
+        LIMIT 8;
         `
 
         return database.executar(instrucao);
@@ -141,16 +141,16 @@ let database = require("../database/config")
     function capturarNovoDadoRAM(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i") as dataHora, h.consumo, c.max as maxConsumo
+            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
             historico h
         JOIN componente c ON h.fkComponente = c.idComponente
         JOIN hardware hw ON c.fkHardware = hw.idHardware
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
-            th.tipo = 'RAM' AND h.fkMaquina = 2
+            th.tipo = 'RAM' AND h.fkMaquina = ${idMaquina}
         ORDER BY dataHora DESC
-        TOP 1;
+        LIMIT 1;
         `
 
         return database.executar(instrucao);
@@ -159,16 +159,16 @@ let database = require("../database/config")
     function capturarNovoDadoCPU(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i") as dataHora, h.consumo, c.max as maxConsumo
+            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
             historico h
         JOIN componente c ON h.fkComponente = c.idComponente
         JOIN hardware hw ON c.fkHardware = hw.idHardware
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
-            th.tipo = 'CPU' AND h.fkMaquina = 2
+            th.tipo = 'Processador' AND h.fkMaquina = ${idMaquina}
         ORDER BY dataHora DESC
-        TOP 1;
+        LIMIT 1;
         `
 
         return database.executar(instrucao);
@@ -184,9 +184,9 @@ let database = require("../database/config")
         JOIN hardware hw ON c.fkHardware = hw.idHardware
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
-            th.tipo = 'Disco' AND h.fkMaquina = 2
+            th.tipo = 'Disco' AND h.fkMaquina = ${idMaquina}
         ORDER BY dataHora DESC
-        TOP 1;
+        LIMIT 1;
         `
 
         return database.executar(instrucao);
@@ -237,7 +237,7 @@ let database = require("../database/config")
             ) AS subconsulta
             WHERE rnk = 1
             GROUP BY fkMaquina
-            TOP 8;
+            LIMIT 8;
     
         `;
         console.log("Executando a instrucao SQL: \n" + instrucao);
@@ -265,7 +265,7 @@ let database = require("../database/config")
             quantidadeStrikes > 0 OR quantidadeAlertas > 0
         ORDER BY
             ranking
-        TOP 5;
+        LIMIT 5;
         `;
         console.log("Executando a instrucao SQL: \n" + instrucao);
         return database.executar(instrucao);

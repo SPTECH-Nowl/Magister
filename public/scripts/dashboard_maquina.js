@@ -387,7 +387,7 @@ google.charts.setOnLoadCallback(() => {
 
       nomeMaquina.innerHTML = dados.nome;
       soMaquina.innerHTML = dados.so;
-      uso.innerHTML = dados.emUso = 0 ? `ON` : `OFF`;
+      uso.innerHTML = dados.emUso = 0 ? `OFF` : `ON`;
       ramMaquina.innerHTML = dados.capacidadeRam;
       discoMaquina.innerHTML = dados.capacidadeDisco >= 1000 ? `${(dados.capacidadeDisco / 1024)}tb` : `${dados.capacidadeDisco}GB`;
       nucleos.innerHTML = dados.capacidadeCPU;
@@ -396,36 +396,51 @@ google.charts.setOnLoadCallback(() => {
    drawWindow();
 });
 
-const atualizarGraficos = setInterval(() => {
 
-   capturarDadosRAM(localStorage.getItem("instituicao"), sessionStorage.idMaquina). then((dados) => {
-      let matriz = dados;
-      capturarNovoDadoRAM(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((novoRegistro) => {
-         matriz.pop();
-         matriz.unshift(novoRegistro);
-         drawRAM(matriz);
-      })
+document.addEventListener("DOMContentLoaded", ()=>{
+      capturarDadosRAM(localStorage.getItem("instituicao"), sessionStorage.idMaquina). then((dados) => {
+         dados = dados.reverse();
+         let matriz = dados;
+            setInterval(() => {
+               capturarNovoDadoRAM(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((novoRegistro) => {
+                  matriz.push(novoRegistro);
+                  matriz.shift();
+                  drawRAM(matriz);
+               })
+            }, 3000);
+         });
 
-   })
+      capturarDadosCPU(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((dados) => {
+         dados = dados.reverse();
+         let matriz = dados;
+            setInterval(() => {
+              capturarNovoDadoCPU(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((novoRegistro) => {
+               matriz.push(novoRegistro);
+               matriz.shift();
+               drawCPU(matriz);
+            })
+         }, 3000);
+      });
 
-   capturarDadosCPU(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((dados) => {
-      let matriz = dados;
-      capturarNovoDadoCPU(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((novoRegistro) => {
-         matriz.shift();
-         matriz.push(novoRegistro);
-         drawCPU(matriz);
-      })
-   });
+      capturarDadosDisco(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((dados) => {
+         dados = dados.reverse();
+         let matriz = dados;
+            setInterval(() => {
+               capturarNovoDadoDisco(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((novoRegistro) => {
+                  matriz.push(novoRegistro);
+                  matriz.shift();
+                  drawDisco(matriz);
+               })
+         }, 3000);
+      });
 
-   capturarDadosDisco(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((dados) => {
-      let matriz = dados;
-      capturarNovoDadoDisco(localStorage.getItem("instituicao"), sessionStorage.idMaquina).then((novoRegistro) => {
-         matriz.shift();
-         matriz.push(novoRegistro);
-         drawDisco(matriz);
-      })
-   });
-}, 3000);
+})
+
+
+
+
+
+
 
 
 
