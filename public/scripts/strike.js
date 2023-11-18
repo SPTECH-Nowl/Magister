@@ -11,6 +11,18 @@ function getFiltrosSelecionados() {
     }
 }
 
+function getCheckbox() {
+    const nodeList = document.querySelectorAll("sl-checkbox");
+    const checkboxes = [...nodeList];
+    let checkBool = [];
+
+    checkboxes.forEach((check) => checkBool.push(check.checked))
+
+    console.log(nodeList, checkBool);
+    
+    return checkboxes;
+}
+
 function carregarFeed() {
     var selects = getFiltrosSelecionados();
     var codInstituicao = localStorage.getItem("instituicao");
@@ -49,6 +61,7 @@ function carregarFeed() {
                             var linhaTable = document.createElement("tr");
                             linhaTable.setAttribute('id', `strike_${strike.idStrike}`)
 
+                            var celulaCheckbox = document.createElement("td");
                             var celulaMaquina = document.createElement("td");
                             var celulaDataHora = document.createElement("td");
                             var celulaMotivo = document.createElement("td");
@@ -61,9 +74,12 @@ function carregarFeed() {
                             var endDtH = dtH;
                             endDtH.setMinutes(endDtH.getMinutes() + strike.duracao) 
 
+                            console.log(strike.motivo);
+
+                            celulaCheckbox.innerHTML = `<sl-checkbox size="large" id="${strike.idStrike}"> </sl-checkbox>`;
                             celulaMaquina.textContent = strike.nome;
                             celulaDataHora.textContent = dtH.toLocaleString('pt-BR');
-                            celulaMotivo.textContent = strike.motivo;
+                            celulaMotivo.textContent = strike.motivo == null ? 'Sem motivo' : strike.motivo;
                             celulaDuracao.textContent = `${strike.duracao}min (${endDtH.toLocaleTimeString('pt-BR')})`;
                             celulaSituacao.textContent = strike.situacao;
 
@@ -77,9 +93,8 @@ function carregarFeed() {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Strikes" id="btn_delete" onclick="deletar(${localStorage.getItem("nivPerm")})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Strikes" id="btn_delete" onclick="deletar(${strike.idStrike})">
                             <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Strikes" id="btn_update" onclick="alterar()">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get" onclick="mostrar_dados()">
                         `;
                      
                         
@@ -90,6 +105,7 @@ function carregarFeed() {
                             });
                         });
 
+                            linhaTable.appendChild(celulaCheckbox);
                             linhaTable.appendChild(celulaMaquina);
                             linhaTable.appendChild(celulaDataHora);
                             linhaTable.appendChild(celulaMotivo);
@@ -110,38 +126,117 @@ function carregarFeed() {
         });
 }
 
+function deletar(idDaLinha) {
+    var checkboxes = getCheckbox();
+    var checkboxMarcadas = checkboxes.filter((check) => check.checked)
+    var checkboxIds = checkboxMarcadas.map((check) => check.id).toString()
+    var rota;
+
+    if (checkboxIds == '') {
+        checkboxIds = idDaLinha;
+    }
+
+    console.log(checkboxMarcadas);
+    
+    console.log(`/strikes/excluirStrike`);
+
+    fetch(`/strikes/excluirStrike`, {
+        method: "PUT", 
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            checkboxIdsServer: checkboxIds
+        })
+    })
+        .then(function (resultado) {
+            console.log(resultado);
+            if (resultado.ok) {
+                if (resultado.status == 204) {
+                    alert('se fudeu');
+                } else {
+                    alert('updatou e excluiu hein');
+                    carregarFeed()
+                    contadoresStrike();
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        })
+        .catch(function (resposta) {
+            console.error(resposta);
+        });
+}
+
+function atualizar(idDaLinha) {
+    // var checkboxes = getCheckbox();
+    // var checkboxMarcadas = checkboxes.filter((check) => check.checked)
+    // var checkboxIds = checkboxMarcadas.map((check) => check.id).toString()
+    // var rota;
+
+    // if (checkboxIds == '') {
+    //     checkboxIds = idDaLinha;
+    // }
+
+    // console.log(checkboxMarcadas);
+    
+    // console.log(`/strikes/excluirStrike`);
+
+    // fetch(`/strikes/excluirStrike`, {
+    //     method: "PUT", 
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify({
+    //         checkboxIdsServer: checkboxIds
+    //     })
+    // })
+    //     .then(function (resultado) {
+    //         console.log(resultado);
+    //         if (resultado.ok) {
+    //             if (resultado.status == 204) {
+    //                 alert('se fudeu');
+    //             } else {
+    //                 alert('updatou e excluiu hein');
+    //                 carregarFeed()
+    //                 contadoresStrike();
+    //             }
+    //         } else {
+    //             throw ('Houve um erro na API!');
+    //         }
+    //     })
+    //     .catch(function (resposta) {
+    //         console.error(resposta);
+    //     });
+}
+
 function contadoresStrike(){
     fetch(`/strikes/contadores/${localStorage.getItem("instituicao")}`)
     .then((contadores) => {
         if (contadores.ok) {
             contadores.json().then(function (contadores) {
                 var orderOptions = document.getElementById("orderOptions")
+                orderOptions.innerHTML = '';
 
-                    var spanTotal = document.createElement("span")
-                    var spanAtivos = document.createElement("span")
-                    var spanValidos = document.createElement("span")
-                    var spanInvalidos = document.createElement("span")
-                    var spanInativos = document.createElement("span")
+                var spanTotal = document.createElement("span")
+                var spanAtivos = document.createElement("span")
+                var spanValidos = document.createElement("span")
+                var spanInvalidos = document.createElement("span")
+                var spanInativos = document.createElement("span")
 
-                    spanTotal.textContent = `Total(${contadores[0].total})`
-                    spanAtivos.textContent = `Ativos(${contadores[0].ativos})`
-                    spanValidos.textContent = `Válidos(${contadores[0].validos})`
-                    spanInvalidos.textContent = `Inválidos(${contadores[0].invalidos})`
-                    spanInativos.textContent = `Inativos(${contadores[0].inativos})`
+                spanTotal.textContent = `Total(${contadores[0].total})`
+                spanAtivos.textContent = `Ativos(${contadores[0].ativos})`
+                spanValidos.textContent = `Válidos(${contadores[0].validos})`
+                spanInvalidos.textContent = `Inválidos(${contadores[0].invalidos})`
+                spanInativos.textContent = `Inativos(${contadores[0].inativos})`
 
-
-
-                    spanTotal.onclick = () => carregarFeed()
-                    spanAtivos.onclick = () => carregarFeedSituacao('Ativo')
-                    spanValidos.onclick = () => carregarFeedSituacao('Válido')
-                    spanInvalidos.onclick = () => carregarFeedSituacao('Inválido')
-                    spanInativos.onclick = () => carregarFeedSituacao('Inativo')
-                    
-                    orderOptions.appendChild(spanTotal)
-                    orderOptions.appendChild(spanAtivos)
-                    orderOptions.appendChild(spanValidos)
-                    orderOptions.appendChild(spanInvalidos)
-                    orderOptions.appendChild(spanInativos)
+                spanTotal.onclick = () => carregarFeed()
+                spanAtivos.onclick = () => carregarFeedSituacao('Ativo')
+                spanValidos.onclick = () => carregarFeedSituacao('Válido')
+                spanInvalidos.onclick = () => carregarFeedSituacao('Inválido')
+                spanInativos.onclick = () => carregarFeedSituacao('Inativo')
+                
+                orderOptions.appendChild(spanTotal)
+                orderOptions.appendChild(spanAtivos)
+                orderOptions.appendChild(spanValidos)
+                orderOptions.appendChild(spanInvalidos)
+                orderOptions.appendChild(spanInativos)
                     
             })
         }
@@ -173,6 +268,7 @@ function carregarFeedSituacao(situacao) {
                             var linhaTable = document.createElement("tr");
                             linhaTable.setAttribute('id', `strike_${strike.idStrike}`)
 
+                            var celulaCheckbox = document.createElement("td");
                             var celulaMaquina = document.createElement("td");
                             var celulaDataHora = document.createElement("td");
                             var celulaMotivo = document.createElement("td");
@@ -185,9 +281,12 @@ function carregarFeedSituacao(situacao) {
                             var endDtH = dtH;
                             endDtH.setMinutes(endDtH.getMinutes() + strike.duracao) 
 
+                            console.log(strike.motivo);
+
+                            celulaCheckbox.innerHTML = `<sl-checkbox size="large" id="${strike.idStrike}"> </sl-checkbox>`;
                             celulaMaquina.textContent = strike.nome;
                             celulaDataHora.textContent = dtH.toLocaleString('pt-BR');
-                            celulaMotivo.textContent = strike.motivo;
+                            celulaMotivo.textContent = strike.motivo == null ? 'Sem motivo' : strike.motivo;
                             celulaDuracao.textContent = `${strike.duracao}min (${endDtH.toLocaleTimeString('pt-BR')})`;
                             celulaSituacao.textContent = strike.situacao;
 
@@ -201,9 +300,8 @@ function carregarFeedSituacao(situacao) {
 
                             // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Strikes" id="btn_delete" onclick="deletar(${localStorage.getItem("nivPerm")})">
+                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Strikes" id="btn_delete" onclick="deletar(${strike.idStrike})">
                             <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Strikes" id="btn_update" onclick="alterar()">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get" onclick="mostrar_dados()">
                         `;
                      
                         
@@ -214,6 +312,7 @@ function carregarFeedSituacao(situacao) {
                             });
                         });
 
+                            linhaTable.appendChild(celulaCheckbox);
                             linhaTable.appendChild(celulaMaquina);
                             linhaTable.appendChild(celulaDataHora);
                             linhaTable.appendChild(celulaMotivo);
@@ -233,6 +332,7 @@ function carregarFeedSituacao(situacao) {
             console.error(resposta);
         });
 }
+
 
 document.getElementById('input_busca').addEventListener('keypress', (e) => {
     if(e.key === "Enter") {
