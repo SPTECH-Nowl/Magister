@@ -170,11 +170,11 @@ function adicionarUsuario() {
                         instituicao: localStorage.getItem("instituicao")
                     })
                 })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
-                        }
-                        return response.json(); // Retorna a resposta JSON se estiver tudo OK
+                .then(async (response) => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
+                    }
+                    return await response.json(); // Retorna a resposta JSON se estiver tudo OK
                     })
                     .then(() => {
                         usuarioAdicionado = true; // Define a variável como true quando o usuário é adicionado
@@ -692,9 +692,12 @@ function alterar(idUsuario) {
                                         idUsuario: idUsuario
                                     })
                                 })
-                                .then(response => {
+                                .then(async function (response) {
                                     if (response.ok) {
-                                        return response.json();
+                                        console.log(response);
+                                        var retorno = await response.json();
+                                        console.log(retorno);
+                                        return retorno;
                                     }
                                 })
                                 .then(result => {

@@ -474,9 +474,9 @@ function alterar(idEscola) {
                                         idEscola: dadosEscola[0].idInstituicao,
                                     })
                                 })
-                                    .then(response => {
+                                    .then(async response => {
                                         if (response.ok) {
-                                            return response.json();
+                                            return await response.json();
                                         }
                                     })
                                     .then(result => {
