@@ -31,31 +31,61 @@ FROM maquina m
     function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            m.idMaquina as id,
-            m.nome as nome,
-            m.so as so,
-            m.emUso as emUso,
-            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
-            as componenteRAM,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
-            as capacidadeRAM,
-            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
-            as componenteCPU,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
-            as capacidadeCPU,
-            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
-            as componenteDisco,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
-            as capacidadeDisco,
-            (SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE fkMaquina = ${idMaquina}) as qtdStrikes
-        FROM maquina m
-        JOIN componente c ON c.fkMaquina = m.idMaquina
-        JOIN hardware ram ON c.fkHardware = ram.idHardware
-        JOIN hardware cpu ON c.fkHardware = cpu.idHardware
-        JOIN hardware disco ON c.fkHardware = disco.idHardware
-        WHERE
-            m.idMaquina = ${idMaquina}
-        LIMIT 1;
+        m.idMaquina as id,
+        m.nome as nome,
+        m.so as so,
+        m.emUso as emUso,
+        (
+            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 3 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as componenteRAM,
+        (
+            SELECT capacidade
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 3 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as capacidadeRAM,
+        (
+            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 2 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as componenteCPU,
+        (
+            SELECT capacidade
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 2 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as capacidadeCPU,
+        (
+            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 1 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as componenteDisco,
+        (
+            SELECT capacidade
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 1 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as capacidadeDisco,
+        (
+            SELECT COUNT(*)
+            FROM strike
+            WHERE fkMaquina = m.idMaquina
+        ) as qtdStrikes
+    FROM maquina m
+    WHERE m.idMaquina = ${idMaquina}
+    LIMIT 1;
+    
         `
 
     return database.executar(instrucao);
