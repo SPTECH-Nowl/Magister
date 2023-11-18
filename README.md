@@ -1,5 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=6A28EB&size=35&center=true&vCenter=true&width=1000&lines=HI+THERE!+👋+BE+WELCOME;!;SOMOS+O+GRUPO+FIVE;We+are+the+best+computer+monitoring+company;Ensuring+the+security+of+your+institution;MAGISTER!+🦉)](https://git.io/typing-svg)
-
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=6A28EB&size=35&center=true&vCenter=true&width=1000&lines=HI+THERE!+👋+BE+WELCOME;!;SOMOS+O+GRUPO+FIVE;Pioneers+in+Computer+Monitoring;Dedicated+to+Ensuring+the+Security+of+Your+Institution;Welcome+to+MAGISTER!+🦉)](https://git.io/typing-svg)
 # 🦉 Site Institucional - NOWL
 
 Site institucional da empresa, onde apresentamos quem nós somos, nossos valores e projetos. O site é composto por um cabeçalho onde damos boas vindas e também explicamos brevemente nosso intuito como empresa. Ademais, o site é separado em sessões, sendo elas: sobre nós, integrantes, projetos, fale conosco e um footer.
