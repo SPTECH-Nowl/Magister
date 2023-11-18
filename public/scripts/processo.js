@@ -125,7 +125,7 @@ function listaAppUsados(idUsuario) {
 
                         aplicativospermitidosUsados.innerHTML += `
                                 <div class="boxProcesso" id="boxProcessoActive${processo.idProcesso}" onclick="alterarListaUsados(${processo.idProcesso})">
-                                   <div class="imagem"><img src="../assets/img/iconsProcesso/icon_sql_workbench.png" alt=""></div>
+                                   <div class="imagem"><img src="../assets/img/iconsProcesso/quebra-cabeca.png" alt=""></div>
                                    <div class="nomeProcesso">${processo.nomeAplicativo}</div>
                                 </div>
                                 
@@ -162,7 +162,7 @@ function listaAppNaoUsados(idUsuario) {
 
                         aplicativosPermitidos.innerHTML += `
                             <div class="boxProcesso" id="boxProcessoDisp${processo.idProcesso}" onclick="alterarLista(${processo.idProcesso})">
-                            <div class="imagem"><img src="../assets/img/iconsProcesso/icon_sql_workbench.png" alt=""></div>
+                            <div class="imagem"><img src="../assets/img/iconsProcesso/quebra-cabeca.png" alt=""></div>
                             <div class="nomeProcesso">${processo.nomeAplicativo}</div>
                          </div>
                         `
@@ -244,41 +244,52 @@ function atualizarProcessos(idUsuario) {
 
 function adicionarProcessoLista(idUsuario) {
     if (listaProcessoDisp.length > 0) {
-
         for (var i = 0; i < listaProcessoDisp.length; i++) {
             console.log(listaProcessoDisp.length);
-            var idProcesso = listaProcessoDisp[i]
+            var idProcesso = listaProcessoDisp[i];
             fetch(`/processo/publicar/${idProcesso}/${idUsuario}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-
             }).then(function (resposta) {
                 if (resposta.ok) {
-                    listaAppNaoUsados(idUser)
-                    listaAppUsados(idUser)
-                    listarProcessos(idUser)
+                   
+                    exibirPopUpSucesso();
+                    listaAppNaoUsados(idUser);
+                    listaAppUsados(idUser);
+                    listarProcessos(idUser);
                 } else {
-                    console.log("erro no cadastro")
+                    console.log("Erro no cadastro");
                 }
             }).catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
             });
-
         }
     }
+}
+
+function exibirPopUpSucesso() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Processo adicionado com sucesso!',
+        showConfirmButton: false,
+        timer: 5500
+    });
+
+    
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
 }
 
 
 
 function removerProcessoLista(idUsuario) {
     if (listaProcessoUsado.length > 0) {
-
-
         for (var i = 0; i < listaProcessoUsado.length; i++) {
             console.log(listaProcessoUsado.length);
-            var idProcesso = listaProcessoUsado[i]
+            var idProcesso = listaProcessoUsado[i];
             console.log("cheguei aqui");
             fetch(`/processo/deletarProcesso`, {
                 method: "DELETE",
@@ -293,20 +304,36 @@ function removerProcessoLista(idUsuario) {
             }).then(function (resposta) {
                 if (resposta.ok) {
                     console.log("deletou");
-                    listaAppUsados(idUser)
-                    listaAppNaoUsados(idUser)
-                    listarProcessos(idUser)
+                   
+                    exibirPopUpRemocaoSucesso();
+                    listaAppUsados(idUser);
+                    listaAppNaoUsados(idUser);
+                    listarProcessos(idUser);
                 } else {
-                    console.log("erro no cadastro")
+                    console.log("erro no cadastro");
                 }
             }).catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
             });
-
         }
     }
-
 }
+
+
+function exibirPopUpRemocaoSucesso() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Processo removido com sucesso!',
+        showConfirmButton: false,
+        timer: 1500
+    });
+
+   
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
+}
+
 
 function criarProcessoPersonalizado(idUser) {
     Swal.fire({
@@ -314,44 +341,51 @@ function criarProcessoPersonalizado(idUser) {
         titleClass: 'custom-title',
         html:
             '<input type="text" id="nomeInput" placeholder="Nome EX:(Chrome)" class="swal2-input" style="border-radius: 15px;">' +
-            '<input type="email" id="processoInput" placeholder="Processo EX:(Chrome.exe)"  class="swal2-input" style="border-radius: 15px;">' ,
+            '<input type="email" id="processoInput" placeholder="Processo EX:(Chrome.exe)"  class="swal2-input" style="border-radius: 15px;">',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         confirmButtonText: 'Criar Processo',
         showLoaderOnConfirm: true,
         customClass: {
             container: 'custom-modal',
+            confirmButton: 'custom-confirm-button',
+            cancelButton: 'custom-cancel-button',
         },
         onOpen: () => {
             const customModal = Swal.getPopup();
             customModal.style.backgroundColor = 'white';
-            customModal.style.width = '600px';
-            customModal.style.height = '500px';
+            customModal.style.width = '500px'; // Diminuir a largura do modal
+            customModal.style.height = 'auto'; // Ajustar altura automaticamente
             customModal.style.borderRadius = '15px';
-        },
-        onBeforeOpen: () => {
+
             const confirmButton = Swal.getConfirmButton();
             const cancelButton = Swal.getCancelButton();
+
             if (confirmButton && cancelButton) {
-                confirmButton.style.backgroundColor = '#6D499D';
+                confirmButton.style.backgroundColor = '#4CAF50'; // Botão verde
                 confirmButton.style.borderRadius = '15px';
                 confirmButton.style.marginRight = '15px';
 
-                cancelButton.style.backgroundColor = '#6D499D';
+                cancelButton.style.backgroundColor = '#FF5555'; // Botão vermelho
                 cancelButton.style.borderRadius = '15px';
             }
 
             confirmButton.addEventListener('click', () => {
                 const nomeInput = document.getElementById('nomeInput').value;
                 const processoInput = document.getElementById('processoInput').value;
-      
+
+                // Validar se os campos estão preenchidos
+                if (!nomeInput || !processoInput) {
+                    Swal.fire("error", "Preencha todos os campos antes de criar o processo", "error");
+                    return;
+                }
 
                 // Função para definir o estilo dos inputs
                 function setFieldStyle(input, isValid) {
                     if (isValid) {
-                        input.style.borderColor = '#4CAF50'; 
+                        input.style.borderColor = '#4CAF50';
                     } else {
-                        input.style.borderColor = '#FF5555'; 
+                        input.style.borderColor = '#FF5555';
                     }
                 }
 
@@ -365,20 +399,28 @@ function criarProcessoPersonalizado(idUser) {
                         nomeProcesso: processoInput,
                     })
                 })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                })
-                .then(result => {
-                    if (result) {
-                        Swal.fire('Sucesso!', 'Processo adicionado com sucesso!', 'success');
-                        location.reload();
-                    } else {
-                        Swal.fire("error", "Falha ao cadastras processo", "error");
-                    }
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    })
+                    .then(result => {
+                        if (result) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sucesso!',
+                                text: 'Processo adicionado com sucesso!',
+                            });
+                            location.reload();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Falha ao cadastrar processo',
+                            });
+                        }
+                    });
             });
         },
-    });             
+    });
 }
+

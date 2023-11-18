@@ -1,4 +1,4 @@
-CREATE DATABASE magister;
+create DATABASE magister;
 USE magister;
 
 CREATE TABLE tipoUsuario (
@@ -97,6 +97,8 @@ CREATE TABLE strike (
 CREATE TABLE permissao (
 	idPermissao INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(45) NOT NULL,
+    emUso BOOLEAN NOT NULL,
+    duracaoStrikePadrao INT,
     emUso BOOLEAN NOT NULL,
     duracaoStrikePadrao INT,
     fkAtuacao INT, CONSTRAINT permFkAtuac FOREIGN KEY (fkAtuacao)
@@ -219,7 +221,7 @@ INSERT INTO usuario (nome, email, senha, fkInstituicao, fkTipoUsuario) VALUES
     ('Rock Lee', 'rock.lee@sptech.school', 'DynamicEntry456@', 1, 2),
     ('Neji Hyuga', 'neji.hyuga@sptech.school', 'GentleFist789@', 4, 3),
     ('Tenten', 'tenten@sptech.school', 'WeaponMasterABC@', 5, 3),
-	('caua', 'caua@gmail.com', 'caua', 1, 1);
+	('caua', 'caua@gmail.com', 'caua', 4, 1);
 
 
 
@@ -245,46 +247,39 @@ INSERT INTO hardware (fabricante, modelo, capacidade, especificidade, fkTipoHard
 -- Inserir registros na tabela maquina com fkUsuario e fkHardware
 -- INSERTS MAQUINA
 INSERT INTO maquina (nome, SO, emUso, fkInstituicao) VALUES
-	('Desktop-G7205', 'Windows 10', 1, 1),
+	('Desktop-G7205', 'Windows 10', 0, 1),
 	('Desktop-G1234', 'Windows 11', 0, 1),
-	('Desktop-F5412', 'Linux Ubuntu', 1, 2),
-	('Desktop-C9436', 'Arch Linux', 1, 3),
-	('Laptop-XB350', 'Windows 10', 1, 1),
-	('Workstation-HP123', 'Windows 11', 0, 1),
-	('Server-UBT600', 'Linux Ubuntu', 1, 2),
-	('Desktop-AL2022', 'Arch Linux', 1, 3),
+	('Desktop-F5412', 'Linux Ubuntu', 0, 1),
+	('Desktop-C9436', 'Arch Linux', 0, 1),
+	('Laptop-XB350', 'Windows 10', 0, 1),
+	('Workstation-HP123', 'Windows 11', 0, 2),
+	('Server-UBT600', 'Linux Ubuntu', 0, 2),
+	('Desktop-AL2022', 'Arch Linux', 0, 2),
 	('Laptop-Dell555', 'Windows 10', 0, 2),
-	('Workstation-ASUS', 'Windows 11', 1, 2),
-	('Server-RedHat', 'Red Hat Enterprise Linux', 1, 1),
-	('Desktop-IBM2023', 'Fedora', 0, 4),
-	('Laptop-HP1122', 'Ubuntu', 1, 3),
+	('Workstation-ASUS', 'Windows 11', 0, 3),
+	('Server-RedHat', 'Red Hat Enterprise Linux', 0, 3),
+	('Desktop-IBM2023', 'Fedora', 0, 3),
+	('Laptop-HP1122', 'Ubuntu', 0, 3),
 	('Workstation-Lenovo', 'Debian', 0, 4);
 
 
-    
-    
-    
     -- INSERT STRIKES
 -- INSERTS STRIKE
 -- INSERTS STRIKE
-INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
-('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
-('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
-('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 1, 3),
-('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 1, 2),
-('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 1, 3),
-('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 1, 2),
-('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 6, 2),
-('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 6, 3),
-('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 6, 2),
-('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 5, 3),
-('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 6, 2),
-('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 6, 2),
-('2023-11-09 10:45:00', 0, 'Conversando com Luigi Jadeu', 120, 6, 3);
-
-
-    
-
+-- INSERTS STRIKE
+-- INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
+-- ('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
+-- ('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
+-- ('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 2, 3),
+-- ('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 2, 2),
+-- ('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 3, 3),
+-- ('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 4, 2),
+-- ('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 5, 3),
+-- ('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 7, 2),
+-- ('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 10, 3),
+-- ('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 10, 2),
+-- ('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 11, 2),
+-- ('2023-11-09 10:45:00', 0, 'Conversando com Luigi Tadeu', 120, 15, 3);
 
 
     
@@ -293,81 +288,126 @@ INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
 	(default, 1, 1),
 	(default, 1, 2),
 	(default, 1, 3),
+	(85, 1, 4),
+	(default, 1, 7),
+
 	(default, 2, 1),
 	(80, 2, 2),
 	(default, 2, 4),
+	(90, 2, 5),
+	(default, 2, 7),
+	
 	(90, 3, 1),
 	(90, 3, 2),
 	(95, 3, 3),
 	(90, 3, 4),
-	(default, 1, 1),
-	(default, 1, 2),
-	(default, 1, 3),
-	(default, 2, 1),
-	(80, 2, 2),
-	(default, 2, 4),
-	(90, 3, 1),
-	(90, 3, 2),
-	(95, 3, 3),
-	(90, 3, 4);
+	(default, 3, 6),
+	(85, 3, 7),
+	
+	(default, 4, 1),
+	(default, 4, 2),
+	(default, 4, 3),
+	
+	(default, 5, 1),
+	(default, 5, 2),
+	(default, 5, 3),
+
+	(default, 6, 1),
+	(80, 6, 2),
+	(default, 6, 4),
+
+	(90, 7, 1),
+	(90, 7, 2),
+	(95, 7, 3),
+	(90, 7, 4),
+	(default, 7, 6),
+	(85, 7, 7),
+
+	(default, 8, 1),
+	(default, 8, 2),
+	(default, 8, 3),
+
+	(default, 9, 1),
+	(default, 9, 2),
+	(default, 9, 3),
+
+	(default, 10, 1),
+	(default, 10, 2),
+	(default, 10, 3),
+
+	(default, 11, 1),
+	(default, 11, 2),
+	(default, 11, 3),
+
+	(default, 12, 1),
+	(default, 12, 2),
+	(default, 12, 3),
+
+	(default, 13, 1),
+	(default, 13, 2),
+	(default, 13, 3),
+
+	(default, 14, 1),
+	(80, 14, 2),
+	(default, 14, 4);
+
 
 -- INSERTS PERMISSAO
-INSERT INTO permissao (nome, fkAtuacao, fkUsuario) VALUES
-	('Urubu100', 1, 3),
-	('Urubu200', 3, 3),
-	('Aulinha Java', 2, 4),
-('Aula de S.O', 1, 1),
-  ('Aula de Análise', 2, 2),
-  ('Aula de Sócio', 3, 3),
-  ('Aula de Pesquisa Inovação', 1, 1),
-  ('Aula de Arq Comp', 2, 2),
-  ('Aula de T.I', 3, 3),
-  ('Aula de Algoritmo', 1, 1),
-  ('Aula de Algoritmo', 2, 2);
-  
-  
+INSERT INTO permissao (nome, emUso, duracaoStrikePadrao, fkAtuacao, fkUsuario)
+VALUES 
+  ('Aula de Programação Java', true, 30, 1, 1),
+  ('Aula de Banco de Dados SQL', false, 60, 2, 2),
+  ('Aula de Desenvolvimento Web', true, 45, 1, 3),
+  ('Aula de Estrutura de Dados', false, 30, 2, 4),
+  ('Aula de Sistemas Operacionais', true, 60, 1, 5),
+  ('Aula de Redes de Computadores', false, 45, 2, 6),
+  ('Aula de Engenharia de Software', true, 30, 1, 7),
+  ('Aula de Interface Gráfica', false, 60, 2, 8),
+  ('Aula de Testes de Software', true, 45, 1, 9),
+  ('Aula de Mobile App Development', false, 30, 2, 10);
+
   
 -- INSERTS HISTORICO
-INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
-	('2023-08-23 12:17:30', .5, 1, 1, 2),
-	('2023-08-23 12:17:35', .6, 1, 1, 2),
-	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
-	('2023-08-23 12:17:30', .5, 1, 2, 2),
-	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
-	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
-	('2023-08-23 12:17:30', 200, 1, 3, 2),
-	('2023-08-23 12:17:35', 200, 1, 3, 2),
-	('2023-08-23 12:17:40', 245, 1, 3, 2),
-  ('2023-08-23 12:17:30', .5, 1, 1, 2),
-  ('2023-08-23 12:17:35', .6, 1, 1, 2),
-  ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
-  ('2023-08-23 12:17:30', .5, 1, 2, 2),
-  ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
-  ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
-  ('2023-08-23 12:17:30', 200, 1, 3, 2),
-  ('2023-08-23 12:17:35', 200, 1, 3, 2),
-  ('2023-08-23 12:17:40', 245, 1, 3, 2);
+-- INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
+-- 	('2023-08-23 12:17:30', .5, 1, 1, 2),
+-- 	('2023-08-23 12:17:35', .6, 1, 1, 2),
+-- 	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+-- 	('2023-08-23 12:17:30', .5, 1, 2, 2),
+-- 	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+-- 	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+-- 	('2023-08-23 12:17:30', 200, 1, 3, 2),
+-- 	('2023-08-23 12:17:35', 200, 1, 3, 2),
+-- 	('2023-08-23 12:17:40', 245, 1, 3, 2),
+--   ('2023-08-23 12:17:30', .5, 1, 1, 2),
+--   ('2023-08-23 12:17:35', .6, 1, 1, 2),
+--   ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+--   ('2023-08-23 12:17:30', .5, 1, 2, 2),
+--   ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+--   ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+--   ('2023-08-23 12:17:30', 200, 1, 3, 2),
+--   ('2023-08-23 12:17:35', 200, 1, 3, 2),
+--   ('2023-08-23 12:17:40', 245, 1, 3, 2);
 
 
 -- INSERTS HISTORICOPROCESSO
-INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 2, 2),
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 3, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
-	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
-	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
-	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
-	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
-	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
+-- INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 2, 2),
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 3, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
+-- 	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+-- 	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
+-- 	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
+-- 	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
+-- 	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
 
 
 -- INSERTS PERMISSAOPROCESSO
@@ -491,3 +531,17 @@ LIMIT 10;
         JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
         WHERE idInstituicao = 1 
         GROUP BY m.idMaquina;
+
+-- SELECT DA QUANTIDADE DE STRIKES POR MÁQUINA (ID apenas)
+        SELECT
+            m.idMaquina as id,
+            m.nome AS nome,
+            m.emUso AS emUso,
+            m.SO AS so,
+            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes
+        FROM maquina m
+        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+        JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+        WHERE idInstituicao = 1 
+        GROUP BY m.idMaquina;
+        

@@ -59,43 +59,51 @@ function buscarInstituicao() {
  
  }
 
-document.addEventListener('DOMContentLoaded', function() {
+ 
+ document.addEventListener('DOMContentLoaded', function () {
     const adicionarEscolaButton = document.getElementById('adicionarEscola');
 
-    adicionarEscolaButton.addEventListener('click', function() {
+    adicionarEscolaButton.addEventListener('click', function () {
         Swal.fire({
             title: 'Adicionar Escola',
-            titleClass: 'custom-title',
             html:
                 '<input type="text" id="nomeEscolaInput" placeholder="Nome da Escola" class="swal2-input" style="border-radius: 15px;">' +
                 '<input type="text" id="siglaInput" placeholder="Sigla" class="swal2-input" style="border-radius: 15px;">' +
                 '<div style="display: flex; gap: 1rem; align-items: center">' +
                 '<input type="text" id="codigoInput" placeholder="Código Hexadecimal" disabled class="swal2-input" style="border-radius: 15px;">' +
-                '<button onclick="gerarCodigoHexadecimal()" class="btn primario" style="width: fit-content;"><img src="../assets/img/icone/dice-six.svg"></button>' +
+                '<button id="gerarCodigoBtn" class="btn primario" style="width: fit-content;"><img src="../assets/img/icone/dice-six.svg"></button>' +
                 '</div>',
-            
             confirmButtonText: 'Adicionar Escola',
             showLoaderOnConfirm: true,
             showCancelButton: true,
             cancelButtonText: 'Cancelar',
             cancelButtonClass: 'custom-cancel-button',
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
             customClass: {
                 container: 'custom-modal',
+                popup: 'custom-popup',
+                closeButton: 'custom-close-button',
+                confirmButton: 'custom-confirm-button',
+                cancelButton: 'custom-cancel-button',
             },
             onOpen: () => {
                 const customModal = Swal.getPopup();
                 customModal.style.backgroundColor = 'white';
-                customModal.style.width = '800px';
+                customModal.style.width = '500px';
                 customModal.style.borderRadius = '15px';
+
+                // Adicione o evento de clique ao botão de geração de código
+                document.getElementById('gerarCodigoBtn').addEventListener('click', gerarCodigoHexadecimal);
             },
             onBeforeOpen: () => {
                 const confirmButton = Swal.getConfirmButton();
                 const cancelButton = Swal.getCancelButton();
                 if (confirmButton && cancelButton) {
-                    confirmButton.style.backgroundColor = '#6D499D';
+                    confirmButton.style.backgroundColor = '#28a745';
                     confirmButton.style.borderRadius = '15px';
 
-                    cancelButton.style.backgroundColor = '#6D499D';
+                    cancelButton.style.backgroundColor = '#d33';
                     cancelButton.style.borderRadius = '15px';
                     cancelButton.style.marginRight = '15px';
                 }
@@ -146,33 +154,60 @@ document.addEventListener('DOMContentLoaded', function() {
                     setFieldStyle(codigoInput, true);
                 }
 
-return new Promise((resolve) => {
-    fetch("/instituicoes/cadastrarDashEscola", {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeEscola: nomeEscola,
-            sigla: sigla,
-            codigo: codigo,
+                return new Promise((resolve) => {
+                    fetch("/instituicoes/cadastrarDashEscola", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            nomeEscola: nomeEscola,
+                            sigla: sigla,
+                            codigo: codigo,
+                        })
+                    }).then((response) => {
+                        if (response.ok) {
+                            resolve();
+                        }
+                    });
+                });
+            },
         })
-    }).then((response)=>{
-        if(response.ok){
-            location.reload();
-        }
-    })
-});
-},
-})
-        .then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Sucesso!', 'A escola foi cadastrada com sucesso.', 'success');
-                location.reload();
-            }
-        });
+            .then((result) => {
+                if (result.isConfirmed) {
+                    sessionStorage.clear();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'A escola foi cadastrada com sucesso!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2500);
+                }
+            });
     });
 });
+
+function gerarCodigoHexadecimal() {
+    const codigoInput = document.getElementById('codigoInput');
+    const codigoHexadecimal = getRandomHexCode();
+    codigoInput.value = codigoHexadecimal;
+}
+
+function getRandomHexCode() {
+    const characters = '0123456789ABCDEF';
+    let result = '#';
+
+    for (let i = 0; i < 5; i++) {
+        result += characters[Math.floor(Math.random() * characters.length)];
+    }
+
+    return result;
+}
 
 
 function carregarFeedEscola() {
@@ -234,44 +269,6 @@ function carregarFeedEscola() {
         });
 }
 
-function dadosInstituicao(idEscola) {
-    fetch(`/instituicoes/dadosInstituicao/${idEscola}`)
-        .then(function (response) {
-            if (!response.ok) {
-                console.error('Erro na resposta da API:', response.status);
-                return;
-            }
-            return response.json();
-        })
-        .then(function (dadosEscola) {
-            if (dadosEscola && dadosEscola.length > 0) {
-                const escola = dadosEscola[0];
-
-                console.log("Dados recebidos da escola: ", JSON.stringify(escola));
-                Swal.fire({
-                    title: 'Dados da escola',
-                    titleClass: 'custom-title',
-                    width: '700px', // Reduza a largura para 700px (ajuste conforme necessário)
-                    html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                        <span><b>Escola</b>: ${escola.nome}</span>
-                        <span><b>Sigla</b>: ${escola.sigla}</span>
-                        <span><b>Código hexadecimal:</b> ${escola.codigoHex}</span>
-                    </div>`,
-                    confirmButtonColor: '#6D499D', // Cor do botão "OK"
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        container: 'custom-modal', // Classe personalizada para o modal
-                        confirmButton: 'custom-confirm-button', // Classe personalizada para o botão "OK"
-                    },
-                });
-            } else {
-                console.error('Dados do usuário não encontrados na resposta da API.');
-            }
-        })
-        .catch(function (erro) {
-            console.error('Erro na requisição:', erro);
-        });
-}
 
 function deletarEscola(idEscola, tipoPermissao) {
     if (tipoPermissao === "3") {
@@ -293,11 +290,12 @@ function deletarEscola(idEscola, tipoPermissao) {
             denyButtonText: 'Cancelar',
             confirmButtonColor: '#d33',
             denyButtonColor: '#3085d6',
+            icon: 'warning',
             customClass: {
                 confirmButton: 'swal2-button-custom',
                 popup: 'swal2-popup-custom'
             },
-            width: '400px',
+            width: '500px',  // Aumentei a largura para 500px
             heightAuto: false,
             customHeight: '700px' // Aumento maior na altura
         }).then((result) => {
@@ -312,10 +310,23 @@ function deletarEscola(idEscola, tipoPermissao) {
                     })
                 }).then(function (resposta) {
                     if (resposta.ok) {
-                        Swal.fire('Escola deletado com sucesso', '', 'success');
-                        location.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Escola deletada com sucesso!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        // Aguarde um momento antes de recarregar a página (opcional)
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     } else {
-                        Swal.fire('Falha ao deletar o Escola', '', 'error');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Falha ao deletar a escola',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 }).catch(function (resposta) {
                     console.log(resposta);
@@ -324,14 +335,59 @@ function deletarEscola(idEscola, tipoPermissao) {
         });
     }
 }
- 
+
+function dadosInstituicao(idEscola) {
+    fetch(`/instituicoes/dadosInstituicao/${idEscola}`)
+        .then(function (response) {
+            if (!response.ok) {
+                console.error('Erro na resposta da API:', response.status);
+                return;
+            }
+            return response.json();
+        })
+        .then(function (dadosEscola) {
+            if (dadosEscola && dadosEscola.length > 0) {
+                const escola = dadosEscola[0];
+
+                
+                Swal.fire({
+                    title: 'Dados da Escola',
+                    html: `
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                            <span><b>Escola:</b> ${escola.nome}</span>
+                            <span><b>Sigla:</b> ${escola.sigla}</span>
+                            <span><b>Código hexadecimal:</b> ${escola.codigoHex}</span>
+                        </div>`,
+                    showCloseButton: true, // Adiciona o botão de fechar
+                    customClass: {
+                        container: 'custom-modal', // o modal
+                        popup: 'custom-popup', //conteúdo do modal
+                        closeButton: 'custom-close-button', //o botão de fechar
+                    },
+                    animation: false, // Desativa animações para melhorar a performance
+                    backdrop: `
+                        rgba(0,0,123,0.4)
+                        url('/path/to/your/loading.gif')
+                        left top
+                        no-repeat
+                    `, // Adiciona um fundo de carregamento
+                });
+            } else {
+                console.error('Dados da escola não encontrados na resposta da API.');
+            }
+        })
+        .catch(function (erro) {
+            console.error('Erro na requisição:', erro);
+        });
+}
+
 
 function alterar(idEscola) {
     fetch(`/instituicoes/listarInstituicaoEsp/${idEscola}`)
         .then((dadosEscola) => {
             if (dadosEscola.ok) {
                 dadosEscola.json().then((dadosEscola) => {
-                    
+
                     if (
                         dadosEscola[0].nome === "" &&
                         dadosEscola[0].sigla === "" &&
@@ -343,35 +399,36 @@ function alterar(idEscola) {
                     }
 
                     Swal.fire({
-                        title: 'Editar escola',
-                        titleClass: 'custom-title',
+                        title: 'Editar Escola',
                         html:
-                            '<input type="nomeEscola" id="nomeEscolaInput" placeholder="NomeEscola" value="' + dadosEscola[0].nome + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="sigla" id="siglaInput" placeholder="sigla" value="' + dadosEscola[0].sigla + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="codigo" disabled id="codigoInput" placeholder="codigo" value="' + dadosEscola[0].codigoHex + '" class="swal2-input" style="border-radius: 15px;">',
+                            `<input type="text" id="nomeEscolaInput" placeholder="Nome da Escola" value="${dadosEscola[0].nome}" class="swal2-input" style="border-radius: 15px;">
+                            <input type="text" id="siglaInput" placeholder="Sigla" value="${dadosEscola[0].sigla}" class="swal2-input" style="border-radius: 15px;">`,
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar Escola',
-                        showLoaderOnConfirm: true,
+                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
+                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" (verde)
+                        showCloseButton: true, // Adiciona o botão de fechar
                         customClass: {
                             container: 'custom-modal',
+                            popup: 'custom-popup',
+                            closeButton: 'custom-close-button',
+                            confirmButton: 'custom-confirm-button',
+                            cancelButton: 'custom-cancel-button',
                         },
                         onOpen: () => {
                             const customModal = Swal.getPopup();
                             customModal.style.backgroundColor = 'white';
-                            customModal.style.width = '800px';
-                            customModal.style.height = '600px';
+                            customModal.style.width = '500px';
+                            customModal.style.height = 'auto';  // Altura automática
                             customModal.style.borderRadius = '15px';
                         },
                         onBeforeOpen: () => {
                             const confirmButton = Swal.getConfirmButton();
                             const cancelButton = Swal.getCancelButton();
                             if (confirmButton && cancelButton) {
-                                confirmButton.style.backgroundColor = '#6D499D';
                                 confirmButton.style.borderRadius = '15px';
-                                confirmButton.style.marginRight = '15px';
 
-                                cancelButton.style.backgroundColor = '#6D499D';
                                 cancelButton.style.borderRadius = '15px';
                             }
 
@@ -382,31 +439,29 @@ function alterar(idEscola) {
                                 // Função para definir o estilo dos inputs
                                 function setFieldStyle(input, isValid) {
                                     if (isValid) {
-                                        input.style.borderColor = '#4CAF50'; 
+                                        input.style.borderColor = '#4CAF50';
                                     } else {
-                                        input.style.borderColor = '#FF5555'; 
+                                        input.style.borderColor = '#FF5555';
                                     }
                                 }
 
                                 // Validação do campo Nome
-                if (dadosEscola[0].nome.length < 3) {
-                    setFieldStyle(nomeEscolaInput, false);
-                    Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(nomeEscolaInput, true);
-                }
+                                if (dadosEscola[0].nome.length < 3) {
+                                    setFieldStyle(nomeEscolaInput, false);
+                                    Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
+                                    return false;
+                                } else {
+                                    setFieldStyle(nomeEscolaInput, true);
+                                }
 
-                // Validação do campo Sigla
-                if (dadosEscola[0].sigla.length < 2) {
-                    setFieldStyle(siglaInput, false);
-                    Swal.showValidationMessage('A sigla deve ter pelo menos 2 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(siglaInput, true);
-                }
-
-
+                                // Validação do campo Sigla
+                                if (dadosEscola[0].sigla.length < 2) {
+                                    setFieldStyle(siglaInput, false);
+                                    Swal.showValidationMessage('A sigla deve ter pelo menos 2 caracteres.');
+                                    return false;
+                                } else {
+                                    setFieldStyle(siglaInput, true);
+                                }
 
                                 fetch("/instituicoes/editarInstituicao", {
                                     method: "put",
@@ -416,49 +471,45 @@ function alterar(idEscola) {
                                     body: JSON.stringify({
                                         nomeEscola: nomeEscolaInput.value,
                                         sigla: siglaInput.value,
-                                        idEscola : dadosEscola[0].idInstituicao,
+                                        idEscola: dadosEscola[0].idInstituicao,
                                     })
                                 })
-                                .then(response => {
-                                    if (response.ok) {
-                                        return response.json();
-                                    }
-                                })
-                                .then(result => {
-                                    if (result) {
-                                        Swal.fire('Sucesso!', 'Escola atualizado com sucesso!', 'success');
-                                        location.reload();
-                                    } else {
-                                        Swal.fire("error", "Falha ao editar escola", "error");
-                                    }
-                                });
+                                    .then(response => {
+                                        if (response.ok) {
+                                            return response.json();
+                                        }
+                                    })
+                                    .then(result => {
+                                        if (result) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Sucesso!',
+                                                text: 'Escola atualizada com sucesso!',
+                                                showConfirmButton: false,
+                                                timer: 1500 // Fecha o pop-up após 1,5 segundos
+                                            });
+                                            setTimeout(() => {
+                                                location.reload();
+                                            }, 1500);
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Falha!',
+                                                text: 'Falha ao editar escola',
+                                            });
+                                        }
+                                    });
                             });
                         },
                     });
                 });
             } else {
-                Swal.fire("error", "Falha ao editar escola", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Falha!',
+                    text: 'Falha ao editar escola',
+                });
             }
         });
 }
 
-function gerarCodigoHexadecimal() {
-    const caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let codigo = '';
-  
-    for (let i = 0; i < 6; i++) {
-      const indice = Math.floor(Math.random() * caracteres.length);
-      codigo += caracteres.charAt(indice);
-    }
-  
-    var inputCodigo = document.getElementById("codigoInput")
-    inputCodigo.value = codigo
-}
-
-const inputBusca = document.getElementById("input_busca");
-inputBusca.addEventListener("keypress", (e) => {
-    if(e.key === "Enter") {
-        e.preventDefault;
-        buscarUsuario();
-    }
-});

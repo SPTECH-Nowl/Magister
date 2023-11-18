@@ -43,10 +43,10 @@
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
    <script src="../components/dialog/dialog.js" defer></script>
-
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+   
 
 
    <script src="../scripts/funcoes.js" defer></script>
@@ -131,13 +131,14 @@
 
    <ul>
       <li>
-         <sl-tooltip content="Sair" placement="right" >
-         <a href="../login_cadastro.html">
-         <img src="../assets/img/elements/settings.svg" alt="">
-         </a>
-      </sl-tooltip>
+          <sl-tooltip content="Sair" placement="right">
+              <a href="javascript:void(0);" id="sairLink">
+                  <img src="../assets/img/elements/settings.svg" alt="">
+              </a>
+          </sl-tooltip>
       </li>
-   </ul>
+  </ul>
+  
 </div>
 
    <div class="charts-container">
@@ -193,5 +194,25 @@
 <script>
    document.addEventListener("DOMContentLoaded", ()=>{
       validarAcesso(2);
+   });
+</script>
+<script>
+   document.getElementById('sairLink').addEventListener('click', function () {
+       // Exibir um pop-up personalizado usando Swal.fire
+       Swal.fire({
+           title: 'Obrigado pela visita!',
+           text: 'Até a próxima!',
+           icon: 'info',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'OK',
+           cancelButtonText: 'Cancelar'
+       }).then((result) => {
+           // Redirecionar para a página de login/cadastro se o usuário confirmar
+           if (result.isConfirmed) {
+               window.location.href = '../login_cadastro.html';
+           }
+       });
    });
 </script>

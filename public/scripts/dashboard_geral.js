@@ -101,7 +101,7 @@ function maquinasComMaisDefeitos(idInstituicao){
                         celulaVerMaquina.appendChild(linkVerMais);
                         
                         
-                        celulaNome.textContent = `Máquina ${maquinaAtual.fkMaquina}`;
+                        celulaNome.textContent = ` ${maquinaAtual.nomeMaquina}`;
                         celulaNStrike.textContent = maquinaAtual.quantidadeStrikes;
                         celulaNAlerta.textContent = maquinaAtual.quantidadeAlertas;
                         
@@ -159,15 +159,18 @@ function kpiInfos(idInstituicao){
                 drawPieAlertaDisco();
             });
 
+            var porcentagemComStrike = valoresKpi.maquinasComStrike / valoresKpi.totalMaquinas * 100
             
-            document.getElementById("porcentagem_strikes").innerHTML = `${valoresKpi.porcentagemComStrike}%`
+            document.getElementById("porcentagem_strikes").innerHTML = `${porcentagemComStrike}%`
                 
             function drawPieStrike() {
+
+                var maquinasSemStrike =  valoresKpi.totalMaquinas - valoresKpi.maquinasComStrike
 
                 var data = google.visualization.arrayToDataTable([
                     ['Categoria', 'Quantidade de Strikes'],
                     ['Com Strike', valoresKpi.maquinasComStrike],
-                    ['Sem Stike', valoresKpi.maquinasSemStrike ]
+                    ['Sem Stike', maquinasSemStrike ]
                 ]);
 
                 var options = {
@@ -191,13 +194,18 @@ function kpiInfos(idInstituicao){
                 
             }
 
-            document.getElementById("porcentagem_disco").innerHTML = `${valoresKpi.porcentagemComAlerta}%`
+            
+            var porcentagemComAlerta = valoresKpi.maquinasComAlerta / valoresKpi.totalMaquinas * 100
+            
+            document.getElementById("porcentagem_disco").innerHTML = `${porcentagemComAlerta}%`
 
             function drawPieAlertaDisco() {
+                var maquinasSemAlerta = valoresKpi.totalMaquinas - valoresKpi.maquinasComAlerta;
+
                 var data = google.visualization.arrayToDataTable([
                     ['Categoria', 'Quantidade de Alerta'],
-                    ['Acima de 80%', valoresKpi.maquinasComAlerta],
-                    ['Abaixo de 80%', valoresKpi.maquinasSemAlerta]
+                    ['Com alerta', valoresKpi.maquinasComAlerta],
+                    ['Sem alerta', maquinasSemAlerta]
                 ]);
             
                 var options = {

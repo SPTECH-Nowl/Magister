@@ -106,13 +106,13 @@
 
       <ul>
          <li>
-            <sl-tooltip content="Sair" placement="right" >
-            <a href="../login_cadastro.html">
-            <img src="../assets/img/elements/settings.svg" alt="">
-            </a>
-         </sl-tooltip>
+             <sl-tooltip content="Sair" placement="right">
+                 <a href="javascript:void(0);" id="sairLink">
+                     <img src="../assets/img/elements/settings.svg" alt="">
+                 </a>
+             </sl-tooltip>
          </li>
-      </ul>
+     </ul>
    </div>
 
    <div class="dash-content">
@@ -214,10 +214,18 @@
             <h3>Uso de Disco</h3>
             <div id="disc_chart" class="chart"></div>
          </div>
-         <div class="chart-container">
-            <h3>Quantidade de janelas abertas</h3>
-            <div id="window_chart" class="chart"></div>
+         <div class="chart-container flex-row">
+            <div class="chart-container ">
+               <h3>Quantidade de alertas do dia</h3>
+               <span id="qtdAlertas" style="font-size: 7rem; color: var(--color-purple-500) !important; font-family: var(--font-title); font-weight: bold;">0</span>
+            </div>
+
+            <div class="chart-container ">
+               <h3>Quantidade de strikes do dia</h3>
+               <span id="qtdStrikes" style="font-size: 7rem; color: var(--color-purple-500) !important; font-family: var(--font-title); font-weight: bold;">0</span>
+            </div>
          </div>
+         
       </div>
    </div>
 </body>
@@ -226,5 +234,25 @@
 <script>
    document.addEventListener("DOMContentLoaded", ()=>{
       validarAcesso(3);
+   });
+</script>
+<script>
+   document.getElementById('sairLink').addEventListener('click', function () {
+       // Exibir um pop-up personalizado usando Swal.fire
+       Swal.fire({
+           title: 'Obrigado pela visita!',
+           text: 'Até a próxima!',
+           icon: 'info',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'OK',
+           cancelButtonText: 'Cancelar'
+       }).then((result) => {
+           // Redirecionar para a página de login/cadastro se o usuário confirmar
+           if (result.isConfirmed) {
+               window.location.href = '../login_cadastro.html';
+           }
+       });
    });
 </script>

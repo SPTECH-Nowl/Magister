@@ -81,21 +81,63 @@ function editarMaquina(nome, id) {
    window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
 }
 
+
 function deletarMaquina(idMaquina) {
-   fetch(`/maquinas/deletarMaquina/`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({idMaquina: idMaquina})
-   }).then((response) => {
-      if(response.ok) {
-         sessionStorage.clear(); 
-         location.reload();
-      }
-   }).catch((err) => {
-      console.log(err);
-      console.log("Houve um erro ao tentar deletar a máquina!")
-   })
+   Swal.fire({
+       title: 'Você tem certeza?',
+       text: 'Esta ação é irreversível!',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#d33',
+       cancelButtonColor: '#3085d6',
+       confirmButtonText: 'Sim, deletar!',
+       cancelButtonText: 'Cancelar',
+       showCloseButton: false, 
+       closeButtonHtml: '<i class="fas fa-times"></i>', 
+       customClass: {
+           closeButton: 'custom-close-button' 
+       },
+       onBeforeOpen: () => {
+           // Adiciona um evento de clique ao botão de fechar personalizado
+           const customCloseButton = Swal.getContainer().querySelector('.custom-close-button');
+           customCloseButton.addEventListener('click', () => {
+               Swal.close();
+           });
+       }
+   }).then((result) => {
+       if (result.isConfirmed) {
+           realizarExclusao(idMaquina);
+       }
+   });
 }
+
+function realizarExclusao(idMaquina) {
+   fetch(`/maquinas/deletarMaquina/`, {
+       method: "DELETE",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ idMaquina: idMaquina })
+   }).then((response) => {
+       if (response.ok) {
+           sessionStorage.clear();
+
+           Swal.fire({
+               icon: 'success',
+               title: 'Máquina deletada com sucesso!',
+               showConfirmButton: false,
+               timer: 1500 
+           });
+
+           setTimeout(() => {
+               location.reload();
+           }, 1500);
+       }
+   }).catch((err) => {
+       console.log(err);
+       console.log("Houve um erro ao tentar deletar a máquina!");
+   });
+}
+
+
 
 function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
    const maquinas = document.getElementById("maquinas");

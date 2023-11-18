@@ -247,63 +247,79 @@ function criarGrupoPermissao(idUsuario, nomeUsuario){
 
 
 // Validações de login e cadastro
-
 function entrar() {
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
 
     if (emailVar == "" || senhaVar == "") {
-        swal("error","Preencha todos os campos","error");
-    }
-    else {
-     
-        fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, 
-             {cache: "no-cache"}).then((informacoesUsuario) =>{
-                if(informacoesUsuario.ok){
+        swal("error", "Preencha todos os campos", "error");
+    } else {
 
-                    informacoesUsuario.json().then(infosUser =>{
-                        
+        fetch(`${window.location.origin}/usuarios/entrar/${emailVar}/${senhaVar}`, { cache: "no-cache" })
+            .then((informacoesUsuario) => {
+                if (informacoesUsuario.ok) {
+                    informacoesUsuario.json().then(infosUser => {
+
                         fetch(`/processo/getGrupoPerm/${infosUser.idUsuario}`)
-                        .then((response)=>{
-                            if(response.status = 204){
-                                criarGrupoPermissao(infosUser.idUsuariom, infosUser.nome);
-                                
-                                localStorage.setItem("email", infosUser.email);
-                                localStorage.setItem("nome", infosUser.nome);
-                                localStorage.setItem("idUsuario", infosUser.idUsuario);
-                                localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
-                                localStorage.setItem("instituicao", infosUser.fkInstituicao);
-                                
-                                window.location = "dashboard/dashboard_geral.html"
-                            } else{
-                                localStorage.setItem("email", infosUser.email);
-                                localStorage.setItem("nome", infosUser.nome);
-                                localStorage.setItem("idUsuario", infosUser.idUsuario);
-                                localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
-                                localStorage.setItem("instituicao", infosUser.fkInstituicao);
-                                
-                                window.location = "dashboard/dashboard_geral.html"
-                            }
-                        })
-                        
+                            .then((response) => {
+                                if (response.status === 204) {
+                                    criarGrupoPermissao(infosUser.idUsuariom, infosUser.nome);
 
+                                    localStorage.setItem("email", infosUser.email);
+                                    localStorage.setItem("nome", infosUser.nome);
+                                    localStorage.setItem("idUsuario", infosUser.idUsuario);
+                                    localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
+                                    localStorage.setItem("instituicao", infosUser.fkInstituicao);
 
+                                    // Exibir o pop-up do switch alert
+                                    Swal.fire({
+                                        title: 'Redirecionando para o dashboard',
+                                        text: 'Aguarde...',
+                                        icon: 'info',
+                                        timer: 2500,
+                                        showConfirmButton: false,
+                                    }).then(() => {
+                                        // Redirecionar após o tempo definido
+                                        window.location = "dashboard/dashboard_geral.html";
+                                    });
+
+                                } else {
+                                    localStorage.setItem("email", infosUser.email);
+                                    localStorage.setItem("nome", infosUser.nome);
+                                    localStorage.setItem("idUsuario", infosUser.idUsuario);
+                                    localStorage.setItem("nivPerm", infosUser.fkTipoUsuario);
+                                    localStorage.setItem("instituicao", infosUser.fkInstituicao);
+
+                                    // Exibir o pop-up do switch alert
+                                    Swal.fire({
+                                        title: 'Redirecionando para o dashboard',
+                                        tiltle: 'Aguarde...',
+                                        icon: 'info',
+                                        timer: 2500,
+                                        showConfirmButton: false,
+                                    }).then(() => {
+                                        // Redirecionar após o tempo definido
+                                        window.location = "dashboard/dashboard_geral.html";
+                                    });
+                                }
+                            })
                     })
 
                 } else {
-                    swal('warning','Email e/ou senha invalido!','error')
+                    swal('warning', 'Email e/ou senha inválido(s)!', 'error')
 
                     informacoesUsuario.text().then(texto => {
                         console.error(texto)
                     })
 
                 }
-             }).catch(function (erro) {
+            }).catch(function (erro) {
                 console.log(erro);
             })
         return false
     }
 }
+
 
 // CADASTRO FUNCAO
 function cadastrar() {
