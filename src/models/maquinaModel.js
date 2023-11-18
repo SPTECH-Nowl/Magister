@@ -1,7 +1,5 @@
 let database = require("../database/config")
 
-
-
     function capturarDadosMaquina(idMaquina, idInstituicao) {
         let instrucao = `
     SELECT 
@@ -26,42 +24,72 @@ FROM maquina m
     
         `;
 
-        console.log(instrucao);
-        return database.executar(instrucao);
-    }
+    console.log(instrucao);
+    return database.executar(instrucao);
+}
 
     function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            m.idMaquina as id,
-            m.nome as nome,
-            m.so as so,
-            m.emUso as emUso,
-            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
-            as componenteRAM,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
-            as capacidadeRAM,
-            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
-            as componenteCPU,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
-            as capacidadeCPU,
-            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
-            as componenteDisco,
-            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
-            as capacidadeDisco,
-            (SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE fkMaquina = ${idMaquina}) as qtdStrikes
-        FROM maquina m
-        JOIN componente c ON c.fkMaquina = m.idMaquina
-        JOIN hardware ram ON c.fkHardware = ram.idHardware
-        JOIN hardware cpu ON c.fkHardware = cpu.idHardware
-        JOIN hardware disco ON c.fkHardware = disco.idHardware
-        WHERE
-            m.idMaquina = ${idMaquina}
-        LIMIT 1;
+        m.idMaquina as id,
+        m.nome as nome,
+        m.so as so,
+        m.emUso as emUso,
+        (
+            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 3 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as componenteRAM,
+        (
+            SELECT capacidade
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 3 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as capacidadeRAM,
+        (
+            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 2 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as componenteCPU,
+        (
+            SELECT capacidade
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 2 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as capacidadeCPU,
+        (
+            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 1 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as componenteDisco,
+        (
+            SELECT capacidade
+            FROM hardware
+            JOIN componente ON fkHardware = idHardware
+            WHERE fkTipoHardware = 1 AND fkMaquina = m.idMaquina
+            LIMIT 1
+        ) as capacidadeDisco,
+        (
+            SELECT COUNT(*)
+            FROM strike
+            WHERE fkMaquina = m.idMaquina
+        ) as qtdStrikes
+    FROM maquina m
+    WHERE m.idMaquina = ${idMaquina}
+    LIMIT 1;
+    
         `
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
     function capturarTodasMaquinas(idInstituicao, ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '', pesquisa = '') {
         let instrucao = `
@@ -123,8 +151,8 @@ FROM maquina m
         `
         console.log(instrucao);
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
     function capturarConsumoRAM(idMaquina, idInstituicao) {
         let instrucao = `
@@ -168,8 +196,8 @@ FROM maquina m
         LIMIT 8;
         `
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
     function capturarConsumoDisco(idMaquina, idInstituicao) {
         let instrucao = `
@@ -191,8 +219,8 @@ FROM maquina m
         LIMIT 8;
         `
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
     function capturarNovoDadoRAM(idMaquina, idInstituicao) {
         let instrucao = `
@@ -210,8 +238,8 @@ FROM maquina m
         LIMIT 1;
         `
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
     function capturarNovoDadoCPU(idMaquina, idInstituicao) {
         let instrucao = `
@@ -229,8 +257,8 @@ FROM maquina m
         LIMIT 1;
         `
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
     function capturarNovoDadoDisco(idMaquina, idInstituicao) {
         let instrucao = `
@@ -248,27 +276,27 @@ FROM maquina m
         LIMIT 1;
         `
 
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
 
-    function editarMaquina(idMaquina, nomeMaquina, SistemaOperacional, idInstituicao) {
-        let instrucao = `
-        UPDATE maquina
-        SET nome = '${nomeMaquina}', SO = '${SistemaOperacional}'
-        WHERE idMaquina = ${idMaquina};
-        `;
-        return database.executar(instrucao);
-    }
+function editarMaquina(idMaquina, nomeMaquina, SistemaOperacional, idInstituicao) {
+    let instrucao = `
+    UPDATE maquina
+    SET nome = '${nomeMaquina}', SO = '${SistemaOperacional}'
+    WHERE idMaquina = ${idMaquina};
+    `;
+    return database.executar(instrucao);
+}
 
-    function deletarMaquina(idMaquina) {
-        let instrucao = `
-            DELETE FROM maquina WHERE idMaquina = ${idMaquina};
-        `;
-    
-        return database.executar(instrucao);
-    }
-    
+function deletarMaquina(idMaquina) {
+    let instrucao = `
+        DELETE FROM maquina WHERE idMaquina = ${idMaquina};
+    `;
+
+    return database.executar(instrucao);
+}
+
 
     
     function maisUsoCpuRamKpi(idInstituicao) {
@@ -332,6 +360,46 @@ FROM maquina m
         return database.executar(instrucao);
     }
 
+
+function capturarStrikesPorMaquina(idInstituicao, idUsuario) {
+    let instrucao = `
+    SELECT
+        m.idMaquina as id,
+        m.nome AS nome,
+        (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes
+    FROM maquina m
+    LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+    JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+    JOIN usuario us ON us.fkInstituicao = inst.idInstituicao
+    WHERE idInstituicao = ${idInstituicao} AND idUsuario = ${idUsuario}
+    GROUP BY m.idMaquina;
+    `;
+
+    return database.executar(instrucao);
+}
+
+function capturarStrikesDaMaquina(idMaquina) {
+    let instrucao = `SELECT DATE_FORMAT(dataHora, '%d/%m/%y') as data, DATE_FORMAT(dataHora, '%H:%s') as hora FROM strike WHERE fkMaquina = ${idMaquina} ORDER BY dataHora DESC LIMIT 1;`;
+
+    return database.executar(instrucao);
+}
+
+//trocar essa função para o model de permissoes quando tiver um 
+function capturarPermissoes(idUsuario) {
+    let instrucao  = `
+    SELECT 
+        atuacao.nome,
+        atuacao.descricao,
+        permissao.emUso
+    FROM 
+        permissao 
+        JOIN usuario ON fkUsuario = idUsuario 
+        JOIN atuacao ON fkAtuacao = idAtuacao
+        WHERE idUsuario = ${idUsuario};
+    `;
+
+    return database.executar(instrucao);
+}
 
     module.exports = {
         capturarDadosMaquina,

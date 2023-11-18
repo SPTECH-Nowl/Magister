@@ -333,7 +333,49 @@ function maquinasMaisDefeitos(req, res) {
         );
 }
 
+function capturarStrikesPorMaquina(req, res) {
+    let idInstituicao = req.params.idInstituicao;
+    let idUsuario = req.params.idUsuario;
 
+    maquinaModel.capturarStrikesPorMaquina(idInstituicao, idUsuario)
+        .then((response) => {
+            res.json(response)
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log(err.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        })
+}
+
+function capturarStrikesDaMaquina(req, res) {
+    let idMaquina = req.params.idMaquina;
+
+    maquinaModel.capturarStrikesDaMaquina(idMaquina)
+        .then((response) => {
+            res.json(response)
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log(err.sqlMessage);
+            res.status(500).json(err.sqlMessage);
+        })
+}
+
+//trocar essa função para o model de permissoes quando tiver um 
+function capturarPermissoes(req, res) {
+    let idMaquina = req.params.idUsuario;
+   
+    maquinaModel.capturarPermissoes(idMaquina)
+        .then((response) => {
+            res.json(response)
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log(err.sqlMessage);
+            res.status(500).json(err.sqlMessage);
+        })
+}
 
 module.exports = {
     capturarDadosMaquina,
@@ -348,5 +390,8 @@ module.exports = {
     editarMaquina,
     deletarMaquina,
     maisUsoCpuRamKpi,
-    maquinasMaisDefeitos
+    maquinasMaisDefeitos,
+    capturarStrikesPorMaquina,
+    capturarStrikesDaMaquina,
+    capturarPermissoes
 }
