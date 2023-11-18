@@ -56,136 +56,153 @@ function buscarUsuario() {
 
    }))
       }
-
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
-    adicionarUsuarioButton.addEventListener('click', function() {
-        Swal.fire({
-            title: 'Adicionar Usuário',
-            titleClass: 'custom-title',
-            html:
-                '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input" style="border-radius: 15px;">' +
-                '<input type="email" id="emailInput" placeholder="Email" class="swal2-input" style="border-radius: 15px;">' +
-                '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input" style="border-radius: 15px;">' +
-                '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input" style="border-radius: 15px;">',
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            cancelButtonClass: 'custom-cancel-button',
-            confirmButtonText: 'Adicionar Usuário',
-            showLoaderOnConfirm: true,
-            customClass: {
-                container: 'custom-modal',
-            },
-            onOpen: () => {
-                const customModal = Swal.getPopup();
-                customModal.style.backgroundColor = 'white';
-                customModal.style.width = '800px';
-                customModal.style.borderRadius = '15px';
-            },
-            onBeforeOpen: () => {
-                const confirmButton = Swal.getConfirmButton();
-                const cancelButton = Swal.getCancelButton();
-                if (confirmButton && cancelButton) {
-                    confirmButton.style.backgroundColor = '#6D499D';
-                    confirmButton.style.borderRadius = '15px';
-
-                    cancelButton.style.backgroundColor = '#6D499D';
-                    cancelButton.style.borderRadius = '15px';
-                    cancelButton.style.marginRight = '15px';
-                }
-            },
-            preConfirm: () => {
-                // Validação dos campos
-                const nomeInput = document.getElementById('nomeInput');
-                const emailInput = document.getElementById('emailInput');
-                const senhaInput = document.getElementById('senhaInput');
-                const tipoInput = document.getElementById('tipoInput');
-
-                const nome = nomeInput.value;
-                const email = emailInput.value;
-                const senha = senhaInput.value;
-                const tipo = tipoInput.value;
-
-                // Função para definir o estilo dos inputs
-                function setFieldStyle(input, isValid) {
-                    if (isValid) {
-                        input.style.borderColor = '#4CAF50'; // Borda verde para campos válidos
-                    } else {
-                        input.style.borderColor = '#FF5555'; // Borda vermelha para campos inválidos
-                    }
-                }
-
-                // Validação do campo Nome
-                if (nome.length < 3) {
-                    setFieldStyle(nomeInput, false);
-                    Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(nomeInput, true);
-                }
-
-                // Validação do campo Email
-                if (!email.includes('@')) {
-                    setFieldStyle(emailInput, false);
-                    Swal.showValidationMessage('O email deve conter o símbolo "@".');
-                    return false;
-                } else {
-                    setFieldStyle(emailInput, true);
-                }
-
-                // Validação do campo Senha
-                if (senha.length < 5) {
-                    setFieldStyle(senhaInput, false);
-                    Swal.showValidationMessage('A senha deve ter pelo menos 5 caracteres.');
-                    return false;
-                } else {
-                    setFieldStyle(senhaInput, true);
-                }
-
-                // Validação do campo Tipo
-                if (tipo !== '1' && tipo !== '2' && tipo !== '3') {
-                    setFieldStyle(tipoInput, false);
-                    Swal.showValidationMessage('O tipo só pode ser 1, 2 ou 3.');
-                    return false;
-                } else {
-                    setFieldStyle(tipoInput, true);
-                }
-
-                // Simule a adição de um usuário (substitua isso com sua lógica real)
-                return new Promise((resolve) => {
-                        fetch("/usuarios/cadastrarNaDash", {
-                            method: "POST",
-                            headers: {
-                                "Content-type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                nomeUsuario: nome,
-                                emailUsuario: email,
-                                senhaUsuario: senha,
-                                nivPermissao: tipo,
-                                instituicao: localStorage.getItem("instituicao")
-                            })
-                        }).then((response)=>{
-                            if(response.ok){
-                                location.reload();
-                            }
-                        })
-                });
-            },
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Sucesso!', 'O usuário foi cadastrado com sucesso.', 'success');
-                location.reload();
-            }
-        });
-    });
+    adicionarUsuarioButton.addEventListener('click', adicionarUsuario);
 });
 
-            
+function adicionarUsuario() {
+    let usuarioAdicionado = false; // Variável para rastrear se o usuário foi adicionado
+
+    Swal.fire({
+        title: 'Adicionar Usuário',
+        html:
+            '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input" style="border-radius: 15px;">' +
+            '<input type="email" id="emailInput" placeholder="Email" class="swal2-input" style="border-radius: 15px;">' +
+            '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input" style="border-radius: 15px;">' +
+            '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input" style="border-radius: 15px;">',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: '#d33', // Cor do botão "Cancelar"
+        confirmButtonText: 'Adicionar Usuário',
+        confirmButtonColor: '#28a745', // Cor do botão "Adicionar Usuário"
+        showLoaderOnConfirm: true,
+        customClass: {
+            container: 'custom-modal',
+            popup: 'custom-popup',
+            closeButton: 'custom-close-button',
+            confirmButton: 'custom-confirm-button',
+            cancelButton: 'custom-cancel-button',
+        },
+        onOpen: () => {
+            const customModal = Swal.getPopup();
+            customModal.style.backgroundColor = 'white';
+            customModal.style.width = '550px';
+            customModal.style.borderRadius = '15px';
+        },
+        preConfirm: () => {
+            // Validação dos campos
+            const nomeInput = document.getElementById('nomeInput');
+            const emailInput = document.getElementById('emailInput');
+            const senhaInput = document.getElementById('senhaInput');
+            const tipoInput = document.getElementById('tipoInput');
+
+            const nome = nomeInput.value;
+            const email = emailInput.value;
+            const senha = senhaInput.value;
+            const tipo = tipoInput.value;
+
+            // Função para definir o estilo dos inputs
+            function setFieldStyle(input, isValid) {
+                if (isValid) {
+                    input.style.borderColor = '#4CAF50'; // Borda verde para campos válidos
+                } else {
+                    input.style.borderColor = '#FF5555'; // Borda vermelha para campos inválidos
+                }
+            }
+
+            // Validação do campo Nome
+            if (nome.length < 3) {
+                setFieldStyle(nomeInput, false);
+                Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
+                return false;
+            } else {
+                setFieldStyle(nomeInput, true);
+            }
+
+            // Validação do campo Email
+            if (!email.includes('@')) {
+                setFieldStyle(emailInput, false);
+                Swal.showValidationMessage('O email deve conter o símbolo "@".');
+                return false;
+            } else {
+                setFieldStyle(emailInput, true);
+            }
+
+            // Validação do campo Senha
+            if (senha.length < 5) {
+                setFieldStyle(senhaInput, false);
+                Swal.showValidationMessage('A senha deve ter pelo menos 5 caracteres.');
+                return false;
+            } else {
+                setFieldStyle(senhaInput, true);
+            }
+
+            // Validação do campo Tipo
+            if (tipo !== '1' && tipo !== '2' && tipo !== '3') {
+                setFieldStyle(tipoInput, false);
+                Swal.showValidationMessage('O tipo só pode ser 1, 2 ou 3.');
+                return false;
+            } else {
+                setFieldStyle(tipoInput, true);
+            }
+
+            // Simule a adição de um usuário (substitua isso com sua lógica real)
+            return new Promise((resolve) => {
+                fetch("/usuarios/cadastrarNaDash", {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeUsuario: nome,
+                        emailUsuario: email,
+                        senhaUsuario: senha,
+                        nivPermissao: tipo,
+                        instituicao: localStorage.getItem("instituicao")
+                    })
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
+                        }
+                        return response.json(); // Retorna a resposta JSON se estiver tudo OK
+                    })
+                    .then(() => {
+                        usuarioAdicionado = true; // Define a variável como true quando o usuário é adicionado
+                        resolve(); // Resolve a Promise após a adição do usuário
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        console.log("Houve um erro ao tentar cadastrar o usuário");
+                    });
+            });
+        },
+    })
+        .then((result) => {
+            if (result.isConfirmed && usuarioAdicionado) {
+                sessionStorage.clear();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'O usuário foi cadastrado com sucesso!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            }
+        })
+        .catch(() => {
+            // Não faça nada se o usuário fechar o modal ou se houver um erro
+        });
+}
+
 
 
 
@@ -455,7 +472,7 @@ function mostrar_dados(idUsuario) {
                     },
                     animation: false, 
                     backdrop: `
-                        rgba(0,0,1,0.4)
+                        rgba(0,0,123,0.4)
                         url('/path/to/your/loading.gif')
                         left top
                         no-repeat

@@ -59,13 +59,12 @@ function buscarInstituicao() {
  
  }
 
-document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     const adicionarEscolaButton = document.getElementById('adicionarEscola');
 
     adicionarEscolaButton.addEventListener('click', function() {
         Swal.fire({
             title: 'Adicionar Escola',
-            titleClass: 'custom-title',
             html:
                 '<input type="text" id="nomeEscolaInput" placeholder="Nome da Escola" class="swal2-input" style="border-radius: 15px;">' +
                 '<input type="text" id="siglaInput" placeholder="Sigla" class="swal2-input" style="border-radius: 15px;">' +
@@ -79,23 +78,29 @@ document.addEventListener('DOMContentLoaded', function() {
             showCancelButton: true,
             cancelButtonText: 'Cancelar',
             cancelButtonClass: 'custom-cancel-button',
+            confirmButtonColor: '#28a745', // Cor do botão "Adicionar Escola"
+            cancelButtonColor: '#d33', // Cor do botão "Cancelar"
             customClass: {
                 container: 'custom-modal',
+                popup: 'custom-popup',
+                closeButton: 'custom-close-button',
+                confirmButton: 'custom-confirm-button',
+                cancelButton: 'custom-cancel-button',
             },
             onOpen: () => {
                 const customModal = Swal.getPopup();
                 customModal.style.backgroundColor = 'white';
-                customModal.style.width = '800px';
+                customModal.style.width = '500px';
                 customModal.style.borderRadius = '15px';
             },
             onBeforeOpen: () => {
                 const confirmButton = Swal.getConfirmButton();
                 const cancelButton = Swal.getCancelButton();
                 if (confirmButton && cancelButton) {
-                    confirmButton.style.backgroundColor = '#6D499D';
+                    confirmButton.style.backgroundColor = '#28a745'; // Cor do botão "Adicionar Escola"
                     confirmButton.style.borderRadius = '15px';
 
-                    cancelButton.style.backgroundColor = '#6D499D';
+                    cancelButton.style.backgroundColor = '#d33'; // Cor do botão "Cancelar"
                     cancelButton.style.borderRadius = '15px';
                     cancelButton.style.marginRight = '15px';
                 }
@@ -146,33 +151,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     setFieldStyle(codigoInput, true);
                 }
 
-return new Promise((resolve) => {
-    fetch("/instituicoes/cadastrarDashEscola", {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeEscola: nomeEscola,
-            sigla: sigla,
-            codigo: codigo,
+                return new Promise((resolve) => {
+                    fetch("/instituicoes/cadastrarDashEscola", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            nomeEscola: nomeEscola,
+                            sigla: sigla,
+                            codigo: codigo,
+                        })
+                    }).then((response)=>{
+                        if(response.ok){
+                            resolve();
+                        }
+                    });
+                });
+            },
         })
-    }).then((response)=>{
-        if(response.ok){
-            location.reload();
-        }
-    })
-});
-},
-})
         .then((result) => {
             if (result.isConfirmed) {
-                Swal.fire('Sucesso!', 'A escola foi cadastrada com sucesso.', 'success');
-                location.reload();
+                sessionStorage.clear();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'A escola foi cadastrada com sucesso!',
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+
+                setTimeout(() => {
+                    location.reload();
+                }, 2500);
             }
         });
     });
 });
+
+
 
 
 function carregarFeedEscola() {
@@ -329,13 +346,13 @@ function dadosInstituicao(idEscola) {
                         popup: 'custom-popup', //conteúdo do modal
                         closeButton: 'custom-close-button', //o botão de fechar
                     },
-                    animation: false, 
+                    animation: false, // Desativa animações para melhorar a performance
                     backdrop: `
                         rgba(0,0,123,0.4)
                         url('/path/to/your/loading.gif')
                         left top
                         no-repeat
-                    `, 
+                    `, // Adiciona um fundo de carregamento
                 });
             } else {
                 console.error('Dados da escola não encontrados na resposta da API.');
@@ -371,9 +388,9 @@ function alterar(idEscola) {
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar Escola',
-                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" 
-                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" 
-                        showCloseButton: true, // botão de fechar
+                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
+                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" (verde)
+                        showCloseButton: true, // Adiciona o botão de fechar
                         customClass: {
                             container: 'custom-modal',
                             popup: 'custom-popup',
@@ -451,7 +468,7 @@ function alterar(idEscola) {
                                                 title: 'Sucesso!',
                                                 text: 'Escola atualizada com sucesso!',
                                                 showConfirmButton: false,
-                                                timer: 1500 
+                                                timer: 1500 // Fecha o pop-up após 1,5 segundos
                                             });
                                             setTimeout(() => {
                                                 location.reload();

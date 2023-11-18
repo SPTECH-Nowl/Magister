@@ -80,8 +80,8 @@ function editarMaquina(nome, id) {
    window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
 }
 
+
 function deletarMaquina(idMaquina) {
-   
    Swal.fire({
        title: 'Você tem certeza?',
        text: 'Esta ação é irreversível!',
@@ -90,10 +90,21 @@ function deletarMaquina(idMaquina) {
        confirmButtonColor: '#d33',
        cancelButtonColor: '#3085d6',
        confirmButtonText: 'Sim, deletar!',
-       cancelButtonText: 'Cancelar'
+       cancelButtonText: 'Cancelar',
+       showCloseButton: false, 
+       closeButtonHtml: '<i class="fas fa-times"></i>', 
+       customClass: {
+           closeButton: 'custom-close-button' 
+       },
+       onBeforeOpen: () => {
+           // Adiciona um evento de clique ao botão de fechar personalizado
+           const customCloseButton = Swal.getContainer().querySelector('.custom-close-button');
+           customCloseButton.addEventListener('click', () => {
+               Swal.close();
+           });
+       }
    }).then((result) => {
        if (result.isConfirmed) {
-         
            realizarExclusao(idMaquina);
        }
    });
@@ -106,18 +117,15 @@ function realizarExclusao(idMaquina) {
        body: JSON.stringify({ idMaquina: idMaquina })
    }).then((response) => {
        if (response.ok) {
-         
            sessionStorage.clear();
 
-        
            Swal.fire({
                icon: 'success',
                title: 'Máquina deletada com sucesso!',
                showConfirmButton: false,
-               timer: 1500 // Fecha o pop-up após 1,5 segundos
+               timer: 1500 
            });
 
-          
            setTimeout(() => {
                location.reload();
            }, 1500);
@@ -127,6 +135,7 @@ function realizarExclusao(idMaquina) {
        console.log("Houve um erro ao tentar deletar a máquina!");
    });
 }
+
 
 
 function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
