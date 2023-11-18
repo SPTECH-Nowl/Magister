@@ -202,7 +202,7 @@ function getRandomHexCode() {
     const characters = '0123456789ABCDEF';
     let result = '#';
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         result += characters[Math.floor(Math.random() * characters.length)];
     }
 
