@@ -244,41 +244,52 @@ function atualizarProcessos(idUsuario) {
 
 function adicionarProcessoLista(idUsuario) {
     if (listaProcessoDisp.length > 0) {
-
         for (var i = 0; i < listaProcessoDisp.length; i++) {
             console.log(listaProcessoDisp.length);
-            var idProcesso = listaProcessoDisp[i]
+            var idProcesso = listaProcessoDisp[i];
             fetch(`/processo/publicar/${idProcesso}/${idUsuario}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-
             }).then(function (resposta) {
                 if (resposta.ok) {
-                    listaAppNaoUsados(idUser)
-                    listaAppUsados(idUser)
-                    listarProcessos(idUser)
+                    // Adição bem-sucedida, exibe o pop-up de sucesso
+                    exibirPopUpSucesso();
+                    listaAppNaoUsados(idUser);
+                    listaAppUsados(idUser);
+                    listarProcessos(idUser);
                 } else {
-                    console.log("erro no cadastro")
+                    console.log("Erro no cadastro");
                 }
             }).catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
             });
-
         }
     }
+}
+
+function exibirPopUpSucesso() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Processo adicionado com sucesso!',
+        showConfirmButton: false,
+        timer: 5500
+    });
+
+    // Aguarde um momento antes de recarregar a página (opcional)
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
 }
 
 
 
 function removerProcessoLista(idUsuario) {
     if (listaProcessoUsado.length > 0) {
-
-
         for (var i = 0; i < listaProcessoUsado.length; i++) {
             console.log(listaProcessoUsado.length);
-            var idProcesso = listaProcessoUsado[i]
+            var idProcesso = listaProcessoUsado[i];
             console.log("cheguei aqui");
             fetch(`/processo/deletarProcesso`, {
                 method: "DELETE",
@@ -293,20 +304,36 @@ function removerProcessoLista(idUsuario) {
             }).then(function (resposta) {
                 if (resposta.ok) {
                     console.log("deletou");
-                    listaAppUsados(idUser)
-                    listaAppNaoUsados(idUser)
-                    listarProcessos(idUser)
+                    // Adição do pop-up de sucesso após a remoção bem-sucedida
+                    exibirPopUpRemocaoSucesso();
+                    listaAppUsados(idUser);
+                    listaAppNaoUsados(idUser);
+                    listarProcessos(idUser);
                 } else {
-                    console.log("erro no cadastro")
+                    console.log("erro no cadastro");
                 }
             }).catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
             });
-
         }
     }
-
 }
+
+// Função para exibir o pop-up de sucesso após a remoção bem-sucedida
+function exibirPopUpRemocaoSucesso() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Processo removido com sucesso!',
+        showConfirmButton: false,
+        timer: 1500
+    });
+
+    // Aguarde um momento antes de recarregar a página (opcional)
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
+}
+
 
 function criarProcessoPersonalizado(idUser) {
     Swal.fire({

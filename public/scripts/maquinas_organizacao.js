@@ -81,20 +81,53 @@ function editarMaquina(nome, id) {
 }
 
 function deletarMaquina(idMaquina) {
-   fetch(`/maquinas/deletarMaquina/`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({idMaquina: idMaquina})
-   }).then((response) => {
-      if(response.ok) {
-         sessionStorage.clear(); 
-         location.reload();
-      }
-   }).catch((err) => {
-      console.log(err);
-      console.log("Houve um erro ao tentar deletar a máquina!")
-   })
+   // Exibe um pop-up de confirmação
+   Swal.fire({
+       title: 'Você tem certeza?',
+       text: 'Esta ação é irreversível!',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#d33',
+       cancelButtonColor: '#3085d6',
+       confirmButtonText: 'Sim, deletar!',
+       cancelButtonText: 'Cancelar'
+   }).then((result) => {
+       if (result.isConfirmed) {
+           // Se o usuário confirmar, realiza a exclusão
+           realizarExclusao(idMaquina);
+       }
+   });
 }
+
+function realizarExclusao(idMaquina) {
+   fetch(`/maquinas/deletarMaquina/`, {
+       method: "DELETE",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ idMaquina: idMaquina })
+   }).then((response) => {
+       if (response.ok) {
+           // Se a exclusão for bem-sucedida, limpa a sessionStorage
+           sessionStorage.clear();
+
+           // Exibe o pop-up informando que a máquina foi deletada com sucesso
+           Swal.fire({
+               icon: 'success',
+               title: 'Máquina deletada com sucesso!',
+               showConfirmButton: false,
+               timer: 1500 // Fecha o pop-up após 1,5 segundos
+           });
+
+           // Aguarde um momento antes de recarregar a página (opcional)
+           setTimeout(() => {
+               location.reload();
+           }, 1500);
+       }
+   }).catch((err) => {
+       console.log(err);
+       console.log("Houve um erro ao tentar deletar a máquina!");
+   });
+}
+
 
 function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
    const maquinas = document.getElementById("maquinas");

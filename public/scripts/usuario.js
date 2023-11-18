@@ -421,6 +421,8 @@ function limparFormulario() {
 }
 
 
+
+
 function mostrar_dados(idUsuario) {
     fetch(`/usuarios/mostrar_dados/${idUsuario}`)
         .then(function (response) {
@@ -434,22 +436,30 @@ function mostrar_dados(idUsuario) {
             if (dadosUsuario && dadosUsuario.length > 0) {
                 const usuario = dadosUsuario[0];
                 console.log("Dados recebidos dos usuários: ", JSON.stringify(usuario));
+
+               
                 Swal.fire({
                     title: 'Dados do Cliente',
-                    titleClass: 'custom-title',
-                    width: '700px', // Reduza a largura para 700px (ajuste conforme necessário)
-                    html: `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                        <span><b>Nome</b>: ${usuario.nome}</span>
-                        <span><b>Email</b>: ${usuario.email}</span>
-                        <span><b>Senha:</b> ${usuario.senha}</span>
-                        <span><b>nivPermissao:</b> ${usuario.fkTipoUsuario}</span>
-                    </div>`,
-                    confirmButtonColor: '#6D499D', // Cor do botão "OK"
-                    confirmButtonText: 'OK',
+                    html: `
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                            <span><b>Nome:</b> ${usuario.nome}</span>
+                            <span><b>Email:</b> ${usuario.email}</span>
+                            <span><b>Senha:</b> ${usuario.senha}</span>
+                            <span><b>Nível de Permissão:</b> ${usuario.fkTipoUsuario}</span>
+                        </div>`,
+                    showCloseButton: true, // Adiciona o botão de fechar
                     customClass: {
                         container: 'custom-modal', // Classe personalizada para o modal
-                        confirmButton: 'custom-confirm-button', // Classe personalizada para o botão "OK"
+                        popup: 'custom-popup', // Classe personalizada para o conteúdo do modal
+                        closeButton: 'custom-close-button', // Classe personalizada para o botão de fechar
                     },
+                    animation: false, // Desativa animações para melhorar a performance
+                    backdrop: `
+                        rgba(0,0,1,0.4)
+                        url('/path/to/your/loading.gif')
+                        left top
+                        no-repeat
+                    `, // Adiciona um fundo de carregamento
                 });
             } else {
                 console.error('Dados do usuário não encontrados na resposta da API.');
@@ -459,6 +469,8 @@ function mostrar_dados(idUsuario) {
             console.error('Erro na requisição:', erro);
         });
 }
+
+
 
 function deletar(idUsuario, tipoPermissao) {
     if (tipoPermissao === "0") {
@@ -480,11 +492,12 @@ function deletar(idUsuario, tipoPermissao) {
             denyButtonText: 'Cancelar',
             confirmButtonColor: '#d33',
             denyButtonColor: '#3085d6',
+            icon: 'warning',
             customClass: {
                 confirmButton: 'swal2-button-custom',
                 popup: 'swal2-popup-custom'
             },
-            width: '400px',
+            width: '500px',  // Aumentei a largura para 500px
             heightAuto: false,
             customHeight: '700px' // Aumento maior na altura
         }).then((result) => {
@@ -499,10 +512,23 @@ function deletar(idUsuario, tipoPermissao) {
                     })
                 }).then(function (resposta) {
                     if (resposta.ok) {
-                        Swal.fire('Usuário deletado com sucesso', '', 'success');
-                        location.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Usuário deletado com sucesso!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        // Aguarde um momento antes de recarregar a página (opcional)
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     } else {
-                        Swal.fire('Falha ao deletar o usuário', '', 'error');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Falha ao deletar o usuário',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 }).catch(function (resposta) {
                     console.log(resposta);
@@ -511,6 +537,8 @@ function deletar(idUsuario, tipoPermissao) {
         });
     }
 }
+
+
 
 
 
@@ -530,6 +558,7 @@ function testar() {
 
     return false;
 }
+
 function alterar(idUsuario) {
     fetch(`/usuarios/listarPorUsuario/${idUsuario}`)
         .then((dadosUsuario) => {
@@ -546,37 +575,39 @@ function alterar(idUsuario) {
                         return;
                     }
 
+                    // Utilizando SweetAlert2 para exibir o modal de edição
                     Swal.fire({
                         title: 'Editar Usuário',
-                        titleClass: 'custom-title',
                         html:
-                            '<input type="text" id="nomeInput" placeholder="Nome" value="' + dadosUsuario[0].nome + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="email" id="emailInput" placeholder="Email" value="' + dadosUsuario[0].email + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="password" id="senhaInput" placeholder="Senha" value="' + dadosUsuario[0].senha + '" class="swal2-input" style="border-radius: 15px;">' +
-                            '<input type="text" id="tipoInput" placeholder="Tipo" value="' + dadosUsuario[0].nivPermissao + '" class="swal2-input" style="border-radius: 15px;">',
+                            `<input type="text" id="nomeInput" placeholder="Nome" value="${dadosUsuario[0].nome}" class="swal2-input" style="border-radius: 15px;">
+                            <input type="email" id="emailInput" placeholder="Email" value="${dadosUsuario[0].email}" class="swal2-input" style="border-radius: 15px;">
+                            <input type="password" id="senhaInput" placeholder="Senha" value="${dadosUsuario[0].senha}" class="swal2-input" style="border-radius: 15px;">
+                            <input type="text" id="tipoInput" placeholder="Tipo" value="${dadosUsuario[0].nivPermissao}" class="swal2-input" style="border-radius: 15px;">`,
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
-                        confirmButtonText: 'Salvar Usuario',
-                        showLoaderOnConfirm: true,
+                        confirmButtonText: 'Salvar Usuário',
+                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
+                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Usuário" (verde)
+                        showCloseButton: true, // Adiciona o botão de fechar
                         customClass: {
                             container: 'custom-modal',
+                            popup: 'custom-popup',
+                            closeButton: 'custom-close-button',
+                            confirmButton: 'custom-confirm-button',
+                            cancelButton: 'custom-cancel-button',
                         },
                         onOpen: () => {
                             const customModal = Swal.getPopup();
                             customModal.style.backgroundColor = 'white';
-                            customModal.style.width = '800px';
-                            customModal.style.height = '600px';
+                            customModal.style.width = '500px';
                             customModal.style.borderRadius = '15px';
                         },
                         onBeforeOpen: () => {
                             const confirmButton = Swal.getConfirmButton();
                             const cancelButton = Swal.getCancelButton();
                             if (confirmButton && cancelButton) {
-                                confirmButton.style.backgroundColor = '#6D499D';
                                 confirmButton.style.borderRadius = '15px';
-                                confirmButton.style.marginRight = '15px';
 
-                                cancelButton.style.backgroundColor = '#6D499D';
                                 cancelButton.style.borderRadius = '15px';
                             }
 
@@ -589,9 +620,9 @@ function alterar(idUsuario) {
                                 // Função para definir o estilo dos inputs
                                 function setFieldStyle(input, isValid) {
                                     if (isValid) {
-                                        input.style.borderColor = '#4CAF50'; 
+                                        input.style.borderColor = '#4CAF50';
                                     } else {
-                                        input.style.borderColor = '#FF5555'; 
+                                        input.style.borderColor = '#FF5555';
                                     }
                                 }
 
@@ -648,10 +679,22 @@ function alterar(idUsuario) {
                                 })
                                 .then(result => {
                                     if (result) {
-                                        Swal.fire('Sucesso!', 'Usuário atualizado com sucesso!', 'success');
-                                        location.reload();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Sucesso!',
+                                            text: 'Usuário atualizado com sucesso!',
+                                            showConfirmButton: false,
+                                            timer: 1500 // Fecha o pop-up após 1,5 segundos
+                                        });
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1500);
                                     } else {
-                                        Swal.fire("error", "Falha ao editar usuário", "error");
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Falha!',
+                                            text: 'Falha ao editar usuário',
+                                        });
                                     }
                                 });
                             });
@@ -659,15 +702,11 @@ function alterar(idUsuario) {
                     });
                 });
             } else {
-                Swal.fire("error", "Falha ao editar usuário", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Falha!',
+                    text: 'Falha ao editar usuário',
+                });
             }
         });
 }
-
-const inputBusca = document.getElementById("input_busca");
-inputBusca.addEventListener("keypress", (e) => {
-    if(e.key === "Enter") {
-        e.preventDefault;
-        buscarUsuario();
-    }
-});
