@@ -314,7 +314,7 @@ function dadosInstituicao(idEscola) {
             if (dadosEscola && dadosEscola.length > 0) {
                 const escola = dadosEscola[0];
 
-                // Utilizando SweetAlert2 para exibir os dados da escola
+                
                 Swal.fire({
                     title: 'Dados da Escola',
                     html: `
@@ -325,17 +325,17 @@ function dadosInstituicao(idEscola) {
                         </div>`,
                     showCloseButton: true, // Adiciona o botão de fechar
                     customClass: {
-                        container: 'custom-modal', // Classe personalizada para o modal
-                        popup: 'custom-popup', // Classe personalizada para o conteúdo do modal
-                        closeButton: 'custom-close-button', // Classe personalizada para o botão de fechar
+                        container: 'custom-modal', // o modal
+                        popup: 'custom-popup', //conteúdo do modal
+                        closeButton: 'custom-close-button', //o botão de fechar
                     },
-                    animation: false, // Desativa animações para melhorar a performance
+                    animation: false, 
                     backdrop: `
                         rgba(0,0,123,0.4)
                         url('/path/to/your/loading.gif')
                         left top
                         no-repeat
-                    `, // Adiciona um fundo de carregamento
+                    `, 
                 });
             } else {
                 console.error('Dados da escola não encontrados na resposta da API.');
@@ -371,9 +371,9 @@ function alterar(idEscola) {
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar Escola',
-                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
-                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" (verde)
-                        showCloseButton: true, // Adiciona o botão de fechar
+                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" 
+                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" 
+                        showCloseButton: true, // botão de fechar
                         customClass: {
                             container: 'custom-modal',
                             popup: 'custom-popup',
@@ -451,7 +451,7 @@ function alterar(idEscola) {
                                                 title: 'Sucesso!',
                                                 text: 'Escola atualizada com sucesso!',
                                                 showConfirmButton: false,
-                                                timer: 1500 // Fecha o pop-up após 1,5 segundos
+                                                timer: 1500 
                                             });
                                             setTimeout(() => {
                                                 location.reload();

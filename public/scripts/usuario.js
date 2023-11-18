@@ -447,19 +447,19 @@ function mostrar_dados(idUsuario) {
                             <span><b>Senha:</b> ${usuario.senha}</span>
                             <span><b>Nível de Permissão:</b> ${usuario.fkTipoUsuario}</span>
                         </div>`,
-                    showCloseButton: true, // Adiciona o botão de fechar
+                    showCloseButton: true, //  botão de fechar
                     customClass: {
-                        container: 'custom-modal', // Classe personalizada para o modal
-                        popup: 'custom-popup', // Classe personalizada para o conteúdo do modal
-                        closeButton: 'custom-close-button', // Classe personalizada para o botão de fechar
+                        container: 'custom-modal', // modal
+                        popup: 'custom-popup', //conteúdo do modal
+                        closeButton: 'custom-close-button', //  botão de fechar
                     },
-                    animation: false, // Desativa animações para melhorar a performance
+                    animation: false, 
                     backdrop: `
                         rgba(0,0,1,0.4)
                         url('/path/to/your/loading.gif')
                         left top
                         no-repeat
-                    `, // Adiciona um fundo de carregamento
+                    `, 
                 });
             } else {
                 console.error('Dados do usuário não encontrados na resposta da API.');
@@ -497,9 +497,9 @@ function deletar(idUsuario, tipoPermissao) {
                 confirmButton: 'swal2-button-custom',
                 popup: 'swal2-popup-custom'
             },
-            width: '500px',  // Aumentei a largura para 500px
+            width: '500px',  // Aumentei a largura 
             heightAuto: false,
-            customHeight: '700px' // Aumento maior na altura
+            customHeight: '700px' // Aumento a altura
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch(`/usuarios/deletar/`, {
@@ -518,7 +518,7 @@ function deletar(idUsuario, tipoPermissao) {
                             showConfirmButton: false,
                             timer: 1500
                         });
-                        // Aguarde um momento antes de recarregar a página (opcional)
+                      //  recarrega a página 
                         setTimeout(() => {
                             location.reload();
                         }, 1500);
@@ -575,7 +575,7 @@ function alterar(idUsuario) {
                         return;
                     }
 
-                    // Utilizando SweetAlert2 para exibir o modal de edição
+                   
                     Swal.fire({
                         title: 'Editar Usuário',
                         html:
@@ -586,9 +586,9 @@ function alterar(idUsuario) {
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar Usuário',
-                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
-                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Usuário" (verde)
-                        showCloseButton: true, // Adiciona o botão de fechar
+                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" 
+                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Usuário" 
+                        showCloseButton: true, // botão de fechar
                         customClass: {
                             container: 'custom-modal',
                             popup: 'custom-popup',

@@ -81,7 +81,7 @@ function editarMaquina(nome, id) {
 }
 
 function deletarMaquina(idMaquina) {
-   // Exibe um pop-up de confirmação
+   
    Swal.fire({
        title: 'Você tem certeza?',
        text: 'Esta ação é irreversível!',
@@ -93,7 +93,7 @@ function deletarMaquina(idMaquina) {
        cancelButtonText: 'Cancelar'
    }).then((result) => {
        if (result.isConfirmed) {
-           // Se o usuário confirmar, realiza a exclusão
+         
            realizarExclusao(idMaquina);
        }
    });
@@ -106,10 +106,10 @@ function realizarExclusao(idMaquina) {
        body: JSON.stringify({ idMaquina: idMaquina })
    }).then((response) => {
        if (response.ok) {
-           // Se a exclusão for bem-sucedida, limpa a sessionStorage
+         
            sessionStorage.clear();
 
-           // Exibe o pop-up informando que a máquina foi deletada com sucesso
+        
            Swal.fire({
                icon: 'success',
                title: 'Máquina deletada com sucesso!',
@@ -117,7 +117,7 @@ function realizarExclusao(idMaquina) {
                timer: 1500 // Fecha o pop-up após 1,5 segundos
            });
 
-           // Aguarde um momento antes de recarregar a página (opcional)
+          
            setTimeout(() => {
                location.reload();
            }, 1500);

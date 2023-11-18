@@ -254,7 +254,7 @@ function adicionarProcessoLista(idUsuario) {
                 },
             }).then(function (resposta) {
                 if (resposta.ok) {
-                    // Adição bem-sucedida, exibe o pop-up de sucesso
+                   
                     exibirPopUpSucesso();
                     listaAppNaoUsados(idUser);
                     listaAppUsados(idUser);
@@ -277,7 +277,7 @@ function exibirPopUpSucesso() {
         timer: 5500
     });
 
-    // Aguarde um momento antes de recarregar a página (opcional)
+    
     setTimeout(() => {
         location.reload();
     }, 1500);
@@ -304,7 +304,7 @@ function removerProcessoLista(idUsuario) {
             }).then(function (resposta) {
                 if (resposta.ok) {
                     console.log("deletou");
-                    // Adição do pop-up de sucesso após a remoção bem-sucedida
+                   
                     exibirPopUpRemocaoSucesso();
                     listaAppUsados(idUser);
                     listaAppNaoUsados(idUser);
@@ -319,7 +319,7 @@ function removerProcessoLista(idUsuario) {
     }
 }
 
-// Função para exibir o pop-up de sucesso após a remoção bem-sucedida
+
 function exibirPopUpRemocaoSucesso() {
     Swal.fire({
         icon: 'success',
@@ -328,7 +328,7 @@ function exibirPopUpRemocaoSucesso() {
         timer: 1500
     });
 
-    // Aguarde um momento antes de recarregar a página (opcional)
+   
     setTimeout(() => {
         location.reload();
     }, 1500);
