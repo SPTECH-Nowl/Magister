@@ -125,7 +125,7 @@ function listaAppUsados(idUsuario) {
 
                         aplicativospermitidosUsados.innerHTML += `
                                 <div class="boxProcesso" id="boxProcessoActive${processo.idProcesso}" onclick="alterarListaUsados(${processo.idProcesso})">
-                                   <div class="imagem"><img src="../assets/img/iconsProcesso/icon_sql_workbench.png" alt=""></div>
+                                   <div class="imagem"><img src="../assets/img/iconsProcesso/quebra-cabeca.png" alt=""></div>
                                    <div class="nomeProcesso">${processo.nomeAplicativo}</div>
                                 </div>
                                 
@@ -162,7 +162,7 @@ function listaAppNaoUsados(idUsuario) {
 
                         aplicativosPermitidos.innerHTML += `
                             <div class="boxProcesso" id="boxProcessoDisp${processo.idProcesso}" onclick="alterarLista(${processo.idProcesso})">
-                            <div class="imagem"><img src="../assets/img/iconsProcesso/icon_sql_workbench.png" alt=""></div>
+                            <div class="imagem"><img src="../assets/img/iconsProcesso/quebra-cabeca.png" alt=""></div>
                             <div class="nomeProcesso">${processo.nomeAplicativo}</div>
                          </div>
                         `
