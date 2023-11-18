@@ -334,7 +334,6 @@ function exibirPopUpRemocaoSucesso() {
     }, 1500);
 }
 
-
 function criarProcessoPersonalizado(idUser) {
     Swal.fire({
         title: 'Criar processo personalizado',
@@ -371,7 +370,12 @@ function criarProcessoPersonalizado(idUser) {
             confirmButton.addEventListener('click', () => {
                 const nomeInput = document.getElementById('nomeInput').value;
                 const processoInput = document.getElementById('processoInput').value;
-      
+
+                // Validar se os campos estão preenchidos
+                if (!nomeInput || !processoInput) {
+                    Swal.fire("error", "Preencha todos os campos antes de criar o processo", "error");
+                    return;
+                }
 
                 // Função para definir o estilo dos inputs
                 function setFieldStyle(input, isValid) {
@@ -402,7 +406,7 @@ function criarProcessoPersonalizado(idUser) {
                         Swal.fire('Sucesso!', 'Processo adicionado com sucesso!', 'success');
                         location.reload();
                     } else {
-                        Swal.fire("error", "Falha ao cadastras processo", "error");
+                        Swal.fire("error", "Falha ao cadastrar processo", "error");
                     }
                 });
             });
