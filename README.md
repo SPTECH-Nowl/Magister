@@ -1,5 +1,6 @@
+
 <h1 align="center">
-  <src="https://your-image-url-here" alt="BEM VINDO, SOMOS O GRUPO FIVE">
+  <span id="welcome-text" style="color: #6D499D;">BEM VINDO, SOMOS O GRUPO FIVE</span>
 </h1>
 
 <p align="center">
@@ -7,10 +8,17 @@
 </p>
 
 <style>
-  @keyframes colorChange {
-    0% { color: #6D499D; }
-    50% { color: #FF5555; }
-    100% { color: #6D499D; }
+  @keyframes fadeInOut {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  #welcome-text {
+    animation: fadeInOut 3s infinite;
   }
 </style>
 
