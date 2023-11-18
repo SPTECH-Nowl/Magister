@@ -1,7 +1,7 @@
 # <span style="color: #6D499D">BEM VINDO, SOMOS O GRUPO FIVE</span>
 
 <p align="center">
-  <img src="https://your-image-url-here" alt="Logo do Grupo Five">
+  <img src="file:///C:/Users/Aluno/Magister/public/assets/img/Logos/logoMagister.svg" alt="Logo do Grupo Five">
 </p>
 
 <p align="center">
