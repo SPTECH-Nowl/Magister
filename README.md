@@ -1,3 +1,14 @@
+# <span style="color: #6D499D">BEM VINDO, SOMOS O GRUPO FIVE</span>
+
+<p align="center">
+  <img src="https://your-image-url-here" alt="Logo do Grupo Five">
+</p>
+
+<p align="center">
+  Adquira nossa solução para tornar a sua vida mais fácil!
+</p>
+
+
 # 🦉 Site Institucional - NOWL
 
 Site institucional da empresa, onde apresentamos quem nós somos, nossos valores e projetos. O site é composto por um cabeçalho onde damos boas vindas e também explicamos brevemente nosso intuito como empresa. Ademais, o site é separado em sessões, sendo elas: sobre nós, integrantes, projetos, fale conosco e um footer.
