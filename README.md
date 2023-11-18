@@ -1,15 +1,5 @@
 [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=6A28EB&size=35&center=true&vCenter=true&width=1000&lines=HI+THERE!+👋+BE+WELCOME;;São+Paulo+Tech+School+-+SPTech;SOMOS+O+GRUPO+FIVE;Discover+our+solutions+and+make+your+life+easier!;Enjoy!+🚀)](https://git.io/typing-svg)
 
-##
-
-<img src="assets/imagens/octocat.png" height="150" style="border-radius: 50px;" align="right" alt="kakau_pic" > 
-
-### Olá, eu sou a Kauanny👋
-🌱 Sou uma estudante de Análise e Desenvolvimento de Sistemas. <br>
-🔭 Apaixonada por esse mundo tecnológico. <br>
-🚀 A developer in progress...
-<br><br>
-
 
 # 🦉 Site Institucional - NOWL
 
