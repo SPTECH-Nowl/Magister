@@ -334,36 +334,39 @@ function exibirPopUpRemocaoSucesso() {
     }, 1500);
 }
 
+
 function criarProcessoPersonalizado(idUser) {
     Swal.fire({
         title: 'Criar processo personalizado',
         titleClass: 'custom-title',
         html:
             '<input type="text" id="nomeInput" placeholder="Nome EX:(Chrome)" class="swal2-input" style="border-radius: 15px;">' +
-            '<input type="email" id="processoInput" placeholder="Processo EX:(Chrome.exe)"  class="swal2-input" style="border-radius: 15px;">' ,
+            '<input type="email" id="processoInput" placeholder="Processo EX:(Chrome.exe)"  class="swal2-input" style="border-radius: 15px;">',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         confirmButtonText: 'Criar Processo',
         showLoaderOnConfirm: true,
         customClass: {
             container: 'custom-modal',
+            confirmButton: 'custom-confirm-button',
+            cancelButton: 'custom-cancel-button',
         },
         onOpen: () => {
             const customModal = Swal.getPopup();
             customModal.style.backgroundColor = 'white';
-            customModal.style.width = '600px';
-            customModal.style.height = '500px';
+            customModal.style.width = '500px'; // Diminuir a largura do modal
+            customModal.style.height = 'auto'; // Ajustar altura automaticamente
             customModal.style.borderRadius = '15px';
-        },
-        onBeforeOpen: () => {
+
             const confirmButton = Swal.getConfirmButton();
             const cancelButton = Swal.getCancelButton();
+
             if (confirmButton && cancelButton) {
-                confirmButton.style.backgroundColor = '#6D499D';
+                confirmButton.style.backgroundColor = '#4CAF50'; // Botão verde
                 confirmButton.style.borderRadius = '15px';
                 confirmButton.style.marginRight = '15px';
 
-                cancelButton.style.backgroundColor = '#6D499D';
+                cancelButton.style.backgroundColor = '#FF5555'; // Botão vermelho
                 cancelButton.style.borderRadius = '15px';
             }
 
@@ -380,9 +383,9 @@ function criarProcessoPersonalizado(idUser) {
                 // Função para definir o estilo dos inputs
                 function setFieldStyle(input, isValid) {
                     if (isValid) {
-                        input.style.borderColor = '#4CAF50'; 
+                        input.style.borderColor = '#4CAF50';
                     } else {
-                        input.style.borderColor = '#FF5555'; 
+                        input.style.borderColor = '#FF5555';
                     }
                 }
 
@@ -396,20 +399,28 @@ function criarProcessoPersonalizado(idUser) {
                         nomeProcesso: processoInput,
                     })
                 })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                })
-                .then(result => {
-                    if (result) {
-                        Swal.fire('Sucesso!', 'Processo adicionado com sucesso!', 'success');
-                        location.reload();
-                    } else {
-                        Swal.fire("error", "Falha ao cadastrar processo", "error");
-                    }
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    })
+                    .then(result => {
+                        if (result) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sucesso!',
+                                text: 'Processo adicionado com sucesso!',
+                            });
+                            location.reload();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Falha ao cadastrar processo',
+                            });
+                        }
+                    });
             });
         },
-    });             
+    });
 }
+
