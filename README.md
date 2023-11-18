@@ -1,8 +1,5 @@
-
-<!-- README.md -->
-
 <h1 align="center">
-  <span style="color: #6D499D; animation: colorChange 3s infinite;">BEM VINDO, SOMOS O GRUPO FIVE</span>
+  <img src="https://your-image-url-here" alt="BEM VINDO, SOMOS O GRUPO FIVE">
 </h1>
 
 <p align="center">
