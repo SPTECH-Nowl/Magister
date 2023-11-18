@@ -1,13 +1,21 @@
-# <span style="color: #6D499D">BEM VINDO, SOMOS O GRUPO FIVE</span>
+
+<!-- README.md -->
+
+<h1 align="center">
+  <span style="color: #6D499D; animation: colorChange 3s infinite;">BEM VINDO, SOMOS O GRUPO FIVE</span>
+</h1>
 
 <p align="center">
-  <img src="file:///C:/Users/Aluno/Magister/public/assets/img/Logos/logoMagister.svg" alt="Logo do Grupo Five">
+  <span style="color: #6D499D; font-size: 20px;">Adquira nossa solução para tornar a sua vida mais fácil!</span>
 </p>
 
-<p align="center">
-  Adquira nossa solução para tornar a sua vida mais fácil!
-</p>
-
+<style>
+  @keyframes colorChange {
+    0% { color: #6D499D; }
+    50% { color: #FF5555; }
+    100% { color: #6D499D; }
+  }
+</style>
 
 # 🦉 Site Institucional - NOWL
 
