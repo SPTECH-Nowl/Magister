@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://your-image-url-here" alt="BEM VINDO, SOMOS O GRUPO FIVE">
+  <src="https://your-image-url-here" alt="BEM VINDO, SOMOS O GRUPO FIVE">
 </h1>
 
 <p align="center">
