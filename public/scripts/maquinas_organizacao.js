@@ -18,6 +18,7 @@ searchInput.addEventListener('keypress', (e) => {
       pesquisarPorNome();
    }
 });
+
 function pesquisarPorNome() {
    let maquinas = document.getElementById('maquinas');
    maquinas.innerHTML = '';
@@ -106,7 +107,7 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
          let nome = maquina.nome;
          let emUso = maquina.emUso == 0 ? "OFF" : "ON";
          let qtdStrikes = maquina.qtdStrikes;
-         let status = maquina.status;
+         let status = emUso == "OFF" ? "OFF" : maquina.status ;
          let so = maquina.so.includes("Windows")? ` <img src="../assets/img/Icone/windows_icon.svg" alt="" class="so">` 
          : ` <img src="../assets/img/Icone/linux_icon.svg" alt="" class="so">`;
 
@@ -153,8 +154,11 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
             case "Alerta":
                status_maquina.style.color = "yellow";
                break;
-            default:
+            case "Normal":
                status_maquina.style.color = "var(--color-green-500)";
+               break;
+            default:
+               status_maquina.style.color = "var(--color-gray-600)";
                break;
          }
 

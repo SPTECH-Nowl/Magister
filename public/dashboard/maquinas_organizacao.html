@@ -34,7 +34,7 @@
    <script src="https://unpkg.com/@popperjs/core@2"></script>
    <script src="https://unpkg.com/tippy.js@6"></script>
 
-   <title>Máquinas</title>
+   <title>Máquinas da organização</title>
 </head>
 <body onload="validarAcesso()">
    <div class="side-menu">
@@ -129,12 +129,12 @@
                <button class="btn primario" onclick="pesquisarPorNome()">Buscar</button>
             </div>
             <div class="container-selects">
-                <sl-select id="ordem_az" placeholder="Ordem alfabética" value="ord_a_z" pill filled clearable>
+                <sl-select filter id="ordem_az" placeholder="Ordem alfabética" value="ord_a_z" pill filled clearable>
                   <sl-option value="ord_a_z">A à Z</sl-option>
                   <sl-option value="ord_z_a">Z à A</sl-option>
                 </sl-select>
 
-                <sl-select id="qtd_strikes" placeholder="Qtd de Strikes" pill filled clearable>
+                <sl-select filter id="qtd_strikes" placeholder="Qtd de Strikes" pill filled clearable>
                   <sl-option value="zero_stk">Sem strikes</sl-option>
                   <sl-option value="um_stk">1 Strike</sl-option>
                   <sl-option value="um_ou_mais_stk">1 ou mais strikes</sl-option>
@@ -143,12 +143,12 @@
                   <sl-option value="tres_stk">3 Strikes</sl-option>
                 </sl-select>
 
-                <sl-select id="em_uso" placeholder="Em uso" pill filled clearable>
+                <sl-select filter id="em_uso" placeholder="Em uso" pill filled clearable>
                   <sl-option value="true">Ligado</sl-option>
                   <sl-option value="false">Desligado</sl-option>
                 </sl-select>
 
-                <sl-select id="status" placeholder="Status" pill filled clearable>
+                <sl-select filter id="status" placeholder="Status" pill filled clearable>
                   <sl-option value="critico">Crítico</sl-option>
                   <sl-option value="alerta">Alerta</sl-option>
                   <sl-option value="normal">Normal</sl-option>

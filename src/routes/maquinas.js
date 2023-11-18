@@ -47,7 +47,16 @@ router.get("/maquinasMaisDefeitos/:idInstituicao", (req, res) => {
     maquinaController.maquinasMaisDefeitos(req, res);
 });
 
+router.get("/capturarStrikesPorMaquina/:idInstituicao/:idUsuario", (req, res) => {
+    maquinaController.capturarStrikesPorMaquina(req, res);
+})
 
+router.get("/capturarStrikesDaMaquina/:idMaquina", (req, res) => {
+    maquinaController.capturarStrikesDaMaquina(req, res);
+})
 
+router.get("/capturarPermissoes/:idUsuario", (req, res) => {
+    maquinaController.capturarPermissoes(req, res);
+})
 
 module.exports = router;

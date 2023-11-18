@@ -100,11 +100,13 @@ h1 {
 /* dialog */
 sl-dialog::part(overlay) {
    background: #0d0d0d9a;
+   overflow: hidden;
 }
 
 sl-dialog::part(panel) {
    border-radius: 20px;
    width: 40vw;
+   overflow: hidden;
 }
 
 sl-dialog::part(title) {
@@ -237,6 +239,7 @@ sl-tooltip button {
 .stk-dialog-buttons {
    display: flex;
    gap: 2rem;
+   overflow: hidden;
 }
 
 .stk-dialog-title {
@@ -288,4 +291,111 @@ sl-tooltip button {
 
 .tippy-btn:hover::after {
    width: 60%;
+}
+
+.maquinas-strike-container {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   overflow-x: hidden;
+   overflow-y: scroll;
+   width: 100%;
+   height: 100%;
+   max-height: 40vh;
+   box-sizing: border-box;
+   font-family: var(--font-title);
+}
+
+.maquinas-strike-container::-webkit-scrollbar {
+   width: 5px;
+}
+
+.maquinas-strike-container::-webkit-scrollbar-track {
+   background-color: var(--color-branco);
+}
+
+.maquinas-strike-container::-webkit-scrollbar-thumb {
+   background-color: var(--color-violeta);
+   ;
+   border-radius: 5px;
+}
+
+sl-dialog[strike-dialog]::part(base) {
+   display: flex;
+}
+
+.maquina-strike {
+   display: flex;
+   width: 100%;
+   height: 10vh;
+   background-color: var(--color-cinza);
+   border-radius: 1rem;
+   padding: 1.2rem;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.maquina-strike i {
+   font-size: 1.5rem;
+   color: red;
+}
+
+.maquina-strike-info {
+   display: flex;
+   gap: 2rem;
+}
+
+.maquina-strike-horario {
+   display: flex;
+   gap: 1rem;
+}
+
+.maquina-strike span {
+   font-size: 1.2rem;
+}
+
+.maquina-strike-info span {
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   overflow: hidden;
+   width: 8.5rem;
+   font-size: 1.2rem;
+   display: flex;
+}
+
+.checkbox-and-content {
+   display: flex;
+   gap: 0.4rem;
+}
+
+#strikes_maquina_strike {
+   position: relative;
+}
+
+.ph.ph-plus {
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 1rem;
+}
+
+sl-checkbox {
+   padding: 0;
+   margin: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.maquina-strike-actions {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   margin-top: 1.5rem;
+}
+
+.maquina-strike-buttons {
+   display: flex;
+   flex-direction: row;
+   gap: 1rem;
 }

@@ -97,6 +97,8 @@ CREATE TABLE strike (
 CREATE TABLE permissao (
 	idPermissao INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(45) NOT NULL,
+    emUso BOOLEAN NOT NULL,
+    duracaoStrikePadrao INT,
     fkAtuacao INT, CONSTRAINT permFkAtuac FOREIGN KEY (fkAtuacao)
 		REFERENCES atuacao(idAtuacao),
     fkUsuario INT, CONSTRAINT permFKUsu FOREIGN KEY (fkUsuario)
@@ -163,7 +165,7 @@ INSERT INTO medida (nome, unidade) VALUES
 -- INSERTS INSTITUICAO
 INSERT INTO instituicao (nome, sigla, codigoHex) VALUES
 	('Nowl', 'nowl', '000000'),
-	('São Paulo Tech School', 'SPTech', 'ABC123'),
+	('São Paulo Tech School', 'SPTech', 'ABC123'	),
 	('Universidade São Paulo', 'USP', '456FED'),
 	('ETEC de Guaianases', 'ETG', '123456'),
 	('Escola Técnica de Informática', 'ETI', '7890AB'),
@@ -476,3 +478,16 @@ WHERE h.dataHora >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
 GROUP BY m.idMaquina, m.nome
 ORDER BY uso_medio_cpu DESC, uso_medio_ram DESC
 LIMIT 10;
+
+-- SELECT DA QUANTIDADE DE STRIKES POR MÁQUINA (ID apenas)
+        SELECT
+            m.idMaquina as id,
+            m.nome AS nome,
+            m.emUso AS emUso,
+            m.SO AS so,
+            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes
+        FROM maquina m
+        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+        JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+        WHERE idInstituicao = 1 
+        GROUP BY m.idMaquina;
