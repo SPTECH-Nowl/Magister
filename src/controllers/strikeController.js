@@ -126,12 +126,34 @@ function contadores(req, res) {
     });
 }
 
+function excluirStrike(req, res) {
+    console.log('no controller', req.body);
+    var checkboxIds = req.body.checkboxIdsServer;
+    var texto = '';
+
+    if(checkboxIds != '') {
+        var texto = `WHERE idStrike IN(${checkboxIds})`;
+    }
+
+    console.log('texto: ' + texto);
+
+    strikeModel.excluirStrike(texto)
+    .then(function (resultado) {
+        console.log('no then do controller');
+
+        res.status(200).json(resultado);
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao excluir o(s) strike(s): ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function strikePMes(req, res) {
     var idInstituicao = req.params.idInstituicao;
     var opcao = req.params.opcao;
     
     var qtdMes;
-
 
     switch(opcao){
         case "1":
@@ -189,5 +211,6 @@ module.exports = {
     listarSituacao,
     contadores,
     strikePMes,
-    kpiInfos
+    kpiInfos,
+    excluirStrike
 }

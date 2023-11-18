@@ -7,6 +7,10 @@ router.get("/listar/:codInstituicao/:dataHora/:ativo/:valido/:invalido/:inativo/
     strikeController.listar(req, res);
 });
 
+router.put('/excluirStrike', (req, res) => {
+    strikeController.excluirStrike(req, res);
+});
+
 router.get("/listar/situacao/:codInstituicao/:situacao", function (req, res) {
     strikeController.listarSituacao(req, res);
 });
