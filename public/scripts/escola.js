@@ -59,10 +59,11 @@ function buscarInstituicao() {
  
  }
 
- document.addEventListener('DOMContentLoaded', function() {
+ 
+ document.addEventListener('DOMContentLoaded', function () {
     const adicionarEscolaButton = document.getElementById('adicionarEscola');
 
-    adicionarEscolaButton.addEventListener('click', function() {
+    adicionarEscolaButton.addEventListener('click', function () {
         Swal.fire({
             title: 'Adicionar Escola',
             html:
@@ -70,16 +71,15 @@ function buscarInstituicao() {
                 '<input type="text" id="siglaInput" placeholder="Sigla" class="swal2-input" style="border-radius: 15px;">' +
                 '<div style="display: flex; gap: 1rem; align-items: center">' +
                 '<input type="text" id="codigoInput" placeholder="Código Hexadecimal" disabled class="swal2-input" style="border-radius: 15px;">' +
-                '<button onclick="gerarCodigoHexadecimal()" class="btn primario" style="width: fit-content;"><img src="../assets/img/icone/dice-six.svg"></button>' +
+                '<button id="gerarCodigoBtn" class="btn primario" style="width: fit-content;"><img src="../assets/img/icone/dice-six.svg"></button>' +
                 '</div>',
-            
             confirmButtonText: 'Adicionar Escola',
             showLoaderOnConfirm: true,
             showCancelButton: true,
             cancelButtonText: 'Cancelar',
             cancelButtonClass: 'custom-cancel-button',
-            confirmButtonColor: '#28a745', // Cor do botão "Adicionar Escola"
-            cancelButtonColor: '#d33', // Cor do botão "Cancelar"
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
             customClass: {
                 container: 'custom-modal',
                 popup: 'custom-popup',
@@ -92,15 +92,18 @@ function buscarInstituicao() {
                 customModal.style.backgroundColor = 'white';
                 customModal.style.width = '500px';
                 customModal.style.borderRadius = '15px';
+
+                // Adicione o evento de clique ao botão de geração de código
+                document.getElementById('gerarCodigoBtn').addEventListener('click', gerarCodigoHexadecimal);
             },
             onBeforeOpen: () => {
                 const confirmButton = Swal.getConfirmButton();
                 const cancelButton = Swal.getCancelButton();
                 if (confirmButton && cancelButton) {
-                    confirmButton.style.backgroundColor = '#28a745'; // Cor do botão "Adicionar Escola"
+                    confirmButton.style.backgroundColor = '#28a745';
                     confirmButton.style.borderRadius = '15px';
 
-                    cancelButton.style.backgroundColor = '#d33'; // Cor do botão "Cancelar"
+                    cancelButton.style.backgroundColor = '#d33';
                     cancelButton.style.borderRadius = '15px';
                     cancelButton.style.marginRight = '15px';
                 }
@@ -162,34 +165,49 @@ function buscarInstituicao() {
                             sigla: sigla,
                             codigo: codigo,
                         })
-                    }).then((response)=>{
-                        if(response.ok){
+                    }).then((response) => {
+                        if (response.ok) {
                             resolve();
                         }
                     });
                 });
             },
         })
-        .then((result) => {
-            if (result.isConfirmed) {
-                sessionStorage.clear();
+            .then((result) => {
+                if (result.isConfirmed) {
+                    sessionStorage.clear();
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'A escola foi cadastrada com sucesso!',
-                    showConfirmButton: false,
-                    timer: 2500
-                });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'A escola foi cadastrada com sucesso!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
 
-                setTimeout(() => {
-                    location.reload();
-                }, 2500);
-            }
-        });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2500);
+                }
+            });
     });
 });
 
+function gerarCodigoHexadecimal() {
+    const codigoInput = document.getElementById('codigoInput');
+    const codigoHexadecimal = getRandomHexCode();
+    codigoInput.value = codigoHexadecimal;
+}
 
+function getRandomHexCode() {
+    const characters = '0123456789ABCDEF';
+    let result = '#';
+
+    for (let i = 0; i < 4; i++) {
+        result += characters[Math.floor(Math.random() * characters.length)];
+    }
+
+    return result;
+}
 
 
 function carregarFeedEscola() {
