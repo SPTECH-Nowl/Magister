@@ -1,4 +1,4 @@
-CREATE DATABASE magister;
+create DATABASE magister;
 USE magister;
 
 CREATE TABLE tipoUsuario (
@@ -165,7 +165,7 @@ INSERT INTO medida (nome, unidade) VALUES
 -- INSERTS INSTITUICAO
 INSERT INTO instituicao (nome, sigla, codigoHex) VALUES
 	('Nowl', 'nowl', '000000'),
-	('São Paulo Tech School', 'SPTech', 'ABC123'	),
+	('São Paulo Tech School', 'SPTech', 'ABC123'),
 	('Universidade São Paulo', 'USP', '456FED'),
 	('ETEC de Guaianases', 'ETG', '123456'),
 	('Escola Técnica de Informática', 'ETI', '7890AB'),
@@ -219,7 +219,7 @@ INSERT INTO usuario (nome, email, senha, fkInstituicao, fkTipoUsuario) VALUES
     ('Rock Lee', 'rock.lee@sptech.school', 'DynamicEntry456@', 1, 2),
     ('Neji Hyuga', 'neji.hyuga@sptech.school', 'GentleFist789@', 4, 3),
     ('Tenten', 'tenten@sptech.school', 'WeaponMasterABC@', 5, 3),
-	('caua', 'caua@gmail.com', 'caua', 1, 1);
+	('caua', 'caua@gmail.com', 'caua', 4, 1);
 
 
 
@@ -245,46 +245,39 @@ INSERT INTO hardware (fabricante, modelo, capacidade, especificidade, fkTipoHard
 -- Inserir registros na tabela maquina com fkUsuario e fkHardware
 -- INSERTS MAQUINA
 INSERT INTO maquina (nome, SO, emUso, fkInstituicao) VALUES
-	('Desktop-G7205', 'Windows 10', 1, 1),
+	('Desktop-G7205', 'Windows 10', 0, 1),
 	('Desktop-G1234', 'Windows 11', 0, 1),
-	('Desktop-F5412', 'Linux Ubuntu', 1, 2),
-	('Desktop-C9436', 'Arch Linux', 1, 3),
-	('Laptop-XB350', 'Windows 10', 1, 1),
-	('Workstation-HP123', 'Windows 11', 0, 1),
-	('Server-UBT600', 'Linux Ubuntu', 1, 2),
-	('Desktop-AL2022', 'Arch Linux', 1, 3),
+	('Desktop-F5412', 'Linux Ubuntu', 0, 1),
+	('Desktop-C9436', 'Arch Linux', 0, 1),
+	('Laptop-XB350', 'Windows 10', 0, 1),
+	('Workstation-HP123', 'Windows 11', 0, 2),
+	('Server-UBT600', 'Linux Ubuntu', 0, 2),
+	('Desktop-AL2022', 'Arch Linux', 0, 2),
 	('Laptop-Dell555', 'Windows 10', 0, 2),
-	('Workstation-ASUS', 'Windows 11', 1, 2),
-	('Server-RedHat', 'Red Hat Enterprise Linux', 1, 1),
-	('Desktop-IBM2023', 'Fedora', 0, 4),
-	('Laptop-HP1122', 'Ubuntu', 1, 3),
+	('Workstation-ASUS', 'Windows 11', 0, 3),
+	('Server-RedHat', 'Red Hat Enterprise Linux', 0, 3),
+	('Desktop-IBM2023', 'Fedora', 0, 3),
+	('Laptop-HP1122', 'Ubuntu', 0, 3),
 	('Workstation-Lenovo', 'Debian', 0, 4);
 
 
-    
-    
-    
     -- INSERT STRIKES
 -- INSERTS STRIKE
 -- INSERTS STRIKE
-INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
-('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
-('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
-('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 1, 3),
-('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 1, 2),
-('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 1, 3),
-('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 1, 2),
-('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 6, 2),
-('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 6, 3),
-('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 6, 2),
-('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 5, 3),
-('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 6, 2),
-('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 6, 2),
-('2023-11-09 10:45:00', 0, 'Conversando com Luigi Jadeu', 120, 6, 3);
-
-
-    
-
+-- INSERTS STRIKE
+-- INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
+-- ('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
+-- ('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
+-- ('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 2, 3),
+-- ('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 2, 2),
+-- ('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 3, 3),
+-- ('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 4, 2),
+-- ('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 5, 3),
+-- ('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 7, 2),
+-- ('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 10, 3),
+-- ('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 10, 2),
+-- ('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 11, 2),
+-- ('2023-11-09 10:45:00', 0, 'Conversando com Luigi Tadeu', 120, 15, 3);
 
 
     
@@ -293,23 +286,69 @@ INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
 	(default, 1, 1),
 	(default, 1, 2),
 	(default, 1, 3),
+	(85, 1, 4),
+	(default, 1, 7),
+
 	(default, 2, 1),
 	(80, 2, 2),
 	(default, 2, 4),
+	(90, 2, 5),
+	(default, 2, 7),
+	
 	(90, 3, 1),
 	(90, 3, 2),
 	(95, 3, 3),
 	(90, 3, 4),
-	(default, 1, 1),
-	(default, 1, 2),
-	(default, 1, 3),
-	(default, 2, 1),
-	(80, 2, 2),
-	(default, 2, 4),
-	(90, 3, 1),
-	(90, 3, 2),
-	(95, 3, 3),
-	(90, 3, 4);
+	(default, 3, 6),
+	(85, 3, 7),
+	
+	(default, 4, 1),
+	(default, 4, 2),
+	(default, 4, 3),
+	
+	(default, 5, 1),
+	(default, 5, 2),
+	(default, 5, 3),
+
+	(default, 6, 1),
+	(80, 6, 2),
+	(default, 6, 4),
+
+	(90, 7, 1),
+	(90, 7, 2),
+	(95, 7, 3),
+	(90, 7, 4),
+	(default, 7, 6),
+	(85, 7, 7),
+
+	(default, 8, 1),
+	(default, 8, 2),
+	(default, 8, 3),
+
+	(default, 9, 1),
+	(default, 9, 2),
+	(default, 9, 3),
+
+	(default, 10, 1),
+	(default, 10, 2),
+	(default, 10, 3),
+
+	(default, 11, 1),
+	(default, 11, 2),
+	(default, 11, 3),
+
+	(default, 12, 1),
+	(default, 12, 2),
+	(default, 12, 3),
+
+	(default, 13, 1),
+	(default, 13, 2),
+	(default, 13, 3),
+
+	(default, 14, 1),
+	(80, 14, 2),
+	(default, 14, 4);
+
 
 -- INSERTS PERMISSAO
 INSERT INTO permissao (nome, emUso, duracaoStrikePadrao, fkAtuacao, fkUsuario)
@@ -326,48 +365,47 @@ VALUES
   ('Aula de Mobile App Development', false, 30, 2, 10);
 
   
-  
 -- INSERTS HISTORICO
-INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
-	('2023-08-23 12:17:30', .5, 1, 1, 2),
-	('2023-08-23 12:17:35', .6, 1, 1, 2),
-	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
-	('2023-08-23 12:17:30', .5, 1, 2, 2),
-	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
-	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
-	('2023-08-23 12:17:30', 200, 1, 3, 2),
-	('2023-08-23 12:17:35', 200, 1, 3, 2),
-	('2023-08-23 12:17:40', 245, 1, 3, 2),
-  ('2023-08-23 12:17:30', .5, 1, 1, 2),
-  ('2023-08-23 12:17:35', .6, 1, 1, 2),
-  ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
-  ('2023-08-23 12:17:30', .5, 1, 2, 2),
-  ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
-  ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
-  ('2023-08-23 12:17:30', 200, 1, 3, 2),
-  ('2023-08-23 12:17:35', 200, 1, 3, 2),
-  ('2023-08-23 12:17:40', 245, 1, 3, 2);
+-- INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
+-- 	('2023-08-23 12:17:30', .5, 1, 1, 2),
+-- 	('2023-08-23 12:17:35', .6, 1, 1, 2),
+-- 	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+-- 	('2023-08-23 12:17:30', .5, 1, 2, 2),
+-- 	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+-- 	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+-- 	('2023-08-23 12:17:30', 200, 1, 3, 2),
+-- 	('2023-08-23 12:17:35', 200, 1, 3, 2),
+-- 	('2023-08-23 12:17:40', 245, 1, 3, 2),
+--   ('2023-08-23 12:17:30', .5, 1, 1, 2),
+--   ('2023-08-23 12:17:35', .6, 1, 1, 2),
+--   ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+--   ('2023-08-23 12:17:30', .5, 1, 2, 2),
+--   ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+--   ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+--   ('2023-08-23 12:17:30', 200, 1, 3, 2),
+--   ('2023-08-23 12:17:35', 200, 1, 3, 2),
+--   ('2023-08-23 12:17:40', 245, 1, 3, 2);
 
 
 -- INSERTS HISTORICOPROCESSO
-INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 2, 2),
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 3, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
-	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
-	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
-	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
-	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
-	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
-	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
-	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
+-- INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 2, 2),
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 3, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
+-- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
+-- 	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+-- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+-- 	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
+-- 	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
+-- 	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
+-- 	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
 
 
 -- INSERTS PERMISSAOPROCESSO
@@ -491,3 +529,341 @@ LIMIT 10;
         JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
         WHERE idInstituicao = 1 
         GROUP BY m.idMaquina;
+        
+SELECT 
+    m.idMaquina as id,
+    m.nome as nome,
+    m.so as so,
+    m.emUso as emUso,
+    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 3 AND idMaquina = m.idMaquina LIMIT 1) 
+    as capacidadeRam,
+    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 2 AND idMaquina = m.idMaquina LIMIT 1) 
+    as capacidadeCPU,
+    (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 1 AND idMaquina = m.idMaquina LIMIT 1) 
+    as capacidadeDisco,
+    (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE()) as quantidadeStrikes,
+    (SELECT COUNT(*) FROM historico WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE() AND consumo > (SELECT max FROM componente WHERE fkMaquina = m.idMaquina AND fkHardware = 3)) as quantidadeAlertas
+FROM maquina m
+WHERE
+    m.idMaquina = 2
+LIMIT 1;
+
+
+SELECT 
+    (SELECT COUNT(idStrike) FROM strike
+     JOIN maquina ON strike.fkMaquina = maquina.idMaquina
+     WHERE WEEK(dataHora) = WEEK(CURDATE()) AND fkInstituicao = 1) as strikesNaSemana,
+
+    (SELECT COUNT(idHistorico) FROM historico
+     JOIN maquina ON historico.fkMaquina = maquina.idMaquina
+     WHERE WEEK(dataHora) = WEEK(CURDATE()) AND fkInstituicao = 1) as alertasNaSemana,
+
+    (SELECT COUNT(DISTINCT m.idMaquina) AS totalMaquinas
+     FROM maquina m
+     WHERE m.fkInstituicao = 1) AS totalMaquinas,
+
+    (SELECT COUNT(DISTINCT m.idMaquina) AS maquinasComStrike
+     FROM maquina m
+     JOIN strike s ON m.idMaquina = s.fkMaquina
+     WHERE WEEK(s.dataHora) = WEEK(CURDATE()) AND m.fkInstituicao = 1) AS maquinasComStrike,
+
+    (SELECT COUNT(DISTINCT m.idMaquina) AS maquinasSemStrike
+    FROM maquina m
+    LEFT JOIN strike s ON m.idMaquina = s.fkMaquina AND WEEK(s.dataHora) = WEEK(CURDATE())
+    WHERE s.fkMaquina IS NULL AND m.fkInstituicao = 1) AS maquinasSemStrike,
+    
+    (SELECT ROUND(COALESCE((COUNT(DISTINCT CASE WHEN s.idStrike IS NOT NULL AND WEEK(s.dataHora) = WEEK(CURDATE()) THEN m.idMaquina END) / COUNT(DISTINCT m.idMaquina)) * 100.0, 0), 1) AS porcentagemComStrike
+	 FROM maquina m
+	 LEFT JOIN strike s ON m.idMaquina = s.fkMaquina
+	 WHERE m.fkInstituicao = 1) AS porcentagemComStrike,
+    (SELECT COUNT(DISTINCT m.idMaquina) AS maquinasComAlerta
+FROM maquina m
+WHERE EXISTS (
+    SELECT 1
+    FROM historico h
+    JOIN componente c ON h.fkComponente = c.idComponente
+    WHERE m.idMaquina = h.fkMaquina
+        AND c.fkHardware = 3
+        AND h.consumo > c.max
+        AND DATE(h.dataHora) = CURDATE()
+)
+AND m.fkInstituicao = 2) AS maquinasComAlerta,
+(SELECT COUNT(DISTINCT m.idMaquina) AS maquinasSemAlerta
+FROM maquina m
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM historico h
+    JOIN componente c ON h.fkComponente = c.idComponente
+    WHERE m.idMaquina = h.fkMaquina
+        AND c.fkHardware = 3
+        AND h.consumo > c.max
+        AND DATE(h.dataHora) = CURDATE()
+)
+AND DATE((SELECT MAX(dataHora) FROM historico WHERE fkMaquina = m.idMaquina)) = CURDATE()
+AND m.fkInstituicao = 2) AS maquinasSemAlerta,
+(SELECT ROUND(COALESCE((COUNT(DISTINCT CASE WHEN h.consumo > c.max AND DATE(h.dataHora) = CURDATE() THEN m.idMaquina END) / COUNT(DISTINCT m.idMaquina)) * 100.0, 0), 1) AS porcentagemComAlerta
+FROM maquina m
+LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+LEFT JOIN componente c ON m.idMaquina = c.fkMaquina AND c.fkHardware = 3
+WHERE m.fkInstituicao = 2) AS porcentagemComAlerta;
+
+    
+SELECT COUNT(DISTINCT m.idMaquina) AS maquinasSemAlerta
+FROM maquina m
+WHERE m.fkInstituicao = 1
+    AND NOT EXISTS (
+        SELECT 1
+        FROM historico h
+        JOIN componente c ON h.fkComponente = c.idComponente
+        WHERE m.idMaquina = h.fkMaquina
+            AND c.fkHardware = 3
+            AND h.consumo > c.max
+            AND DATE(h.dataHora) = CURDATE()
+            AND h.dataHora = (SELECT MAX(dataHora) FROM historico WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE())
+    )
+    OR DATE((SELECT MAX(dataHora) FROM historico WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE())) <> CURDATE();
+
+SELECT COUNT(DISTINCT m.idMaquina) AS maquinasComAlerta
+FROM maquina m
+JOIN historico h ON m.idMaquina = h.fkMaquina
+JOIN componente c ON h.fkComponente = c.idComponente
+WHERE m.fkInstituicao = 2
+    AND c.fkHardware = 3
+    AND h.consumo > c.max
+    AND DATE(h.dataHora) = CURDATE()
+    AND h.dataHora = (SELECT MAX(dataHora) FROM historico WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE());
+
+
+select * from maquina where fkInstituicao = 2;
+
+
+SELECT
+            m.idMaquina AS fkMaquina,
+            m.nome AS nomeMaquina,
+            COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,
+            COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) AS quantidadeAlertas,
+            
+            RANK() OVER (ORDER BY COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) DESC) AS ranking
+        FROM
+            maquina m
+        LEFT JOIN strike s ON m.idMaquina = s.fkMaquina
+        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina AND h.consumo > 80
+        WHERE
+            m.fkInstituicao = 1
+        GROUP BY
+            m.idMaquina
+        HAVING
+            quantidadeStrikes > 0 OR quantidadeAlertas > 0
+        ORDER BY
+            ranking
+        LIMIT 5;
+SELECT ROUND(COALESCE((COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN m.idMaquina END) / COUNT(DISTINCT CASE WHEN DATE(h.dataHora) = CURDATE() THEN m.idMaquina END)) * 100.0, 0), 1) AS porcentagemComAlerta
+ FROM maquina m
+ LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+ WHERE h.fkMaquina IS NOT NULL AND h.consumo > 80 AND DATE(h.dataHora) = CURDATE() AND m.fkInstituicao = 1;
+
+
+insert into historico values (null, now(), 10, 2, 1, 6),
+(null, now(), 10, 2, 2, 7),
+(null, now(), 10, 2, 4, 8);
+
+select * from historico ;
+
+select * from componente;
+select * from tipohardware;
+
+use magister;
+select * from strike;
+select * from situacao;
+
+SELECT COUNT(DISTINCT m.idMaquina) AS maquinasComAlerta
+FROM maquina m
+JOIN historico h ON m.idMaquina = h.fkMaquina
+JOIN hardware hw ON h.fkHardware = hw.idHardware
+JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+WHERE m.fkInstituicao = 1
+AND DATE(h.dataHora) = CURDATE() 
+AND (
+    (th.tipo = 'Processador' AND h.consumo > 80 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'Processador')) OR
+    (th.tipo = 'RAM' AND h.consumo > 80 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'RAM')) OR
+    (th.tipo = 'Disco' AND h.consumo > 80 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'Disco'))
+);
+
+SELECT COUNT(DISTINCT m.idMaquina) AS maquinasSemAlerta
+FROM maquina m
+LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
+LEFT JOIN hardware hw ON h.fkHardware = hw.idHardware
+LEFT JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+WHERE m.fkInstituicao = 1
+AND DATE(h.dataHora) = CURDATE()  -- Adicionando a condição para a data de hoje
+AND (
+    (th.tipo = 'Processador' AND (h.consumo IS NULL OR (h.consumo <= 80 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'Processador')))) OR
+    (th.tipo = 'RAM' AND (h.consumo IS NULL OR (h.consumo <= 80 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'RAM')))) OR
+    (th.tipo = 'Disco' AND (h.consumo IS NULL OR (h.consumo <= 80 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'Disco'))))
+);
+
+
+
+ SELECT 
+    (SELECT COUNT(idStrike) FROM strike
+    JOIN maquina ON strike.fkMaquina = maquina.idMaquina
+    WHERE YEARWEEK(dataHora, 1) = YEARWEEK(CURDATE(), 1) AND fkInstituicao = 1) as strikesNaSemana,
+
+    (SELECT COUNT(idHistorico) FROM historico
+    JOIN maquina ON historico.fkMaquina = maquina.idMaquina
+    WHERE YEARWEEK(dataHora, 1) = YEARWEEK(CURDATE(), 1) AND fkInstituicao = 1) as alertasNaSemana,
+
+    (SELECT COUNT(DISTINCT m.idMaquina) AS totalMaquinas
+     FROM maquina m
+     WHERE m.fkInstituicao = 1) AS totalMaquinas,
+
+     (SELECT COUNT(DISTINCT m.idMaquina) AS maquinasComStrike
+     FROM maquina m
+     JOIN strike s ON m.idMaquina = s.fkMaquina
+     WHERE DATE(s.dataHora) = CURDATE() AND s.fkSituacao = 1 AND m.fkInstituicao = 1) as maquinasComStrike,
+    
+     (SELECT COUNT(DISTINCT m.idMaquina) AS maquinasComAlerta
+     FROM maquina m
+     JOIN historico h ON m.idMaquina = h.fkMaquina
+     JOIN hardware hw ON h.fkHardware = hw.idHardware
+     JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+     WHERE m.fkInstituicao = 1
+     AND DATE(h.dataHora) = CURDATE() 
+     AND (
+         (th.tipo = 'Processador' AND h.consumo > 70 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'Processador')) OR
+         (th.tipo = 'RAM' AND h.consumo > 70 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'RAM')) OR
+         (th.tipo = 'Disco' AND h.consumo > 70 AND h.idHistorico = (SELECT MAX(idHistorico) FROM historico WHERE fkMaquina = m.idMaquina AND tipo = 'Disco'))
+     )
+     ) AS maquinasComAlerta;
+     
+     
+     
+                SELECT 
+            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo
+        FROM 
+            historico h
+        JOIN componente c ON h.fkComponente = c.idComponente
+        JOIN hardware hw ON c.fkHardware = hw.idHardware
+        JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+        WHERE
+            th.tipo = 'Disco' AND h.fkMaquina = 4
+            AND DATE(h.dataHora) = CURDATE() 
+        ORDER BY dataHora DESC
+        LIMIT 1;
+        
+        
+        SELECT 
+            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+        FROM 
+            historico h
+        JOIN componente c ON h.fkComponente = c.idComponente
+        JOIN hardware hw ON c.fkHardware = hw.idHardware
+        JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
+        WHERE
+            th.tipo = 'Processador' AND h.fkMaquina = 4
+        ORDER BY dataHora DESC
+        LIMIT 8;
+        
+SELECT
+        m.idMaquina AS fkMaquina,
+        m.nome AS nomeMaquina,
+        COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,
+        COUNT(DISTINCT CASE WHEN h.consumo > 70 THEN h.idHistorico END) AS quantidadeAlertas,
+        
+        RANK() OVER (ORDER BY COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) DESC) AS ranking
+    FROM
+        maquina m
+    LEFT JOIN strike s ON m.idMaquina = s.fkMaquina
+    LEFT JOIN historico h ON m.idMaquina = h.fkMaquina AND h.consumo > 70
+    WHERE
+        m.fkInstituicao = 1
+        AND YEARWEEK(h.dataHora, 1) = YEARWEEK(CURDATE(), 1)  -- Filtrar pela semana atual
+    GROUP BY
+        m.idMaquina
+    HAVING
+        quantidadeStrikes > 0 OR quantidadeAlertas > 0
+    ORDER BY
+        ranking
+    LIMIT 5;
+    
+SELECT
+    m.idMaquina as id,
+    m.nome AS nome,
+    m.emUso AS emUso,
+    m.SO AS so,
+    (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes,
+    CASE
+    WHEN (
+        SELECT consumo
+        FROM historico h
+        WHERE h.fkMaquina = m.idMaquina
+          AND h.fkComponente IN (
+              SELECT idComponente
+              FROM componente
+              WHERE fkHardware IN (
+                  SELECT idHardware
+                  FROM hardware
+                  WHERE fkTipoHardware IN (
+                      SELECT idTipoHardware
+                      FROM tipoHardware
+                      WHERE tipo = 'RAM'
+                  )
+              )
+          )
+        ORDER BY h.dataHora DESC
+        LIMIT 1
+    ) >= 85 THEN 'Crítico'
+    WHEN (
+        SELECT consumo
+        FROM historico h
+        WHERE h.fkMaquina = m.idMaquina
+          AND h.fkComponente IN (
+              SELECT idComponente
+              FROM componente
+              WHERE fkHardware IN (
+                  SELECT idHardware
+                  FROM hardware
+                  WHERE fkTipoHardware IN (
+                      SELECT idTipoHardware
+                      FROM tipoHardware
+                      WHERE tipo = 'RAM'
+                  )
+              )
+          )
+        ORDER BY h.dataHora DESC
+        LIMIT 1
+    ) >= 70 THEN 'Alerta'
+    ELSE 'Normal'
+END AS status
+FROM maquina m
+JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado} ${pesquisa}
+GROUP BY m.idMaquina
+ ${ordAlfabetica};
+
+
+	SELECT
+    m.idMaquina as id,
+    m.nome AS nome,
+    m.emUso AS emUso,
+    m.SO AS so,
+    (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes,
+    (SELECT consumo FROM historico h WHERE h.fkMaquina = m.idMaquina AND h.fkComponente IN (SELECT idComponente FROM componente WHERE fkHardware IN (SELECT idHardware FROM hardware WHERE fkTipoHardware IN (SELECT idTipoHardware FROM tipoHardware WHERE tipo = 'RAM'))) ORDER BY h.dataHora DESC LIMIT 1) AS ultimoConsumoRAM
+FROM maquina m
+JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+WHERE m.idMaquina = 1;
+
+        
+ INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
+ 	(now(), 80, 1, 1, 1);
+
+select * from maquina;
+select * from componente;
+select * from hardware;
+
+INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
+  (now(), 1, 'Tentativa de fechamento do processo', 300, 1, 1);
+DELETE FROM strike where idStrike = 3;
+
+select * from strike;
+select * from historico where fkMaquina = 4;

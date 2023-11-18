@@ -4,7 +4,7 @@ let database = require("../database/config")
 
     function capturarDadosMaquina(idMaquina, idInstituicao) {
         let instrucao = `
-        SELECT 
+    SELECT 
         m.idMaquina as id,
         m.nome as nome,
         m.so as so,
@@ -14,11 +14,15 @@ let database = require("../database/config")
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 2 AND idMaquina = m.idMaquina LIMIT 1) 
         as capacidadeCPU,
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 1 AND idMaquina = m.idMaquina LIMIT 1) 
-        as capacidadeDisco
-    FROM maquina m
+        as capacidadeDisco, 
+        (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE()) as quantidadeStrikes,
+		
+        (SELECT COUNT(*) FROM historico WHERE fkMaquina = m.idMaquina AND DATE(dataHora) = CURDATE() AND consumo > 70) as quantidadeAlertas
+FROM maquina m
     WHERE
         m.idMaquina = ${idMaquina}
     LIMIT 1;
+    
     
         `;
 
@@ -62,22 +66,59 @@ let database = require("../database/config")
     function capturarTodasMaquinas(idInstituicao, ordAlfabetica = '', qtdStrikes = '', emUso = '', estado = '', pesquisa = '') {
         let instrucao = `
         SELECT
-            m.idMaquina as id,
-            m.nome AS nome,
-            m.emUso AS emUso,
-            m.SO AS so,
-            (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes,
-            CASE
-                WHEN MAX(h.consumo) >= 85 THEN 'Crítico'
-                WHEN MAX(h.consumo) >= 70 THEN 'Alerta'
-                ELSE 'Normal'
-            END AS status
-        FROM maquina m
-        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
-        JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
-        WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado} ${pesquisa}
-        GROUP BY m.idMaquina
-        ${ordAlfabetica}
+        m.idMaquina as id,
+        m.nome AS nome,
+        m.emUso AS emUso,
+        m.SO AS so,
+        (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) AS qtdStrikes,
+        CASE
+        WHEN (
+            SELECT consumo
+            FROM historico h
+            WHERE h.fkMaquina = m.idMaquina
+              AND h.fkComponente IN (
+                  SELECT idComponente
+                  FROM componente
+                  WHERE fkHardware IN (
+                      SELECT idHardware
+                      FROM hardware
+                      WHERE fkTipoHardware IN (
+                          SELECT idTipoHardware
+                          FROM tipoHardware
+                          WHERE tipo = 'RAM'
+                      )
+                  )
+              )
+            ORDER BY h.dataHora DESC
+            LIMIT 1
+        ) >= 85 THEN 'Crítico'
+        WHEN (
+            SELECT consumo
+            FROM historico h
+            WHERE h.fkMaquina = m.idMaquina
+              AND h.fkComponente IN (
+                  SELECT idComponente
+                  FROM componente
+                  WHERE fkHardware IN (
+                      SELECT idHardware
+                      FROM hardware
+                      WHERE fkTipoHardware IN (
+                          SELECT idTipoHardware
+                          FROM tipoHardware
+                          WHERE tipo = 'RAM'
+                      )
+                  )
+              )
+            ORDER BY h.dataHora DESC
+            LIMIT 1
+        ) >= 70 THEN 'Alerta'
+        ELSE 'Normal'
+    END AS status
+    FROM maquina m
+    JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
+    WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado} ${pesquisa}
+    GROUP BY m.idMaquina
+     ${ordAlfabetica};
         ;
         `
         console.log(instrucao);
@@ -88,7 +129,11 @@ let database = require("../database/config")
     function capturarConsumoRAM(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+        h.idHistorico, 
+        DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, 
+        h.consumo, 
+        c.max as maxConsumo, 
+        th.tipo 
         FROM 
             historico h
         JOIN componente c ON h.fkComponente = c.idComponente
@@ -96,7 +141,8 @@ let database = require("../database/config")
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
             th.tipo = 'RAM' AND h.fkMaquina = ${idMaquina}
-        ORDER BY dataHora DESC
+            AND DATE(h.dataHora) = CURDATE() 
+        ORDER BY h.dataHora DESC
         LIMIT 8;
         `
         return database.executar(instrucao);
@@ -105,7 +151,11 @@ let database = require("../database/config")
     function capturarConsumoCPU(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo, th.tipo 
+        h.idHistorico, 
+        DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, 
+        h.consumo, 
+        c.max as maxConsumo, 
+        th.tipo 
         FROM 
             historico h
         JOIN componente c ON h.fkComponente = c.idComponente
@@ -113,7 +163,8 @@ let database = require("../database/config")
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
             th.tipo = 'Processador' AND h.fkMaquina = ${idMaquina}
-        ORDER BY dataHora DESC
+            AND DATE(h.dataHora) = CURDATE() 
+        ORDER BY h.dataHora DESC
         LIMIT 8;
         `
 
@@ -123,7 +174,11 @@ let database = require("../database/config")
     function capturarConsumoDisco(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo
+        h.idHistorico, 
+        DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, 
+        h.consumo, 
+        c.max as maxConsumo, 
+        th.tipo 
         FROM 
             historico h
         JOIN componente c ON h.fkComponente = c.idComponente
@@ -131,7 +186,8 @@ let database = require("../database/config")
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
             th.tipo = 'Disco' AND h.fkMaquina = ${idMaquina}
-        ORDER BY dataHora DESC
+            AND DATE(h.dataHora) = CURDATE() 
+        ORDER BY h.dataHora DESC
         LIMIT 8;
         `
 
@@ -149,6 +205,7 @@ let database = require("../database/config")
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
             th.tipo = 'RAM' AND h.fkMaquina = ${idMaquina}
+            AND DATE(h.dataHora) = CURDATE() 
         ORDER BY dataHora DESC
         LIMIT 1;
         `
@@ -167,6 +224,7 @@ let database = require("../database/config")
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
             th.tipo = 'Processador' AND h.fkMaquina = ${idMaquina}
+            AND DATE(h.dataHora) = CURDATE() 
         ORDER BY dataHora DESC
         LIMIT 1;
         `
@@ -177,7 +235,7 @@ let database = require("../database/config")
     function capturarNovoDadoDisco(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i") as dataHora, h.consumo, c.max as maxConsumo
+            h.idHistorico, DATE_FORMAT(h.dataHora, "%H:%i:%s") as dataHora, h.consumo, c.max as maxConsumo
         FROM 
             historico h
         JOIN componente c ON h.fkComponente = c.idComponente
@@ -185,6 +243,7 @@ let database = require("../database/config")
         JOIN tipoHardware th ON hw.fkTipoHardware = th.idTipoHardware
         WHERE
             th.tipo = 'Disco' AND h.fkMaquina = ${idMaquina}
+            AND DATE(h.dataHora) = CURDATE() 
         ORDER BY dataHora DESC
         LIMIT 1;
         `
@@ -248,24 +307,26 @@ let database = require("../database/config")
     function maquinasMaisDefeitos(idInstituicao) {
         let instrucao = `
         SELECT
-            m.idMaquina AS fkMaquina,
-            COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,
-            COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) AS quantidadeAlertas,
-            
-            RANK() OVER (ORDER BY COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) DESC) AS ranking
-        FROM
-            maquina m
-        LEFT JOIN strike s ON m.idMaquina = s.fkMaquina
-        LEFT JOIN historico h ON m.idMaquina = h.fkMaquina AND h.consumo > 80
-        WHERE
-            m.fkInstituicao = ${idInstituicao}
-        GROUP BY
-            m.idMaquina
-        HAVING
-            quantidadeStrikes > 0 OR quantidadeAlertas > 0
-        ORDER BY
-            ranking
-        LIMIT 5;
+        m.idMaquina AS fkMaquina,
+        m.nome AS nomeMaquina,
+        COUNT(DISTINCT s.idStrike) AS quantidadeStrikes,
+        COUNT(DISTINCT CASE WHEN h.consumo > 70 THEN h.idHistorico END) AS quantidadeAlertas,
+        
+        RANK() OVER (ORDER BY COUNT(DISTINCT CASE WHEN h.consumo > 80 THEN h.idHistorico END) DESC) AS ranking
+    FROM
+        maquina m
+    LEFT JOIN strike s ON m.idMaquina = s.fkMaquina
+    LEFT JOIN historico h ON m.idMaquina = h.fkMaquina AND h.consumo > 70
+    WHERE
+        m.fkInstituicao = ${idInstituicao}
+        AND YEARWEEK(h.dataHora, 1) = YEARWEEK(CURDATE(), 1)  -- Filtrar pela semana atual
+    GROUP BY
+        m.idMaquina
+    HAVING
+        quantidadeStrikes > 0 OR quantidadeAlertas > 0
+    ORDER BY
+        ranking
+    LIMIT 5;    
         `;
         console.log("Executando a instrucao SQL: \n" + instrucao);
         return database.executar(instrucao);

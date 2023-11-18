@@ -28,6 +28,7 @@ dialog.addEventListener('sl-show', () => {
             capcddDisco = document.getElementById("modal_capcdd_disco"),
             statusUso = document.getElementById("modal_uso");
 
+
       nome.innerHTML = dados.nome;
       so.innerHTML = dados.so;
       cpu.innerHTML = dados.componenteCPU;
@@ -36,7 +37,7 @@ dialog.addEventListener('sl-show', () => {
       capcddRAM.innerHTML = `${dados.capacidadeRAM}gb`;
       disco.innerHTML = dados.componenteDisco;
       capcddDisco.innerHTML = `${dados.capacidadeDisco}gb`;
-      statusUso.innerHTML = dados.emUso == 0 ? `OFF` : `ON`;
+      statusUso.innerHTML = dados.emUso ==  0 ? "OFF" : "ON";
       
       if(dados.emUso == 1) statusUso.style.color = "#BF80FF"
 
@@ -214,6 +215,8 @@ function capturarTodosDadosMaquina(idInstituicao, idMaquina) {
    })
 }
 
+
+
 function capturarDadosRAM(idInstituicao, idMaquina) {
    return new Promise((resolve, reject) => {
       let dadosRAM = [];
@@ -242,7 +245,7 @@ function capturarDadosRAM(idInstituicao, idMaquina) {
 
 function capturarDadosCPU(idInstituicao, idMaquina) {
    return new Promise((resolve, reject) => {
-      let dadosRAM = [];
+      let dadosCPU = [];
 
       fetch(`/maquinas/capturarConsumoCPU/${idInstituicao}/${idMaquina}`)
          .then((response) => {
@@ -250,10 +253,10 @@ function capturarDadosCPU(idInstituicao, idMaquina) {
                response.json().then((response) => {
                   response.forEach(dado => {
                      let dados = [dado.dataHora, dado.consumo]
-                     dadosRAM.push(dados);
+                     dadosCPU.push(dados);
                   });
 
-                  resolve(dadosRAM);
+                  resolve(dadosCPU);
                });
             } else {
                reject("Erro na requisição.");
@@ -268,7 +271,7 @@ function capturarDadosCPU(idInstituicao, idMaquina) {
 
 function capturarDadosDisco(idInstituicao, idMaquina) {
    return new Promise((resolve, reject) => {
-      let dadosRAM = [];
+      let dadosDisco = [];
 
       fetch(`/maquinas/capturarConsumoDisco/${idInstituicao}/${idMaquina}`)
          .then((response) => {
@@ -276,10 +279,10 @@ function capturarDadosDisco(idInstituicao, idMaquina) {
                response.json().then((response) => {
                   response.forEach(dado => {
                      let dados = [dado.dataHora, dado.consumo]
-                     dadosRAM.push(dados);
+                     dadosDisco.push(dados);
                   });
 
-                  resolve(dadosRAM);
+                  resolve(dadosDisco);
                });
             } else {
                reject("Erro na requisição.");
@@ -384,13 +387,17 @@ google.charts.setOnLoadCallback(() => {
       const discoMaquina = document.getElementById("disco");
       const uso = document.getElementById("statusUso")
       const nucleos = document.getElementById("nucleos");
+      const strikes = document.getElementById("qtdStrikes")
+      const alertas = document.getElementById("qtdAlertas")
 
       nomeMaquina.innerHTML = dados.nome;
       soMaquina.innerHTML = dados.so;
-      uso.innerHTML = dados.emUso = 0 ? `OFF` : `ON`;
+      uso.innerHTML = dados.emUso == 0 ? `OFF` : `ON`;
       ramMaquina.innerHTML = dados.capacidadeRam;
       discoMaquina.innerHTML = dados.capacidadeDisco >= 1000 ? `${(dados.capacidadeDisco / 1024)}tb` : `${dados.capacidadeDisco}GB`;
       nucleos.innerHTML = dados.capacidadeCPU;
+      strikes.innerHTML = dados.quantidadeStrikes;
+      alertas.innerHTML = dados.quantidadeAlertas;
    })
 
    drawWindow();
