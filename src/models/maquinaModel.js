@@ -31,61 +31,31 @@ FROM maquina m
     function capturarTodosDadosMaquina(idMaquina, idInstituicao) {
         let instrucao = `
         SELECT 
-        m.idMaquina as id,
-        m.nome as nome,
-        m.so as so,
-        m.emUso as emUso,
-        (
-            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
-            FROM hardware
-            JOIN componente ON fkHardware = idHardware
-            WHERE fkTipoHardware = 3 AND fkMaquina = m.idMaquina
-            LIMIT 1
-        ) as componenteRAM,
-        (
-            SELECT capacidade
-            FROM hardware
-            JOIN componente ON fkHardware = idHardware
-            WHERE fkTipoHardware = 3 AND fkMaquina = m.idMaquina
-            LIMIT 1
-        ) as capacidadeRAM,
-        (
-            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
-            FROM hardware
-            JOIN componente ON fkHardware = idHardware
-            WHERE fkTipoHardware = 2 AND fkMaquina = m.idMaquina
-            LIMIT 1
-        ) as componenteCPU,
-        (
-            SELECT capacidade
-            FROM hardware
-            JOIN componente ON fkHardware = idHardware
-            WHERE fkTipoHardware = 2 AND fkMaquina = m.idMaquina
-            LIMIT 1
-        ) as capacidadeCPU,
-        (
-            SELECT GROUP_CONCAT(CONCAT(fabricante, ' ', modelo, ' ', especificidade) SEPARATOR ', ')
-            FROM hardware
-            JOIN componente ON fkHardware = idHardware
-            WHERE fkTipoHardware = 1 AND fkMaquina = m.idMaquina
-            LIMIT 1
-        ) as componenteDisco,
-        (
-            SELECT capacidade
-            FROM hardware
-            JOIN componente ON fkHardware = idHardware
-            WHERE fkTipoHardware = 1 AND fkMaquina = m.idMaquina
-            LIMIT 1
-        ) as capacidadeDisco,
-        (
-            SELECT COUNT(*)
-            FROM strike
-            WHERE fkMaquina = m.idMaquina
-        ) as qtdStrikes
-    FROM maquina m
-    WHERE m.idMaquina = ${idMaquina}
-    LIMIT 1;
-    
+            m.idMaquina as id,
+            m.nome as nome,
+            m.so as so,
+            m.emUso as emUso,
+            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
+            as componenteRAM,
+            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 3 AND idMaquina = ${idMaquina}) 
+            as capacidadeRAM,
+            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
+            as componenteCPU,
+            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 2 AND idMaquina = ${idMaquina}) 
+            as capacidadeCPU,
+            (SELECT concat(fabricante, ' ', modelo, ' ', especificidade) FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
+            as componenteDisco,
+            (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware JOIN maquina ON fkMaquina = idMaquina WHERE fkTipoHardware = 1 AND idMaquina = ${idMaquina}) 
+            as capacidadeDisco,
+            (SELECT COUNT(*) FROM strike JOIN maquina ON fkMaquina = idMaquina WHERE fkMaquina = ${idMaquina}) as qtdStrikes
+        FROM maquina m
+        JOIN componente c ON c.fkMaquina = m.idMaquina
+        JOIN hardware ram ON c.fkHardware = ram.idHardware
+        JOIN hardware cpu ON c.fkHardware = cpu.idHardware
+        JOIN hardware disco ON c.fkHardware = disco.idHardware
+        WHERE
+            m.idMaquina = ${idMaquina}
+        LIMIT 1;
         `
 
     return database.executar(instrucao);
@@ -146,10 +116,8 @@ FROM maquina m
     JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
     WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado} ${pesquisa}
     GROUP BY m.idMaquina
-     ${ordAlfabetica};
-        ;
-        `
-        console.log(instrucao);
+    ${ordAlfabetica}
+    ;`
 
     return database.executar(instrucao);
 }
@@ -371,16 +339,16 @@ function capturarStrikesPorMaquina(idInstituicao, idUsuario) {
     LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
     JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
     JOIN usuario us ON us.fkInstituicao = inst.idInstituicao
-    WHERE idInstituicao = ${idInstituicao} AND idUsuario = ${idUsuario}
+    WHERE idInstituicao = ${idInstituicao} AND idUsuario = ${idUsuario} AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) >= 3
     GROUP BY m.idMaquina;
     `;
-
+    console.log('strikes por maquina', instrucao)
     return database.executar(instrucao);
 }
 
 function capturarStrikesDaMaquina(idMaquina) {
     let instrucao = `SELECT DATE_FORMAT(dataHora, '%d/%m/%y') as data, DATE_FORMAT(dataHora, '%H:%s') as hora FROM strike WHERE fkMaquina = ${idMaquina} ORDER BY dataHora DESC LIMIT 1;`;
-
+    console.log('strikes da maquina', instrucao)
     return database.executar(instrucao);
 }
 
@@ -388,6 +356,7 @@ function capturarStrikesDaMaquina(idMaquina) {
 function capturarPermissoes(idUsuario) {
     let instrucao  = `
     SELECT 
+        atuacao.idAtuacao,
         atuacao.nome,
         atuacao.descricao,
         permissao.emUso
@@ -414,8 +383,10 @@ function capturarPermissoes(idUsuario) {
         editarMaquina,
         deletarMaquina,
         maisUsoCpuRamKpi,
-        maquinasMaisDefeitos
-
+        maquinasMaisDefeitos,
+        capturarPermissoes,
+        capturarStrikesDaMaquina,
+        capturarStrikesPorMaquina
     };
 
 

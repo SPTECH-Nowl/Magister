@@ -1,7 +1,7 @@
 const { text } = require("express");
-var strikeModel = require("../models/strikeModel");
+let strikeModel = require("../models/strikeModel");
 
-var sessoes = [];
+let sessoes = [];
 
 function listar(req, res) {
     console.log('no controller');
@@ -89,8 +89,8 @@ function listar(req, res) {
 
 function listarSituacao(req, res) {
     console.log('no controller');
-    var codInstituicao = req.params.codInstituicao;
-    var situacao = req.params.situacao;
+    let codInstituicao = req.params.codInstituicao;
+    let situacao = req.params.situacao;
 
     strikeModel.listarSituacao(codInstituicao, situacao)
     .then(function (resultado) {
@@ -109,7 +109,7 @@ function listarSituacao(req, res) {
 
 function contadores(req, res) {
     console.log('no controller');
-    var codInstituicao = req.params.codInstituicao;
+    let codInstituicao = req.params.codInstituicao;
 
     strikeModel.contadores(codInstituicao)
     .then(function (resultado) {
@@ -128,11 +128,16 @@ function contadores(req, res) {
 
 function excluirStrike(req, res) {
     console.log('no controller', req.body);
-    var checkboxIds = req.body.checkboxIdsServer;
-    var texto = '';
+    let checkboxIds = req.body.checkboxIdsServer;
+    let usarIdMaquina = req.body.usarIdMaquina;
+    let texto = '';
 
     if(checkboxIds != '') {
-        var texto = `WHERE idStrike IN(${checkboxIds})`;
+        if(usarIdMaquina) {
+            texto = `WHERE fkMaquina IN(${checkboxIds})`;
+        } else {
+            texto = `WHERE idStrike IN(${checkboxIds})`;
+        }
     }
 
     console.log('texto: ' + texto);
@@ -150,10 +155,10 @@ function excluirStrike(req, res) {
 }
 
 function strikePMes(req, res) {
-    var idInstituicao = req.params.idInstituicao;
-    var opcao = req.params.opcao;
+    let idInstituicao = req.params.idInstituicao;
+    let opcao = req.params.opcao;
     
-    var qtdMes;
+    let qtdMes;
 
     switch(opcao){
         case "1":
@@ -189,7 +194,7 @@ function strikePMes(req, res) {
 
 
 function kpiInfos(req, res) {
-    var idInstituicao = req.params.idInstituicao;
+    let idInstituicao = req.params.idInstituicao;
 
     strikeModel.kpiInfos(idInstituicao)
     .then(function (resultado) {

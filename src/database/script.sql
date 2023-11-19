@@ -99,8 +99,6 @@ CREATE TABLE permissao (
 	nome VARCHAR(45) NOT NULL,
     emUso BOOLEAN NOT NULL,
     duracaoStrikePadrao INT,
-    emUso BOOLEAN NOT NULL,
-    duracaoStrikePadrao INT,
     fkAtuacao INT, CONSTRAINT permFkAtuac FOREIGN KEY (fkAtuacao)
 		REFERENCES atuacao(idAtuacao),
     fkUsuario INT, CONSTRAINT permFKUsu FOREIGN KEY (fkUsuario)
@@ -262,26 +260,20 @@ INSERT INTO maquina (nome, SO, emUso, fkInstituicao) VALUES
 	('Laptop-HP1122', 'Ubuntu', 0, 3),
 	('Workstation-Lenovo', 'Debian', 0, 4);
 
-
-    -- INSERT STRIKES
 -- INSERTS STRIKE
--- INSERTS STRIKE
--- INSERTS STRIKE
--- INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
--- ('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
--- ('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
--- ('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 2, 3),
--- ('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 2, 2),
--- ('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 3, 3),
--- ('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 4, 2),
--- ('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 5, 3),
--- ('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 7, 2),
--- ('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 10, 3),
--- ('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 10, 2),
--- ('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 11, 2),
--- ('2023-11-09 10:45:00', 0, 'Conversando com Luigi Tadeu', 120, 15, 3);
-
-
+INSERT INTO strike (dataHora, validade, motivo, duracao, fkMaquina, fkSituacao) VALUES
+('2023-07-05 17:42:57', 1, 'Tentativa de fechamento do processo', 300, 1, 3),
+('2023-11-05 14:30:00', 1, 'Acessando abas acima de 18 anos', 60, 1, 2),
+('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 2, 3),
+('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 2, 2),
+('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 3, 3),
+('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 4, 2),
+('2023-11-05 15:45:00', 0, 'Vendo Naruto no meio da aula', 120, 5, 3),
+('2023-11-06 10:15:00', 1, 'Uso indevido', 90, 7, 2),
+('2023-11-07 14:30:00', 0, 'Acessando sites bloqueados', 60, 10, 3),
+('2023-11-08 16:45:00', 1, 'Downloads não autorizados', 120, 10, 2),
+('2023-11-09 09:30:00', 1, 'Assistindo jogo do Flamengo', 60, 11, 2),
+('2023-11-09 10:45:00', 0, 'Conversando com Luigi Tadeu', 120, 15, 3);
     
 -- INSERTS COMPONENTE
 INSERT INTO componente (max, fkMaquina, fkHardware) VALUES
@@ -368,46 +360,46 @@ VALUES
 
   
 -- INSERTS HISTORICO
--- INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
--- 	('2023-08-23 12:17:30', .5, 1, 1, 2),
--- 	('2023-08-23 12:17:35', .6, 1, 1, 2),
--- 	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
--- 	('2023-08-23 12:17:30', .5, 1, 2, 2),
--- 	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
--- 	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
--- 	('2023-08-23 12:17:30', 200, 1, 3, 2),
--- 	('2023-08-23 12:17:35', 200, 1, 3, 2),
--- 	('2023-08-23 12:17:40', 245, 1, 3, 2),
---   ('2023-08-23 12:17:30', .5, 1, 1, 2),
---   ('2023-08-23 12:17:35', .6, 1, 1, 2),
---   ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
---   ('2023-08-23 12:17:30', .5, 1, 2, 2),
---   ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
---   ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
---   ('2023-08-23 12:17:30', 200, 1, 3, 2),
---   ('2023-08-23 12:17:35', 200, 1, 3, 2),
---   ('2023-08-23 12:17:40', 245, 1, 3, 2);
+INSERT INTO historico (dataHora, consumo, fkComponente, fkHardware, fkMaquina) VALUES
+	('2023-08-23 12:17:30', .5, 1, 1, 2),
+	('2023-08-23 12:17:35', .6, 1, 1, 2),
+	('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+	('2023-08-23 12:17:30', .5, 1, 2, 2),
+	('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+	('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+	('2023-08-23 12:17:30', 200, 1, 3, 2),
+	('2023-08-23 12:17:35', 200, 1, 3, 2),
+	('2023-08-23 12:17:40', 245, 1, 3, 2),
+  ('2023-08-23 12:17:30', .5, 1, 1, 2),
+  ('2023-08-23 12:17:35', .6, 1, 1, 2),
+  ('2023-08-23 12:17:40', 1.1, 1, 1, 2),
+  ('2023-08-23 12:17:30', .5, 1, 2, 2),
+  ('2023-08-23 12:17:35', 1.1, 1, 2, 2),
+  ('2023-08-23 12:17:40', 1.4, 1, 2, 2),
+  ('2023-08-23 12:17:30', 200, 1, 3, 2),
+  ('2023-08-23 12:17:35', 200, 1, 3, 2),
+  ('2023-08-23 12:17:40', 245, 1, 3, 2);
 
 
 -- INSERTS HISTORICOPROCESSO
--- INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
--- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
--- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 2, 2),
--- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 3, 1),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
--- 	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
--- 	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
--- 	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
--- 	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
--- 	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
--- 	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
--- 	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
+INSERT INTO historicoProcesso (enderecoProcesso, fkHistorico, fkProcesso) VALUES
+	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 1, 1),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 1, 2),
+	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 2, 1),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 2, 2),
+	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 3, 1),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 3, 2),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 6, 2),
+	('C:\Program Files\MySQL\MySQL Workbench 8.0\MySQLWorkbench.exe', 4, 1),
+	('C:\Program Files\Microsoft Office\Office16\WINWORD.EXE', 5, 1),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 4, 2),
+	('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', 5, 2),
+	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 6, 3),
+	('D:\Program Files\Adobe\Acrobat\Acrobat.exe', 7, 3),
+	('C:\Program Files\Visual Studio Code\Code.exe', 8, 4),
+	('C:\Program Files\Visual Studio Code\Code.exe', 9, 4);
 
 
 -- INSERTS PERMISSAOPROCESSO
