@@ -112,14 +112,13 @@ function kpiInfos(idInstituicao){
 
 
 function excluirStrike(texto) {
-    console.log('no model');
     var instrução = `
         UPDATE strike 
         SET fkSituacao = 2
         ${texto};
     `;
 
-    console.log("Executando a instrução SQL: \n" + instrução);
+    console.log("Executando a instrução SQL (Exclusão de Strike): \n" + instrução);
     return database.executar(instrução);
 }
 

@@ -356,6 +356,7 @@ function capturarStrikesDaMaquina(idMaquina) {
 function capturarPermissoes(idUsuario) {
     let instrucao  = `
     SELECT 
+        atuacao.idAtuacao,
         atuacao.nome,
         atuacao.descricao,
         permissao.emUso

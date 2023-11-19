@@ -144,7 +144,8 @@ function deletar(idDaLinha) {
         method: "PUT", 
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            checkboxIdsServer: checkboxIds
+            checkboxIdsServer: checkboxIds,
+            usarIdMaquina: false
         })
     })
         .then(function (resultado) {

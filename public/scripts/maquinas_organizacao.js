@@ -37,7 +37,6 @@ function pesquisarPorNome() {
 
 function capturarTodasMaquinas(idInstituicao, pesquisa) {
    const s = getSelectedValues();
-   console.log(s)
    return new Promise((resolve, reject) => {
       fetch(`/maquinas/capturarTodasMaquinas/`, 
       {
@@ -143,7 +142,6 @@ function mostrarTodasMaquinas(idInstituicao, pesquisa = '') {
    const maquinas = document.getElementById("maquinas");
 
    capturarTodasMaquinas(idInstituicao, pesquisa).then((dadosMaquinas) => {
-      console.log(dadosMaquinas);
       dadosMaquinas.forEach(maquina => {
          let id = maquina.id;
          let nome = maquina.nome;
