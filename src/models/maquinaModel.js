@@ -7,7 +7,7 @@ let database = require("../database/config")
         m.nome as nome,
         m.so as so,
         m.emUso as emUso,
-        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 3 AND idMaquina = m.idMaquina LIMIT 1) 
+        (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 3 AND idMaquina = m  .idMaquina LIMIT 1) 
         as capacidadeRam,
         (SELECT capacidade FROM hardware JOIN componente ON fkHardware = idHardware WHERE fkTipoHardware = 2 AND idMaquina = m.idMaquina LIMIT 1) 
         as capacidadeCPU,
