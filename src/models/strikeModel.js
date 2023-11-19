@@ -36,21 +36,21 @@ function listarSituacao(codInstituicao, situacao) {
     return database.executar(instrução);
 }
 
-function contadores(codInstituicao) {
-    console.log('no model');
-    var instrução = `
-    SELECT COUNT(idStrike) as 'total',
-           COUNT(if(fkSituacao = 1 , 1 ,null)) as 'ativos',
-           COUNT(if(fkSituacao = 2 ,1 ,null)) as 'inativos',
-           COUNT(if(fkSituacao = 3 , 1 ,null)) as 'validos',
-           COUNT(if(fkSituacao = 4 ,1 ,null)) as 'invalidos' FROM strike
-			JOIN maquina ON idMaquina = fkMaquina
-				WHERE fkMaquina = ${codInstituicao};
-    `;
+// function contadores(codInstituicao) {
+//     console.log('no model');
+//     var instrução = `
+//     SELECT COUNT(idStrike) as 'total',
+//            COUNT(if(fkSituacao = 1 , 1 ,null)) as 'ativos',
+//            COUNT(if(fkSituacao = 2 ,1 ,null)) as 'inativos',
+//            COUNT(if(fkSituacao = 3 , 1 ,null)) as 'validos',
+//            COUNT(if(fkSituacao = 4 ,1 ,null)) as 'invalidos' FROM strike
+// 			JOIN maquina ON idMaquina = fkMaquina
+// 				WHERE fkMaquina = ${codInstituicao};
+//     `;
 
-    console.log("Executando a instrução SQL: \n" + instrução);
-    return database.executar(instrução);
-}
+//     console.log("Executando a instrução SQL: \n" + instrução);
+//     return database.executar(instrução);
+// }
 
 
 
@@ -110,12 +110,43 @@ function kpiInfos(idInstituicao){
     return database.executar(instrucao);
 }
 
+
+function excluirStrike(texto) {
+    console.log('no model');
+    var instrução = `
+        UPDATE strike 
+        SET fkSituacao = 2
+        ${texto};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
+function contadores(codInstituicao) {
+    console.log('no model');
+    var instrução = `
+    SELECT COUNT(idStrike) as 'total',
+           COUNT(if(fkSituacao = 1 , 1 ,null)) as 'ativos',
+           COUNT(if(fkSituacao = 2 ,1 ,null)) as 'inativos',
+           COUNT(if(fkSituacao = 3 , 1 ,null)) as 'validos',
+           COUNT(if(fkSituacao = 4 ,1 ,null)) as 'invalidos' FROM strike
+			JOIN maquina ON idMaquina = fkMaquina
+				WHERE fkInstituicao = ${codInstituicao};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrução);
+    return database.executar(instrução);
+}
+
+
 module.exports = {
     listar,
     listarSituacao,
     contadores,
     strikePMes,
-    kpiInfos
+    kpiInfos,
+    excluirStrike
 };
 
 
