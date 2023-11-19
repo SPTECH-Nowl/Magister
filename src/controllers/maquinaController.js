@@ -54,22 +54,22 @@ function capturarTodasMaquinas(req, res) {
 
     switch(qtdStrikes) {
         case 'zero_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 0'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina AND fkSituacao IN(1, 3)) = 0'
             break;
         case 'um_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 1'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina AND fkSituacao IN(1, 3)) = 1'
             break;
         case 'um_ou_mais_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 1'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina AND fkSituacao IN(1, 3)) >= 1'
             break;
         case 'dois_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) = 2'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina AND fkSituacao IN(1, 3)) = 2'
             break;
         case 'dois_ou_mais_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 2'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina AND fkSituacao IN(1, 3)) >= 2'
             break;
         case 'tres_stk':
-            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina) >= 3'
+            qtdStrikes = 'AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = idMaquina AND fkSituacao IN(1, 3)) >= 3'
             break;
         default:
             qtdStrikes = '';
