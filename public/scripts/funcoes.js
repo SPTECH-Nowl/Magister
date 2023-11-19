@@ -35,7 +35,6 @@ function addDialog() {
    dialogElement.setAttribute('label', 'Últimas máquinas com advertência');
    dialogElement.setAttribute('strike-dialog', true);
    dialogElement.classList.add('dialog-scrolling');
-   dialogElement.setAttribute('open', true);
    
    const maquinasStrikeContainer = document.createElement('div');
    maquinasStrikeContainer.classList.add('maquinas-strike-container');
@@ -78,6 +77,7 @@ function addDialog() {
 
 function mostrarStrikeDialog() {
    const dialogStrike = document.querySelector("sl-dialog[strike-dialog]");
+   console.log('estou sendo executado');
    dialogStrike.show();
 }
 
@@ -90,7 +90,7 @@ function getStrikesPorMaquina() {
       .then((response => {
          if(response.ok) {
             response.json().then((response) => {
-               resolve(response)
+               resolve(response);
             })
          }
       }))
@@ -145,7 +145,8 @@ function addStrike(registro, dataHora) {
    checkboxAndContent.classList.add('checkbox-and-content');
    
    const checkbox = document.createElement('sl-checkbox');
-   checkbox.setAttribute("idStrike", registro.id);
+   checkbox.setAttribute("idMaquinaCheck", registro.id);
+   checkbox.setAttribute("acaoCheckbox", '');
    checkboxAndContent.appendChild(checkbox);
    
    const maquinaStrikeInfo = document.createElement('div');
@@ -200,13 +201,16 @@ function addStrike(registro, dataHora) {
 
 function verifStrikes() {
    getStrikesPorMaquina().then(dados => {
-      dados.forEach((registro) => {
-         getStrikesDaMaquina(registro.id).then(datas => {
-            let dataHora = datas[0];
-            addStrike(registro, dataHora);
-         })
-      })
-   });
+      if(dados.length > 0) {
+         dados.forEach((registro) => {
+            getStrikesDaMaquina(registro.id).then(datas => {
+               let dataHora = datas[0];
+               addStrike(registro, dataHora);
+            })
+         });
+         mostrarStrikeDialog();
+      }
+   })
 }
 
 function changePageAction() {
@@ -219,13 +223,6 @@ function addAdvertencias() {
    let idUsuario = localStorage.getItem("idUsuario");
    let idInstituicao = localStorage.getItem("instituicao"); 
    let linksStrikes = [...document.querySelectorAll("span[strike-link]")];
-   linksStrikes.forEach(link => {
-      link.addEventListener("click", (e) => {
-         e.preventDefault;
-         changePageAction();
-      })
-   })
-   
    addDialog();
    
    getPermissaoUsuario(idUsuario)
@@ -235,9 +232,27 @@ function addAdvertencias() {
          
       })
       verifStrikes();
-   }).then(_ => {
-      mostrarStrikeDialog()
    })
 } 
+
+function getCheckboxAcao() {
+   const nodeList = document.querySelectorAll("sl-checkbox[acaoCheckbox]");
+   const checkboxes = [...nodeList];
+   let checkBool = [];
+
+   checkboxes.forEach((check) => checkBool.push(check.checked))
+
+   console.log(nodeList, checkBool);
+   
+   return checkboxes;
+}
+
+function aplicarAdvertencia() {
+   const checkboxes = getCheckboxAcao();
+   var checkboxMarcadas = checkboxes.filter((check) => check.checked);
+   var checkboxIds = checkboxMarcadas.map((check) => check.getAttribute("idMaquinaCheck")).toString();
+
+   
+}
 
 window.addEventListener("DOMContentLoaded", addAdvertencias);

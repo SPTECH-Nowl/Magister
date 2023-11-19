@@ -128,8 +128,8 @@ function carregarFeed() {
 
 function deletar(idDaLinha) {
     var checkboxes = getCheckbox();
-    var checkboxMarcadas = checkboxes.filter((check) => check.checked)
-    var checkboxIds = checkboxMarcadas.map((check) => check.id).toString()
+    var checkboxMarcadas = checkboxes.filter((check) => check.checked);
+    var checkboxIds = checkboxMarcadas.map((check) => check.id).toString();
     var rota;
 
     if (checkboxIds == '') {

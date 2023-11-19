@@ -116,10 +116,8 @@ FROM maquina m
     JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
     WHERE idInstituicao = ${idInstituicao} ${qtdStrikes} ${emUso} ${estado} ${pesquisa}
     GROUP BY m.idMaquina
-     ${ordAlfabetica};
-        ;
-        `
-        console.log(instrucao);
+    ${ordAlfabetica}
+    ;`
 
     return database.executar(instrucao);
 }
@@ -341,16 +339,16 @@ function capturarStrikesPorMaquina(idInstituicao, idUsuario) {
     LEFT JOIN historico h ON m.idMaquina = h.fkMaquina
     JOIN instituicao inst ON inst.idInstituicao = m.fkInstituicao
     JOIN usuario us ON us.fkInstituicao = inst.idInstituicao
-    WHERE idInstituicao = ${idInstituicao} AND idUsuario = ${idUsuario}
+    WHERE idInstituicao = ${idInstituicao} AND idUsuario = ${idUsuario} AND (SELECT COUNT(*) FROM strike WHERE fkMaquina = m.idMaquina AND fkSituacao IN (1, 3)) >= 3
     GROUP BY m.idMaquina;
     `;
-
+    console.log('strikes por maquina', instrucao)
     return database.executar(instrucao);
 }
 
 function capturarStrikesDaMaquina(idMaquina) {
     let instrucao = `SELECT DATE_FORMAT(dataHora, '%d/%m/%y') as data, DATE_FORMAT(dataHora, '%H:%s') as hora FROM strike WHERE fkMaquina = ${idMaquina} ORDER BY dataHora DESC LIMIT 1;`;
-
+    console.log('strikes da maquina', instrucao)
     return database.executar(instrucao);
 }
 
@@ -384,8 +382,10 @@ function capturarPermissoes(idUsuario) {
         editarMaquina,
         deletarMaquina,
         maisUsoCpuRamKpi,
-        maquinasMaisDefeitos
-
+        maquinasMaisDefeitos,
+        capturarPermissoes,
+        capturarStrikesDaMaquina,
+        capturarStrikesPorMaquina
     };
 
 
