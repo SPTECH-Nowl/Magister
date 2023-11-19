@@ -59,6 +59,7 @@ function buscarUsuario() {
 }
 
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
     adicionarUsuarioButton.addEventListener('click', adicionarUsuario);
@@ -73,7 +74,11 @@ function adicionarUsuario() {
             '<input type="text" id="nomeInput" placeholder="Nome" class="swal2-input" style="border-radius: 15px;">' +
             '<input type="email" id="emailInput" placeholder="Email" class="swal2-input" style="border-radius: 15px;">' +
             '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input" style="border-radius: 15px;">' +
-            '<input type="text" id="tipoInput" placeholder="Tipo" class="swal2-input" style="border-radius: 15px;">',
+            '<select id="tipoInput" class="swal2-input" style="border-radius: 15px;">' +
+                '<option value="1">ADM Nowl</option>' +
+                '<option value="2">ADM da Instituição</option>' +
+                '<option value="3">Professor</option>' +
+            '</select>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         cancelButtonColor: '#d33', // Cor do botão "Cancelar"
@@ -165,11 +170,11 @@ function adicionarUsuario() {
                         instituicao: localStorage.getItem("instituicao")
                     })
                 })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
-                        }
-                        return response.json(); // Retorna a resposta JSON se estiver tudo OK
+                .then(async (response) => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
+                    }
+                    return await response.json(); // Retorna a resposta JSON se estiver tudo OK
                     })
                     .then(() => {
                         usuarioAdicionado = true; // Define a variável como true quando o usuário é adicionado
@@ -202,8 +207,6 @@ function adicionarUsuario() {
             // Não faça nada se o usuário fechar o modal ou se houver um erro
         });
 }
-
-
 
 
 function filtrosTipo(){
@@ -689,9 +692,12 @@ function alterar(idUsuario) {
                                         idUsuario: idUsuario
                                     })
                                 })
-                                .then(response => {
+                                .then(async function (response) {
                                     if (response.ok) {
-                                        return response.json();
+                                        console.log(response);
+                                        var retorno = await response.json();
+                                        console.log(retorno);
+                                        return retorno;
                                     }
                                 })
                                 .then(result => {
