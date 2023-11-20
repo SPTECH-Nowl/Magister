@@ -3,7 +3,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../styles/global.css">
-   <link rel="stylesheet" href="../styles/usuarios.css">
+   <link rel="stylesheet" href="../styles/configuracoes.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
   
 
@@ -13,12 +13,8 @@
 <script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.min.js"></script>
 
 
-
-
- <!-- BACK END DO CRU DE USUARIO-->
+ <!-- BACK END DO CU DE USUARIO-->
    <script src="../scripts/usuario.js" defer></script>
-
-
 
 
    <!-- Phosphor Icons -->
@@ -29,12 +25,10 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/components/select/select.js"></script>
+   
    <!-- Componentes -->
    <script src="../components/input/input.js" defer></script>
    <link rel="stylesheet" href="../components/input/input.css">
-
-   <script src="../components/select/select.js" defer></script>
-   <link rel="stylesheet" href="../components/select/select.css">
 
    <script src="../components/button/button.js" defer></script>
    <link rel="stylesheet" href="../components/button/button.css">
@@ -43,21 +37,19 @@
    <link rel="stylesheet" href="../components/navbar/navbar.css">
 
    <script src="../components/dialog/dialog.js" defer></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+   
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    
 
-
    <script src="../scripts/funcoes.js" defer></script>
 
-   <title>Magister | Usuários</title>
+   <title>Magister | Configurações</title>
 
 </head>
 <body>
-   <body onload="carregarFeed()"></body>
    
-
    <sl-drawer id="Drawer" label="Drawer" class="drawer-focus">
     
     <sl-button slot="footer" variant="primary"></sl-button>
@@ -138,56 +130,60 @@
           </sl-tooltip>
       </li>
   </ul>
-  
 </div>
 
-   <div class="charts-container">
-      <h1>Usuários</h1>
-      <div class="top-users">
+<div class="config-container">
+<div class="left-content">
+    <div class="user-config">
+        <h1>Configurações de usuário</h1>
+        
+        <div class="input-container">
+                <div class="config-input">
+                    <sl-input class="config-input" label="Nome de usuario" placeholder="Nome de usuario" size="large" pill></sl-input>
+                </div>
+                <div class="config-input">
+                    <sl-input class="config-input" label="E-mail" placeholder="socorrojesus@gmail.com" size="large" pill></sl-input>
+                </div>
+                <div class="config-input">
+                    <sl-input class="config-input" label="Senha" type="password" placeholder="Senha" size="large" pill password-toggle></sl-input>
+                </div>
 
-         <div class="flex-row gap-1" id="orderOptions"></div>
+        </div>
 
-         <div class="container-selects">
+        <sl-button class="confirm-button" size="large" pill>Salvar</sl-button>
 
-          
-            <div class="flex-row gap-1 pesquisarEAdd">
-               <div class="input-wrapper icon wdt-100">
-                  <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" class="input" id="input_busca" placeholder="Pesquisar por um usuário"
-                     fontSize="1rem">
-                  <i class="ph ph-eye" id="teste_ph"></i>
-               </div>
-               <button class="btn primario" id="adicionarUsuario">Adicionar usuário</button>
-            </div>
-         </div>
+    </div>
+
+    <div class="strike-config">
+        <h1>Configurações de strike</h1>
+        
+        <div class="select-config-wrapper">
+            
+              <sl-select class="select-config" size="large" value="option-1" pill label="Ação padrão">
+                <sl-option value="option-1">Opção padrão</sl-option>
+              </sl-select>
+              
+
+              <sl-button class="confirm-button" size="large" pill>Adicionar</sl-button>
+
+        </div>
+
+        <sl-input id="tempoPadraoInput" label="Tempo padrão de strike" type="time" size="large" pill></sl-input>
+
+        <sl-button class="confirm-button" size="large" pill>Salvar</sl-button>
+
+    </div>
+
+</div>
+
+<!-- <div class="right-content">
+
+</div> -->
+</div>
 
 
-      </div>
-      <div class="charts-content">
-         <div class="chart-grid cols-1">
 
 
-            <div class="tableWrapper">
-               <table>
-                     <thead>
-                        <tr>
-                           <th>Nome</th>
-                           <th>Email</th>
-                           <th>Tipo</th>
-                           <th></th>
-                        </tr>
-                     </thead>
-               
-                  <tbody class="user-list-tbody" id="listaDeUsuarios">
-
-                  </tbody>
-               </table>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   
 </body>
 </html>
 
