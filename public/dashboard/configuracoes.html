@@ -14,7 +14,7 @@
 
 
  <!-- BACK END DO CU DE USUARIO-->
-   <script src="../scripts/usuario.js" defer></script>
+   <script src="../scripts/configuracoes.js" defer></script>
 
 
    <!-- Phosphor Icons -->
@@ -42,8 +42,6 @@
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    
-
-   <script src="../scripts/funcoes.js" defer></script>
 
    <title>Magister | Configurações</title>
 
@@ -139,18 +137,21 @@
         
         <div class="input-container">
                 <div class="config-input">
-                    <sl-input class="config-input" label="Nome de usuario" placeholder="Nome de usuario" size="large" pill></sl-input>
+                    <sl-input class="config-input" label="Nome de usuario" placeholder="Nome de usuario" size="large" pill id="nomeFuncionario"></sl-input>
                 </div>
                 <div class="config-input">
-                    <sl-input class="config-input" label="E-mail" placeholder="socorrojesus@gmail.com" size="large" pill></sl-input>
+                    <sl-input class="config-input" label="E-mail" placeholder="socorrojesus@gmail.com" size="large" pill id="emailFuncionario"></sl-input>
                 </div>
                 <div class="config-input">
-                    <sl-input class="config-input" label="Senha" type="password" placeholder="Senha" size="large" pill password-toggle></sl-input>
+                    <sl-input class="config-input" help-text="" label="Senha" type="password" placeholder="Senha" size="large" pill password-toggle id="senhaFuncionario"></sl-input>
+                </div>
+                <div class="config-input">
+                    <sl-input class="config-input invalid" label="Permissão" type="text" placeholder="Permissão" size="large" pill  id="permissaoFuncionario" disabled></sl-input>
                 </div>
 
         </div>
 
-        <sl-button class="confirm-button" size="large" pill>Salvar</sl-button>
+        <sl-button class="confirm-button" size="large" pill onclick="atualizarDados(idFuncionario)">Salvar</sl-button>
 
     </div>
 
