@@ -15,6 +15,7 @@ var maquinaRouter = require("./src/routes/maquinas");
 var instituicaoRouter = require("./src/routes/instituicoes");
 var strikeRouter = require("./src/routes/strikes");
 var atuacoesRouter = require("./src/routes/atuacoes");
+var permissoesRouter = require("./src/routes/permissao");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,6 +30,7 @@ app.use("/maquinas", maquinaRouter);
 app.use("/instituicoes", instituicaoRouter);
 app.use("/strikes", strikeRouter);
 app.use("/atuacoes", atuacoesRouter);
+app.use("/permissoes", permissoesRouter);
 
 app.use((req, res)=>{
     res.redirect('/404.html');
