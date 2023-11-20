@@ -211,11 +211,32 @@ function kpiInfos(req, res) {
     });
 }
 
+function acaoETempoUsuarioEspecifico(req, res) {
+
+    let idFuncionario = req.params.idFuncionario;
+
+    strikeModel.acaoETempoUsuarioEspecifico(idFuncionario)
+    .then(function (resultado) {
+        console.log('no then do controller');
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log(erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+
 module.exports = {
     listar,
     listarSituacao,
     contadores,
     strikePMes,
     kpiInfos,
-    excluirStrike
+    excluirStrike,
+    acaoETempoUsuarioEspecifico
 }

@@ -28,4 +28,12 @@ router.get("/strikePMes/:opcao/:idInstituicao", function (req, res) {
     strikeController.strikePMes(req, res);
 })
 
+router.get("/acaoETempoUsuarioEspecifico/:idFuncionario", function (req, res) {
+    strikeController.acaoETempoUsuarioEspecifico(req, res);
+})
+
+
+
+
+
 module.exports = router;

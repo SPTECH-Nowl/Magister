@@ -139,13 +139,34 @@ function contadores(codInstituicao) {
 }
 
 
+
+function acaoETempoUsuarioEspecifico(idFuncionario) {
+
+    var instrucao = `
+    SELECT
+    atuacao.idAtuacao,
+    atuacao.nome AS atuacao_nome,
+    atuacao.descricao AS atuacao_descricao,
+    permissao.*
+    FROM permissao
+    JOIN atuacao ON permissao.fkAtuacao = atuacao.idAtuacao
+    WHERE permissao.emUso = true AND permissao.fkUsuario = ${idFuncionario};
+    `
+
+
+    console.log("Executando a instrucao SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+
 module.exports = {
     listar,
     listarSituacao,
     contadores,
     strikePMes,
     kpiInfos,
-    excluirStrike
+    excluirStrike,
+    acaoETempoUsuarioEspecifico
 };
 
 

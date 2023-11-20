@@ -67,3 +67,67 @@ function atualizarDados(idFuncionario){
 
 
 }
+
+
+
+
+function buscarAcoes(){
+    return new Promise((resolve, reject) => {
+        fetch(`/atuacoes/buscarAcoes/`)
+           .then((response) => {
+              if(response.ok) {
+                 response.json().then((response) => {
+                    let registro = response;
+                    resolve(registro);
+                 })
+              }
+           })
+           .catch((error) => {
+              console.log("Erro na requisição", error);
+              reject(error);
+           })
+     })
+}
+
+
+function acaoETempoUsuarioEspecifico(idFuncionario){
+    return new Promise((resolve, reject) => {
+        fetch(`/strikes/acaoETempoUsuarioEspecifico/${idFuncionario}`)
+           .then((response) => {
+              if(response.ok) {
+                 response.json().then((response) => {
+                    let registro = response;
+                    resolve(registro);
+                 })
+              }
+           })
+           .catch((error) => {
+              console.log("Erro na requisição", error);
+              reject(error);
+           })
+     })
+}
+
+
+    buscarAcoes().then(dados => {
+        dados.forEach( acao => {
+            document.getElementById("acoesSelect").innerHTML += `<sl-option value="${acao.idAtuacao}">${acao.nome}</sl-option>`
+        });
+    })
+
+
+    acaoETempoUsuarioEspecifico(idFuncionario).then(dados =>{
+        document.getElementById("acoesSelect").setAttribute("value", dados[0].idAtuacao)
+        
+        let duracaoBrutaEmMinutos = dados[0].duracaoStrikePadrao;
+
+        let horas = Math.floor(duracaoBrutaEmMinutos / 60);
+        let minutos = duracaoBrutaEmMinutos % 60;
+    
+        horas = horas < 10 ? "0" + horas : horas;
+        minutos = minutos < 10 ? "0" + minutos : minutos;
+    
+        let duracaoFormatada = `${horas}:${minutos}`;
+    
+        document.getElementById("tempoPadraoInput").value = duracaoFormatada
+    })

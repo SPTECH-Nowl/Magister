@@ -156,16 +156,44 @@
     </div>
 
     <div class="strike-config">
-        <h1>Configurações de strike</h1>
+        <h1>Configurações de permissao</h1>
+
+        <div class="select-config-wrapper">
+            
+            <sl-select class="select-config" size="large" value="option-1" pill label="Permissão atual" id="permissoesSelect">
+              <sl-option disabled value="option-1">Selecione uma permissão</sl-option>
+            </sl-select>
+            
+
+            <sl-button class="confirm-button" size="large" pill>Adicionar</sl-button>
+
+      </div>
         
         <div class="select-config-wrapper">
             
-              <sl-select class="select-config" size="large" value="option-1" pill label="Ação padrão">
-                <sl-option value="option-1">Opção padrão</sl-option>
+              <sl-select class="select-config" size="large" value="option-1" pill label="Ação padrão" id="acoesSelect">
+                <sl-option disabled value="option-1">Selecione uma ação</sl-option>
               </sl-select>
               
 
+              <sl-drawer label="Adicionar nova ação" class="drawer-overview" id="adicionarAcao">
+                
+                Socorro jesus
+
+                <sl-button slot="footer" variant="primary">Close</sl-button>
+              </sl-drawer>
+              
               <sl-button class="confirm-button" size="large" pill>Adicionar</sl-button>
+
+              <script>
+                const drawer = document.querySelector('#adicionarAcao');
+                
+                const openButton = drawer.nextElementSibling;
+                const closeButton = drawer.querySelector('sl-button[variant="primary"]');
+              
+                openButton.addEventListener('click', () => drawer.show());
+                closeButton.addEventListener('click', () => drawer.hide());
+              </script>
 
         </div>
 

@@ -14,6 +14,7 @@ var processoRouter = require("./src/routes/processo");
 var maquinaRouter = require("./src/routes/maquinas");
 var instituicaoRouter = require("./src/routes/instituicoes");
 var strikeRouter = require("./src/routes/strikes");
+var atuacoesRouter = require("./src/routes/atuacoes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,7 +28,7 @@ app.use("/processo", processoRouter);
 app.use("/maquinas", maquinaRouter);
 app.use("/instituicoes", instituicaoRouter);
 app.use("/strikes", strikeRouter);
-
+app.use("/atuacoes", atuacoesRouter);
 
 app.use((req, res)=>{
     res.redirect('/404.html');
