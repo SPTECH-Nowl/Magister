@@ -1,16 +1,37 @@
+
+var idUsuario = localStorage.getItem("idUsuario");
+
 document.addEventListener('DOMContentLoaded', function() {
-    carregarFeed();
+    carregarFeed(idUsuario);
 
     const adicionarPermissaoButton = document.getElementById('adicionarPermissao');
     adicionarPermissaoButton.addEventListener('click', adicionarPermissao);
    });
 
-function carregarFeed() {
-    // var idUsuario = localStorage.getItem("idUsuario");
-    fetch(`/permissoes/listar/`)
-        .then(function (listaPermissoes) {
 
-            console.log(listaPermissoes);
+function buscarAcoes(){
+    return new Promise((resolve, reject) => {
+        fetch(`/atuacoes/buscarAcoes/`)
+           .then((response) => {
+              if(response.ok) {
+                 response.json().then((response) => {
+                    let registro = response;
+                    resolve(registro);
+                 })
+              }
+           })
+           .catch((error) => {
+              console.log("Erro na requisição", error);
+              reject(error);
+           })
+     })
+}
+
+
+function carregarFeed(idUsuario) {
+
+    fetch(`/permissoes/listarPorUsuario/${idUsuario}`)
+        .then(function (listaPermissoes) {
             if (listaPermissoes.ok) {
                 if (listaPermissoes.status == 204) {
                     var tablePermissoes = document.getElementById("listaDePermissao");
@@ -19,8 +40,7 @@ function carregarFeed() {
                     listaPermissoes.json().then(function (listaPermissoes) {
                         
                         var tablePermissoes = document.getElementById("listaDePermissao");
-                        tablePermissoes.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
-
+                        tablePermissoes.innerHTML = ""; 
                         console.log(listaPermissoes)
                         
                         for (var i = 0; i < listaPermissoes.length; i++) {
@@ -251,15 +271,15 @@ function deletar(idPermissao, tipoPermissao) {
 }
 
 function alterar(idPermissao) {
-    fetch(`/permissoes/editar/${idPermissao}`)
+    fetch(`/permissoes/buscarPermicao/${idPermissao}`)
         .then((dadosPermissao) => {
             if (dadosPermissao.ok) {
                 dadosPermissao.json().then((dadosPermissao) => {
-                    
+                    console.log(dadosPermissao)
                     // Verifique se todos os campos estão vazios
                     if (
-                        dadosPermissao[0].nome === "" &&
-                        dadosPermissao[0].Atuacao === "" &&
+                        dadosPermissao[0].permissao_nome === "" &&
+                        dadosPermissao[0].atuacao_nome === "" &&
                         dadosPermissao[0].duracaoStrikePadrao === ""
                     ) {
                         Swal.fire("Atenção", "Todos os campos estão vazios. Não é possível editar.", "warning");
@@ -270,8 +290,8 @@ function alterar(idPermissao) {
                     Swal.fire({
                         title: 'Editar Permissão',
                         html:
-                            `<input type="text" id="nomeListaInput" placeholder="Nome da lista" value="${dadosPermissao[0].nome}" class="swal2-input" style="border-radius: 15px;">
-                            <input type="text" id="atuacaoInput" placeholder="Atuação" value="${dadosPermissao[0].Atuacao}" class="swal2-input" style="border-radius: 15px;">
+                            `<input type="text" id="nomeListaInput" placeholder="Nome da lista" value="${dadosPermissao[0].permissao_nome}" class="swal2-input" style="border-radius: 15px;">
+                            <input type="text" id="atuacaoInput" placeholder="Atuação" value="${dadosPermissao[0].atuacao_nome}" class="swal2-input" style="border-radius: 15px;">
                             <input type="number" id="duracaoStrikePadraoInput" placeholder="Tempo de duração" value="${dadosPermissao[0].duracaoStrikePadrao}" class="swal2-input" style="border-radius: 15px;">`,
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
@@ -345,8 +365,8 @@ function alterar(idPermissao) {
                                         "Content-Type": "application/json"
                                     },
                                     body: JSON.stringify({
-                                        nomeLista: nomeInput,
-                                        atuacaoInput: atuacaoInput,
+                                        nome: nomeInput,
+                                        atuacao: atuacaoInput,
                                         duracaoStrikePadrao: duracaoInput,
                                         idPermissao: idPermissao
                                     })
@@ -388,9 +408,9 @@ function alterar(idPermissao) {
                 });
             }
         });
-    }
+}
 
-    function buscarPermissao() {
+function buscarPermissao() {
         var nomeDigitado = input_busca.value
         var instituicao = localStorage.getItem("instituicao")
      
@@ -441,4 +461,4 @@ function alterar(idPermissao) {
      
         }))
            }
-     }
+}

@@ -9,12 +9,30 @@ function listar() {
 FROM permissao p
 JOIN atuacao a ON p.fkAtuacao = a.idAtuacao
 JOIN usuario u ON p.fkUsuario = u.idUsuario
-JOIN tipoUsuario tu ON u.fkTipoUsuario = tu.idTipoUsuario
-WHERE tu.idTipoUsuario = 3;`;
+JOIN tipoUsuario tu ON u.fkTipoUsuario = tu.idTipoUsuario`
 
     console.log("Executando a instrução SQL: \n" + instrução);
     return database.executar(instrução);
 }
+
+
+function listarPorUsuario(idUsuario) {
+    var instrucao = `
+    SELECT
+        p.nome,
+        p.duracaoStrikePadrao,
+        a.nome AS Atuacao,
+        p.idPermissao
+    FROM permissao p
+    JOIN atuacao a ON p.fkAtuacao = a.idAtuacao
+    JOIN usuario u ON p.fkUsuario = u.idUsuario
+    JOIN tipoUsuario tu ON u.fkTipoUsuario = tu.idTipoUsuario
+    WHERE u.idUsuario = ${idUsuario};`
+
+    console.log("Executando a instrucao SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 
 function buscarPermissoesFunc(idFuncionario) {
     var instrucao = `
@@ -67,7 +85,7 @@ function deletar(idPermissao) {
 function editar(nome, atuacao, duracaoStrikePadrao, idPermissao) {
     var instrução = `
     UPDATE permissao
-    SET nome = '${nome}', atuacao = '${atuacao}', duracaoStrikePadrao = '${duracaoStrikePadrao}'
+    SET nome = '${nome}', fkAtuacao = '${atuacao}', duracaoStrikePadrao = '${duracaoStrikePadrao}'
     WHERE idPermissao = ${ idPermissao };
     `;
     return database.executar(instrução);
@@ -96,5 +114,6 @@ module.exports = {
     buscarPermissoesFunc,
     editarConfig,
     buscarPermicao,
-    adicionar
+    adicionar,
+    listarPorUsuario
 };

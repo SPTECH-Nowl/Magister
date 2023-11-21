@@ -19,6 +19,23 @@ function listar(req, res) {
     });
 }
 
+function listarPorUsuario(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    permissaoModel.listarPorUsuario(idUsuario)
+    .then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!");
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar permissões: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function buscarPermissoesFunc(req, res) {
     var idFuncionario = req.params.idFuncionario;
 
@@ -101,7 +118,7 @@ function deletar(req, res) {
 }
 
 function editar(req, res) {
-    var nome = req.body.nomePermissao;
+    var nome = req.body.nome;
     var atuacao = req.body.atuacao;
     var duracaoStrikePadrao = req.body.duracaoStrikePadrao;
     var idPermissao = req.body.idPermissao;
@@ -149,5 +166,6 @@ module.exports = {
     buscarPermissoesFunc,
     editarConfig,
     buscarPermicao,
-    adicionar
+    adicionar,
+    listarPorUsuario
 }
