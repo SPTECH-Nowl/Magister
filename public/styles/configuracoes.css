@@ -84,11 +84,16 @@ body{
     color: var(--color-gray-800);
 }
 
-sl-input::part(form-control-label), .select-config::part(form-control-label){
+sl-input::part(form-control-label), .select-config::part(form-control-label), .select-config::part(form-control-help-text){
     color: var(--color-gray-800);
     font-weight: 600;
     font-size: 1.2rem;
 }
+
+.select-config::part(form-control-help-text){
+    color: var(--color-purple-500);
+}
+
 
 
 sl-button.confirm-button{
@@ -128,3 +133,16 @@ sl-select.select-config{
     align-self: flex-end;
 }
 
+.drawerAdd::part(body){
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.drawerAdd sl-button.confirm-button{
+    align-self: center;
+    width: 100%;
+}
+
+.drawerAdd sl-select.select-config{
+    width: 100%;
+}
