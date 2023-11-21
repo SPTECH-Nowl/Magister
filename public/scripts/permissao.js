@@ -339,7 +339,7 @@ function alterar(idPermissao) {
                                     setFieldStyle(document.getElementById('duracaoStrikePadraoInput'), true);
                                 }
 
-                                fetch("/permissoes/editar/", {
+                                fetch(`/permissoes/editar/${idPermissao}`, {
                                     method: "put",
                                     headers: {
                                         "Content-Type": "application/json"
@@ -347,8 +347,7 @@ function alterar(idPermissao) {
                                     body: JSON.stringify({
                                         nomeLista: nomeInput,
                                         atuacaoInput: atuacaoInput,
-                                        duracaoStrikePadrao: duracaoInput,
-                                        idPermissao: idPermissao
+                                        duracaoStrikePadrao: duracaoInput
                                     })
                                 })
                                 .then(response => {

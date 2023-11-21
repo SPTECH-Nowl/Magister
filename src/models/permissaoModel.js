@@ -18,7 +18,11 @@ WHERE tu.idTipoUsuario = 3;`;
 
 function deletar(idPermissao) {
     var instrução = `
-    DELETE FROM permissao WHERE idPermissao = ${ idPermissao };
+    UPDATE permissao 
+    SET fkUsuario = NULL, fkAtuacao = NULL 
+    WHERE idPermissao = ${idPermissao};
+
+    DELETE FROM permissao WHERE idPermissao = ${idPermissao};
     `;
     console.log("Executando a instrução SQL: \n" + instrução);
     return database.executar(instrução);
