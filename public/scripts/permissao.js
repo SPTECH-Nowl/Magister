@@ -359,7 +359,7 @@ function alterar(idPermissao) {
                                     setFieldStyle(document.getElementById('duracaoStrikePadraoInput'), true);
                                 }
 
-                                fetch("/permissoes/editar/", {
+                                fetch(`/permissoes/editar/${idPermissao}`, {
                                     method: "put",
                                     headers: {
                                         "Content-Type": "application/json"
