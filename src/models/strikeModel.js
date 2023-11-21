@@ -145,6 +145,7 @@ function acaoETempoUsuarioEspecifico(idFuncionario) {
     var instrucao = `
     SELECT
     atuacao.idAtuacao,
+    atuacao.descricao,
     atuacao.nome AS atuacao_nome,
     atuacao.descricao AS atuacao_descricao,
     permissao.*
