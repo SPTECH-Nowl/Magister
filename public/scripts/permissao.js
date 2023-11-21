@@ -44,7 +44,20 @@ function carregarFeed(idUsuario) {
                         console.log(listaPermissoes)
                         
                         for (var i = 0; i < listaPermissoes.length; i++) {
+
+
+                            
                             var permissao = listaPermissoes[i];
+
+                            let duracaoBrutaEmMinutos = permissao.duracaoStrikePadrao;
+    
+                            let horas = Math.floor(duracaoBrutaEmMinutos / 60);
+                            let minutos = duracaoBrutaEmMinutos % 60;
+                        
+                            horas = horas < 10 ? "0" + horas : horas;
+                            minutos = minutos < 10 ? "0" + minutos : minutos;
+                        
+                            let duracaoFormatada = `${horas}:${minutos}`;
 
                             var linhaTable = document.createElement("tr");
                             linhaTable.setAttribute('id', `permissao_${permissao.idPermissao}`)
@@ -55,7 +68,7 @@ function carregarFeed(idUsuario) {
                             var celulaBotoes = document.createElement("td");
 
                             celulaNome.textContent = permissao.nome;
-                            celulaDuracaoStrike.textContent = permissao.duracaoStrikePadrao;
+                            celulaDuracaoStrike.textContent = duracaoFormatada;
                             celulaAtuacao.textContent = permissao.Atuacao;
 
                             // Adicione os botões com base no ID do usuário
@@ -275,7 +288,18 @@ function alterar(idPermissao) {
         .then((dadosPermissao) => {
             if (dadosPermissao.ok) {
                 dadosPermissao.json().then((dadosPermissao) => {
-                    console.log(dadosPermissao)
+                    
+                                let duracaoBrutaEmMinutos = dadosPermissao[0].duracaoStrikePadrao;
+    
+                                let horas = Math.floor(duracaoBrutaEmMinutos / 60);
+                                let minutos = duracaoBrutaEmMinutos % 60;
+                            
+                                horas = horas < 10 ? "0" + horas : horas;
+                                minutos = minutos < 10 ? "0" + minutos : minutos;
+                            
+                                let duracaoFormatada = `${horas}:${minutos}`;
+                            
+                              
                     // Verifique se todos os campos estão vazios
                     if (
                         dadosPermissao[0].permissao_nome === "" &&
@@ -291,8 +315,11 @@ function alterar(idPermissao) {
                         title: 'Editar Permissão',
                         html:
                             `<input type="text" id="nomeListaInput" placeholder="Nome da lista" value="${dadosPermissao[0].permissao_nome}" class="swal2-input" style="border-radius: 15px;">
-                            <input type="text" id="atuacaoInput" placeholder="Atuação" value="${dadosPermissao[0].atuacao_nome}" class="swal2-input" style="border-radius: 15px;">
-                            <input type="number" id="duracaoStrikePadraoInput" placeholder="Tempo de duração" value="${dadosPermissao[0].duracaoStrikePadrao}" class="swal2-input" style="border-radius: 15px;">`,
+                            <select type="text" id="atuacaoInput" placeholder="Atuação" value="" class="swal2-input" style="border-radius: 15px;">
+                                  <option value="0" disabled> Escolha uma ação</option>
+                            </select>
+                            
+                            <input type="time" id="duracaoStrikePadraoInput" placeholder="Tempo de duração" value="${duracaoFormatada}" class="swal2-input" style="border-radius: 15px;">`,
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar alterações',
@@ -321,10 +348,26 @@ function alterar(idPermissao) {
                                 cancelButton.style.borderRadius = '15px';
                             }
 
+                            buscarAcoes().then(dados =>{
+                                dados.forEach(acao => {
+                                    document.getElementById("atuacaoInput").innerHTML += `<option value="${acao.idAtuacao}"> ${acao.nome}</option>`
+                                });
+                            })
+
                             confirmButton.addEventListener('click', () => {
                                 const nomeInput = document.getElementById('nomeListaInput').value;
                                 const duracaoInput = document.getElementById('duracaoStrikePadraoInput').value;
-                                const atuacaoInput = document.getElementById('atuacaoInput').value;
+
+                                var atuacaoInput = document.getElementById('atuacaoInput').value;
+
+                                var tempoPadrao = document.getElementById('duracaoStrikePadraoInput').value;
+    
+                                var partesTempo = tempoPadrao.split(':');
+                            
+                                var horas = parseInt(partesTempo[0], 10);
+                                var minutos = parseInt(partesTempo[1], 10);
+                            
+                                var tempoTotalEmMinutos = horas * 60 + minutos;
 
                                 // Função para definir o estilo dos inputs
                                 function setFieldStyle(input, isValid) {
@@ -344,7 +387,7 @@ function alterar(idPermissao) {
                                     setFieldStyle(document.getElementById('nomeListaInput'), true);
                                 }
                                 
-                                if (atuacaoInput.length < 3) {
+                                if (atuacaoInput.length == 0) {
                                     setFieldStyle(document.getElementById('atuacaoInput'), false);
                                     Swal.showValidationMessage('A atuação deve ter pelo menos 3 caracteres.');
                                     return false;
@@ -359,7 +402,7 @@ function alterar(idPermissao) {
                                     setFieldStyle(document.getElementById('duracaoStrikePadraoInput'), true);
                                 }
 
-                                fetch(`/permissoes/editar/${idPermissao}`, {
+                                fetch(`/permissoes/editar`, {
                                     method: "put",
                                     headers: {
                                         "Content-Type": "application/json"
@@ -367,17 +410,12 @@ function alterar(idPermissao) {
                                     body: JSON.stringify({
                                         nome: nomeInput,
                                         atuacao: atuacaoInput,
-                                        duracaoStrikePadrao: duracaoInput,
+                                        duracaoStrikePadrao: tempoTotalEmMinutos,
                                         idPermissao: idPermissao
                                     })
                                 })
                                 .then(response => {
                                     if (response.ok) {
-                                        return response.json();
-                                    }
-                                })
-                                .then(result => {
-                                    if (result) {
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Sucesso!',
@@ -385,17 +423,20 @@ function alterar(idPermissao) {
                                             showConfirmButton: false,
                                             timer: 1500 // Fecha o pop-up após 1,5 segundos
                                         });
+
                                         setTimeout(() => {
-                                            location.reload();
+                                            window.location.reload();
                                         }, 1500);
-                                    } else {
+
+                                    } else{
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Falha!',
                                             text: 'Falha ao editar Lista',
                                         });
                                     }
-                                });
+                                })
+
                             });
                         },
                     });
