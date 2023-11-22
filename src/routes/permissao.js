@@ -27,10 +27,9 @@ router.put("/editar", function (req, res) {
     permissaoController.editar(req, res);
 });
 
-router.post("/adicionar", function (req, res) {
-    permissaoController.adicionar(req, res);
+router.post("/cadastrarPermissao", function (req, res) {
+    permissaoController.cadastrarPermissao(req, res);
 });
-
 
 router.put("/editarConfig", function (req, res) {
     permissaoController.editarConfig(req, res);

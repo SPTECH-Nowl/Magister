@@ -53,7 +53,7 @@ function buscarPermissoesFunc(req, res) {
     });
 }
 
-function adicionar(req, res) {
+function cadastrarPermissao(req, res) {
     var nome = req.body.nome
     var fkAtuacao = req.body.fkAtuacao
     var tempoPadrao = req.body.duracaoStrikePadrao
@@ -66,7 +66,7 @@ function adicionar(req, res) {
     } else if(tempoPadrao == undefined){
         console.log("tempo padrão não definido")
     } else{
-    permissaoModel.adicionar(nome, fkAtuacao, tempoPadrao, fkUsuario)
+    permissaoModel.cadastrarPermissao(nome, fkAtuacao, tempoPadrao, fkUsuario)
     .then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
@@ -166,6 +166,6 @@ module.exports = {
     buscarPermissoesFunc,
     editarConfig,
     buscarPermicao,
-    adicionar,
+    cadastrarPermissao,
     listarPorUsuario
 }

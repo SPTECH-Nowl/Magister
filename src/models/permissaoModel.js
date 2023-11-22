@@ -75,15 +75,26 @@ function buscarPermicao(idPermicao) {
 }
 
 function deletar(idPermissao) {
-    var instrução = `
-    UPDATE permissao 
-    SET fkUsuario = NULL, fkAtuacao = NULL 
-    WHERE idPermissao = ${idPermissao};
+    return new Promise(function (resolve, reject) {
+        var instrucao1 = `UPDATE permissao 
+        SET fkUsuario = NULL, fkAtuacao = NULL 
+        WHERE idPermissao = ${idPermissao};`;
+        var instrucao2 = `DELETE FROM permissao WHERE idPermissao = ${idPermissao};`;
 
-    DELETE FROM permissao WHERE idPermissao = ${idPermissao};
-    `;
-    console.log("Executando a instrução SQL: \n" + instrução);
-    return database.executar(instrução);
+        console.log("Executando as instruções SQL...");
+        var querys = [];
+
+        querys.push(database.executar(instrucao1));
+        querys.push(database.executar(instrucao2));
+       
+        Promise.all(querys)
+            .then(function (res) {
+                resolve(res);
+            })
+            .catch(function (error) {
+                reject(error);
+            });
+    });
 }
 
 function editar(nome, atuacao, duracaoStrikePadrao, idPermissao) {
@@ -104,7 +115,7 @@ function editarConfig(idAtuacao, idPermissao,  duracaoStrikePadrao) {
     return database.executar(instrução);
 }
 
-function adicionar(nome, fkAtuacao, tempoPadrao, fkUsuario) {
+function cadastrarPermissao(nome, fkAtuacao, tempoPadrao, fkUsuario) {
     var instrucao = `
         insert into permissao values (null, '${nome}', 0, ${tempoPadrao}, ${fkAtuacao}, ${fkUsuario})
     `;
@@ -118,6 +129,6 @@ module.exports = {
     buscarPermissoesFunc,
     editarConfig,
     buscarPermicao,
-    adicionar,
+    cadastrarPermissao,
     listarPorUsuario
 };

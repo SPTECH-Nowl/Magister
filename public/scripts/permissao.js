@@ -1,30 +1,30 @@
 
 var idUsuario = localStorage.getItem("idUsuario");
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     carregarFeed(idUsuario);
 
     const adicionarPermissaoButton = document.getElementById('adicionarPermissao');
     adicionarPermissaoButton.addEventListener('click', adicionarPermissao);
-   });
+});
 
 
-function buscarAcoes(){
+function buscarAcoes() {
     return new Promise((resolve, reject) => {
         fetch(`/atuacoes/buscarAcoes/`)
-           .then((response) => {
-              if(response.ok) {
-                 response.json().then((response) => {
-                    let registro = response;
-                    resolve(registro);
-                 })
-              }
-           })
-           .catch((error) => {
-              console.log("Erro na requisição", error);
-              reject(error);
-           })
-     })
+            .then((response) => {
+                if (response.ok) {
+                    response.json().then((response) => {
+                        let registro = response;
+                        resolve(registro);
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log("Erro na requisição", error);
+                reject(error);
+            })
+    })
 }
 
 
@@ -38,25 +38,25 @@ function carregarFeed(idUsuario) {
                     tablePermissoes.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
                 } else {
                     listaPermissoes.json().then(function (listaPermissoes) {
-                        
+
                         var tablePermissoes = document.getElementById("listaDePermissao");
-                        tablePermissoes.innerHTML = ""; 
+                        tablePermissoes.innerHTML = "";
                         console.log(listaPermissoes)
-                        
+
                         for (var i = 0; i < listaPermissoes.length; i++) {
 
 
-                            
+
                             var permissao = listaPermissoes[i];
 
                             let duracaoBrutaEmMinutos = permissao.duracaoStrikePadrao;
-    
+
                             let horas = Math.floor(duracaoBrutaEmMinutos / 60);
                             let minutos = duracaoBrutaEmMinutos % 60;
-                        
+
                             horas = horas < 10 ? "0" + horas : horas;
                             minutos = minutos < 10 ? "0" + minutos : minutos;
-                        
+
                             let duracaoFormatada = `${horas}:${minutos}`;
 
                             var linhaTable = document.createElement("tr");
@@ -76,14 +76,14 @@ function carregarFeed(idUsuario) {
                             <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Permissao" id="btn_delete${permissao.idPermissao}" onclick="deletar(${permissao.idPermissao}, ${localStorage.getItem("nivPerm")})">
                             <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Permissao" id="btn_update${permissao.idPermissao}" onclick="alterar(${permissao.idPermissao})">
                          `;
-                     
-                        
-                        document.addEventListener("DOMContentLoaded", function () {
-                            carregarFeed(); // Chame a função para carregar a tabela de usuários
-                            tippy(".tooltip", {
-                                placement: "top",
+
+
+                            document.addEventListener("DOMContentLoaded", function () {
+                                carregarFeed(); // Chame a função para carregar a tabela de usuários
+                                tippy(".tooltip", {
+                                    placement: "top",
+                                });
                             });
-                        });
 
 
                             linhaTable.appendChild(celulaNome);
@@ -107,12 +107,21 @@ function carregarFeed(idUsuario) {
 function adicionarPermissao() {
     let permissaoAdicionada = false;
 
+    buscarAcoes().then(dados => {
+        dados.forEach(acao => {
+            document.getElementById("atuacaoInput").innerHTML += `<option value="${acao.idAtuacao}"> ${acao.nome}</option>`
+        });
+    })
+
     Swal.fire({
         title: 'Adicionar permissão',
         html:
-            '<input type="text" id="nomeListaInput" placeholder="Nome da lista" class="swal2-input" style="border-radius: 15px;">' +
-            '<input type="number" id="duracaoInput" placeholder="Tempo de duração" class="swal2-input" style="border-radius: 15px;">' +
-            '<select id="atuacaoInput" placeholder="Atuação" class="swal2-input" style="border-radius: 15px;>  </select>',
+            `<input type="text" id="nomeListaInput" placeholder="Nome da lista" class="swal2-input" style="border-radius: 15px;">
+        <select type="text" id="atuacaoInput" placeholder="Atuação" value="" class="swal2-input" style="border-radius: 15px;">
+              <option value="0" disabled> Escolha uma ação</option>
+        </select>
+        
+        <input type="time" id="duracaoStrikePadraoInput" placeholder="Tempo de duração" class="swal2-input" style="border-radius: 15px;">`,
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         cancelButtonColor: '#d33', // Cor do botão "Cancelar"
@@ -135,12 +144,19 @@ function adicionarPermissao() {
         preConfirm: () => {
             // Validação dos campos
             const nomeListaInput = document.getElementById('nomeListaInput');
-            const duracaoInput = document.getElementById('duracaoInput');
+            const atuacaoInput = document.getElementById('atuacaoInput')
+            const duracaoInput = document.getElementById('duracaoStrikePadraoInput');
 
             const nome = nomeListaInput.value;
+            const atuacao = atuacaoInput.value;
             const duracao = duracaoInput.value;
 
-            const nomeUsuario = sessionStorage.getItem('nomeUsuario')
+            const duracaoMinutos = convertParaMinutos(duracao)
+
+            function convertParaMinutos(horaMinuto) {
+                const [horas, minutos] = horaMinuto.split(":");
+                return parseInt(horas) * 60 + parseInt(minutos);
+            }
 
             // Função para definir o estilo dos inputs
             function setFieldStyle(input, isValid) {
@@ -153,56 +169,64 @@ function adicionarPermissao() {
 
             // Validação do campo Nome
             if (nome.length < 3) {
-                setFieldStyle(nomeInput, false);
+                setFieldStyle(nomeListaInput, false);
                 Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
                 return false;
             } else {
-                setFieldStyle(nomeInput, true);
+                setFieldStyle(nomeListaInput, true);
             }
 
-            if(duracao <= 0) {
+            if (atuacao == null) {
+                setFieldStyle(atuacaoInput, false);
+                Swal.showValidationMessage("Selecione uma ação padrão.")
+            } else {
+                setFieldStyle(atuacaoInput, true);
+            }
+
+            if (duracao <= 0) {
                 setFieldStyle(duracaoInput, false);
                 Swal.showValidationMessage("A duração do strike deve ser de, pelo menos, um minuto")
+            } else {
+                setFieldStyle(duracaoInput, true);
             }
-            
+
             return new Promise((resolve) => {
-                fetch("/permissao/cadastrarPermissao", {
+                fetch("/permissoes/cadastrarPermissao", {
                     method: "POST",
                     headers: {
                         "Content-type": "application/json"
                     },
                     body: JSON.stringify({
-                        nomeUsuario: nome,
-                        emailUsuario: email,
-                        senhaUsuario: senha,
-                        nivPermissao: tipo,
-                        instituicao: localStorage.getItem("instituicao")
+                        nome: nome,
+                        duracaoStrikePadrao: duracaoMinutos,
+                        fkAtuacao: atuacao,
+                        fkUsuario: localStorage.getItem("idUsuario")
                     })
                 })
                     .then((response) => {
                         if (!response.ok) {
-                            throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
+                            throw new Error('Erro ao adicionar permissão'); // Lança um erro para cair no catch
                         }
                         return response.json(); // Retorna a resposta JSON se estiver tudo OK
                     })
                     .then(() => {
-                        usuarioAdicionado = true; // Define a variável como true quando o usuário é adicionado
+                        permissaoAdicionada = true; // Define a variável como true quando o usuário é adicionado
                         resolve(); // Resolve a Promise após a adição do usuário
                     })
                     .catch((error) => {
                         console.log(error);
-                        console.log("Houve um erro ao tentar cadastrar o usuário");
+                        console.log("Houve um erro ao tentar adicionar a permissão");
                     });
             });
         },
     })
         .then((result) => {
-            if (result.isConfirmed && usuarioAdicionado) {
+            if (result.isConfirmed && permissaoAdicionada) {
                 sessionStorage.clear();
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'O usuário foi cadastrado com sucesso!',
+                    title: 'A permissão foi adicionada com sucesso!',
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -247,7 +271,7 @@ function deletar(idPermissao, tipoPermissao) {
             customHeight: '700px' // Aumento a altura
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/permissoes/deletar/`, {
+                fetch(`/permissoes/deletar/${idPermissao}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -263,7 +287,7 @@ function deletar(idPermissao, tipoPermissao) {
                             showConfirmButton: false,
                             timer: 1500
                         });
-                      //  recarrega a página 
+                        //  recarrega a página 
                         setTimeout(() => {
                             location.reload();
                         }, 1500);
@@ -288,18 +312,18 @@ function alterar(idPermissao) {
         .then((dadosPermissao) => {
             if (dadosPermissao.ok) {
                 dadosPermissao.json().then((dadosPermissao) => {
-                    
-                                let duracaoBrutaEmMinutos = dadosPermissao[0].duracaoStrikePadrao;
-    
-                                let horas = Math.floor(duracaoBrutaEmMinutos / 60);
-                                let minutos = duracaoBrutaEmMinutos % 60;
-                            
-                                horas = horas < 10 ? "0" + horas : horas;
-                                minutos = minutos < 10 ? "0" + minutos : minutos;
-                            
-                                let duracaoFormatada = `${horas}:${minutos}`;
-                            
-                              
+
+                    let duracaoBrutaEmMinutos = dadosPermissao[0].duracaoStrikePadrao;
+
+                    let horas = Math.floor(duracaoBrutaEmMinutos / 60);
+                    let minutos = duracaoBrutaEmMinutos % 60;
+
+                    horas = horas < 10 ? "0" + horas : horas;
+                    minutos = minutos < 10 ? "0" + minutos : minutos;
+
+                    let duracaoFormatada = `${horas}:${minutos}`;
+
+
                     // Verifique se todos os campos estão vazios
                     if (
                         dadosPermissao[0].permissao_nome === "" &&
@@ -310,7 +334,7 @@ function alterar(idPermissao) {
                         return;
                     }
 
-                   
+
                     Swal.fire({
                         title: 'Editar Permissão',
                         html:
@@ -348,7 +372,7 @@ function alterar(idPermissao) {
                                 cancelButton.style.borderRadius = '15px';
                             }
 
-                            buscarAcoes().then(dados =>{
+                            buscarAcoes().then(dados => {
                                 dados.forEach(acao => {
                                     document.getElementById("atuacaoInput").innerHTML += `<option value="${acao.idAtuacao}"> ${acao.nome}</option>`
                                 });
@@ -361,12 +385,12 @@ function alterar(idPermissao) {
                                 var atuacaoInput = document.getElementById('atuacaoInput').value;
 
                                 var tempoPadrao = document.getElementById('duracaoStrikePadraoInput').value;
-    
+
                                 var partesTempo = tempoPadrao.split(':');
-                            
+
                                 var horas = parseInt(partesTempo[0], 10);
                                 var minutos = parseInt(partesTempo[1], 10);
-                            
+
                                 var tempoTotalEmMinutos = horas * 60 + minutos;
 
                                 // Função para definir o estilo dos inputs
@@ -386,7 +410,7 @@ function alterar(idPermissao) {
                                 } else {
                                     setFieldStyle(document.getElementById('nomeListaInput'), true);
                                 }
-                                
+
                                 if (atuacaoInput.length == 0) {
                                     setFieldStyle(document.getElementById('atuacaoInput'), false);
                                     Swal.showValidationMessage('A atuação deve ter pelo menos 3 caracteres.');
@@ -394,7 +418,7 @@ function alterar(idPermissao) {
                                 } else {
                                     setFieldStyle(document.getElementById('atuacaoInput'), true);
                                 }
-                    
+
                                 if (duracaoInput <= 0) {
                                     setFieldStyle(document.getElementById('duracaoIStrikePadraoInput'), false);
                                     Swal.showValidationMessage('A duração do Strike deve ser de, no mínimo, cinco minutos.')
@@ -414,28 +438,28 @@ function alterar(idPermissao) {
                                         idPermissao: idPermissao
                                     })
                                 })
-                                .then(response => {
-                                    if (response.ok) {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Sucesso!',
-                                            text: 'Lista atualizada com sucesso!',
-                                            showConfirmButton: false,
-                                            timer: 1500 // Fecha o pop-up após 1,5 segundos
-                                        });
+                                    .then(response => {
+                                        if (response.ok) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Sucesso!',
+                                                text: 'Lista atualizada com sucesso!',
+                                                showConfirmButton: false,
+                                                timer: 1500 // Fecha o pop-up após 1,5 segundos
+                                            });
 
-                                        setTimeout(() => {
-                                            window.location.reload();
-                                        }, 1500);
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 1500);
 
-                                    } else{
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Falha!',
-                                            text: 'Falha ao editar Lista',
-                                        });
-                                    }
-                                })
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Falha!',
+                                                text: 'Falha ao editar Lista',
+                                            });
+                                        }
+                                    })
 
                             });
                         },
@@ -452,54 +476,54 @@ function alterar(idPermissao) {
 }
 
 function buscarPermissao() {
-        var nomeDigitado = input_busca.value
-        var instituicao = localStorage.getItem("instituicao")
-     
-           if (nomeDigitado.length < 3){
-              carregarFeed()
-           } else {
-              fetch(`/permissoes/pesquisarUsuario/${nomeDigitado}/${instituicao}`)
-                 .then((permissaoBuscada =>{
-                    if(permissaoBuscada.status == 204){
-                       var tablePermissoes = document.getElementById("listaDePermissoes");
-                       tablePermissoes.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
-                    }else {
-                         permissaoBuscada.json().then(function (permissaoBuscada) {
-                             var tablePermissoes = document.getElementById("listaDePermissoes");
-                             tablePermissoes.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
-     
-                             console.log(permissaoBuscada)
-                             
-                             for (var i = 0; i < permissaoBuscada.length; i++) {
-                                 var permissao = permissaoBuscada[i];
-                                 
-                                 var linhaTable = document.createElement("tr");
-                                 var celulaNome = document.createElement("td");
-                                 var celulaDuracaoStrike = document.createElement("td");
-                                 var celulaAtuacao = document.createElement("td");
-                                 var celulaBotoes = document.createElement("td");
-     
-                                 celulaNome.textContent = permissao.nome;
-                                 celulaDuracaoStrike.textContent = permissao.duracaoStrikePadrao;
-                                 celulaAtuacao.textContent = permissao.Atuacao;
-     
-                                 // Adicione os botões com base no ID do usuário
-                                 celulaBotoes.innerHTML = `
+    var nomeDigitado = input_busca.value
+    var instituicao = localStorage.getItem("instituicao")
+
+    if (nomeDigitado.length < 3) {
+        carregarFeed()
+    } else {
+        fetch(`/permissoes/pesquisarUsuario/${nomeDigitado}/${instituicao}`)
+            .then((permissaoBuscada => {
+                if (permissaoBuscada.status == 204) {
+                    var tablePermissoes = document.getElementById("listaDePermissoes");
+                    tablePermissoes.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                } else {
+                    permissaoBuscada.json().then(function (permissaoBuscada) {
+                        var tablePermissoes = document.getElementById("listaDePermissoes");
+                        tablePermissoes.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
+
+                        console.log(permissaoBuscada)
+
+                        for (var i = 0; i < permissaoBuscada.length; i++) {
+                            var permissao = permissaoBuscada[i];
+
+                            var linhaTable = document.createElement("tr");
+                            var celulaNome = document.createElement("td");
+                            var celulaDuracaoStrike = document.createElement("td");
+                            var celulaAtuacao = document.createElement("td");
+                            var celulaBotoes = document.createElement("td");
+
+                            celulaNome.textContent = permissao.nome;
+                            celulaDuracaoStrike.textContent = permissao.duracaoStrikePadrao;
+                            celulaAtuacao.textContent = permissao.Atuacao;
+
+                            // Adicione os botões com base no ID do usuário
+                            celulaBotoes.innerHTML = `
                                  <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Permissao">
                                  <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Permissao">
                              `;
-                                                     
-     
-                             linhaTable.appendChild(celulaNome);
-                             linhaTable.appendChild(celulaAtuacao);
-                             linhaTable.appendChild(celulaDuracaoStrike);
-                             linhaTable.appendChild(celulaBotoes);
- 
-                             tablePermissoes.appendChild(linhaTable);
-                             }
-                         });
-                     }
-     
-        }))
-           }
+
+
+                            linhaTable.appendChild(celulaNome);
+                            linhaTable.appendChild(celulaAtuacao);
+                            linhaTable.appendChild(celulaDuracaoStrike);
+                            linhaTable.appendChild(celulaBotoes);
+
+                            tablePermissoes.appendChild(linhaTable);
+                        }
+                    });
+                }
+
+            }))
+    }
 }
