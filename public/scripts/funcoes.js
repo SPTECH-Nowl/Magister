@@ -84,9 +84,35 @@ function addDialog() {
          botaoAplicarAcao.textContent = 'Aplicar ação';
          botaoAplicarAcao.classList.add('btn', 'primario', 'btn-full');
          botaoAplicarAcao.id = 'btn_aplicar_acao';
-         botaoAplicarAcao.addEventListener("click", (e) => {
-            e.preventDefault;
-            aplicarAdvertencia();
+         botaoAplicarAcao.addEventListener("click", async (e) => {
+            e.preventDefault();
+            try {
+               
+               const result = await Swal.fire({
+                  title: 'Confirmação',
+                  text: 'Deseja realmente aplicar a ação?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sim',
+                  cancelButtonText: 'Cancelar'
+               });
+
+               if (result.isConfirmed) {
+                  await aplicarAdvertencia();
+                 
+                  Swal.fire({
+                     title: 'Sucesso!',
+                     text: 'Ação aplicada com sucesso!',
+                     icon: 'success',
+                     showCancelButton: true,
+                     confirmButtonText: 'OK',
+                     timer: 50000
+                  })
+               }
+            } catch (error) {
+             
+               console.error(error);
+            }
          });
          maquinaStrikeButtons.appendChild(botaoAplicarAcao);
          
@@ -94,15 +120,124 @@ function addDialog() {
          botaoInativarStrikes.textContent = 'Inativar strikes';
          botaoInativarStrikes.classList.add('btn', 'secundario', 'btn-full');
          botaoInativarStrikes.id = 'btn_inativar';
-         botaoInativarStrikes.addEventListener("click", (e) => {
+         botaoInativarStrikes.addEventListener("click", async (e) => {
             e.preventDefault;
-            aplicarAdvertencia();
+            try {
+               await aplicarAdvertencia();
+               
+               Swal.fire({
+                  title: 'Sucesso!',
+                  text: 'Ação aplicada com sucesso!',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                  timer:5000
+               });
+            } catch (error) {
+               
+               console.error(error);
+            }
          })
          maquinaStrikeButtons.appendChild(botaoInativarStrikes);
          
          body.appendChild(dialogElement);    
       })
    });
+}
+
+async function aplicarAdvertencia() {
+   return new Promise((resolve, reject) => {
+    
+      setTimeout(() => {
+         resolve();
+      }, 5000); 
+   });
+}
+
+function addToast () {
+   const idInstituicao = localStorage.getItem("instituicao");
+   return new Promise(() => {
+      getStrikesToasts(idInstituicao)
+      .then(ultimosStrikes => {
+         // ultimosStrikes.forEach(strike => {
+         //    alert(strike.nome + strike.dataHora)
+
+         // })
+
+         const body = document.querySelector('body')
+
+         const toast = document.createElement('div')
+         const toastHeader = document.createElement('div')
+         const toastBody = document.createElement('div')
+
+         toast.classList.add('toast')
+         toastHeader.classList.add('toast-header')
+         toastBody.classList.add('toast-body')
+
+         toast.setAttribute('id', 'toast')
+         toastHeader.setAttribute('onclick', 'toggleToast()')
+         toastBody.setAttribute('id', 'toastBody')
+
+         toastHeader.innerHTML = `ÚLTIMOS STRIKES (${ultimosStrikes.length}) ▼`
+
+         ultimosStrikes.forEach(strike => {
+            const toastLine = document.createElement('div')
+            const toastBtns = document.createElement('div')
+
+            toastLine.classList.add('toast-line')
+            toastBtns.classList.add('toast-btns')
+
+
+            const lineName = document.createElement('p')
+            const lineHora = document.createElement('p')
+
+            const name = document.createTextNode(strike.nome)
+            const hora = document.createTextNode(strike.dataHora)
+            
+            lineName.appendChild(name)
+            lineHora.appendChild(hora)
+
+            toastBtns.innerHTML = `
+               <a href="./strikes.html">
+                  <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip toast-btn" title="Ver Strikes" id="btn_info">
+               </a>
+            `;
+            
+            toastLine.appendChild(lineName)
+            toastLine.appendChild(lineHora)
+            toastLine.appendChild(toastBtns)
+
+            toastBody.appendChild(toastLine);
+         })
+
+         // if (ultimosStrikes.length == 3) {
+         //    const verMais = document.createElement('a')
+         //    verMais.setAttribute('href', './strikes.html')
+         //    verMais.classList.add('toast-ver-mais')
+
+         //    const verMaisTexto = document.createTextNode('Ver mais...')
+
+         //    verMais.appendChild(verMaisTexto)
+         //    toastBody.appendChild(verMais)
+         // }
+         
+         toast.appendChild(toastHeader)
+         toast.appendChild(toastBody)
+         body.appendChild(toast);
+      })
+   });
+}
+
+function toggleToast () {
+   let toast = document.getElementById('toast');
+   let toastBody = document.getElementById('toastBody');
+
+   if (toast.classList.contains('open')) {
+      toast.style.transform = `translateY(0px)`
+   } else {
+      toast.style.transform = `translateY(${toastBody.offsetHeight}px)`
+   }
+
+   toast.classList.toggle('open')
 }
 
 function mostrarStrikeDialog() {
@@ -150,6 +285,23 @@ function getStrikesDaMaquina(idMaquina) {
 function getPermissaoUsuario(idUsuario) {
    return new Promise((resolve, reject) => {
       fetch(`/maquinas/capturarPermissoes/${idUsuario}`)
+      .then((response) => {
+         if(response.ok) {
+            response.json().then((response) => {
+               resolve(response);
+            })
+         }
+      })
+      .catch((err) => {
+         console.log("Erro de requisição", err);
+         reject(err);
+      })
+   })
+}
+
+function getStrikesToasts(idInstituicao) {
+   return new Promise((resolve, reject) => {
+      fetch(`/strikes/strikesToast/${idInstituicao}`)
       .then((response) => {
          if(response.ok) {
             response.json().then((response) => {
@@ -247,7 +399,7 @@ function verifStrikes() {
 function changePageAction() {
    sessionStorage.nomeMaquina = nome;
    sessionStorage.idMaquina = id;
-   window.location.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
+   window.location.href = "http://52.3.127.92//dashboard/dashboard_maquina.html";
 }
 
 function getCheckboxAcao() {
@@ -293,6 +445,8 @@ function aplicarAdvertencia() {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
+   window.location.href.slice(-12) != 'strikes.html' ? addToast() : null;
+   
    addDialog();
    verifStrikes();
 });

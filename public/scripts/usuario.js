@@ -1,31 +1,31 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     carregarFeed(),
-    filtrosTipo()
-   });
+        filtrosTipo()
+});
 
 
 function buscarUsuario() {
-   var nomeDigitado = input_busca.value
-   var instituicao = localStorage.getItem("instituicao")
+    var nomeDigitado = input_busca.value
+    var instituicao = localStorage.getItem("instituicao")
 
-      if (nomeDigitado.length < 3){
-         carregarFeed()
-      } else {
-         fetch(`/usuarios/pesquisarUsuario/${nomeDigitado}/${instituicao}`)
-            .then((usuarioBuscado =>{
-               if(usuarioBuscado.status == 204){
-                  var tableUsuarios = document.getElementById("listaDeUsuarios");
-                  tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
-               }else {
+    if (nomeDigitado.length < 3) {
+        carregarFeed()
+    } else {
+        fetch(`/usuarios/pesquisarUsuario/${nomeDigitado}/${instituicao}`)
+            .then((usuarioBuscado => {
+                if (usuarioBuscado.status == 204) {
+                    var tableUsuarios = document.getElementById("listaDeUsuarios");
+                    tableUsuarios.innerHTML = "<tr><td colspan='4'>Nenhum resultado encontrado.</td></tr>";
+                } else {
                     usuarioBuscado.json().then(function (usuarioBuscado) {
                         var tableUsuarios = document.getElementById("listaDeUsuarios");
                         tableUsuarios.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
 
                         console.log(usuarioBuscado)
-                        
+
                         for (var i = 0; i < usuarioBuscado.length; i++) {
                             var usuario = usuarioBuscado[i];
-                            
+
                             var linhaTable = document.createElement("tr");
                             var celulaNome = document.createElement("td");
                             var celulaEmail = document.createElement("td");
@@ -42,7 +42,7 @@ function buscarUsuario() {
                             <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Escola">
                             <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações">
                         `;
-                                                
+
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -54,13 +54,13 @@ function buscarUsuario() {
                     });
                 }
 
-   }))
-      }
+            }))
+    }
 }
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const adicionarUsuarioButton = document.getElementById('adicionarUsuario');
     adicionarUsuarioButton.addEventListener('click', adicionarUsuario);
 });
@@ -75,9 +75,9 @@ function adicionarUsuario() {
             '<input type="email" id="emailInput" placeholder="Email" class="swal2-input" style="border-radius: 15px;">' +
             '<input type="password" id="senhaInput" placeholder="Senha" class="swal2-input" style="border-radius: 15px;">' +
             '<select id="tipoInput" class="swal2-input" style="border-radius: 15px;">' +
-                '<option value="1">ADM Nowl</option>' +
-                '<option value="2">ADM da Instituição</option>' +
-                '<option value="3">Professor</option>' +
+            '<option value="1">ADM Nowl</option>' +
+            '<option value="2">ADM da Instituição</option>' +
+            '<option value="3">Professor</option>' +
             '</select>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
@@ -170,12 +170,12 @@ function adicionarUsuario() {
                         instituicao: localStorage.getItem("instituicao")
                     })
                 })
-                .then(async (response) => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
-                    }
-                    return await response.json(); // Retorna a resposta JSON se estiver tudo OK
-                    })
+                    // .then(async (response) => {
+                    //     if (!response.ok) {
+                    //         throw new Error('Erro ao cadastrar usuário'); // Lança um erro para cair no catch
+                    //     }
+                    //     return await response.json(); // Retorna a resposta JSON se estiver tudo OK
+                    //     })
                     .then(() => {
                         usuarioAdicionado = true; // Define a variável como true quando o usuário é adicionado
                         resolve(); // Resolve a Promise após a adição do usuário
@@ -209,48 +209,47 @@ function adicionarUsuario() {
 }
 
 
-function filtrosTipo(){
-   fetch(`/usuarios/qtdTotal/${localStorage.getItem("instituicao")}`)
-   .then((qtdTotal) => {
-      if (qtdTotal.ok){
-         fetch(`/usuarios/qtdAdministrador/${localStorage.getItem("instituicao")}`)
-         .then((qtdTotalAdm) => {
-            fetch(`/usuarios/qtdInstrutor/${localStorage.getItem("instituicao")}`)
-               .then((qtdTotalInstrutor) => {
-                  if (qtdTotalInstrutor.ok){
-                     qtdTotal.json().then((qtdTotal) => {
-                        qtdTotalAdm.json().then((qtdTotalAdm) =>{
-                           qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
-                              var orderOptions = document.getElementById("orderOptions")
+function filtrosTipo() {
+    fetch(`/usuarios/qtdTotal/${localStorage.getItem("instituicao")}`)
+        .then((qtdTotal) => {
+            if (qtdTotal.ok) {
+                fetch(`/usuarios/qtdAdministrador/${localStorage.getItem("instituicao")}`)
+                    .then((qtdTotalAdm) => {
+                        fetch(`/usuarios/qtdInstrutor/${localStorage.getItem("instituicao")}`)
+                            .then((qtdTotalInstrutor) => {
+                                if (qtdTotalInstrutor.ok) {
+                                    qtdTotal.json().then((qtdTotal) => {
+                                        qtdTotalAdm.json().then((qtdTotalAdm) => {
+                                            qtdTotalInstrutor.json().then((qtdTotalInstrutor) => {
+                                                var orderOptions = document.getElementById("orderOptions")
 
-                                 var spanTotal = document.createElement("span")
-                                 var spanTotalAdministrador = document.createElement("span")
-                                 var spanTotalInstrutor = document.createElement("span")
+                                                var spanTotal = document.createElement("span")
+                                                var spanTotalAdministrador = document.createElement("span")
+                                                var spanTotalInstrutor = document.createElement("span")
 
-                                 spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
-                                 spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
-                                 spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
+                                                spanTotal.textContent = `Total (${qtdTotal[0].qtdTotal})`
+                                                spanTotalAdministrador.textContent = `Administradores (${qtdTotalAdm[0].qtdTotal})`
+                                                spanTotalInstrutor.textContent = `Instrutor (${qtdTotalInstrutor[0].qtdTotal})`
 
-                                 spanTotal.onclick = carregarFeed
-                                 spanTotalAdministrador.onclick = carregarFeedAdm
-                                 spanTotalInstrutor.onclick = carregarFeedInstrutor
+                                                spanTotal.onclick = carregarFeed
+                                                spanTotalAdministrador.onclick = carregarFeedAdm
+                                                spanTotalInstrutor.onclick = carregarFeedInstrutor
 
-                                 orderOptions.appendChild(spanTotal)
-                                 orderOptions.appendChild(spanTotalAdministrador)
-                                 orderOptions.appendChild(spanTotalInstrutor)
+                                                orderOptions.appendChild(spanTotal)
+                                                orderOptions.appendChild(spanTotalAdministrador)
+                                                orderOptions.appendChild(spanTotalInstrutor)
 
 
-                           })
-                        })                        
-                     })
+                                            })
+                                        })
+                                    })
 
-                  }
-               })
-         })
-      }
-   })
+                                }
+                            })
+                    })
+            }
+        })
 }
-
 
 function carregarFeed() {
     var codInstituicao = localStorage.getItem("instituicao");
@@ -265,8 +264,6 @@ function carregarFeed() {
                         var tableUsuarios = document.getElementById("listaDeUsuarios");
                         tableUsuarios.innerHTML = ""; // Limpar a tabela antes de preencher com os novos dados
 
-                        console.log(listaUsuarios)
-                        
                         for (var i = 0; i < listaUsuarios.length; i++) {
                             var usuario = listaUsuarios[i];
 
@@ -280,25 +277,14 @@ function carregarFeed() {
 
                             celulaNome.textContent = usuario.nomeUsuario;
                             celulaEmail.textContent = usuario.email;
-                            celulaTipo.textContent = usuario.nivPermissao;
+                            celulaTipo.textContent = getTipoUsuarioText(usuario.nivPermissao);
 
-                            // Adicione os botões com base no ID do usuário
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
-                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                        `;
-                     
-                        
-                        document.addEventListener("DOMContentLoaded", function () {
-                            carregarFeed(); // Chame a função para carregar a tabela de usuários
-                            tippy(".tooltip", {
-                                placement: "top",
-                            });
-                        });
+                                <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
+                                <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                                <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            `;
 
-
-                            
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
                             linhaTable.appendChild(celulaTipo);
@@ -317,6 +303,27 @@ function carregarFeed() {
         });
 }
 
+function getTipoUsuarioText(tipoUsuario) {
+    switch (tipoUsuario) {
+        case 1:
+            return "ADM Nowl";
+        case 2:
+            return "ADM da Instituição";
+        case 3:
+            return "Professor";
+        default:
+            return "Desconhecido";
+    }
+}
+
+// Chame a função para carregar a tabela de usuários
+document.addEventListener("DOMContentLoaded", function () {
+    carregarFeed();
+    tippy(".tooltip", {
+        placement: "top",
+    });
+});
+
 function carregarFeedAdm() {
     var codInstituicao = localStorage.getItem("instituicao");
 
@@ -329,13 +336,11 @@ function carregarFeedAdm() {
                 } else {
                     listaUsuarios.json().then(function (listaUsuarios) {
                         var tableUsuarios = document.getElementById("listaDeUsuarios");
-                        tableUsuarios.innerHTML = ""; 
+                        tableUsuarios.innerHTML = "";
 
-                        console.log(listaUsuarios)
-                        
                         for (var i = 0; i < listaUsuarios.length; i++) {
                             var usuario = listaUsuarios[i];
-                            
+
                             var linhaTable = document.createElement("tr");
                             var celulaNome = document.createElement("td");
                             var celulaEmail = document.createElement("td");
@@ -344,24 +349,13 @@ function carregarFeedAdm() {
 
                             celulaNome.textContent = usuario.nomeUsuario;
                             celulaEmail.textContent = usuario.email;
-                            celulaTipo.textContent = usuario.nivPermissao;
-
-                            // Adicione os botões com base no ID do usuário
+                            celulaTipo.textContent = getTipoUsuarioText(usuario.nivPermissao);
 
                             celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
-                            <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
-                        `;
-                     
-                        
-                        document.addEventListener("DOMContentLoaded", function () {
-                            carregarFeed(); // Chame a função para carregar a tabela de usuários
-                            tippy(".tooltip", {
-                                placement: "top",
-                            });
-                        });
-
+                                <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip" title="Excluir Usuário" id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
+                                <img src="../assets/img/Icone/editIcon.svg" class="tooltip" title="Editar Usuário" id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                                <img src="../assets/img/Icone/moreInfoIcon.svg" class="tooltip" title="Mais Informações" id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            `;
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -393,13 +387,11 @@ function carregarFeedInstrutor() {
                 } else {
                     listaUsuarios.json().then(function (listaUsuarios) {
                         var tableUsuarios = document.getElementById("listaDeUsuarios");
-                        tableUsuarios.innerHTML = ""; 
+                        tableUsuarios.innerHTML = "";
 
-                        console.log(listaUsuarios)
-                        
                         for (var i = 0; i < listaUsuarios.length; i++) {
                             var usuario = listaUsuarios[i];
-                            
+
                             var linhaTable = document.createElement("tr");
                             var celulaNome = document.createElement("td");
                             var celulaEmail = document.createElement("td");
@@ -408,15 +400,13 @@ function carregarFeedInstrutor() {
 
                             celulaNome.textContent = usuario.nomeUsuario;
                             celulaEmail.textContent = usuario.email;
-                            celulaTipo.textContent = usuario.nivPermissao;
+                            celulaTipo.textContent = getTipoUsuarioText(usuario.nivPermissao);
 
-                            // Adicione os botões com base no ID do usuário
-                          celulaBotoes.innerHTML = `
-                            <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usúario"  id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
-                            <img src="../assets/img/Icone/editIcon.svg"  class="tooltip edit-action" title="Editar Usúario"  id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
-                            <img src="../assets/img/Icone/moreInfoIcon.svg"  class="tooltip info-action" title="Mais Informações"  id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
+                            celulaBotoes.innerHTML = `
+                                <img src="../assets/img/Icone/deleteIcon.svg" class="tooltip delete-action" title="Excluir Usuário"  id="btn_delete${usuario.idUsuario}" onclick="deletar(${usuario.idUsuario}, ${localStorage.getItem("nivPerm")})">
+                                <img src="../assets/img/Icone/editIcon.svg"  class="tooltip edit-action" title="Editar Usuário"  id="btn_update${usuario.idUsuario}" onclick="alterar(${usuario.idUsuario})">
+                                <img src="../assets/img/Icone/moreInfoIcon.svg"  class="tooltip info-action" title="Mais Informações"  id="btn_get${usuario.idUsuario}" onclick="mostrar_dados(${usuario.idUsuario})">
                             `;
-                
 
                             linhaTable.appendChild(celulaNome);
                             linhaTable.appendChild(celulaEmail);
@@ -436,11 +426,27 @@ function carregarFeedInstrutor() {
         });
 }
 
-function limparFormulario() {
-    document.getElementById("form_postagem").reset();
+// Adicione essa função para obter o texto do tipo de usuário com base no valor numérico
+function getTipoUsuarioText(tipoUsuario) {
+    switch (tipoUsuario) {
+        case 1:
+            return "Administrador Nowl";
+        case 2:
+            return "Administrador Instituição";
+        case 3:
+            return "Professor Instituição";
+        default:
+            return "Desconhecido";
+    }
 }
 
-
+document.addEventListener("DOMContentLoaded", function () {
+    carregarFeedAdm();
+    carregarFeedInstrutor();
+    tippy(".tooltip", {
+        placement: "top",
+    });
+});
 
 
 function mostrar_dados(idUsuario) {
@@ -457,7 +463,6 @@ function mostrar_dados(idUsuario) {
                 const usuario = dadosUsuario[0];
                 console.log("Dados recebidos dos usuários: ", JSON.stringify(usuario));
 
-               
                 Swal.fire({
                     title: 'Dados do Cliente',
                     html: `
@@ -465,21 +470,14 @@ function mostrar_dados(idUsuario) {
                             <span><b>Nome:</b> ${usuario.nome}</span>
                             <span><b>Email:</b> ${usuario.email}</span>
                             <span><b>Senha:</b> ${usuario.senha}</span>
-                            <span><b>Nível de Permissão:</b> ${usuario.fkTipoUsuario}</span>
+                            ${getTipoUsuarioMessage(usuario.fkTipoUsuario)}
                         </div>`,
-                    showCloseButton: true, //  botão de fechar
+                    showCloseButton: true, // botão de fechar
                     customClass: {
                         container: 'custom-modal', // modal
-                        popup: 'custom-popup', //conteúdo do modal
-                        closeButton: 'custom-close-button', //  botão de fechar
+                        popup: 'custom-popup', // conteúdo do modal
+                        closeButton: 'custom-close-button', // botão de fechar
                     },
-                    animation: false, 
-                    backdrop: `
-                        rgba(0,0,123,0.4)
-                        url('/path/to/your/loading.gif')
-                        left top
-                        no-repeat
-                    `, 
                 });
             } else {
                 console.error('Dados do usuário não encontrados na resposta da API.');
@@ -489,6 +487,30 @@ function mostrar_dados(idUsuario) {
             console.error('Erro na requisição:', erro);
         });
 }
+
+function getTipoUsuarioMessage(tipoUsuario) {
+    if (tipoUsuario == 1) {
+        return '<span><b>Tipo de Usuário:</b> ADM Nowl</span>';
+    } else if (tipoUsuario == 2) {
+        return '<span><b>Tipo de Usuário:</b> ADM da instituição</span>';
+    } else if (tipoUsuario == 3) {
+        return '<span><b>Tipo de Usuário:</b> Professor</span>';
+    } else {
+        return '<span><b>Tipo de Usuário:</b> Desconhecido</span>';
+    }
+}
+
+// Exemplo de uso:
+// Supondo que você tenha uma chamada de API ou algo parecido para obter os dados do usuário
+// Vamos assumir que 'dadosDaAPI' contém os dados do usuário.
+const dadosDaAPI = {
+    nome: 'Nome do Usuário',
+    email: 'usuario@email.com',
+    senha: 'senha123',
+    fkTipoUsuario: 2, // Altere este valor para testar diferentes tipos de usuário
+};
+
+mostrar_dados(dadosDaAPI);
 
 
 
@@ -538,7 +560,7 @@ function deletar(idUsuario, tipoPermissao) {
                             showConfirmButton: false,
                             timer: 1500
                         });
-                      //  recarrega a página 
+                        //  recarrega a página 
                         setTimeout(() => {
                             location.reload();
                         }, 1500);
@@ -595,14 +617,17 @@ function alterar(idUsuario) {
                         return;
                     }
 
-                   
                     Swal.fire({
                         title: 'Editar Usuário',
                         html:
                             `<input type="text" id="nomeInput" placeholder="Nome" value="${dadosUsuario[0].nome}" class="swal2-input" style="border-radius: 15px;">
                             <input type="email" id="emailInput" placeholder="Email" value="${dadosUsuario[0].email}" class="swal2-input" style="border-radius: 15px;">
                             <input type="password" id="senhaInput" placeholder="Senha" value="${dadosUsuario[0].senha}" class="swal2-input" style="border-radius: 15px;">
-                            <input type="text" id="tipoInput" placeholder="Tipo" value="${dadosUsuario[0].nivPermissao}" class="swal2-input" style="border-radius: 15px;">`,
+                            <select id="tipoInput" class="swal2-input" style="border-radius: 15px;">
+                                <option value="1" ${dadosUsuario[0].nivPermissao === '1' ? 'selected' : ''}>Adminstrador Nowl</option>
+                                <option value="2" ${dadosUsuario[0].nivPermissao === '2' ? 'selected' : ''}>Admnistrador da instituição</option>
+                                <option value="3" ${dadosUsuario[0].nivPermissao === '3' ? 'selected' : ''}>Professor</option>
+                            </select>`,
                         showCancelButton: true,
                         cancelButtonText: 'Cancelar',
                         confirmButtonText: 'Salvar Usuário',
@@ -671,13 +696,7 @@ function alterar(idUsuario) {
                                     setFieldStyle(document.getElementById('senhaInput'), true);
                                 }
 
-                                if (tipoInput !== '1' && tipoInput !== '2' && tipoInput !== '3') {
-                                    setFieldStyle(document.getElementById('tipoInput'), false);
-                                    Swal.showValidationMessage('O tipo só pode ser 1, 2 ou 3.');
-                                    return false;
-                                } else {
-                                    setFieldStyle(document.getElementById('tipoInput'), true);
-                                }
+                                // A validação para 'tipoInput' não é mais necessária
 
                                 fetch("/usuarios/editar", {
                                     method: "put",
@@ -692,34 +711,34 @@ function alterar(idUsuario) {
                                         idUsuario: idUsuario
                                     })
                                 })
-                                .then(async function (response) {
-                                    if (response.ok) {
-                                        console.log(response);
-                                        var retorno = await response.json();
-                                        console.log(retorno);
-                                        return retorno;
-                                    }
-                                })
-                                .then(result => {
-                                    if (result) {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Sucesso!',
-                                            text: 'Usuário atualizado com sucesso!',
-                                            showConfirmButton: false,
-                                            timer: 1500 // Fecha o pop-up após 1,5 segundos
-                                        });
-                                        setTimeout(() => {
-                                            location.reload();
-                                        }, 1500);
-                                    } else {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Falha!',
-                                            text: 'Falha ao editar usuário',
-                                        });
-                                    }
-                                });
+                                    .then(async function (response) {
+                                        if (response.ok) {
+                                            console.log(response);
+                                            var retorno = await response.json();
+                                            console.log(retorno);
+                                            return retorno;
+                                        }
+                                    })
+                                    .then(result => {
+                                        if (result) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Sucesso!',
+                                                text: 'Usuário atualizado com sucesso!',
+                                                showConfirmButton: false,
+                                                timer: 1500 // Fecha o pop-up após 1,5 segundos
+                                            });
+                                            setTimeout(() => {
+                                                location.reload();
+                                            }, 1500);
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Falha!',
+                                                text: 'Falha ao editar usuário',
+                                            });
+                                        }
+                                    });
                             });
                         },
                     });

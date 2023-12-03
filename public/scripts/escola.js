@@ -210,6 +210,7 @@ function getRandomHexCode() {
 }
 
 
+
 function carregarFeedEscola() {
     fetch(`/instituicoes/listarInstituicoes`)
         .then(function (listaDeEscolas) {
@@ -364,13 +365,6 @@ function dadosInstituicao(idEscola) {
                         popup: 'custom-popup', //conteúdo do modal
                         closeButton: 'custom-close-button', //o botão de fechar
                     },
-                    animation: false, // Desativa animações para melhorar a performance
-                    backdrop: `
-                        rgba(0,0,123,0.4)
-                        url('/path/to/your/loading.gif')
-                        left top
-                        no-repeat
-                    `, // Adiciona um fundo de carregamento
                 });
             } else {
                 console.error('Dados da escola não encontrados na resposta da API.');
@@ -384,132 +378,135 @@ function dadosInstituicao(idEscola) {
 
 function alterar(idEscola) {
     fetch(`/instituicoes/listarInstituicaoEsp/${idEscola}`)
-        .then((dadosEscola) => {
-            if (dadosEscola.ok) {
-                dadosEscola.json().then((dadosEscola) => {
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Falha ao obter dados da escola');
+            }
+        })
+        .then(dadosEscola => {
+            if (
+                dadosEscola[0].nome === "" &&
+                dadosEscola[0].sigla === "" &&
+                dadosEscola[0].codigo === "" &&
+                dadosEscola[0].responsavel === ""
+            ) {
+                Swal.fire("Atenção", "Todos os campos estão vazios. Não é possível editar.", "warning");
+                return;
+            }
 
-                    if (
-                        dadosEscola[0].nome === "" &&
-                        dadosEscola[0].sigla === "" &&
-                        dadosEscola[0].codigo === "" &&
-                        dadosEscola[0].responsavel === ""
-                    ) {
-                        Swal.fire("Atenção", "Todos os campos estão vazios. Não é possível editar.", "warning");
-                        return;
+            Swal.fire({
+                title: 'Editar Escola',
+                html:
+                    `<input type="text" id="nomeEscolaInput" placeholder="Nome da Escola" value="${dadosEscola[0].nome}" class="swal2-input" style="border-radius: 15px;">
+                    <input type="text" id="siglaInput" placeholder="Sigla" value="${dadosEscola[0].sigla}" class="swal2-input" style="border-radius: 15px;">`,
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Salvar Escola',
+                cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
+                confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" (verde)
+                showCloseButton: true, // Adiciona o botão de fechar
+                customClass: {
+                    container: 'custom-modal',
+                    popup: 'custom-popup',
+                    closeButton: 'custom-close-button',
+                    confirmButton: 'custom-confirm-button',
+                    cancelButton: 'custom-cancel-button',
+                },
+                onOpen: () => {
+                    const customModal = Swal.getPopup();
+                    customModal.style.backgroundColor = 'white';
+                    customModal.style.width = '500px';
+                    customModal.style.height = 'auto';  // Altura automática
+                    customModal.style.borderRadius = '15px';
+                },
+                onBeforeOpen: () => {
+                    const confirmButton = Swal.getConfirmButton();
+                    const cancelButton = Swal.getCancelButton();
+                    if (confirmButton && cancelButton) {
+                        confirmButton.style.borderRadius = '15px';
+                        cancelButton.style.borderRadius = '15px';
                     }
 
-                    Swal.fire({
-                        title: 'Editar Escola',
-                        html:
-                            `<input type="text" id="nomeEscolaInput" placeholder="Nome da Escola" value="${dadosEscola[0].nome}" class="swal2-input" style="border-radius: 15px;">
-                            <input type="text" id="siglaInput" placeholder="Sigla" value="${dadosEscola[0].sigla}" class="swal2-input" style="border-radius: 15px;">`,
-                        showCancelButton: true,
-                        cancelButtonText: 'Cancelar',
-                        confirmButtonText: 'Salvar Escola',
-                        cancelButtonColor: '#d33', // Cor do botão "Cancelar" (vermelho)
-                        confirmButtonColor: '#28a745', // Cor do botão "Salvar Escola" (verde)
-                        showCloseButton: true, // Adiciona o botão de fechar
-                        customClass: {
-                            container: 'custom-modal',
-                            popup: 'custom-popup',
-                            closeButton: 'custom-close-button',
-                            confirmButton: 'custom-confirm-button',
-                            cancelButton: 'custom-cancel-button',
-                        },
-                        onOpen: () => {
-                            const customModal = Swal.getPopup();
-                            customModal.style.backgroundColor = 'white';
-                            customModal.style.width = '500px';
-                            customModal.style.height = 'auto';  // Altura automática
-                            customModal.style.borderRadius = '15px';
-                        },
-                        onBeforeOpen: () => {
-                            const confirmButton = Swal.getConfirmButton();
-                            const cancelButton = Swal.getCancelButton();
-                            if (confirmButton && cancelButton) {
-                                confirmButton.style.borderRadius = '15px';
+                    confirmButton.addEventListener('click', async () => {
+                        const nomeEscolaInput = document.getElementById('nomeEscolaInput');
+                        const siglaInput = document.getElementById('siglaInput');
 
-                                cancelButton.style.borderRadius = '15px';
+                        // Função para definir o estilo dos inputs
+                        function setFieldStyle(input, isValid) {
+                            if (isValid) {
+                                input.style.borderColor = '#4CAF50';
+                            } else {
+                                input.style.borderColor = '#FF5555';
                             }
+                        }
 
-                            confirmButton.addEventListener('click', () => {
-                                const nomeEscolaInput = document.getElementById('nomeEscolaInput');
-                                const siglaInput = document.getElementById('siglaInput');
+                        // Validação do campo Nome
+                        if (dadosEscola[0].nome.length < 3) {
+                            setFieldStyle(nomeEscolaInput, false);
+                            Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
+                            return;
+                        } else {
+                            setFieldStyle(nomeEscolaInput, true);
+                        }
 
-                                // Função para definir o estilo dos inputs
-                                function setFieldStyle(input, isValid) {
-                                    if (isValid) {
-                                        input.style.borderColor = '#4CAF50';
-                                    } else {
-                                        input.style.borderColor = '#FF5555';
-                                    }
-                                }
+                        // Validação do campo Sigla
+                        if (dadosEscola[0].sigla.length < 2) {
+                            setFieldStyle(siglaInput, false);
+                            Swal.showValidationMessage('A sigla deve ter pelo menos 2 caracteres.');
+                            return;
+                        } else {
+                            setFieldStyle(siglaInput, true);
+                        }
 
-                                // Validação do campo Nome
-                                if (dadosEscola[0].nome.length < 3) {
-                                    setFieldStyle(nomeEscolaInput, false);
-                                    Swal.showValidationMessage('O nome deve ter pelo menos 3 caracteres.');
-                                    return false;
-                                } else {
-                                    setFieldStyle(nomeEscolaInput, true);
-                                }
-
-                                // Validação do campo Sigla
-                                if (dadosEscola[0].sigla.length < 2) {
-                                    setFieldStyle(siglaInput, false);
-                                    Swal.showValidationMessage('A sigla deve ter pelo menos 2 caracteres.');
-                                    return false;
-                                } else {
-                                    setFieldStyle(siglaInput, true);
-                                }
-
-                                fetch("/instituicoes/editarInstituicao", {
-                                    method: "put",
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    },
-                                    body: JSON.stringify({
-                                        nomeEscola: nomeEscolaInput.value,
-                                        sigla: siglaInput.value,
-                                        idEscola: dadosEscola[0].idInstituicao,
-                                    })
+                        try {
+                            const response = await fetch("/instituicoes/editarInstituicao", {
+                                method: "put",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    nomeEscola: nomeEscolaInput.value,
+                                    sigla: siglaInput.value,
+                                    idEscola: dadosEscola[0].idInstituicao,
                                 })
-                                    .then(async response => {
-                                        if (response.ok) {
-                                            return await response.json();
-                                        }
-                                    })
-                                    .then(result => {
-                                        if (result) {
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Sucesso!',
-                                                text: 'Escola atualizada com sucesso!',
-                                                showConfirmButton: false,
-                                                timer: 1500 // Fecha o pop-up após 1,5 segundos
-                                            });
-                                            setTimeout(() => {
-                                                location.reload();
-                                            }, 1500);
-                                        } else {
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Falha!',
-                                                text: 'Falha ao editar escola',
-                                            });
-                                        }
-                                    });
                             });
-                        },
+
+                            if (response.ok) {
+                                const result = await response.json();
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Sucesso!',
+                                    text: 'Escola atualizada com sucesso!',
+                                    showConfirmButton: false,
+                                    timer: 1500 // Fecha o pop-up após 1,5 segundos
+                                });
+
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1500);
+                            } else {
+                                throw new Error('Falha ao editar escola');
+                            }
+                        } catch (error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Falha!',
+                                text: 'Falha ao editar escola',
+                            });
+                        }
                     });
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Falha!',
-                    text: 'Falha ao editar escola',
-                });
-            }
+                },
+            });
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Falha!',
+                text: error.message,
+            });
         });
 }
-
+s

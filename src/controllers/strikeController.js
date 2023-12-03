@@ -7,85 +7,83 @@ function listar(req, res) {
     console.log('no controller');
     let codInstituicao = req.params.codInstituicao;
     let dataHora = req.params.dataHora;
-    let ativo = req.params.ativo  == 'true' ? true : false;
-    let valido = req.params.valido  == 'true' ? true : false;
-    let invalido = req.params.invalido  == 'true' ? true : false;
-    let inativo = req.params.inativo  == 'true' ? true : false;
+    let ativo = req.params.ativo === 'true';
+    let valido = req.params.valido === 'true';
+    let invalido = req.params.invalido === 'true';
+    let inativo = req.params.inativo === 'true';
     let textoBusca = req.params.textoBusca;
 
     let situacoes = [ativo, valido, invalido, inativo];
-    let texto = 'AND ';
+    let condicoes = [];
 
     console.log('textoBusca = ' + textoBusca);
 
     if (situacoes.filter(Boolean).length >= 2) {
         if (ativo) {
-            texto == 'AND ' ? texto += `situacao = 'Ativo'` : 
-            texto += `OR situacao = 'Ativo'`;
+            condicoes.push("situacao = 'Ativo'");
         }
-    
+
         if (valido) {
-            texto == 'AND ' ? texto += `situacao = 'Válido'` : 
-            texto += `OR situacao = 'Válido'`;
+            condicoes.push("situacao = 'Válido'");
         }
-    
+
         if (invalido) {
-            texto == 'AND ' ? texto += `situacao = 'Inválido'` : 
-            texto += `OR situacao = 'Inválido'`;
+            condicoes.push("situacao = 'Inválido'");
         }
-    
+
         if (inativo) {
-            texto == 'AND ' ? texto += `situacao = 'Inativo'` : 
-            texto += `OR situacao = 'Inativo'`;
+            condicoes.push("situacao = 'Inativo'");
         }
-
-    } else if(!ativo && !valido && !invalido && !inativo) {
-        texto += `situacao != 'Inativo'`;
-
+    } else if (!ativo && !valido && !invalido && !inativo) {
+        condicoes.push("situacao != 'Inativo'");
     } else {
         if (ativo) {
-            texto += `situacao = 'Ativo'`;
+            condicoes.push("situacao = 'Ativo'");
         }
-    
+
         if (valido) {
-            texto += `situacao = 'Válido'`;
+            condicoes.push("situacao = 'Válido'");
         }
-    
+
         if (invalido) {
-            texto += `situacao = 'Inválido'`;
+            condicoes.push("situacao = 'Inválido'");
         }
-    
+
         if (inativo) {
-            texto += `situacao = 'Inativo'`;
+            condicoes.push("situacao = 'Inativo'");
         }
     }
-    
-    if (textoBusca != 'false') {
-        texto += ` AND nome LIKE '%${textoBusca}%' `;
+
+    if (textoBusca !== 'false') {
+        condicoes.push(`nome LIKE '%${textoBusca}%'`);
     }
 
-    if (dataHora == 'mais_recente') {
-        texto += ' ORDER BY dataHora'
-    } else if (dataHora == 'mais_antigo') {
-        texto += ' ORDER BY dataHora DESC'
+    let orderBy = '';
+
+    if (dataHora === 'mais_recente') {
+        orderBy = ' ORDER BY dataHora';
+    } else if (dataHora === 'mais_antigo') {
+        orderBy = ' ORDER BY dataHora DESC';
     }
 
-    console.log('controller, texto = ' + texto);
 
-    strikeModel.listar(codInstituicao, texto)
-    .then(function (resultado) {
-        console.log('no then do controller');
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!");
-        }
-    }).catch(function (erro) {
-        console.log(erro);
-        console.log("Houve um erro ao buscar os strikes: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
+    console.log('controller, query = ' + query);
+
+    strikeModel.listar(codInstituicao, query)
+        .then(function (resultado) {
+            console.log('no then do controller');
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao buscar os strikes: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
 }
+
 
 function listarSituacao(req, res) {
     console.log('no controller');

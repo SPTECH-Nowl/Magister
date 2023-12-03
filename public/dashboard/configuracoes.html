@@ -6,14 +6,16 @@
    <link rel="stylesheet" href="../styles/configuracoes.css">
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
   
-
-
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+   
+   <script src="../scripts/funcoes.js"></script>
 
 <!-- Inclua a biblioteca Tippy.js -->
 <script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.min.js"></script>
 
 
- <!-- BACK END DO CU DE USUARIO-->
+ <!-- BACK END DE USUARIO-->
    <script src="../scripts/configuracoes.js" defer></script>
 
 
@@ -120,9 +122,16 @@
    
 
    <ul>
+      <li id="sair_item">
+         <sl-tooltip content="Sair" placement="right"  id="sairLink">
+            <!-- <a href="../login_cadastro.html"> -->
+               <img src="../assets/img/elements/sign-out.svg" alt="">
+            </a>
+         </sl-tooltip>
+      </li>
       <li>
           <sl-tooltip content="Configurações" placement="right">
-              <a href="configuracoes.html" id="sairLink">
+              <a href="configuracoes.html">
                   <img src="../assets/img/elements/settings.svg" alt="">
               </a>
           </sl-tooltip>
@@ -173,7 +182,7 @@
                     <sl-option disabled value="option-1">Selecione uma ação</sl-option>
                 </sl-select>
 
-                <sl-input label="Tempo de strike padrão" size="large" type="time" pill id="tempoPadraoPermissao"></sl-input>
+                <sl-input placeholder="00:00" label="Tempo de strike padrão" size="large" type="text" pill id="tempoPadraoPermissao"></sl-input>
 
                 <sl-button onclick="criarPermissao()" class="confirm-button" size="large" pill>Adicionar</sl-button>
 
@@ -211,7 +220,7 @@
 
             </sl-drawer>
 
-              <sl-button style="align-self: center !important" class="confirm-button" size="large" pill>Adicionar</sl-button>
+              <sl-button style="align-self: end !important" class="confirm-button" size="large" pill>Adicionar</sl-button>
               
               <script>
                 const drawer = document.querySelector('#adicionarAcao');
@@ -224,8 +233,10 @@
 
         </div>
 
-        <sl-input id="tempoPadraoInput" label="Tempo padrão de strike" type="time" size="large" pill></sl-input>
+        <sl-input id="tempoPadraoInput" label="Tempo padrão de strike" type="text" placeholder="00:00"  size="large" pill></sl-input>
 
+
+        
         <sl-button onclick="atualizarDadosPermissao()" class="confirm-button" size="large" pill>Salvar</sl-button>
 
     </div>
@@ -248,6 +259,26 @@
       validarAcesso(2);
    });
 </script>
+
+
+
 <script>
- 
+   document.getElementById('sairLink').addEventListener('click', function () {
+       // Exibir um pop-up personalizado usando Swal.fire
+       Swal.fire({
+           title: 'Obrigado pela visita!',
+           text: 'Até a próxima!',
+           icon: 'info',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'OK',
+           cancelButtonText: 'Cancelar'
+       }).then((result) => {
+           // Redirecionar para a página de login/cadastro se o usuário confirmar
+           if (result.isConfirmed) {
+               window.location.href = '../login_cadastro.html';
+           }
+       });
+   });
 </script>

@@ -89,17 +89,7 @@ function maquinasComMaisDefeitos(idInstituicao){
                         var linhaTable = document.createElement("tr");
                         var celulaNome = document.createElement("td");
                         var celulaNStrike = document.createElement("td");
-                        var celulaNAlerta = document.createElement("td");
-    
-                        var celulaVerMaquina = document.createElement("td");
-                        
-                        var linkVerMais = document.createElement("a");
-    
-                        linkVerMais.href = "http://localhost:3333/dashboard/dashboard_maquina.html";
-                        linkVerMais.textContent = "Ver mais";
-                        
-                        celulaVerMaquina.appendChild(linkVerMais);
-                        
+                        var celulaNAlerta = document.createElement("td");                    
                         
                         celulaNome.textContent = ` ${maquinaAtual.nomeMaquina}`;
                         celulaNStrike.textContent = maquinaAtual.quantidadeStrikes;
@@ -109,7 +99,6 @@ function maquinasComMaisDefeitos(idInstituicao){
                         linhaTable.appendChild(celulaNome);
                         linhaTable.appendChild(celulaNStrike);
                         linhaTable.appendChild(celulaNAlerta);
-                        linhaTable.appendChild(celulaVerMaquina);
     
                         tableMaquinas.appendChild(linhaTable);
                     });
@@ -159,10 +148,9 @@ function kpiInfos(idInstituicao){
                 drawPieAlertaDisco();
             });
 
-            var porcentagemComStrike = valoresKpi.maquinasComStrike / valoresKpi.totalMaquinas * 100
+            var porcentagemComStrike = (valoresKpi.maquinasComStrike / valoresKpi.totalMaquinas * 100).toFixed(2);
+            document.getElementById("porcentagem_strikes").innerHTML = `${porcentagemComStrike}%`;
             
-            document.getElementById("porcentagem_strikes").innerHTML = `${porcentagemComStrike}%`
-                
             function drawPieStrike() {
 
                 var maquinasSemStrike =  valoresKpi.totalMaquinas - valoresKpi.maquinasComStrike
@@ -195,7 +183,7 @@ function kpiInfos(idInstituicao){
             }
 
             
-            var porcentagemComAlerta = valoresKpi.maquinasComAlerta / valoresKpi.totalMaquinas * 100
+            var porcentagemComAlerta = (valoresKpi.maquinasComAlerta / valoresKpi.totalMaquinas * 100).toFixed(2);
             
             document.getElementById("porcentagem_disco").innerHTML = `${porcentagemComAlerta}%`
 

@@ -10,7 +10,7 @@
    <link rel="shortcut icon" href="../assets/img/Logos/magisterLogo.svg" type="image/x-icon">
    <script src="../components/button/button.js"></script>
    <link rel="stylesheet" href="../components/button/button.css">
-   <script src="../scripts/funcoes.js"></script>
+  
    
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
@@ -107,9 +107,16 @@
       
 
       <ul>
+         <li id="sair_item">
+            <sl-tooltip content="Sair" placement="right"  id="sairLink">
+               <!-- <a href="../login_cadastro.html"> -->
+                  <img src="../assets/img/elements/sign-out.svg" alt="">
+               </a>
+            </sl-tooltip>
+         </li>
          <li>
              <sl-tooltip content="Configurações" placement="right">
-                 <a href="configuracoes.html" id="sairLink">
+                 <a href="configuracoes.html">
                      <img src="../assets/img/elements/settings.svg" alt="">
                  </a>
              </sl-tooltip>
@@ -118,7 +125,7 @@
    </div>
 
    <div class="dash-content">
-      <h1>Dashboard Geral - <u><span id="nomeInst">null</span></u></h1>
+      <h1>Dashboard Geral - <u><span id="nomeInst">0</span></u></h1>
       <div class="grid grid-geral">
 
          <div class="chart-container">
@@ -128,7 +135,7 @@
 
          <div class="chart-container">
             <p class="chart-text">Nº de Alertas na Semana: </p>
-            <p class="chart-info"> <span id="qtd_alertas_semana">null</span> <span class="chart-text">Alertas</span></p>
+            <p class="chart-info"> <span id="qtd_alertas_semana">0</span> <span class="chart-text">Alertas</span></p>
          </div>
 
          <div class="chart-container">
@@ -136,7 +143,7 @@
             <div class="chart-div">
 
                <div class="chart-div-left">
-                  <p class="chart-info"> <span id="qtd_mais_strikes">null</span> <span class="chart-text">Strikes</span></p>
+                  <p class="chart-info"> <span id="qtd_mais_strikes">0</span> <span class="chart-text">Strikes</span></p>
                </div>
 
                <div class="chart-div-right">
@@ -179,7 +186,6 @@
                   <th>Máquina</th>
                   <th>Nº Strikes</th>
                   <th>Nº Alertas</th>
-                  <th>Ver Máquina</th>
                </thead>
                
                <tbody id="chart_ranking">
@@ -207,4 +213,27 @@
 </script>
 <script>
  
+</script>
+
+
+
+<script>
+   document.getElementById('sairLink').addEventListener('click', function () {
+       // Exibir um pop-up personalizado usando Swal.fire
+       Swal.fire({
+           title: 'Obrigado pela visita!',
+           text: 'Até a próxima!',
+           icon: 'info',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'OK',
+           cancelButtonText: 'Cancelar'
+       }).then((result) => {
+           // Redirecionar para a página de login/cadastro se o usuário confirmar
+           if (result.isConfirmed) {
+               window.location.href = '../login_cadastro.html';
+           }
+       });
+   });
 </script>

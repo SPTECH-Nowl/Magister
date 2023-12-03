@@ -301,9 +301,17 @@ function capturarNovoDadoRAM(idInstituicao, idMaquina) {
          .then((response) => {
             if (response.ok) {
                response.json().then((data) => {
-                  let [obj] = data;
-                  let novoRegistro = [obj.dataHora, obj.consumo];
-                  resolve(novoRegistro);
+                  if (data && data.length > 0) {
+                     let [obj] = data;
+                     if (obj && obj.dataHora && obj.consumo) {
+                        let novoRegistro = [obj.dataHora, obj.consumo];
+                        resolve(novoRegistro);
+                     } else {
+                        reject("Dados inválidos no objeto retornado");
+                     }
+                  } else {
+                     reject("Nenhum dado retornado");
+                  }
                });
             } else {
                reject("Erro de requisição");
@@ -322,9 +330,17 @@ function capturarNovoDadoCPU(idInstituicao, idMaquina) {
          .then((response) => {
             if (response.ok) {
                response.json().then((data) => {
-                  let [obj] = data;
-                  let novoRegistro = [obj.dataHora, obj.consumo];
-                  resolve(novoRegistro);
+                  if (data && data.length > 0) {
+                     let [obj] = data;
+                     if (obj && obj.dataHora && obj.consumo) {
+                        let novoRegistro = [obj.dataHora, obj.consumo];
+                        resolve(novoRegistro);
+                     } else {
+                        reject("Dados inválidos no objeto retornado");
+                     }
+                  } else {
+                     reject("Nenhum dado retornado");
+                  }
                });
             } else {
                reject("Erro de requisição");
@@ -343,9 +359,17 @@ function capturarNovoDadoDisco(idInstituicao, idMaquina) {
          .then((response) => {
             if (response.ok) {
                response.json().then((data) => {
-                  let [obj] = data;
-                  let novoRegistro = [obj.dataHora, obj.consumo];
-                  resolve(novoRegistro);
+                  if (data && data.length > 0) {
+                     let [obj] = data;
+                     if (obj && obj.dataHora && obj.consumo) {
+                        let novoRegistro = [obj.dataHora, obj.consumo];
+                        resolve(novoRegistro);
+                     } else {
+                        reject("Dados inválidos no objeto retornado");
+                     }
+                  } else {
+                     reject("Nenhum dado retornado");
+                  }
                });
             } else {
                reject("Erro de requisição");
